@@ -1,14 +1,20 @@
 window.voidEthereumAddress = '0x0000000000000000000000000000000000000000';
 window.voidEthereumAddressExtended = '0x0000000000000000000000000000000000000000000000000000000000000000';
 window.descriptionWordLimit = 300;
-window.urlRegex = new RegExp("(https?:\\/\\/[^\s]+)", "gs");
+window.oldUrlRegex = new RegExp("(https?:\\/\\/[^\s]+)", "gs");
+window.urlRegex = new RegExp("(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$", "gs");
 window.solidityImportRule = new RegExp("import( )+\"(\\d+)\"( )*;", "gs");
 window.pragmaSolidityRule = new RegExp("pragma( )+solidity( )*(\\^|>)\\d+.\\d+.\\d+;", "gs");
 window.base64Regex = new RegExp("data:([\\S]+)\\/([\\S]+);base64", "gs");
 
 window.Main = async function Main() {
-    window.context = await window.AJAXRequest('data/context.json');
-    //wait window.onEthereumUpdate(window.web3 && window.web3.currentProvider);
+    await window.loadContext();
+    await window.onEthereumUpdate(0);
+};
+
+window.connectFromHomepage = async function connectFromHomepage(button) {
+    button && (button.innerHTML = '<spa class="loaderMinimino"></span>');
+    button && (button.className = '');
     window.choosePage();
 };
 
@@ -60,12 +66,18 @@ window.loadDFO = async function loadDFO(address, allAddresses) {
             address,
             topics: [
                 window.proxyChangedTopic = window.proxyChangedTopic || window.web3.utils.sha3('ProxyChanged(address)')
-            ]
+            ],
+            fromBlock: window.getNetworkElement("deploySearchStart"),
+            toBlock: 'latest'
         }, true);
         return await window.loadDFO(window.web3.eth.abi.decodeParameter('address', logs[0].topics[1]), allAddresses);
     }
     dfo.options.originalAddress = allAddresses[0];
     dfo.options.allAddresses = allAddresses;
+    try {
+        dfo.metadataLink = window.web3.eth.abi.decodeParameter('string', await window.blockchainCall(dfo.methods.read, 'getMetadataLink', '0x'));
+    } catch(e) {
+    }
     return dfo;
 };
 
@@ -74,75 +86,69 @@ window.getLogs = async function(a, endOnFirstResult) {
     var logs = [];
     args.fromBlock = args.fromBlock || (window.getNetworkElement('deploySearchStart') + '');
     args.toBlock = args.toBlock || (await window.web3.eth.getBlockNumber() + '');
+    args.fromBlock = args.fromBlock !== "undefined" ? args.fromBlock : "0";
     var to = parseInt(args.toBlock);
-    while (parseInt(args.fromBlock) <= to) {
+    var fillWithWeb3Logs = async function(logs, args) {
+        if(window.web3.currentProvider === window.web3ForLogs.currentProvider) {
+            return logs;
+        }
+        var newArgs = {};
+        Object.entries(args).forEach(entry => newArgs[entry[0]] = entry[1]);
+        newArgs.fromBlock = window.web3.startBlock;
+        newArgs.toBlock = 'latest';
+        logs.push(...(await window.web3.eth.getPastLogs(newArgs)));
+        return logs;
+    };
+    while (isNaN(to) || parseInt(args.fromBlock) <= to) {
         var newTo = parseInt(args.fromBlock) + window.context.blockSearchSection;
         newTo = newTo <= to ? newTo : to;
-        args.toBlock = newTo + '';
-        logs.push(...(await window.web3.eth.getPastLogs(args)));
-        if (logs.length > 0 && endOnFirstResult === true) {
-            return logs;
+        args.toBlock = isNaN(newTo) ? args.toBlock : (newTo + '');
+        logs.push(...(await window.web3ForLogs.eth.getPastLogs(args)));
+        if (isNaN(to) || logs.length > 0 && endOnFirstResult === true) {
+            return await fillWithWeb3Logs(logs, args);
         }
         args.fromBlock = (parseInt(args.toBlock) + 1) + '';
     }
-    return logs;
+    return await fillWithWeb3Logs(logs, args);
 };
 
 window.onEthereumUpdate = function onEthereumUpdate(millis) {
-    return new Promise(function(ok, ko) {
+    return new Promise(function(ok) {
         setTimeout(async function() {
-            try {
-                var web3Provider = !isNaN(millis) || !millis ? window.context.infuraNode : millis;
-                var update = false;
-                if (!window.networkId || window.networkId !== await window.web3.eth.net.getId()) {
-                    delete window.contracts;
-                    window.web3 = new window.Web3Browser(web3Provider);
-                    window.web3.currentProvider && window.web3.currentProvider.setMaxListeners && window.web3.currentProvider.setMaxListeners(0);
-                    window.web3.eth.transactionBlockTimeout = 999999999;
-                    window.web3.eth.transactionPollingTimeout = new Date().getTime();
-                    window.networkId = await window.web3.eth.net.getId();
-                    var network = window.context.ethereumNetwork[window.networkId];
-                    if (network === undefined || network === null) {
-                        return alert('This network is actually not supported!');
-                    }
-                    window.ethereum && window.ethereum.autoRefreshOnNetworkChange && (window.ethereum.autoRefreshOnNetworkChange = false);
-                    window.ethereum && window.ethereum.on && window.ethereum.on('networkChanged', () => window.onEthereumUpdate(window.web3.currentProvider));
-                    window.ethereum && window.ethereum.on && window.ethereum.on('accountsChanged', () => window.onEthereumUpdate(window.web3.currentProvider));
-                    window.DFOHub(window.web3);
-                    update = true;
+            var update = false;
+            if (!window.networkId || window.networkId !== parseInt(window.ethereum.chainId)) {
+                delete window.contracts;
+                window.ethereum && (window.ethereum.enable = () => window.ethereum.request({ method: 'eth_requestAccounts' }));
+                window.ethereum && window.ethereum.autoRefreshOnNetworkChange && (window.ethereum.autoRefreshOnNetworkChange = false);
+                window.ethereum && window.ethereum.on && (!window.ethereum._events || !window.ethereum._events.accountsChanged || window.ethereum._events.accountsChanged.length === 0) && window.ethereum.on('accountsChanged', window.onEthereumUpdate);
+                window.ethereum && window.ethereum.on && (!window.ethereum._events || !window.ethereum._events.chainChanged || window.ethereum._events.chainChanged.length === 0) && window.ethereum.on('chainChanged', window.onEthereumUpdate);
+                window.web3 = await createWeb3(window.context.blockchainConnectionString || window.ethereum);
+                window.networkId = await window.web3.eth.net.getId();
+                window.web3ForLogs = await createWeb3(window.getNetworkElement("blockchainConnectionForLogString") || window.web3.currentProvider);
+                var network = window.context.ethereumNetwork[window.networkId];
+                if (network === undefined || network === null) {
+                    return alert('This network is actually not supported!');
                 }
-                delete window.walletAddress;
-                try {
-                    window.walletAddress = (await window.web3.eth.getAccounts())[0];
-                } catch (e) {}
-                !window.walletAddress && window.localStorage.removeItem("selectedEthereumProvider");
-                update && $.publish('ethereum/update');
-                $.publish('ethereum/ping');
-                return ok(window.web3);
-            } catch (e) {
-                if((e.message || e).toLowerCase().indexOf('daily request count') === -1) {
-                    ko(e);
-                } else {
-                    ok();
-                }
+                update = true;
             }
+            delete window.walletAddress;
+            try {
+                window.walletAddress = (await window.web3.eth.getAccounts())[0];
+            } catch (e) {}
+            update && $.publish('ethereum/update');
+            $.publish('ethereum/ping');
+            return ok(window.web3);
         }, !isNaN(millis) ? millis : 550);
     });
 };
 
-window.loadEthereumStuff = async function loadEthereumStuff(oldStableCoin) {
-    window.uniswapV2Router = window.newContract(window.context.UniswapV2RouterAbi, window.context.uniswapV2RouterAddress);
-    window.wethToken = window.newContract(window.context.votingTokenAbi, window.wethAddress = window.web3.utils.toChecksumAddress(await window.blockchainCall(window.uniswapV2Router.methods.WETH)));
-    window.uniswapV2Factory = window.newContract(window.context.UniswapV2FactoryAbi, window.context.uniswapV2FactoryAddress);
-    try {
-        window.stableCoin = window.newContract(window.context.StableCoinAbi, window.getNetworkElement(oldStableCoin ? "oldStableCoinAddress" : "stableCoinAddress"));
-        window.doubleProxy = window.newContract(window.context.DoubleProxyAbi, await window.blockchainCall(window.stableCoin.methods.doubleProxy))
-        window.dfo = window.web3.eth.dfoHub.load(await window.blockchainCall(window.doubleProxy.methods.proxy));
-        window.stableCoin = await window.loadTokenInfos(window.stableCoin.options.address, window.context.StableCoinAbi);
-        window.stableCoin.logo = 'assets/img/StableLogo.png';
-        window.votingToken = await window.loadTokenInfos((await (window.dfo = await window.dfo).votingToken).options.address);
-    } catch(e) {
-    }
+window.createWeb3 = async function createWeb3(connectionProvider) {
+    var web3 = new window.Web3Browser(connectionProvider);
+    web3.currentProvider.setMaxListeners && window.web3.currentProvider.setMaxListeners(0);
+    web3.eth.transactionBlockTimeout = 999999999;
+    web3.eth.transactionPollingTimeout = new Date().getTime();
+    web3.startBlock = await web3.eth.getBlockNumber();
+    return web3;
 };
 
 window.getNetworkElement = function getNetworkElement(element) {
@@ -178,9 +184,45 @@ window.hasEthereumAddress = function(address) {
     return window.isEthereumAddress(address) && address !== window.voidEthereumAddress;
 }
 
-window.choosePage = function choosePage() {
-    window.localStorage.setItem("ack", true);
-    var page = undefined;
+window.loadContext = async function loadContext() {
+    var context = await window.AJAXRequest('data/context.json');
+    var localContext = {};
+    try {
+        localContext = await window.AJAXRequest('data/context.local.json');
+    } catch(e) {
+        console.clear && console.clear();
+    }
+    window.context = window.deepCopy(context, localContext);
+};
+
+window.deepCopy = function deepCopy(data, extension) {
+    data = data ? JSON.parse(JSON.stringify(data)) : {};
+    extension = extension ? JSON.parse(JSON.stringify(extension)) : {};
+    var keys = Object.keys(extension);
+    for(var i in keys) {
+        var key = keys[i];
+        if(!data[key]) {
+            data[key] = extension[key];
+            continue;
+        }
+        try {
+            if(Object.keys(data[key]).length > 0 && Object.keys(extension[key]).length > 0) {
+                data[key] = deepCopy(data[key], extension[key]);
+                continue;
+            }
+        } catch(e) {
+        }
+        data[key] = extension[key];
+    }
+    return data;
+};
+
+window.choosePage = async function choosePage() {
+    window.getPage();
+    if (await window.loadCustomizedPage()) {
+        return;
+    }
+    var page;
     try {
         page = window.location.pathname.split('/').join('');
         page = page.indexOf('.html') === -1 ? undefined : page.split('.html').join('');
@@ -189,10 +231,21 @@ window.choosePage = function choosePage() {
 
     try {
         var maybePromise = window[page] && window[page]();
-        maybePromise && maybePromise.catch && maybePromise.catch(console.error);
+        maybePromise && maybePromise.catch && await maybePromise;
     } catch (e) {
         console.error(e);
     }
+};
+
+window.getLink = function getLink() {
+    var link = window.location.protocol + '//';
+    link += window.location.hostname;
+    window.location.port && (link += ':' + window.location.port);
+    return link;
+};
+
+window.loadCustomizedPage = async function loadCustomizedPage() {
+    return false;
 };
 
 window.getData = function getData(root, checkValidation) {
@@ -203,21 +256,29 @@ window.getData = function getData(root, checkValidation) {
     var children = root.children().find('input,select,textarea');
     children.length === 0 && (children = root.children('input,select,textarea'));
     children.each(function(i, input) {
-        var id = input.id || i;
-        input.type && input.type !== 'checkbox' && (data[id] = input.value);
-        input.type === 'number' && (data[id] = parseFloat(data[id]));
-        input.type === 'number' && isNaN(data[id]) && (data[id] = parseFloat(input.dataset.defaultValue));
-        (input.type === 'checkbox' || input.type === 'radio') && (data[id] = input.checked);
-        !input.type || input.type === 'hidden' && (data[id] = $(input).val());
-        input.type === 'file' && (data[id] = input.files);
-        if (checkValidation || input.dataset.mandatory === 'true') {
-            if (!data[id] ||
-                (input.type === 'number' && isNaN(data[id])) ||
-                (input.type === 'file' && data[id].length === 0)) {
-                throw id.firstLetterToUpperCase() + " is mandatory";
+        var id = ((input.id || i) + '').split('.');
+        var value;
+        input.type && input.type !== 'checkbox' && (value = input.value);
+        input.type === 'number' && (value = parseFloat(value.split(',').join('')));
+        input.type === 'number' && isNaN(value) && (value = parseFloat((input.dataset.defaultValue || '').split(',').join('')));
+        (input.type === 'checkbox' || input.type === 'radio') && (value = input.checked);
+        !input.type || input.type === 'hidden' && (value = $(input).val());
+        input.type === 'file' && (value = input.files);
+        if (checkValidation) {
+            if (!value) {
+                throw "Data is mandatory";
+            }
+            if (input.type === 'number' && isNaN(value)) {
+                throw "Number is mandatory";
             }
         }
+        var x = data;
+        while (id.length > 0) {
+            var partialId = id.pop();
+            x = data[partialId] = data[partialId] || id.length === 0 ? value : {};
+        }
     });
+
     return data;
 };
 
@@ -236,35 +297,35 @@ window.setData = function setData(root, data) {
 };
 
 window.getAddress = async function getAddress() {
-    window.ethereum && await window.ethereum.enable();
+    await window.ethereum.enable();
     return (window.walletAddress = (await window.web3.eth.getAccounts())[0]);
-};
-
-window.consumeAddressBarParam = function consumeAddressBarParam(paramName) {
-    var param = window.addressBarParams[paramName];
-    delete window.addressBarParams[paramName];
-    return param;
 };
 
 window.getSendingOptions = function getSendingOptions(transaction, value) {
     return new Promise(async function(ok, ko) {
         if (transaction) {
-            var address = await window.getAddress();
+            var from = await window.getAddress();
+            var nonce = await window.web3.eth.getTransactionCount(from);
             return window.bypassEstimation ? ok({
-                from: address,
+                nonce,
+                from,
                 gas: window.gasLimit || '7900000',
                 value
             }) : transaction.estimateGas({
-                    from: address,
+                    nonce,
+                    from,
                     gasPrice: window.web3.utils.toWei("13", "gwei"),
-                    value
+                    value,
+                    gas: '7900000',
+                    gasLimit: '7900000'
                 },
                 function(error, gas) {
                     if (error) {
                         return ko(error.message || error);
                     }
                     return ok({
-                        from: address,
+                        nonce,
+                        from,
                         gas: gas || window.gasLimit || '7900000',
                         value
                     });
@@ -277,21 +338,23 @@ window.getSendingOptions = function getSendingOptions(transaction, value) {
     });
 };
 
-window.createContract = async function createContract(value, abi, data) {
+window.createContract = async function createContract(abi, data) {
     var args = [];
-    data = value !== undefined && isNaN(value) ? abi : data;
-    abi = value !== undefined && isNaN(value) ? value : abi;
-    for (var i = value === abi ? 2 : 3; i < arguments.length; i++) {
-        args.push(arguments[i]);
+    if (arguments.length > 2) {
+        for (var i = 2; i < arguments.length; i++) {
+            args.push(arguments[i]);
+        }
     }
     var from = await window.getAddress();
     data = window.newContract(abi).deploy({
         data,
         arguments: args,
     });
-    var contractAddress = window.getNextContractAddress && window.getNextContractAddress(from, await window.web3.eth.getTransactionCount(from));
+    var nonce = await window.web3.eth.getTransactionCount(from);
+    nonce = parseInt(window.numberToString(nonce) + '');
+    var contractAddress = window.getNextContractAddress && window.getNextContractAddress(from, nonce === 0 ? undefined : nonce);
     try {
-        contractAddress = (await window.sendBlockchainTransaction(window.web3.eth.sendTransaction({
+        contractAddress = (await window.sendBlockchainTransaction(undefined, window.web3.eth.sendTransaction({
             from,
             data: data.encodeABI(),
             gasLimit: await data.estimateGas({ from })
@@ -326,11 +389,18 @@ window.sendBlockchainTransaction = function sendBlockchainTransaction(value, tra
         }
         try {
             (transaction = transaction.send ? transaction.send(await window.getSendingOptions(transaction, value), handleTransactionError) : transaction).on('transactionHash', transactionHash => {
+                $.publish('transaction/start');
+                var stop = function() {
+                    $.unsubscribe('transaction/stop', stop);
+                    handleTransactionError('stopped');
+                };
+                $.subscribe('transaction/stop', stop);
                 var timeout = async function() {
                     var receipt = await window.web3.eth.getTransactionReceipt(transactionHash);
                     if (!receipt || !receipt.blockNumber || parseInt(await window.web3.eth.getBlockNumber()) < (parseInt(receipt.blockNumber) + (window.context.transactionConfirmations || 0))) {
                         return window.setTimeout(timeout, window.context.transactionConfirmationsTimeoutMillis);
                     }
+                    $.unsubscribe('transaction/stop', stop);
                     return transaction.then(ok);
                 };
                 window.setTimeout(timeout);
@@ -339,6 +409,12 @@ window.sendBlockchainTransaction = function sendBlockchainTransaction(value, tra
             return handleTransactionError(e);
         }
     });
+};
+
+window.loadFunctionalityNames = async function loadFunctionalityNames(element) {
+    var functionalityNames = await window.blockchainCall(element.functionalitiesManager.methods.functionalityNames);
+    functionalityNames = JSON.parse((functionalityNames.endsWith(',]') ? (functionalityNames.substring(0, functionalityNames.lastIndexOf(',]')) + ']') : functionalityNames).trim());
+    return functionalityNames;
 };
 
 window.loadFunctionalities = function loadFunctionalities(element, callback, ifNecessary) {
@@ -360,7 +436,7 @@ window.loadFunctionalities = function loadFunctionalities(element, callback, ifN
     element.waiters = [];
     return new Promise(async function(ok) {
         try {
-            element.functionalityNames = JSON.parse(await blockchainCall(element.functionalitiesManager.methods.functionalityNames));
+            element.functionalityNames = await window.loadFunctionalityNames(element);
             callback && callback();
         } catch (e) {
             element.functionalityNames = [];
@@ -394,6 +470,9 @@ window.loadFunctionalities = function loadFunctionalities(element, callback, ifN
             callback && callback();
             try {
                 functionality.code = functionality.code || await window.loadContent(functionality.sourceLocationId, functionality.sourceLocation);
+                if (functionality.codeName !== 'getEmergencySurveyStaking' && functionality.sourceLocationId === 0) {
+                    delete functionality.code;
+                }
             } catch (e) {}
             functionality.description = window.extractHTMLDescription(functionality.code);
             functionality.compareErrors = await window.searchForCodeErrors(functionality.location, functionality.code, functionality.codeName, functionality.methodSignature, functionality.replaces);
@@ -420,10 +499,8 @@ window.loadFunctionalities = function loadFunctionalities(element, callback, ifN
 
 window.parseFunctionalities = function parseFunctionalities(functionalitiesJSON) {
     try {
-        functionalitiesJSON = functionalitiesJSON.trim();
-        var functs = JSON.parse(!functionalitiesJSON.endsWith(',') ? functionalitiesJSON : functionalitiesJSON.substring(0, functionalitiesJSON.length - 1) + ']');
         var functionalities = {};
-        functs.map(it => functionalities[it.codeName] = it);
+        JSON.parse((functionalitiesJSON.endsWith(',]') ? (functionalitiesJSON.substring(0, functionalitiesJSON.lastIndexOf(',]')) + ']') : functionalitiesJSON).trim()).forEach(it => functionalities[it.codeName] = it);
         return functionalities;
     } catch (e) {
         console.error(e);
@@ -466,19 +543,7 @@ window.toDecimals = function toDecimals(n, d) {
     var decimals = (typeof d).toLowerCase() === 'string' ? parseInt(d) : d;
     var symbol = window.toEthereumSymbol(decimals);
     if (symbol) {
-        var input = (typeof n).toLowerCase() === 'string' ? n : window.numberToString(n);
-        var output = undefined;
-        while(!output) {
-            try {
-                output = window.web3.utils.toWei(input, symbol);
-            } catch(e) {
-                if((e.message || e).indexOf('places') === -1) {
-                    throw e;
-                }
-                input = input.substring(0, input.length - 1);
-            }
-        }
-        return output;
+        return window.web3.utils.toWei((typeof n).toLowerCase() === 'string' ? n : window.numberToString(n), symbol);
     }
     var number = (typeof n).toLowerCase() === 'string' ? parseInt(n) : n;
     if (!number || this.isNaN(number)) {
@@ -498,7 +563,7 @@ window.loadContent = async function loadContent(tokenId, ocelotAddress, raw) {
     var value = chains.join('');
     value = window.web3.utils.toUtf8(value).trim();
     value = raw ? value : Base64.decode(value.substring(value.indexOf(',')));
-    var regex = new RegExp(window.base64Regex).exec(value.substring(0, value.length < 80 ? value.length : 80));
+    var regex = new RegExp(window.base64Regex).exec(value);
     !raw && regex && regex.index === 0 && (value = Base64.decode(value.substring(value.indexOf(','))));
     return value;
 };
@@ -546,35 +611,24 @@ window.getCodeCache = function getCodeCache() {
     return window.codeCache;
 };
 
-window.split = async function split(content, length, callback) {
-    content = await new Promise(function(ok) {
-        var test = content.substring(0, content.length < 80 ? content.length : 80);
-        var regex = new RegExp(window.base64Regex).exec(test);
-        ok(regex && regex.index === 0 ? content : ('data:text/plain;base64,' + Base64.encode(content)));
-    });
+window.split = function split(content, length) {
+    var regex = new RegExp(window.base64Regex).exec(content);
+    content = regex && regex.index === 0 ? content : ('data:text/plain;base64,' + Base64.encode(content));
+    var data = window.web3.utils.fromUtf8(content);
     var inputs = [];
-    var defaultLength = (length || window.context.singleTokenLength);
-    if (2 + (content.length * 2) <= defaultLength) {
-        inputs.push(window.web3.utils.fromUtf8(content));
-        callback && callback(1);
+    var defaultLength = (length || window.context.singleTokenLength) - 2;
+    if (data.length <= defaultLength) {
+        inputs.push(data);
     } else {
-        var data = content;
-        await new Promise(function(ok) {
-            var loop = function() {
-                if (data.length === 0) {
-                    return ok(inputs);
-                }
-                var length = 2 + (data.length * 2);
-                length = Math.ceil((length <= defaultLength ? length : defaultLength) / 2);
-                length = length > data.length ? data.length : length;
-                var piece = data.substring(0, length);
-                data = data.substring(length);
-                inputs.push(window.web3.utils.fromUtf8(piece));
-                callback && callback(inputs.length);
-                setTimeout(loop);
-            };
-            setTimeout(loop);
-        });
+        while (data.length > 0) {
+            var length = data.length < defaultLength ? data.length : defaultLength;
+            var piece = data.substring(0, length);
+            data = data.substring(length);
+            if (inputs.length > 0) {
+                piece = '0x' + piece;
+            }
+            inputs.push(piece);
+        }
     }
     return inputs;
 };
@@ -633,11 +687,11 @@ window.numberToString = function numberToString(num, locale) {
     return numStr;
 };
 
-/*window.onload = function() {
+window.onload = function() {
     Main().catch(function(e) {
         return alert(e.message || e);
     });
-};*/
+};
 
 window.extractComment = function extractComment(code, element) {
     if (code === undefined || code === null) {
@@ -647,6 +701,7 @@ window.extractComment = function extractComment(code, element) {
     if (!element) {
         var comments = {};
         ['Description', 'Discussion', 'Update'].map(key => comments[key] = window.extractComment(code, key));
+        comments.Discussion && (comments.Discussion = window.formatLink(comments.Discussion));
         return comments;
     }
     var initialCode = '/* ' + element + ':\n';
@@ -664,9 +719,16 @@ window.extractComment = function extractComment(code, element) {
         var tag = split[i];
         if (tag.indexOf(' * ') === 0) {
             try {
-                split[i] = tag.substring(3).trim();
+                split[i] = tag = tag.substring(3).trim();
             } catch (e) {
-                split[i] = tag.substring(2).trim();
+                split[i] = tag = tag.substring(2).trim();
+            }
+        }
+        if (tag.indexOf(' *') === 0) {
+            try {
+                split[i] = tag = tag.substring(2).trim();
+            } catch (e) {
+                split[i] = tag = tag.substring(1).trim();
             }
         }
     }
@@ -718,8 +780,11 @@ window.methodSignatureMatch = function methodSignatureMatch(methodSignature, com
 };
 
 window.extractHTMLDescription = function extractHTMLDescription(code, updateFirst) {
+    if (!code) {
+        return '';
+    }
     var description = '';
-    var comments = window.extractComment(code);
+    var comments = typeof code === 'string' ? window.extractComment(code) : code;
     if (updateFirst) {
         comments.Update && (description += comments.Update);
         comments.Description && (description += ((comments.Update ? '<br/><br/><b>Description</b>:<br/>' : '') + comments.Description));
@@ -742,17 +807,24 @@ window.searchForCodeErrors = async function searchForCodeErrors(location, code, 
         "getEmergencySurveyStaking": true,
         "getQuorum": true,
         "getSurveySingleReward": true,
-        "getSurveyMinimumStaking": true,
+        "getMinimumStaking": true,
         "getIndex": true,
         "getLink": true,
-        "getVotesHardCap": true
+        "getVotesHardCap": true,
+        "getMetadataLink": true
     };
     var errors = [];
     var comments = code ? window.extractComment(code) : {};
-    if ((codeName || (!codeName && !replaces)) && !comments.Description) {
+    if ((codeName || !replaces) && !code) {
+        //errors.push('Missing code!');
+        errors.push('On-chain data not available');
+        errors.push('https://etherscan.io/address/' + location + '#code');
+        errors.push('(IPFS metadata coming soon)');
+    }
+    if ((codeName || (!codeName && !replaces)) && code && !comments.Description) {
         errors.push('Missing description!');
     }
-    if ((codeName || (!codeName && !replaces)) && !comments.Discussion) {
+    if ((codeName || (!codeName && !replaces)) && code && !comments.Discussion) {
         !knownFunctionalities[codeName] && errors.push('Missing discussion Link!');
     }
     if (codeName && replaces && !comments.Update) {
@@ -760,9 +832,6 @@ window.searchForCodeErrors = async function searchForCodeErrors(location, code, 
     }
     if (codeName && !location) {
         errors.push('Missing location address!');
-    }
-    if (codeName && !code) {
-        errors.push('Missing code!');
     }
     if (codeName && !methodSignature) {
         errors.push('Missing method signature!');
@@ -797,7 +866,40 @@ window.searchForCodeErrors = async function searchForCodeErrors(location, code, 
         if (compare && codeName && !window.methodSignatureMatch(methodSignature, compare)) {
             errors.push('Wrong Method signature ' + methodSignature + ' for the given contract!');
         }
+        if (compare) {
+            var constraints = window.checkMandatoryFunctionalityProposalConstraints(compare.abi, !codeName, true);
+            constraints && errors.push(...constraints);
+        }
     } catch (e) {}
+    return errors;
+};
+
+window.checkMandatoryFunctionalityProposalConstraints = function checkMandatoryFunctionalityProposalConstraints(abi, isOneTime, noMetadata) {
+    var mandatoryFunctionalityProposalConstraints = {
+        onStart: isOneTime === true,
+        onStop: isOneTime === true,
+        getMetadataLinkConstructor: false,
+        getMetadataLink: false
+    };
+    for (var voice of abi) {
+        if (!mandatoryFunctionalityProposalConstraints.getMetadataLinkConstructor) {
+            mandatoryFunctionalityProposalConstraints.getMetadataLinkConstructor = voice.type === 'constructor' && voice.inputs && voice.inputs.length >= 1 && voice.inputs[0].type === 'string' && voice.inputs[0].name === 'metadataLink';
+        }
+        if (!mandatoryFunctionalityProposalConstraints.getMetadataLink) {
+            mandatoryFunctionalityProposalConstraints.getMetadataLink = voice.type === 'function' && voice.name === 'getMetadataLink' && voice.stateMutability === 'view' && voice.inputs.length === 0 && voice.outputs.length === 1 && voice.outputs[0].type === 'string';
+        }
+        if (!mandatoryFunctionalityProposalConstraints.onStart) {
+            mandatoryFunctionalityProposalConstraints.onStart = voice.type === 'function' && voice.name === 'onStart' && voice.stateMutability !== "view" && voice.stateMutability !== "pure" && (!voice.outputs || voice.outputs.length === 0) && voice.inputs && voice.inputs.length === 2 && voice.inputs[0].type === 'address' && voice.inputs[1].type === 'address';
+        }
+        if (!mandatoryFunctionalityProposalConstraints.onStop) {
+            mandatoryFunctionalityProposalConstraints.onStop = voice.type === 'function' && voice.name === 'onStop' && voice.stateMutability !== "view" && voice.stateMutability !== "pure" && (!voice.outputs || voice.outputs.length === 0) && voice.inputs && voice.inputs.length === 1 && voice.inputs[0].type === 'address';
+        }
+    }
+    var errors = [];
+    noMetadata !== true && !mandatoryFunctionalityProposalConstraints.getMetadataLinkConstructor && errors.push("Microservices must have a constructor with a string variable called 'metadataLink' as first parameter");
+    noMetadata !== true && !mandatoryFunctionalityProposalConstraints.getMetadataLink && errors.push("Missing mandatory function getMetadataLink() public view returns(string memory)");
+    !mandatoryFunctionalityProposalConstraints.onStart && errors.push("Missing mandatory function onStart(address,address) public");
+    !mandatoryFunctionalityProposalConstraints.onStop && errors.push("Missing mandatory function onStop(address) public");
     return errors;
 };
 
@@ -852,9 +954,18 @@ window.formatDFOLogs = function formatDFOLogs(logVar, event) {
             }
         }
     }
+    window.dfoEvent = window.dfoEvent || window.web3.utils.sha3('Event(string,bytes32,bytes32,bytes)');
+    var eventTopic = event && window.web3.utils.sha3(event);
+    var manipulatedLogs = [];
     for (var i in logs) {
         var log = logs[i];
+        if (log.topics && log.topics[0] !== window.dfoEvent) {
+            continue;
+        }
         log.topics && log.topics.splice(0, 1);
+        if (eventTopic && log.topics && log.topics[0] !== eventTopic) {
+            continue;
+        }
         log.raw && log.raw.topics && log.raw.topics.splice(0, 1);
         try {
             log.data && (log.data = web3.eth.abi.decodeParameter("bytes", log.data));
@@ -872,11 +983,12 @@ window.formatDFOLogs = function formatDFOLogs(logVar, event) {
                 log.raw && log.raw.data && log.raw.data.push(data[key]);
             });
         }
+        manipulatedLogs.push(log);
     }
-    return logVar.length ? logs : logVar;
+    return logVar.length ? manipulatedLogs : manipulatedLogs[0] || logVar;
 };
 
-window.sendGeneratedProposal = function sendGeneratedProposal(element, ctx, template, lines, descriptions, updates) {
+window.sendGeneratedProposal = function sendGeneratedProposal(element, ctx, template, lines, descriptions, updates, prefixedLines, postFixedLines) {
     var initialContext = {
         element,
         functionalityName: '',
@@ -891,10 +1003,12 @@ window.sendGeneratedProposal = function sendGeneratedProposal(element, ctx, temp
         lines,
         descriptions,
         updates,
+        prefixedLines,
+        postFixedLines,
         sequentialOps: template && [{
             name: 'Generating Smart Contract proposal',
             async call(data) {
-                var generatedAndCompiled = await window.generateAndCompileContract(data.template, data.lines, data.descriptions, data.updates);
+                var generatedAndCompiled = await window.generateAndCompileContract(data.template, data.lines, data.descriptions, data.updates, data.prefixedLines, data.postFixedLines);
                 data.sourceCode = generatedAndCompiled.sourceCode;
                 data.selectedContract = generatedAndCompiled.selectedContract;
             }
@@ -906,12 +1020,27 @@ window.sendGeneratedProposal = function sendGeneratedProposal(element, ctx, temp
     window.showProposalLoader(initialContext);
 };
 
-window.generateAndCompileContract = async function generateAndCompileContract(sourceCode, lines, descriptions, updates) {
+window.generateAndCompileContract = async function generateAndCompileContract(sourceCode, lines, descriptions, updates, prefixedLines, postFixedLines) {
     sourceCode = JSON.parse(JSON.stringify(sourceCode));
+    var bodyStart = 3;
+    for (var i = 0; i < sourceCode.length; i++) {
+        if (sourceCode[i].trim().toLowerCase() === 'function_body') {
+            bodyStart = i;
+            sourceCode.splice(bodyStart, 1);
+            break;
+        }
+    }
 
     if (lines && lines.length) {
         for (var i = lines.length - 1; i >= 0; i--) {
-            sourceCode.splice(4, 0, '        ' + lines[i]);
+            lines[i] !== 'undefined' && lines[i] !== 'null' && sourceCode.splice(bodyStart, 0, '        ' + lines[i]);
+        }
+    }
+
+    if (prefixedLines && prefixedLines.length) {
+        sourceCode.splice(2, 0, "");
+        for (var i = prefixedLines.length - 1; i >= 0; i--) {
+            prefixedLines[i] !== 'undefined' && prefixedLines[i] !== 'null' && sourceCode.splice(2, 0, '    ' + prefixedLines[i]);
         }
     }
 
@@ -934,6 +1063,11 @@ window.generateAndCompileContract = async function generateAndCompileContract(so
     }
     sourceCode.unshift('/* Description:');
 
+    if (postFixedLines && postFixedLines.length) {
+        sourceCode.push('');
+        postFixedLines.forEach(it => sourceCode.push(it));
+    }
+
     sourceCode = sourceCode.join('\n');
     return {
         sourceCode,
@@ -946,26 +1080,50 @@ window.showProposalLoader = async function showProposalLoader(initialContext) {
     delete initialContext.sequentialOps;
     window.functionalitySourceId && (initialContext.functionalitySourceId = window.functionalitySourceId);
     (!initialContext.functionalitySourceId && (initialContext.sourceCode || initialContext.template)) && sequentialOps.push({
-        name: "Publishing Smart Contract Code",
-        async call(data) {
+        name: "On-Chain Smart Contract Validation",
+        description: 'Deploying a Smart Contract validation, the code will be save in the Ethereum Blockchain via base64. This action is expensive, but in some cases very important.',
+        async call(data, bypass) {
+            if (bypass) {
+                data.functionalitySourceId = '0';
+                data.functionalitySourceLocation = window.voidEthereumAddress;
+                data.bypassFunctionalitySourceId = true;
+                return;
+            }
             data.functionalitySourceId = await window.mint(window.split(data.sourceCode), undefined, true);
             data.editor && data.editor.contentTokenInput && (data.editor.contentTokenInput.value = data.functionalitySourceId);
+        },
+        bypassable: true,
+        async onTransaction(data, transaction) {
+            window.ocelotMintedEvent = window.ocelotMintedEvent || window.web3.utils.sha3("Minted(uint256,uint256,uint256)");
+            window.ocelotFinalizedEvent = window.ocelotFinalizedEvent || window.web3.utils.sha3("Finalized(uint256,uint256)");
+            for (var log of transaction.logs) {
+                if (log.topics[0] === window.ocelotMintedEvent || log.topics[0] === window.ocelotFinalizedEvent) {
+                    data.functionalitySourceId = window.web3.eth.abi.decodeParameter('uint256', log.topics[1]);
+                    data.editor && data.editor.contentTokenInput && (data.editor.contentTokenInput.value = data.functionalitySourceId);
+                    break;
+                }
+            }
         }
     });
-    (!initialContext.functionalityAddress && (initialContext.selectedContract || initialContext.template)) && sequentialOps.push({
+    (!initialContext.functionalityAddress && (initialContext.selectedContract || initialContext.template || initialContext.functionalitySourceId || initialContext.sourceCode)) && sequentialOps.push({
         name: "Deploying Smart Contract",
         async call(data) {
             if (data.contractName && data.functionalitySourceId && data.selectedSolidityVersion) {
-                var code = await window.loadContent(data.functionalitySourceId);
+                var code = data.bypassFunctionalitySourceId ? data.sourceCode : await window.loadContent(data.functionalitySourceId);
                 var compiled = await window.SolidityUtilities.compile(code, data.selectedSolidityVersion, 200);
                 data.selectedContract = compiled[data.contractName];
             }
             var args = [
                 data.selectedContract.abi,
-                data.selectedContract.bytecode
+                data.selectedContract.bytecode,
+                await window.generateFunctionalityMetadataLink(data)
             ];
             data.constructorArguments && Object.keys(data.constructorArguments).map(key => args.push(data.constructorArguments[key]));
             data.functionalityAddress = (await window.createContract.apply(window, args)).options.address;
+            data.editor && data.editor.functionalityAddress && (data.editor.functionalityAddress.value = data.functionalityAddress);
+        },
+        async onTransaction(data, transaction) {
+            data.functionalityAddress = transaction.contractAddress;
             data.editor && data.editor.functionalityAddress && (data.editor.functionalityAddress.value = data.functionalityAddress);
         }
     });
@@ -974,6 +1132,10 @@ window.showProposalLoader = async function showProposalLoader(initialContext) {
         approved < parseInt(initialContext.element.emergencySurveyStaking) && sequentialOps.push({
             name: 'Approving ' + window.fromDecimals(initialContext.element.emergencySurveyStaking, initialContext.element.decimals) + ' ' + initialContext.element.symbol + ' for Emergency Staking',
             async call(data) {
+                var approved = parseInt(await window.blockchainCall(data.element.token.methods.allowance, window.walletAddress, data.element.dFO.options.address));
+                if (approved >= parseInt(data.element.emergencySurveyStaking)) {
+                    return;
+                }
                 await window.blockchainCall(data.element.token.methods.approve, initialContext.element.dFO.options.address, data.element.emergencySurveyStaking);
             }
         });
@@ -1000,16 +1162,18 @@ window.showProposalLoader = async function showProposalLoader(initialContext) {
                 $.publish('message', 'Proposal Sent!', 'info');
                 $.publish('section/change', 'Proposals');
             }
-        }
+        },
+        actionName: "Publish"
     });
-    parseInt(initialContext.element.minimumStaking) && sequentialOps.push({
+    !isNaN(parseInt(initialContext.element.minimumStaking)) && parseInt(initialContext.element.minimumStaking) > 0 && sequentialOps.push({
         name: 'Sending Initial ' + window.fromDecimals(initialContext.element.minimumStaking, initialContext.element.decimals) + ' ' + initialContext.element.symbol + ' for Staking',
         async call(data) {
             await window.blockchainCall(window.newContract(window.context.propsalAbi, data.transaction.events.Proposal.returnValues.proposal).methods.accept, window.numberToString(data.element.minimumStaking));
             $.publish('loader/toggle', false);
             $.publish('message', 'Proposal Sent!', 'info');
             $.publish('section/change', 'Proposals');
-        }
+        },
+        actionName: "Accept"
     });
     $.publish('loader/toggle', [true, sequentialOps, initialContext]);
 };
@@ -1061,48 +1225,17 @@ window.dumpFunctionalities = async function dumpFunctionalities(dfo) {
     return entries.join('\n        ');
 };
 
-window.shortenWord = function shortenWord(word, charsAmount) {
-    return word ? word.substring(0, word.length < (charsAmount = charsAmount || window.context.defaultCharsAmount) ? word.length : charsAmount) + (word.length < charsAmount ? '' : '...') : "";
-};
-
-window.toggleWordPanel = function(panel, word, charsAmount) {
-    if (!panel || !word) {
-        return;
-    }
-    var onClick = function onClick(e) {
-        e && e.preventDefault && e.preventDefault(true) && e.stopPropagation && e.stopPropagation(true);
-        render[e.currentTarget.innerHTML.toLowerCase()]();
-    };
-    var attachButton = function attachButton(text) {
-        var a = document.createElement('a');
-        a.href = "javascript:;"
-        a.innerHTML = text;
-        a.onclick = onClick;
-        panel.appendChild(a);
-    };
-    var render = {
-        less() {
-            panel.innerHTML = window.shortenWord(word, charsAmount);
-            panel.innerHTML.length < word.length && attachButton("More");
-        },
-        more() {
-            panel.innerHTML = window.shortenWord(word, word.length);
-            attachButton("Less");
-        }
-    };
-    render.less();
-};
-
-window.toStateHolderKey = function stateHolderKey(a, b, c) {
-    a !== undefined && a !== null && (typeof a).toLowerCase() !== 'string' && (a = '' + a);
-    b !== undefined && b !== null && (typeof b).toLowerCase() !== 'string' && (b = '' + b);
-    c !== undefined && c !== null && (typeof b).toLowerCase() !== 'string' && (c = '' + c);
-    return [
-        a, !a || !b ? "" : "_",
-        b,
-        (!a && !b) || !c ? "" : "_",
-        c
-    ].join('').toLowerCase();
+window.formatMoney = function formatMoney(value, decPlaces, thouSeparator, decSeparator) {
+    value = (typeof value).toLowerCase() !== 'number' ? parseFloat(value) : value;
+    var n = value,
+        decPlaces = isNaN(decPlaces = Math.abs(decPlaces)) ? 2 : decPlaces,
+        decSeparator = decSeparator == undefined ? "." : decSeparator,
+        thouSeparator = thouSeparator == undefined ? "," : thouSeparator,
+        sign = n < 0 ? "-" : "",
+        i = parseInt(n = Math.abs(+n || 0).toFixed(decPlaces)) + "",
+        j = (j = i.length) > 3 ? j % 3 : 0;
+    var result = sign + (j ? i.substr(0, j) + thouSeparator : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thouSeparator) + (decPlaces ? decSeparator + Math.abs(n - i).toFixed(decPlaces).slice(2) : "");
+    return window.eliminateFloatingFinalZeroes(result, decSeparator);
 };
 
 window.AJAXRequest = function AJAXRequest(link, timeout, toU) {
@@ -1153,127 +1286,30 @@ window.AJAXRequest = function AJAXRequest(link, timeout, toU) {
     });
 };
 
-window.checkCoverSize = function checkCoverSize(cover) {
-    return new Promise(function(ok) {
-        var reader = new FileReader();
-        reader.addEventListener("load", function() {
-            var image = new Image();
-            image.onload = function onload() {
-                return ok(image.width === image.height && image.width === 350);
-            };
-            image.src = (window.URL || window.webkitURL).createObjectURL(cover);
-        }, false);
-        reader.readAsDataURL(cover);
-    });
+window.getEthereumPrice = async function getEthereumPrice() {
+    if (window.lastEthereumPrice && window.lastEthereumPrice.requestExpires > new Date().getTime() && window.lastEthereumPrice.price !== 0) {
+        return window.lastEthereumPrice.price;
+    }
+    var price = 0;
+    try {
+        price = (await window.AJAXRequest(window.context.coingeckoEthereumPriceURL))[0].current_price;
+    } catch (e) {}
+    return (window.lastEthereumPrice = {
+        price,
+        requestExpires: new Date().getTime() + window.context.coingeckoEthereumPriceRequestInterval
+    }).price;
 };
 
-window.uploadToIPFS = async function uploadToIPFS(files) {
-    var single = !(files instanceof Array);
-    files = single ? [files] : files;
-    for (var i in files) {
-        var file = files[i];
-        if (!(file instanceof File) && !(file instanceof Blob)) {
-            files[i] = new Blob([JSON.stringify(files[i], null, 4)], { type: "application/json" });
-        }
-    }
-    var hashes = [];
-    window.api = window.api || new IpfsHttpClient(window.context.ipfsHost);
-    for await (var upload of window.api.add(files)) {
-        hashes.push(window.context.ipfsUrlTemplate + upload.path);
-    }
-    return single ? hashes[0] : hashes;
-};
-
-window.loadItems = async function loadItems(context, list, dontClear, singleItem) {
-    if (!list || list.length === 0 || context.loading) {
-        return;
-    }
-    context.loading = true;
-    dontClear !== true && context.view.setState({ items: [] });
-    var items = [];
-    for (var element of list) {
-        var split = element.split('_');
-        var token = window.newContract(window.context.ERC721ABI, split[2]);
-        var item = {
-            key: element.substring(element.indexOf("_", element.indexOf("_") + 1) + 1),
-            token,
-            votes: split[0],
-            eths: window.fromDecimals(split[1], 18),
-            tokenId: split[3],
-            artist: split[4],
-            ticker: await window.blockchainCall(token.methods.symbol),
-            metadataLink: await window.blockchainCall(token.methods.tokenURI, split[3]),
-            openSeaLink: window.context.openSeaURL + token.options.address + '/' + split[3],
-            etherscanLink: window.getNetworkElement('etherscanURL') + 'token/' + token.options.address + '?a=' + split[3]
-        };
-        var metadata = {};
-        try {
-            metadata = await window.AJAXRequest(item.metadataLink.split('ipfs://').join('//gateway.ipfs.io/'));
-        } catch (e) {}
-        Object.keys(metadata).forEach(key => item[key] = metadata[key]);
-        Object.keys(item).forEach(key => {
-            try {
-                item[key] = item[key].split('ipfs://').join('//gateway.ipfs.io/');
-            } catch (e) {}
-        });
-        items.push(item);
-        singleItem === true && context.view.setState({ items });
-    }
-    singleItem !== true && context.view.setState({ items });
-    delete context.loading;
-    return items;
-};
-
-window.formatMoney = function formatMoney(value, decPlaces, thouSeparator, decSeparator) {
-    value = (typeof value).toLowerCase() !== 'number' ? parseFloat(value) : value;
-    var n = value,
-        decPlaces = isNaN(decPlaces = Math.abs(decPlaces)) ? 2 : decPlaces,
-        decSeparator = decSeparator == undefined ? "." : decSeparator,
-        thouSeparator = thouSeparator == undefined ? "," : thouSeparator,
-        sign = n < 0 ? "-" : "",
-        i = parseInt(n = Math.abs(+n || 0).toFixed(decPlaces)) + "",
-        j = (j = i.length) > 3 ? j % 3 : 0;
-    var result = sign + (j ? i.substr(0, j) + thouSeparator : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thouSeparator) + (decPlaces ? decSeparator + Math.abs(n - i).toFixed(decPlaces).slice(2) : "");
-    return window.eliminateFloatingFinalZeroes(result, decSeparator);
-};
-
-window.eliminateFloatingFinalZeroes = function eliminateFloatingFinalZeroes(value, decSeparator) {
-    decSeparator = decSeparator || '.';
-    if (value.indexOf(decSeparator) === -1) {
-        return value;
-    }
-    var split = value.split(decSeparator);
-    while (split[1].endsWith('0')) {
-        split[1] = split[1].substring(0, split[1].length - 1);
-    }
-    return split[1].length === 0 ? split[0] : split.join(decSeparator);
-};
-
-window.loadTokenInfos = async function loadTokenInfos(addresses, abi, noLogo) {
-    var single = (typeof addresses).toLowerCase() === 'string';
-    addresses = single ? [addresses] : addresses;
-    var tokens = [];
-    window.tokenInfosCache = window.tokenInfosCache || {};
-    for (var address of addresses) {
-        address = window.web3.utils.toChecksumAddress(address);
-        var token = window.newContract(abi || window.context.votingTokenAbi, address);
-        tokens.push(window.tokenInfosCache[address] = window.tokenInfosCache[address] || {
-            address,
-            token,
-            name: address === window.wethAddress ? 'Ethereum' : await window.blockchainCall(token.methods.name),
-            symbol: address === window.wethAddress ? 'ETH' : await window.blockchainCall(token.methods.symbol),
-            decimals: address === window.wethAddress ? '18' : await window.blockchainCall(token.methods.decimals),
-            logo: noLogo ? undefined : await window.loadLogo(address === window.wethAddress ? window.voidEthereumAddress : address)
-        });
-        if(!window.tokenInfosCache[address].logo && noLogo !== true) {
-            window.tokenInfosCache[address].logo = await window.loadLogo(address === window.wethAddress ? window.voidEthereumAddress : address);
-        }
-    }
-    return single ? tokens[0] : tokens;
+window.shortenWord = function shortenWord(word, charsAmount) {
+    return word ? word.substring(0, word.length < (charsAmount = charsAmount || window.context.defaultCharsAmount) ? word.length : charsAmount) + (word.length < charsAmount ? '' : '...') : "";
 };
 
 window.loadLogo = async function loadLogo(address) {
     address = window.web3.utils.toChecksumAddress(address);
+    window.logos = window.logos || {};
+    if(window.logos[address]) {
+        return window.logos[address];
+    }
     var logo = address === window.voidEthereumAddress ? 'assets/img/eth-logo.png' : window.context.trustwalletImgURLTemplate.format(address);
     try {
         await window.AJAXRequest(logo);
@@ -1281,6 +1317,191 @@ window.loadLogo = async function loadLogo(address) {
         logo = 'assets/img/default-logo.png';
     }
     return logo;
+};
+
+window.loadOffChainWallets = async function loadOffChainWallets() {
+    var loadLogoWork = async function loadLogoWork(token) {
+        token.logoURI = token.logoURI || window.context.trustwalletImgURLTemplate.format(window.web3.utils.toChecksumAddress(token.address));
+        token.logoURI = window.formatLink(token.logoURI);
+        try {
+            await window.AJAXRequest(token.logoURI);
+        } catch (e) {
+            token.logoURI = 'assets/img/default-logo.png'
+        }
+        token.logo = token.logoURI;
+    };
+    return await (window.tokensList = window.tokensList || new Promise(async function(ok) {
+        var tokensList = {
+            "Programmable Equities": (await window.AJAXRequest(window.getNetworkElement("decentralizedFlexibleOrganizationsURL"))).tokens.map(it => it.chainId === window.networkId && it),
+            "Tokens": (await window.AJAXRequest(window.context.uniswapTokensURL)).tokens.map(it => it.chainId === window.networkId && it),
+            "Indexes": (await window.AJAXRequest(window.context.indexesURL)).tokens.map(it => it.chainId === window.networkId && it)
+        }
+        var keys = Object.keys(tokensList);
+        for (var key of keys) {
+            if (key === 'Indexes') {
+                continue;
+            }
+            var tokens = tokensList[key];
+            for (var i = 0; i < tokens.length; i++) {
+                var token = tokensList[key][i];
+                if (token === true || token === false) {
+                    continue;
+                }
+                token.listName = key;
+                token.token = token.token || window.newContract(window.context.votingTokenAbi, token.address);
+                loadLogoWork(token);
+                tokensList[key][i] = token;
+            }
+        }
+        return ok(tokensList);
+    }));
+};
+
+window.loadWallets = async function loadWallets(element, callback, alsoLogo) {
+    window.preloadedTokens = window.preloadedTokens || await window.AJAXRequest('data/walletData.json');
+    var network = window.context.ethereumNetwork[window.networkId];
+    var tokens = JSON.parse(JSON.stringify(window.preloadedTokens["tokens" + (network || "")]));
+    for (var i = 0; i < tokens.length; i++) {
+        var token = window.newContract(window.context.votingTokenAbi, tokens[i]);
+        tokens[i] = {
+            token,
+            address: window.web3.utils.toChecksumAddress(tokens[i]),
+            name: await window.blockchainCall(token.methods.name),
+            symbol: await window.blockchainCall(token.methods.symbol),
+            decimals: await window.blockchainCall(token.methods.decimals),
+            logo: !alsoLogo ? undefined : await window.loadLogo(token.options.address)
+        };
+    }
+    element !== window.dfoHub && tokens.unshift({
+        token: window.dfoHub.token,
+        address: window.web3.utils.toChecksumAddress(window.dfoHub.token.options.address),
+        name: window.dfoHub.name,
+        symbol: window.dfoHub.symbol,
+        decimals: window.dfoHub.decimals,
+        logo: !alsoLogo ? undefined : await window.loadLogo(window.dfoHub.token.options.address)
+    });
+    tokens.unshift({
+        token: window.newContract(window.context.votingTokenAbi, window.voidEthereumAddress),
+        address: window.voidEthereumAddress,
+        name: "Ethereum",
+        symbol: "ETH",
+        decimals: 18,
+        logo: !alsoLogo ? undefined : await window.loadLogo(window.voidEthereumAddress)
+    });
+    tokens.unshift({
+        token: element.token,
+        address: window.web3.utils.toChecksumAddress(element.token.options.address),
+        name: element.name,
+        symbol: element.symbol,
+        decimals: element.decimals,
+        logo: !alsoLogo ? undefined : await window.loadLogo(element.token.options.address)
+    });
+    callback && callback(tokens);
+    var values = Object.values(window.list);
+    for (var it of values) {
+        var address = window.web3.utils.toChecksumAddress(it.token.options.address);
+        if ((it === window.dfoHub || it === element)) {
+            continue;
+        }
+        var entry = {
+            token: it.token,
+            address,
+            name: it.name,
+            symbol: it.symbol,
+            decimals: it.decimals,
+            logo: !alsoLogo ? undefined : await window.loadLogo(it.token.options.address)
+        };
+        it !== window.dfoHub && it !== element && tokens.push(entry);
+    }
+    callback && callback(tokens);
+};
+
+window.loadUniswapPairs = async function loadUniswapPairs(view, address) {
+    window.pairCreatedTopic = window.pairCreatedTopic || window.web3.utils.sha3('PairCreated(address,address,address,uint256)');
+    address = window.web3.utils.toChecksumAddress(address || view.props.tokenAddress);
+    view.address = address;
+    view.setState({ uniswapPairs: null, selected: null });
+    var wethAddress = window.web3.utils.toChecksumAddress(await window.blockchainCall(window.newContract(window.context.uniSwapV2RouterAbi, window.context.uniSwapV2RouterAddress).methods.WETH));
+    if (address !== view.address) {
+        return;
+    }
+    if (address === window.voidEthereumAddress) {
+        view.address = address = wethAddress;
+    }
+    var myToken = window.web3.eth.abi.encodeParameter('address', address);
+    var logs = await window.getLogs({
+        address: window.context.uniSwapV2FactoryAddress,
+        fromBlock: '0',
+        topics: [
+            window.pairCreatedTopic, [myToken]
+        ]
+    });
+    logs.push(...(await window.getLogs({
+        address: window.context.uniSwapV2FactoryAddress,
+        fromBlock: '0',
+        topics: [
+            window.pairCreatedTopic, [],
+            [myToken]
+        ]
+    })));
+    if (address !== view.address) {
+        return;
+    }
+    var uniswapPairs = [];
+    var alreadyAdded = {};
+    for (var log of logs) {
+        for (var topic of log.topics) {
+            if (topic === window.pairCreatedTopic || topic.toLowerCase() === myToken.toLowerCase()) {
+                continue;
+            }
+            var pairTokenAddress = window.web3.utils.toChecksumAddress(window.web3.eth.abi.decodeParameters(['address', 'uint256'], log.data)[0]);
+            if (alreadyAdded[pairTokenAddress]) {
+                continue;
+            }
+            alreadyAdded[pairTokenAddress] = true;
+            var pairToken = window.newContract(window.context.uniSwapV2PairAbi, pairTokenAddress);
+            var token0 = window.web3.utils.toChecksumAddress(await window.blockchainCall(pairToken.methods.token0));
+            if (address !== view.address) {
+                return;
+            }
+            var reserves = await window.blockchainCall(pairToken.methods.getReserves);
+            if (address !== view.address) {
+                return;
+            }
+            var addr = window.web3.utils.toChecksumAddress(window.web3.eth.abi.decodeParameter('address', topic));
+            var tokenInfo = await window.loadTokenInfos(addr, wethAddress);
+            if (address !== view.address) {
+                return;
+            }
+            tokenInfo.pairToken = pairToken;
+            tokenInfo.mainReserve = reserves[address === token0 ? 0 : 1];
+            tokenInfo.otherReserve = reserves[address === token0 ? 1 : 0];
+            uniswapPairs.push(tokenInfo);
+            view.enqueue(() => view.setState({ uniswapPairs }));
+        }
+    }
+    uniswapPairs.length === 0 && view.enqueue(() => view.setState({ uniswapPairs }));
+};
+
+window.loadTokenInfos = async function loadTokenInfos(addresses, wethAddress) {
+    wethAddress = wethAddress || await window.blockchainCall(window.newContract(window.context.uniSwapV2RouterAbi, window.context.uniSwapV2RouterAddress).methods.WETH);
+    wethAddress = window.web3.utils.toChecksumAddress(wethAddress);
+    var single = (typeof addresses).toLowerCase() === 'string';
+    addresses = single ? [addresses] : addresses;
+    var tokens = [];
+    for (var address of addresses) {
+        address = window.web3.utils.toChecksumAddress(address);
+        var token = window.newContract(window.context.votingTokenAbi, address);
+        tokens.push({
+            address,
+            token,
+            name: address === wethAddress ? 'Ethereum' : await window.blockchainCall(token.methods.name),
+            symbol: address === wethAddress ? 'ETH' : await window.blockchainCall(token.methods.symbol),
+            decimals: address === wethAddress ? '18' : await window.blockchainCall(token.methods.decimals),
+            logo: await window.loadLogo(address === wethAddress ? window.voidEthereumAddress : address)
+        });
+    }
+    return single ? tokens[0] : tokens;
 };
 
 window.calculateTimeTier = function calculateTimeTier(blockLimit) {
@@ -1305,69 +1526,595 @@ window.getTierKey = function getTierKey(blockLimit) {
     return 'Custom';
 };
 
-window.resolveImageURL = function resolveImageURL(image, extension) {
-    extension = extension || 'png';
-    extension.indexOf('.') === 0 && (extension = extension.substring(1));
-    return 'assets/img/' + image + '.' + extension;
+window.calculateMultiplierAndDivider = function calculateMultiplierAndDivider(p) {
+    p = (typeof p).toLowerCase() === 'string' ? parseFloat(p) : p;
+    p = p / 100;
+    var percentage = window.formatMoney(p, 9, '').split('.');
+    var arr = [];
+    arr[0] = percentage[0];
+    arr[1] = '1';
+    if (percentage.length > 1) {
+        var i;
+        for (i = percentage[1].length - 1; i >= 0; i--) {
+            if (percentage[1][i] !== '0') {
+                break;
+            }
+        }
+        var afterFloat = percentage[1].substring(0, i === percentage[1].length ? i : (i + 1));
+        arr[0] += afterFloat;
+        arr[0] = window.numberToString(parseInt(arr[0]));
+        arr[1] = '1';
+        for (var i = 0; i < afterFloat.length; i++) {
+            arr[1] += '0';
+        }
+        arr[1] = window.numberToString(parseInt(arr[1]));
+    }
+    return arr;
 };
 
-window.getEthereumPrice = async function getEthereumPrice() {
-    if (window.lastEthereumPrice && window.lastEthereumPrice.requestExpires > new Date().getTime() && window.lastEthereumPrice.price !== 0) {
-        return window.lastEthereumPrice.price;
+window.eliminateFloatingFinalZeroes = function eliminateFloatingFinalZeroes(value, decSeparator) {
+    decSeparator = decSeparator || '.';
+    if (value.indexOf(decSeparator) === -1) {
+        return value;
     }
-    var price = 0;
+    var split = value.split(decSeparator);
+    while (split[1].endsWith('0')) {
+        split[1] = split[1].substring(0, split[1].length - 1);
+    }
+    return split[1].length === 0 ? split[0] : split.join(decSeparator);
+};
+
+function getPage() {
+    var location;
     try {
-        price = (await window.AJAXRequest(window.context.coingeckoEthereumPriceURL))[0].current_price;
+        var search = {};
+        var splits = window.location.search.split('?');
+        for (var z in splits) {
+            var split = splits[z].trim();
+            if (split.length === 0) {
+                continue;
+            }
+            split = split.split('&');
+            for (var i in split) {
+                var data = split[i].trim();
+                if (data.length === 0) {
+                    continue;
+                }
+                data = data.split('=');
+                data[1] = window.decodeURIComponent(data[1]);
+                if (!search[data[0]]) {
+                    search[data[0]] = data[1];
+                } else {
+                    var value = search[data[0]];
+                    if (typeof value !== 'object') {
+                        value = [value];
+                    }
+                    value.push(data[1]);
+                    search[data[0]] = value;
+                }
+            }
+        }
+        window.addressBarParams = search;
+        location = window.addressBarParams.location;
     } catch (e) {}
-    return (window.lastEthereumPrice = {
-        price,
-        requestExpires: new Date().getTime() + window.context.coingeckoEthereumPriceRequestInterval
-    }).price;
+    window.history.pushState({}, "", window.location.protocol + '//' + window.location.host);
+    return location;
 };
 
-window.loadUniswapPairs = async function loadUniswapPairs(token, indexes) {
-    window.pairCreatedTopic = window.pairCreatedTopic || window.web3.utils.sha3('PairCreated(address,address,address,uint256)');
-    var address = window.web3.utils.toChecksumAddress(token.address);
-    if (address === window.voidEthereumAddress) {
-        address = window.wethAddress;
+window.loadStakingData = async function loadStakingData(element) {
+    var blockTiers = {};
+    Object.keys(window.context.blockTiers).splice(2, Object.keys(window.context.blockTiers).length).forEach(it => blockTiers[it] = window.context.blockTiers[it]);
+    var json = await window.blockchainCall(element.stateHolder.methods.toJSON);
+    json = JSON.parse(json.endsWith(',]') ? (json.substring(0, json.lastIndexOf(',]')) + ']') : json);
+    var stakingData = [];
+    for (var i in json) {
+        var elem = json[i];
+        if (elem.name.indexOf('staking.transfer.authorized.') === -1 && elem.name.indexOf('authorizedtotransferforstaking_') === -1) {
+            continue;
+        }
+        var active = await window.blockchainCall(element.stateHolder.methods.getBool, elem.name);
+        var split = elem.name.split('.');
+        split.length === 1 && (split = elem.name.split('_'));
+        var stakingManager = window.newContract(window.context.LiquidityMiningContractABI, split[split.length - 1]);
+        stakingData.push(await window.setStakingManagerData(element, stakingManager, blockTiers, active));
     }
-    var myToken = window.web3.eth.abi.encodeParameter('address', address);
-    var logs = await window.getLogs({
-        address: window.context.uniSwapV2FactoryAddress,
-        fromBlock: '0',
-        topics: [
-            window.pairCreatedTopic, [myToken]
-        ]
+    return { stakingData, blockTiers };
+};
+
+window.setStakingManagerData = async function setStakingManagerData(element, stakingManager, blockTiers, active) {
+    var stakingManagerData = {
+        stakingManager,
+        active,
+        blockTiers
+    };
+    stakingManagerData.mainToken = await window.loadTokenInfos(element.token.options.address);
+    stakingManagerData.rewardToken = stakingManagerData.mainToken;
+    try {
+        stakingManagerData.mainToken = await window.loadTokenInfos(await window.blockchainCall(stakingManager.methods.tokenAddress));
+        stakingManagerData.rewardToken = await window.loadTokenInfos(await window.blockchainCall(stakingManager.methods.rewardTokenAddress));
+    } catch(e) {
+    }
+    stakingManagerData.startBlock = await window.blockchainCall(stakingManager.methods.startBlock);
+    try {
+        stakingManagerData.endBlock = await window.blockchainCall(stakingManager.methods.endBlock);
+        if(active) {
+            var currentBlock = await window.web3.eth.getBlockNumber();
+            if(currentBlock > parseInt(stakingManagerData.endBlock)) {
+                stakingManagerData.active = false;
+            }
+        }
+    } catch(e) {
+    }
+    var blockNumber = await window.web3.eth.getBlockNumber();
+    stakingManagerData.started = blockNumber > parseInt(stakingManagerData.startBlock);
+    stakingManagerData.terminated = stakingManagerData.endBlock && blockNumber > parseInt(stakingManagerData.endBlock);
+    stakingManagerData.running = stakingManagerData.started && !stakingManagerData.terminated;
+    var rawTiers = await window.blockchainCall(stakingManager.methods.tierData);
+    var pools = await window.blockchainCall(stakingManager.methods.tokens);
+    stakingManagerData.startBlock = await window.blockchainCall(stakingManager.methods.startBlock);
+    var pairs = await window.loadTokenInfos(pools, window.wethAddress);
+    for (var i in pairs) {
+        pairs[i].amount = await window.blockchainCall(stakingManager.methods.totalPoolAmount, i);
+    }
+    var tiers = [];
+    for (var i = 0; i < rawTiers[0].length; i++) {
+        var tier = {
+            blockNumber: rawTiers[0][i],
+            percentage: 100 * parseFloat(rawTiers[1][i]) / parseFloat(rawTiers[2][i]),
+            rewardSplitTranche: rawTiers[3][i],
+            time: window.calculateTimeTier(rawTiers[0][i]),
+            tierKey: window.getTierKey(rawTiers[0][i])
+        };
+        var stakingInfo = await window.blockchainCall(stakingManager.methods.getStakingInfo, i);
+        tier.minCap = stakingInfo[0];
+        tier.hardCap = stakingInfo[1];
+        tier.remainingToStake = stakingInfo[2];
+        tier.staked = window.web3.utils.toBN(tier.hardCap).sub(window.web3.utils.toBN(tier.remainingToStake)).toString()
+        tiers.push(tier);
+    }
+    stakingManagerData.pairs = pairs;
+    stakingManagerData.tiers = tiers;
+    return stakingManagerData;
+};
+
+window.updateInfo = async function updateInfo(view, element) {
+    if (!element || element.updating) {
+        return;
+    }
+    element.updating = true;
+
+    var votingTokenAddress;
+    var stateHolderAddress;
+    var functionalitiesManagerAddress;
+    element.walletAddress = element.dFO.options.address;
+
+    try {
+        var delegates = await window.web3.eth.call({
+            to: element.dFO.options.address,
+            data: element.dFO.methods.getDelegates().encodeABI()
+        });
+        try {
+            delegates = window.web3.eth.abi.decodeParameter("address[]", delegates);
+        } catch (e) {
+            delegates = window.web3.eth.abi.decodeParameters(["address", "address", "address", "address", "address", "address"], delegates);
+        }
+        votingTokenAddress = delegates[0];
+        stateHolderAddress = delegates[2];
+        functionalitiesManagerAddress = delegates[4];
+        element.walletAddress = delegates[5];
+        element.doubleProxyAddress = delegates[6];
+    } catch (e) {}
+
+    if (!votingTokenAddress) {
+        votingTokenAddress = await window.blockchainCall(element.dFO.methods.getToken);
+        stateHolderAddress = await window.blockchainCall(element.dFO.methods.getStateHolderAddress);
+        functionalitiesManagerAddress = await window.blockchainCall(element.dFO.methods.getMVDFunctionalitiesManagerAddress);
+        try {
+            element.walletAddress = await window.blockchainCall(element.dFO.methods.getMVDWalletAddress);
+        } catch (e) {}
+    }
+
+    if (!element.doubleProxyAddress) {
+        try {
+            element.doubleProxyAddress = await window.blockchainCall(element.dFO.methods.getDoubleProxyAddress);
+        } catch (e) {}
+    }
+
+    element.token = window.newContract(window.context.votingTokenAbi, votingTokenAddress);
+    element.name = await window.blockchainCall(element.token.methods.name);
+    element.symbol = await window.blockchainCall(element.token.methods.symbol);
+    element.totalSupply = await window.blockchainCall(element.token.methods.totalSupply);
+    try {
+        element.metadata = await window.AJAXRequest(window.formatLink(element.metadataLink = window.web3.eth.abi.decodeParameter("string", await window.blockchainCall(element.dFO.methods.read, 'getMetadataLink', '0x'))));
+        Object.entries(element.metadata).forEach(it => element[it[0]] = it[1] || element[it[0]]);
+    } catch (e) {}
+    element.decimals = await window.blockchainCall(element.token.methods.decimals);
+    element.stateHolder = window.newContract(window.context.stateHolderAbi, stateHolderAddress);
+    element.functionalitiesManager = window.newContract(window.context.functionalitiesManagerAbi, functionalitiesManagerAddress);
+    element.functionalitiesAmount = parseInt(await window.blockchainCall(element.functionalitiesManager.methods.getFunctionalitiesAmount));
+    element.lastUpdate = element.startBlock;
+    window.refreshBalances(view, element);
+    element.minimumBlockNumberForEmergencySurvey = '0';
+    element.emergencySurveyStaking = '0';
+
+    setTimeout(async function() {
+        try {
+            element.minimumBlockNumberForEmergencySurvey = window.web3.eth.abi.decodeParameter("uint256", await window.blockchainCall(element.dFO.methods.read, 'getMinimumBlockNumberForEmergencySurvey', '0x')) || '0';
+            element.emergencySurveyStaking = window.web3.eth.abi.decodeParameter("uint256", await window.blockchainCall(element.dFO.methods.read, 'getEmergencySurveyStaking', '0x')) || '0';
+        } catch (e) {}
+        try {
+            element.quorum = window.web3.eth.abi.decodeParameter("uint256", await window.blockchainCall(element.dFO.methods.read, 'getQuorum', '0x'));
+        } catch (e) {
+            element.quorum = "0";
+        }
+        try {
+            element.surveySingleReward = window.web3.eth.abi.decodeParameter("uint256", await window.blockchainCall(element.dFO.methods.read, 'getSurveySingleReward', '0x'));
+        } catch (e) {
+            element.surveySingleReward = "0";
+        }
+        try {
+            element.minimumStaking = window.web3.eth.abi.decodeParameter("uint256", await window.blockchainCall(element.dFO.methods.read, 'getMinimumStaking', '0x'));
+        } catch (e) {
+            element.minimumStaking = "0";
+        }
+        element.icon = window.makeBlockie(element.dFO.options.address);
+        try {
+            element.link = window.web3.eth.abi.decodeParameter("string", await window.blockchainCall(element.dFO.methods.read, 'getLink', '0x'));
+        } catch (e) {}
+        try {
+            element.index = window.web3.eth.abi.decodeParameter("uint256", await window.blockchainCall(element.dFO.methods.read, 'getIndex', '0x'));
+        } catch (e) {}
+        try {
+            element !== window.dfoHub && (element.ens = await window.blockchainCall(window.dfoHubENSResolver.methods.subdomain, element.dFO.options.originalAddress));
+        } catch (e) {}
+        element.votesHardCap = '0'
+        try {
+            element.votesHardCap = window.web3.eth.abi.decodeParameter("uint256", await window.blockchainCall(element.dFO.methods.read, 'getVotesHardCap', '0x'));
+        } catch (e) {}
+        element.ens = element.ens || '';
+        element.ensComplete = element.ens + '.dfohub.eth';
+        element.ensComplete.indexOf('.') === 0 && (element.ensComplete = element.ensComplete.substring(1));
+        try {
+            view && view && setTimeout(function() {
+                view && view.forceUpdate();
+            });
+        } catch (e) {}
+    }, 300);
+    return element;
+};
+
+window.refreshBalances = async function refreshBalances(view, element, silent) {
+    if (!element) {
+        return;
+    }
+    var ethereumPrice = await window.getEthereumPrice();
+    element.balanceOf = await window.blockchainCall(element.token.methods.balanceOf, window.dfoHub.walletAddress);
+    element.communityTokens = await window.blockchainCall(element.token.methods.balanceOf, element.walletAddress);
+    element.communityTokensDollar = '0';
+    element.singleCommunityTokenDollar = '0';
+    element.availableSupply = window.web3.utils.toBN(element.totalSupply).sub(window.web3.utils.toBN(element.communityTokens)).toString();
+    element.unlockedMarketCapDollar = 0;
+    element.walletETH = await window.web3.eth.getBalance(element.walletAddress);
+    element.walletETHDollar = ethereumPrice;
+    element.walletBUIDL = await window.blockchainCall(window.dfoHub.token.methods.balanceOf, element.walletAddress);
+    element.walletBUIDLDollar = '0';
+    element.walletUSDC = '0';
+    element.walletUSDCDollar = '0';
+    element.walletDAI = '0';
+    element.walletDAIDollar = '0';
+    try {
+        element.walletDAI = await window.blockchainCall(window.newContract(window.context.votingTokenAbi, window.getNetworkElement("daiTokenAddress")).methods.balanceOf, element.walletAddress);
+        element.walletDAIDollar = window.fromDecimals((await window.blockchainCall(window.uniswapV2Router.methods.getAmountsOut, window.toDecimals('1', 18), [window.getNetworkElement("daiTokenAddress"), window.wethAddress]))[1], 18, true);
+        element.walletDAIDollar = parseFloat(window.fromDecimals(element.walletDAI, 18, true)) * parseFloat(element.walletDAIDollar) * ethereumPrice;
+    } catch (e) {}
+    try {
+        element.communityTokensDollar = window.fromDecimals((await window.blockchainCall(window.uniswapV2Router.methods.getAmountsOut, window.toDecimals('1', element.decimals), [element.token.options.address, window.wethAddress]))[1], 18, true);
+        element.singleCommunityTokenDollar = element.communityTokensDollar;
+        element.communityTokensDollar = parseFloat(window.fromDecimals(element.communityTokens, 18, true)) * element.communityTokensDollar * ethereumPrice;
+        element.walletUSDC = await window.blockchainCall(window.newContract(window.context.votingTokenAbi, window.getNetworkElement("usdcTokenAddress")).methods.balanceOf, element.walletAddress);
+        element.walletUSDCDollar = window.fromDecimals((await window.blockchainCall(window.uniswapV2Router.methods.getAmountsOut, window.toDecimals('1', 6), [window.getNetworkElement("usdcTokenAddress"), window.wethAddress]))[1], 18, true);
+        element.walletUSDCDollar = parseFloat(window.fromDecimals(element.walletUSDC, 6, true)) * parseFloat(element.walletUSDCDollar) * ethereumPrice;
+    } catch (e) {}
+    try {
+        element.walletBUIDLDollar = window.fromDecimals((await window.blockchainCall(window.uniswapV2Router.methods.getAmountsOut, window.toDecimals('1', window.dfoHub.decimals), [window.dfoHub.token.options.address, window.wethAddress]))[1], 18, true);
+        element.walletBUIDLDollar = parseFloat(window.fromDecimals(element.walletBUIDL, 18, true)) * element.walletBUIDLDollar * ethereumPrice;
+    } catch (e) {}
+    element.walletCumulativeDollar = element.communityTokensDollar + element.walletETHDollar + element.walletUSDCDollar;
+    element !== window.dfoHub && (element.walletCumulativeDollar += element.walletBUIDLDollar);
+    element.walletCumulativeDollar && (element.walletCumulativeDollar = window.formatMoney(element.walletCumulativeDollar));
+    element.walletUSDCDollar && (element.walletUSDCDollar = window.formatMoney(element.walletUSDCDollar));
+    element.communityTokensDollar && (element.communityTokensDollar = window.formatMoney(element.communityTokensDollar));
+    try {
+        element.unlockedMarketCapDollar = parseFloat(element.singleCommunityTokenDollar.split(',').join('.')) * parseFloat(window.fromDecimals(element.availableSupply, element.decimals, true));
+    } catch(e) {
+    }
+    try {
+        element.lockedMarketCapDollar = parseFloat(element.singleCommunityTokenDollar.split(',').join('.')) * parseFloat(window.fromDecimals(element.communityTokens, element.decimals, true));
+    } catch(e) {
+    }
+    try {
+        element.totalMarketCapDollar = parseFloat(element.singleCommunityTokenDollar.split(',').join('.')) * parseFloat(window.fromDecimals(element.totalSupply, element.decimals, true));
+    } catch(e) {
+    }
+    element.walletETHDollar && (element.walletETHDollar = window.formatMoney(element.walletETHDollar));
+    element.walletBUIDLDollar && (element.walletBUIDLDollar = window.formatMoney(element.walletBUIDLDollar));
+    element.walletDAIDollar && (element.walletDAIDollar = window.formatMoney(element.walletDAIDollar));
+    element.myBalanceOf = window.walletAddress ? await window.blockchainCall(element.token.methods.balanceOf, window.walletAddress) : '0';
+    view && view.forceUpdate();
+    if (silent === true) {
+        return;
+    }
+    setTimeout(function() {
+        Promise.all(Object.keys(window.list).map(async function(key, i) {
+            if (element.key === key) {
+                return;
+            }
+            var e = window.list[key];
+            if (!e.token) {
+                return;
+            }
+            e.myBalanceOf = window.walletAddress ? await window.blockchainCall(e.token.methods.balanceOf, window.walletAddress) : '0';
+        })).then(() => view && view.forceUpdate());
     });
-    logs.push(...(await window.getLogs({
-        address: window.context.uniSwapV2FactoryAddress,
-        fromBlock: '0',
-        topics: [
-            window.pairCreatedTopic, [],
-            [myToken]
-        ]
-    })));
-    var uniswapPairs = [];
-    var alreadyAdded = {};
-    for (var log of logs) {
-        for (var topic of log.topics) {
-            if (topic === window.pairCreatedTopic || topic.toLowerCase() === myToken.toLowerCase()) {
-                continue;
+};
+
+window.getFIBlock = async function getFIBlock(element) {
+    if (!element) {
+        window.getFIBlock(window.dfoHub);
+        return window.getFIBlock(window.list['10417092_log_61829c8c']);
+    }
+    var lastSwapBlock = parseInt(await window.blockchainCall(element.stateHolder.methods.getUint256, 'lastSwapBlock'));
+    var swapBlockLimit = parseInt(await window.blockchainCall(element.stateHolder.methods.getUint256, 'swapBlockLimit'));
+    console.log(element.name, window.getNetworkElement('etherscanURL') + 'block/countdown/' + (lastSwapBlock + swapBlockLimit));
+};
+
+window.uploadToIPFS = async function uploadToIPFS(files) {
+    var single = !(files instanceof Array) && (!(files instanceof FileList) || files.length === 0);
+    files = single ? [files] : files;
+    var list = [];
+    for (var i = 0; i < files.length; i++) {
+        var file = files.item ? files.item(i) : files[i];
+        if (!(file instanceof File) && !(file instanceof Blob)) {
+            file = new Blob([JSON.stringify(file, null, 4)], { type: "application/json" });
+        }
+        list.push(file);
+    }
+    var hashes = [];
+    window.api = window.api || new IpfsHttpClient(window.context.ipfsHost);
+    for await (var upload of window.api.add(list)) {
+        hashes.push(window.context.ipfsUrlTemplates[0] + upload.path);
+    }
+    return single ? hashes[0] : hashes;
+};
+
+window.validateDFOMetadata = async function validateDFOMetadata(metadata, noUpload) {
+    var errors = [];
+    !metadata && errors.push('Please provide data');
+
+    metadata && metadata.brandUri && (!metadata.brandUri || !new RegExp(window.urlRegex).test(metadata.brandUri) || metadata.brandUri.indexOf('ipfs') === -1) && errors.push("DFO Logo is not a valid IPFS URL (ipfs://ipfs/...)");
+    metadata && metadata.logoUri && (!metadata.logoUri || !new RegExp(window.urlRegex).test(metadata.logoUri) || metadata.logoUri.indexOf('ipfs') === -1) && errors.push("Token Logo is not a valid IPFS URL (ipfs://ipfs/...)");
+    metadata && metadata.externalENS && (!metadata.externalENS || !new RegExp(window.urlRegex).test(metadata.externalENS) || metadata.externalENS.indexOf('.eth') === -1) && errors.push("External ENS link must contain a valid ENS URL");
+
+    if (errors.length > 0) {
+        throw errors.join('\n');
+    }
+
+    try {
+        metadata.brandUri = metadata.brandUri.item(0);
+    } catch (e) {}
+    if (metadata && typeof metadata.brandUri !== 'string' && !await window.checkCoverSize(metadata.brandUri)) {
+        //errors.push('Brand Logo must be valid 320x320 image');
+    }
+    try {
+        metadata && (metadata.brandUri = (!metadata.brandUri || noUpload) ? metadata.brandUri : (typeof metadata.brandUri === 'string' && metadata.brandUri.indexOf('ipfs') !== -1) ? metadata.brandUri : await window.uploadToIPFS(metadata.brandUri));
+    } catch (e) {
+        errors.push(e.message || e);
+    }
+    try {
+        metadata.logoUri = metadata.logoUri.item(0);
+    } catch (e) {}
+    if (metadata && typeof metadata.logoUri !== 'string' && !await window.checkCoverSize(metadata.logoUri)) {
+        //errors.push('Token Logo must be valid 320x320 image');
+    }
+    try {
+        metadata && (metadata.logoUri = (!metadata.logoUri || noUpload) ? metadata.logoUri : (typeof metadata.logoUri === 'string' && metadata.logoUri.indexOf('ipfs') !== -1) ? metadata.logoUri : await window.uploadToIPFS(metadata.logoUri));
+    } catch (e) {
+        //errors.push(e.message || e);
+    }
+    //metadata && !metadata.name && errors.push("Name is mandatory in metadata");
+    //metadata && !metadata.shortDescription && errors.push("BIO is mandatory in metadata");
+    //metadata && (!metadata.wpUri || !new RegExp(window.urlRegex).test(metadata.wpUri)) && errors.push("Explainer link must contain a valid URL");
+    //metadata && !noUpload && (!metadata.brandUri || !new RegExp(window.urlRegex).test(metadata.brandUri) || metadata.brandUri.indexOf('ipfs') === -1) && errors.push("DFO Logo is not a valid URL");
+    //metadata && !noUpload && (!metadata.logoUri || !new RegExp(window.urlRegex).test(metadata.logoUri) || metadata.logoUri.indexOf('ipfs') === -1) && errors.push("Token Logo is not a valid URL");
+    //metadata && noUpload && !metadata.brandUri && errors.push("Insert a valid DFO Logo");
+    //metadata && noUpload && !metadata.logoUri && errors.push("Insert a valid Token Logo image");
+    //metadata && (!metadata.discussionUri || !new RegExp(window.urlRegex).test(metadata.discussionUri)) && errors.push("Chat link must contain a valid URL");
+    //metadata && (!metadata.repoUri || !new RegExp(window.urlRegex).test(metadata.repoUri)) && errors.push("Repo link must contain a valid URL");
+    //metadata && (!metadata.externalDNS || !new RegExp(window.urlRegex).test(metadata.externalDNS)) && errors.push("External link must contain a valid URL");
+    //metadata && (!metadata.externalENS || !new RegExp(window.urlRegex).test(metadata.externalENS) || metadata.externalENS.indexOf('.eth') === -1) && errors.push("External ENS link must contain a valid ENS URL");
+    //metadata && (!metadata.roadmapUri || !new RegExp(window.urlRegex).test(metadata.roadmapUri)) && errors.push("Roadmap link must contain a valid URL");
+    if (errors.length > 0) {
+        throw errors.join('\n');
+    }
+    return noUpload ? metadata : await window.uploadToIPFS(metadata);
+};
+
+window.proposeNewMetadataLink = async function proposeNewMetadataLink(element, metadata, noValidation) {
+    var metadataLink = !noValidation ? await window.validateDFOMetadata(metadata) : null;
+    var originalMetadataLink = null;
+    try {
+        originalMetadataLink = await window.blockchainCall(element.dFO.methods.read, 'getMetadataLink', '0x');
+        originalMetadataLink = window.web3.eth.abi.decodeParameter('string', originalMetadataLink);
+    } catch (e) {}
+    if (originalMetadataLink === metadataLink) {
+        return;
+    }
+    var descriptions = ['DFO Hub - Utilities - Get Metadata Link', 'The metadata located at this link contains all info about the DFO like name, short description, discussion link and many other info.'];
+    var updates = !metadataLink ? ['Clearing Votes Hard Cap'] : ['Setting metadata link to ' + metadataLink];
+    originalMetadataLink && descriptions.push(updates[0]);
+    var template = !metadataLink ? undefined : JSON.parse(JSON.stringify(window.context.simpleValueProposalTemplate).split('type').join('string memory').split('value').join('\\"' + metadataLink + '\\"'));
+    window.sendGeneratedProposal(element, {
+        title: updates[0],
+        functionalityName: metadataLink ? 'getMetadataLink' : '',
+        functionalityMethodSignature: metadataLink ? 'getValue()' : '',
+        functionalitySubmitable: false,
+        functionalityReplace: originalMetadataLink ? 'getMetadataLink' : '',
+        functionalityOutputParameters: metadataLink ? '["string"]' : '',
+    }, template, undefined, descriptions, updates);
+};
+
+window.deployMetadataLink = async function deployMetadata(metadata, functionalitiesManager) {
+    if(metadata) {
+        var aVar = false;
+        Object.values(metadata).forEach(it => {
+            if(it) {
+                aVar = true;
             }
-            var pairTokenAddress = window.web3.utils.toChecksumAddress(window.web3.eth.abi.decodeParameters(['address', 'uint256'], log.data)[0]);
-            if (alreadyAdded[pairTokenAddress]) {
-                continue;
-            }
-            alreadyAdded[pairTokenAddress] = true;
-            var pairToken = await window.loadTokenInfos(pairTokenAddress, window.context.UniswapV2PairAbi, true);
-            var token0 = window.web3.utils.toChecksumAddress(await window.blockchainCall(pairToken.token.methods.token0));
-            var token1 = window.web3.utils.toChecksumAddress(await window.blockchainCall(pairToken.token.methods.token1));
-            pairToken.token0 = token0 === address ? token : await window.loadTokenInfos(token0, undefined, indexes ? true : false);
-            pairToken.token1 = token1 === address ? token : await window.loadTokenInfos(token1, undefined, indexes ? true : false);
-            pairToken.key = `${token0}_${token1}-${token1}_${token0}`;
-            indexes && (indexes[pairToken.key] = pairToken);
-            uniswapPairs.push(pairToken);
+        });
+        if(!aVar) {
+            return;
         }
     }
-    return uniswapPairs;
+    var metadataLink = await window.validateDFOMetadata(metadata);
+    var code = `
+pragma solidity ^0.7.1;
+
+contract DeployMetadataLink {
+
+    constructor(address mVDFunctionalitiesManagerAddress, address sourceLocation, uint256 sourceLocationId, string memory metadataLink) {
+        IMVDFunctionalitiesManager functionalitiesManager = IMVDFunctionalitiesManager(mVDFunctionalitiesManagerAddress);
+        functionalitiesManager.addFunctionality("getMetadataLink", sourceLocation, sourceLocationId, address(new GetStringValue(metadataLink)), false, "getValue()", '["string"]', false, false);
+        selfdestruct(msg.sender);
+    }
+}
+
+interface IMVDFunctionalitiesManager {
+    function addFunctionality(string calldata codeName, address sourceLocation, uint256 sourceLocationId, address location, bool submitable, string calldata methodSignature, string calldata returnAbiParametersArray, bool isInternal, bool needsSender) external;
+}
+
+contract GetStringValue {
+
+    string private _value;
+
+    constructor(string memory value) public {
+        _value = value;
+    }
+
+    function onStart(address, address) public {
+    }
+
+    function onStop(address) public {
+    }
+
+    function getValue() public view returns(string memory) {
+        return _value;
+    }
+}
+`.trim();
+    var selectedSolidityVersion = 'soljson-v0.7.1+commit.f4a555be.js';
+    var compiled = await window.SolidityUtilities.compile(code, selectedSolidityVersion, 200);
+    var selectedContract = compiled['DeployMetadataLink'];
+    var args = [
+        selectedContract.abi,
+        selectedContract.bytecode,
+        functionalitiesManager,
+        window.getNetworkElement('defaultOcelotTokenAddress'),
+        window.getNetworkElement('deployMetadataLinkSourceLocationId'),
+        metadataLink
+    ];
+    return await window.createContract.apply(window, args);
 };
+
+window.checkCoverSize = function checkCoverSize(cover, width, height) {
+    cover = (cover.item && cover.item(0)) || cover;
+    width = width || 320;
+    height = height || width;
+    return new Promise(function(ok) {
+        var reader = new FileReader();
+        reader.addEventListener("load", function() {
+            var image = new Image();
+            image.onload = function onload() {
+                return ok(image.width === width && image.height === height);
+            };
+            image.src = (window.URL || window.webkitURL).createObjectURL(cover);
+        }, false);
+        reader.readAsDataURL(cover);
+    });
+};
+
+window.formatLink = function formatLink(link) {
+    link = (link ? link instanceof Array ? link[0] : link : '');
+    if(link.indexOf('assets') === 0 || link.indexOf('/assets') === 0) {
+        return link;
+    }
+    for(var temp of window.context.ipfsUrlTemplates) {
+        link = link.split(temp).join(window.context.ipfsUrlChanger);
+    }
+    while(link && link.startsWith('/')) {
+        link = link.substring(1);
+    }
+    return (!link ? '' : link.indexOf('http') === -1 ? ('https://' + link) : link).split('https:').join('').split('http:').join('');
+};
+
+window.generateFunctionalityMetadataLink = async function generateFunctionalityMetadataLink(data) {
+    var comments = {};
+    try {
+        comments = window.extractComment(data.sourceCode || data.code);
+    } catch (e) {}
+    var codeName = data.codeName || data.functionalityName;
+    var replaces = data.replaces || data.functionalityReplace;
+    var metadata = {
+        title: data.title,
+        codeName,
+        description: {
+            Discussion: window.formatLink(comments.Discussion || data.element.ensComplete),
+            Description: comments.Description,
+            Update: comments.Update,
+        },
+        code: data.sourceCode || data.code,
+        version: await window.getNextFunctionalityVersion(data, codeName, replaces)
+    }
+    return await window.uploadToIPFS(metadata);
+};
+
+window.getNextFunctionalityVersion = async function getNextFunctionalityVersion(data, codeName, replaces) {
+    var version = 0;
+    if (replaces && codeName) {
+        try {
+            var functionalityLocation = (await window.blockchainCall(data.element.functionalitiesManager.methods.getFunctionalityData, data.replaces))[0];
+            var metadata = await window.AJAXRequest(await window.blockchainCall(window.newContract(window.context.IFunctionalityAbi, functionalityLocation).methods.getMetadataLink));
+            version = 1 + metadata.version;
+        } catch (e) {}
+    }
+    return version;
+};
+
+window.getHomepageLink = function getHomepageLink(tail) {
+    var link = '';
+    link += window.location.protocol;
+    link += '//';
+    link += window.location.hostname;
+    window.location.port && (link += (':' + window.location.port));
+    link += window.location.pathname;
+    !link.endsWith('/') && (link += '/');
+    return link + (tail || '');
+};
+
+window.setHomepageLink = function setHomepageLink(tail) {
+    window.history.pushState({}, "", window.getHomepageLink(tail));
+};
+
+window.preventItem = function preventItem(e) {
+    if(!e) {
+        return;
+    }
+    e.preventDefault && e.preventDefault(true);
+    e.stopPropagation && e.stopPropagation(true);
+    return e;
+};
+
+window.sleep = function sleep(millis) {
+    return new Promise(function(ok) {
+        setTimeout(ok, millis);
+    });
+}

@@ -19,7 +19,7 @@ var ReactModuleManager = function() {
         var elementName = undefined
         var reactClass = typeof viewName !== 'string' ? viewName : window[viewName] !== undefined ? window[viewName] : undefined
 
-        if (reactClass !== undefined && reactClass.prototype && reactClass.prototype.constructor.displayName !== undefined) {
+        if (reactClass !== undefined && reactClass.prototype.constructor.displayName !== undefined) {
             elementName = reactClass.prototype.constructor.displayName
             if (reactClass.prototype.oldRender === undefined) {
                 var requireCalled = true;
@@ -105,11 +105,11 @@ var ReactModuleManager = function() {
                     if (rendered.props === undefined || rendered.props === null) {
                         rendered.props = {};
                     }
-                    rendered.props.className = loader && rendered.props.defaultClassName ? rendered.props.defaultClassName : rendered.props.className;
+                    rendered.props.className = loader ? rendered.props.defaultClassName : rendered.props.className;
                     if (rendered.props.className === undefined || rendered.props.className === null) {
                         rendered.props.className = '';
                     }
-                    if (rendered.props.className && !rendered.props.className.containsAloneWord(lowerCaseViewName)) {
+                    if (!rendered.props.className.containsAloneWord(lowerCaseViewName)) {
                         if (rendered.props.className !== '') {
                             lowerCaseViewName += ' '
                         }
@@ -142,6 +142,7 @@ var ReactModuleManager = function() {
             if (reactClass.prototype.oldComponentDidMount === undefined) {
                 reactClass.prototype.oldComponentDidMount = reactClass.prototype.componentDidMount
                 reactClass.prototype.componentDidMount = function componentDidMount() {
+                    this.mounted = true;
                     if(requireCalled === false) {
                         return;
                     }
@@ -173,11 +174,6 @@ var ReactModuleManager = function() {
                     cancelTimeout(queueElementId);
                 }
             }
-            if (reactClass.prototype.hasOwnProperty('parentComponent') === undefined) {
-                reactClass.prototype.__defineGetter__('parentComponent', function parentComponent() {
-                    return this.domRoot && this.domRoot[0].parentElement.reactComponent;
-                });
-            }
             if (typeof jQuery !== 'undefined' && jQuery.publish) {
                 if (reactClass.prototype.oldComponentWillUnmount === undefined) {
                     reactClass.prototype.oldComponentWillUnmount = reactClass.prototype.componentWillUnmount
@@ -186,6 +182,7 @@ var ReactModuleManager = function() {
                         if (this.oldComponentWillUnmount !== undefined && this.oldComponentWillUnmount !== null) {
                             this.oldComponentWillUnmount.apply(this);
                         }
+                        delete this.mounted;
                     }
                 }
                 if (reactClass.prototype.subscribe === undefined) {
@@ -247,7 +244,7 @@ var ReactModuleManager = function() {
         var element;
         var involveLoadedModules = true
 
-        if (typeof viewName !== 'string' || window[viewName] === undefined || window[viewName] instanceof HTMLCollection || window[viewName] instanceof HTMLElement) {
+        if (typeof viewName !== 'string' || window[viewName] === undefined) {
             element = React.createElement2.apply(React, callerArguments)
             involveLoadedModules = typeof viewName !== 'string'
             if (elementName !== undefined) {
@@ -268,21 +265,19 @@ var ReactModuleManager = function() {
     return {
         createElement: function(viewName) {
             return createElementInternal({
-                viewName: viewName,
-                createNew: false,
+                viewName,
                 arguments: arguments
             })
         },
         createElementNew: function(viewName) {
             return createElementInternal({
-                viewName: viewName,
+                viewName,
                 createNew: true,
                 arguments: arguments
             })
         }
     }
-}();
-HTMLElement.prototype.__defineGetter__('reactComponent', function reactComponent() { var elem = this; while (elem) { if (elem.reactInstance) { return elem.reactInstance; }elem = elem.parentNode; } });
+}()
 React.defaultLoader = function() {
     return React.createElement('span', {}, 'Loading...');
 };

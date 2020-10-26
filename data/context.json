@@ -2,5 +2,7 @@
     "ethereumNetwork": {
         "1": "",
         "3": "Ropsten"
-    }
+    },
+    "ethItemOrchestratorAddress" : "0xabc",
+    "ethItemOrchestratorAddressRopsten" : "0xabc"
 }
