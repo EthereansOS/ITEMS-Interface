@@ -1,9 +1,22 @@
-[{
-    "name" : "Explainer",
-    "module" : "spa/explainer"
-},
+[
 {
-    "name" : "Explore",
+    "name" : "EXPLORE",
     "module" : "spa/explore",
     "selected" : true
-}]
+},
+{
+    "name" : "CREATE",
+    "module" : "spa/create",
+    "selected" : true
+},
+{
+    "name" : "WRAP",
+    "module" : "spa/wrap",
+    "selected" : true
+},
+{
+    "name" : "FARM",
+    "module" : "spa/farm",
+    "selected" : true
+}
+]

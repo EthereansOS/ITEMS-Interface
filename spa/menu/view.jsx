@@ -15,6 +15,7 @@ var Menu = React.createClass({
             <ul>
                 {this.state && this.state.menu && this.state.menu.map((it, i) => <li key={it.module}>
                     <section>
+                        <a className="logo"><img src="assets/img/logo.png"></img><span className="BrandizedSS"> ETHITEM</span></a>
                         <a href="javascript:;" data-index={i} className={"MenuItem" + ((i + "") === (this.state.selected + "") ? " Selected" : "")} onClick={_this.onSelection}>{it.name}</a>
                     </section>
                 </li>)}
