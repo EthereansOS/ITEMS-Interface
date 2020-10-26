@@ -2,6 +2,15 @@ var Index = React.createClass({
     requiredModules : [
         'spa/menu'
     ],
+    getDefaultSubscriptions() {
+        return {
+            'ethereum/ping' : this.controller.refreshUserData,
+            'ethereum/update' : this.controller.loadData
+        }
+    },
+    componentDidMount() {
+        this.controller.loadData();
+    },
     sectionChange(module, props) {
         var _this = this;
         var section = module.split('/');
