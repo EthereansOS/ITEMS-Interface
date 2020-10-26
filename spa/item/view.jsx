@@ -1,4 +1,4 @@
-var Collection = React.createClass({
+var Item = React.createClass({
     render() {
         return(
         <section className="Pager">

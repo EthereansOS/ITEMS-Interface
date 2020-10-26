@@ -1,4 +1,4 @@
-var CollectionController = function (view) {
+var ItemController = function (view) {
     var context = this;
     context.view = view;
 };
