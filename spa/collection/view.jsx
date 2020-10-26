@@ -11,7 +11,15 @@ var Collection = React.createClass({
                         <h3 className="collectionTitle" className="BrandizedS">Collection Name</h3>
                         <p className="collectionDesc">Collection Description Collection Description Collection Description Collection Description Collection Description Collection Description Collection Description Collection Description Collection Description v Collection Description Collection Description Collection Description Collection Description Collection Description Collection Description</p>
                         <span className="collectionItems">3 ITEMS</span>
+                        <span className="collectionLink">wimd.item.eth.link</span>
                     </article>
+                </section>
+                <section className="collectionNav">
+                    <ul>
+                        <li>Items</li>
+                        <li>Farm</li>
+                        <li>Code</li>
+                    </ul>
                 </section>
                 <section className="collectionPageItems">
                     <section className="collectionPageItem">
@@ -28,6 +36,10 @@ var Collection = React.createClass({
                         <a className="ItemCollectionLink">Collection: WIMD</a>
                     </article>
                     </section>
+                </section>
+                <section className="collectionPageItemsFarm">
+                </section>
+                <section className="collectionPageItemsCode">
                 </section>
             </section>
         </section>);
