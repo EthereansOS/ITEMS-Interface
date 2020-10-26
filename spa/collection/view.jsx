@@ -1,46 +1,40 @@
 var Collection = React.createClass({
+    requiredModules : [
+        'spa/singleCollection',
+        'spa/collectionSingleItem'
+    ],
+    toggle(e) {
+        window.preventItem(e);
+        var oldToggle = this.state && this.state.toggle;
+        var toggle = e.currentTarget.innerHTML.toLowerCase();
+        toggle = oldToggle === toggle ? null : toggle;
+        this.setState({toggle});
+    },
+    onCollectionObjectIds(collectionObjectIds) {
+        this.props.collection.items = this.props.collection.items || {};
+        this.setState({collectionObjectIds});
+    },
     render() {
-        return(
-        <section className="Pager">
+        return (<section className="Pager">
             <section className="collectionPage">
-                <section className="collectionPageInfo">
-                    <figure className="collectionIcon">
-                        <img></img>
-                    </figure>
-                    <article className="collectionInfo">
-                        <h3 className="collectionTitle" className="BrandizedS">Collection Name</h3>
-                        <p className="collectionDesc">Collection Description Collection Description Collection Description Collection Description Collection Description Collection Description Collection Description Collection Description Collection Description v Collection Description Collection Description Collection Description Collection Description Collection Description Collection Description</p>
-                        <span className="collectionItems">3 ITEMS</span>
-                        <span className="collectionLink">wimd.item.eth.link</span>
-                    </article>
-                </section>
+                <SingleCollection collection={this.props.collection} className="collectionPageInfo" showLink showItemsCount  onCollectionObjectIds={this.onCollectionObjectIds}/>
                 <section className="collectionNav">
                     <ul>
-                        <li><a>Items</a></li>
-                        <li><a>Farm</a></li>
-                        <li><a>Code</a></li>
+                        <li className={this.state && this.state.toggle === 'items' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>Items</a></li>
+                        <li className={this.state && this.state.toggle === 'farm' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>Farm</a></li>
+                        {this.props.collection.code && <li className={this.state && this.state.toggle === 'code' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>Code</a></li>}
                     </ul>
                 </section>
-                <section className="collectionPageItems">
-                    <section className="collectionPageItem">
-                        <a>
-                            <figure className="ItemIcon">
-                                <img></img>
-                            </figure>
-                        </a>
-                    <article className="ItemInfo">
-                        <h3 className="ItemTitle" className="BrandizedS">Item Name</h3>
-                        <a className="ItemPrice">&#129412; Price: $20</a>
-                        <a className="ItemPrice">&#9973; Price: $20</a>
-                        <span className="ItemSupply">Quantity: 300,000</span>
-                        <a className="ItemCollectionLink">Collection: WIMD</a>
-                    </article>
-                    </section>
-                </section>
-                <section className="collectionPageItemsFarm">
-                </section>
-                <section className="collectionPageItemsCode">
-                </section>
+                {this.state && this.state.toggle === 'items' && <section className="collectionPageItems">
+                    {!this.state.collectionObjectIds && <Loader/>}
+                    {this.state.collectionObjectIds.map(it => <CollectionSingleItem key={it} objectId={it} collection={this.props.collection}/>)}
+                </section>}
+                {this.state && this.state.toggle === 'farm' && <section className="collectionPageItemsFarm">
+                    Soon @ UniFi
+                </section>}
+                {this.state && this.state.toggle === 'code' && <section className="collectionPageItemsCode">
+                    Code
+                </section>}
             </section>
         </section>);
     }

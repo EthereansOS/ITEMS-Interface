@@ -1,22 +1,19 @@
 [
-{
-    "name" : "EXPLORE",
-    "module" : "spa/explore",
-    "selected" : true
-},
-{
-    "name" : "CREATE",
-    "module" : "spa/create",
-    "selected" : true
-},
-{
-    "name" : "WRAP",
-    "module" : "spa/wrap",
-    "selected" : true
-},
-{
-    "name" : "FARM",
-    "module" : "spa/farm",
-    "selected" : true
-}
+    {
+        "name" : "EXPLORE",
+        "module" : "spa/explore",
+        "selected" : true
+    },
+    {
+        "name" : "CREATE",
+        "module" : "spa/create"
+    },
+    {
+        "name" : "WRAP",
+        "module" : "spa/wrap"
+    },
+    {
+        "name" : "FARM",
+        "module" : "spa/farm"
+    }
 ]

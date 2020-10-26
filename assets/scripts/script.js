@@ -77,8 +77,7 @@ window.loadDFO = async function loadDFO(address, allAddresses) {
     dfo.options.allAddresses = allAddresses;
     try {
         dfo.metadataLink = window.web3.eth.abi.decodeParameter('string', await window.blockchainCall(dfo.methods.read, 'getMetadataLink', '0x'));
-    } catch(e) {
-    }
+    } catch (e) {}
     return dfo;
 };
 
@@ -90,7 +89,7 @@ window.getLogs = async function(a, endOnFirstResult) {
     args.fromBlock = args.fromBlock !== "undefined" ? args.fromBlock : "0";
     var to = parseInt(args.toBlock);
     var fillWithWeb3Logs = async function(logs, args) {
-        if(window.web3.currentProvider === window.web3ForLogs.currentProvider) {
+        if (window.web3.currentProvider === window.web3ForLogs.currentProvider) {
             return logs;
         }
         var newArgs = {};
@@ -190,7 +189,7 @@ window.loadContext = async function loadContext() {
     var localContext = {};
     try {
         localContext = await window.AJAXRequest('data/context.local.json');
-    } catch(e) {
+    } catch (e) {
         console.clear && console.clear();
     }
     window.context = window.deepCopy(context, localContext);
@@ -200,19 +199,18 @@ window.deepCopy = function deepCopy(data, extension) {
     data = data ? JSON.parse(JSON.stringify(data)) : {};
     extension = extension ? JSON.parse(JSON.stringify(extension)) : {};
     var keys = Object.keys(extension);
-    for(var i in keys) {
+    for (var i in keys) {
         var key = keys[i];
-        if(!data[key]) {
+        if (!data[key]) {
             data[key] = extension[key];
             continue;
         }
         try {
-            if(Object.keys(data[key]).length > 0 && Object.keys(extension[key]).length > 0) {
+            if (Object.keys(data[key]).length > 0 && Object.keys(extension[key]).length > 0) {
                 data[key] = deepCopy(data[key], extension[key]);
                 continue;
             }
-        } catch(e) {
-        }
+        } catch (e) {}
         data[key] = extension[key];
     }
     return data;
@@ -1308,7 +1306,7 @@ window.shortenWord = function shortenWord(word, charsAmount) {
 window.loadLogo = async function loadLogo(address) {
     address = window.web3.utils.toChecksumAddress(address);
     window.logos = window.logos || {};
-    if(window.logos[address]) {
+    if (window.logos[address]) {
         return window.logos[address];
     }
     var logo = address === window.voidEthereumAddress ? 'assets/img/eth-logo.png' : window.context.trustwalletImgURLTemplate.format(address);
@@ -1639,19 +1637,17 @@ window.setStakingManagerData = async function setStakingManagerData(element, sta
     try {
         stakingManagerData.mainToken = await window.loadTokenInfos(await window.blockchainCall(stakingManager.methods.tokenAddress));
         stakingManagerData.rewardToken = await window.loadTokenInfos(await window.blockchainCall(stakingManager.methods.rewardTokenAddress));
-    } catch(e) {
-    }
+    } catch (e) {}
     stakingManagerData.startBlock = await window.blockchainCall(stakingManager.methods.startBlock);
     try {
         stakingManagerData.endBlock = await window.blockchainCall(stakingManager.methods.endBlock);
-        if(active) {
+        if (active) {
             var currentBlock = await window.web3.eth.getBlockNumber();
-            if(currentBlock > parseInt(stakingManagerData.endBlock)) {
+            if (currentBlock > parseInt(stakingManagerData.endBlock)) {
                 stakingManagerData.active = false;
             }
         }
-    } catch(e) {
-    }
+    } catch (e) {}
     var blockNumber = await window.web3.eth.getBlockNumber();
     stakingManagerData.started = blockNumber > parseInt(stakingManagerData.startBlock);
     stakingManagerData.terminated = stakingManagerData.endBlock && blockNumber > parseInt(stakingManagerData.endBlock);
@@ -1833,16 +1829,13 @@ window.refreshBalances = async function refreshBalances(view, element, silent) {
     element.communityTokensDollar && (element.communityTokensDollar = window.formatMoney(element.communityTokensDollar));
     try {
         element.unlockedMarketCapDollar = parseFloat(element.singleCommunityTokenDollar.split(',').join('.')) * parseFloat(window.fromDecimals(element.availableSupply, element.decimals, true));
-    } catch(e) {
-    }
+    } catch (e) {}
     try {
         element.lockedMarketCapDollar = parseFloat(element.singleCommunityTokenDollar.split(',').join('.')) * parseFloat(window.fromDecimals(element.communityTokens, element.decimals, true));
-    } catch(e) {
-    }
+    } catch (e) {}
     try {
         element.totalMarketCapDollar = parseFloat(element.singleCommunityTokenDollar.split(',').join('.')) * parseFloat(window.fromDecimals(element.totalSupply, element.decimals, true));
-    } catch(e) {
-    }
+    } catch (e) {}
     element.walletETHDollar && (element.walletETHDollar = window.formatMoney(element.walletETHDollar));
     element.walletBUIDLDollar && (element.walletBUIDLDollar = window.formatMoney(element.walletBUIDLDollar));
     element.walletDAIDollar && (element.walletDAIDollar = window.formatMoney(element.walletDAIDollar));
@@ -1971,14 +1964,14 @@ window.proposeNewMetadataLink = async function proposeNewMetadataLink(element, m
 };
 
 window.deployMetadataLink = async function deployMetadata(metadata, functionalitiesManager) {
-    if(metadata) {
+    if (metadata) {
         var aVar = false;
         Object.values(metadata).forEach(it => {
-            if(it) {
+            if (it) {
                 aVar = true;
             }
         });
-        if(!aVar) {
+        if (!aVar) {
             return;
         }
     }
@@ -2051,13 +2044,13 @@ window.checkCoverSize = function checkCoverSize(cover, width, height) {
 
 window.formatLink = function formatLink(link) {
     link = (link ? link instanceof Array ? link[0] : link : '');
-    if(link.indexOf('assets') === 0 || link.indexOf('/assets') === 0) {
+    if (link.indexOf('assets') === 0 || link.indexOf('/assets') === 0) {
         return link;
     }
-    for(var temp of window.context.ipfsUrlTemplates) {
+    for (var temp of window.context.ipfsUrlTemplates) {
         link = link.split(temp).join(window.context.ipfsUrlChanger);
     }
-    while(link && link.startsWith('/')) {
+    while (link && link.startsWith('/')) {
         link = link.substring(1);
     }
     return (!link ? '' : link.indexOf('http') === -1 ? ('https://' + link) : link).split('https:').join('').split('http:').join('');
@@ -2112,7 +2105,7 @@ window.setHomepageLink = function setHomepageLink(tail) {
 };
 
 window.preventItem = function preventItem(e) {
-    if(!e) {
+    if (!e) {
         return;
     }
     e.preventDefault && e.preventDefault(true);
@@ -2124,4 +2117,59 @@ window.sleep = function sleep(millis) {
     return new Promise(function(ok) {
         setTimeout(ok, millis);
     });
-}
+};
+
+window.tryRetrieveMetadata = async function tryRetrieveMetadata(item) {
+    if (item.metadataLink || (item.category && window.context.collectionsWithMetadata.indexOf(item.category) === -1)) {
+        return;
+    }
+    var clearMetadata = true;
+    try {
+        item.metadataLink = item.objectId ? await window.blockchainCall(item.contract.methods.uri, item.objectId) : await window.blockchainCall(item.contract.methods.uri);
+        if (item.metadataLink !== "") {
+            item.metadata = await window.AJAXRequest(window.formatLink(item.metadataLink));
+            if (typeof item.metadata !== "string") {
+                Object.entries(item.metadata).forEach(it => item[it[0]] = it[1]);
+                item.name = item.item_name || item.name;
+                clearMetadata = false;
+            }
+        }
+    } catch (e) {}
+    clearMetadata && delete item.metadata;
+    clearMetadata && (item.metadataLink = clearMetadata ? "blank" : item.metadataLink);
+};
+
+window.getTokenPriceInDollarsOnUniswap = async function getTokenPriceInDollarsOnUniswap(tokenAddress, decimals) {
+    var uniswapV2Router = window.newContract(window.context.uniswapV2RouterABI, window.context.uniswapV2RouterAddress);
+    var wethAddress = window.web3.utils.toChecksumAddress(await window.blockchainCall(uniswapV2Router.methods.WETH));
+    var ethereumPrice = await window.getEthereumPrice();
+    var path = [
+        tokenAddress,
+        wethAddress
+    ];
+    var amount = window.toDecimals("1", decimals);
+    var ethereumValue = "0";
+    try {
+        ethereumValue = (await window.blockchainCall(uniswapV2Router.methods.getAmountsOut, amount, path))[1];
+    } catch(e) {
+    }
+    ethereumValue = parseFloat(window.fromDecimals(ethereumValue, decimals));
+    ethereumValue *= ethereumPrice;
+    return ethereumValue;
+};
+
+window.getTokenPriceInDollarsOnOpenSea = async function getTokenPriceInDollarsOnOpenSea(asset_contract_address, token_id) {
+    if(window.networkId !== 1) {
+        return 0;
+    }
+    var seaport = new OpenSeaPort(window.web3.currentProvider, {
+        networkName: OpenSeaNetwork.Main
+    });
+    var { orders } = await seaport.api.getOrders({
+        asset_contract_address,
+        token_id,
+        side: OpenSeaOrderSide.Sell
+    });
+    //console.log(orders);
+    return 0;
+};

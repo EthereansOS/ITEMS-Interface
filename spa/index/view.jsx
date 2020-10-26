@@ -6,7 +6,8 @@ var Index = React.createClass({
         return {
             'ethereum/update' : this.controller.loadData,
             'ethereum/ping' : this.controller.refreshCollectionData,
-            'items/refresh' : this.controller.loadCollections
+            'collections/refresh' : this.controller.loadCollections,
+            'section/change' : this.sectionChange
         }
     },
     componentDidMount() {

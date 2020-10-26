@@ -9,17 +9,17 @@ var IndexController = function (view) {
 
     context.loadCollections = async function loadCollections(clear) {
         clear && context.view.setState({ collections: null });
-        (!context.view.state || !context.view.state.collections) && context.view.setState({ collectionsLoading: true });
+        (!context.view.state || !context.view.state.collections) && context.view.setState({ loadingCollections: true });
         var map = {};
         Object.entries(window.context.ethItemFactoryEvents).forEach(it => map[window.web3.utils.sha3(it[0])] = it[1]);
         var topics = [Object.keys(map)];
         var address = await window.blockchainCall(window.ethItemOrchestrator.methods.factories);
         var collections = (context.view.state && context.view.state.collections) || [];
         var blocks = await context.loadBlockSearchTranches();
-        var updateSubCollectionsPromise = function updateSubCollectionsPromise(subC) {
-            return new Promise(function (ok) {
-                collections.push(...subC);
-                context.view.setState({ collections }, () => context.refreshCollectionData(subC).then(ok));
+        var updateSubCollectionsPromise = function updateSubCollectionsPromise(subCollections) {
+            return new Promise(function(ok) {
+                collections.push(...subCollections);
+                context.view.setState({ collections }, () => context.refreshCollectionData(subCollections).then(ok));
             });
         }
         var subCollectionsPromises = [];
@@ -39,6 +39,7 @@ var IndexController = function (view) {
                 var contract = window.newContract(abi, address);
                 var collection = {
                     key: log.blockNumber + "_" + address,
+                    index : collections.length + subCollections.length,
                     address,
                     category,
                     contract
@@ -48,7 +49,7 @@ var IndexController = function (view) {
             subCollectionsPromises.push(updateSubCollectionsPromise(subCollections));
         }
         await Promise.all(subCollectionsPromises);
-        context.view.setState({ collectionsLoading: null })
+        context.view.setState({ loadingCollections: null })
     };
 
     context.loadBlockSearchTranches = async function loadBlockSearchTranches() {
@@ -73,33 +74,15 @@ var IndexController = function (view) {
 
     context.refreshCollectionData = async function refreshCollectionData(collections) {
         collections = collections || context.view.state.collections;
+        if(!collections) {
+            return;
+        }
         for (var collection of collections) {
             collection.name = collection.name || await window.blockchainCall(collection.contract.methods.name);
             collection.symbol = collection.symbol || await window.blockchainCall(collection.contract.methods.symbol);
-            await context.tryRetrieveMetadata(collection);
+            await window.tryRetrieveMetadata(collection, collection.category);
             collection.loaded = true;
         }
         context.view.setState({ collections: context.view.state.collections });
-    };
-
-    context.tryRetrieveMetadata = async function tryRetrieveMetadata(collection) {
-        if (collection.metadataLink || window.context.collectionsWithMetadata.indexOf(collection.category) === -1) {
-            return;
-        }
-        var clearMetadata = true;
-        try {
-            collection.metadataLink = await window.blockchainCall(collection.contract.methods.uri);
-            if (collection.metadataLink !== "") {
-                collection.metadata = await window.AJAXRequest(window.formatLink(collection.metadataLink));
-                if (typeof collection.metadata !== "string") {
-                    Object.entries(collection.metadata).forEach(it => collection[it[0]] = it[1]);
-                    collection.name = collection.collection_name || collection.name;
-                    clearMetadata = false;
-                }
-            }
-        } catch (e) {
-        }
-        clearMetadata && delete collection.metadata;
-        clearMetadata && (collection.metadataLink = clearMetadata ? "blank" : collection.metadataLink);
     };
 };

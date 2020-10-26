@@ -1,0 +1,16 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "opensea.min": "browserify opensea.js | uglifyjs > ../assets/plugins/opensea.min.js",
+    "opensea": "browserify opensea.js > ../assets/plugins/opensea.min.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "opensea-js": "^1.1.8",
+    "uglifyjs": "^2.4.11"
+  }
+}
