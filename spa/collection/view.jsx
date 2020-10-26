@@ -16,9 +16,9 @@ var Collection = React.createClass({
                 </section>
                 <section className="collectionNav">
                     <ul>
-                        <li>Items</li>
-                        <li>Farm</li>
-                        <li>Code</li>
+                        <li><a>Items</a></li>
+                        <li><a>Farm</a></li>
+                        <li><a>Code</a></li>
                     </ul>
                 </section>
                 <section className="collectionPageItems">
