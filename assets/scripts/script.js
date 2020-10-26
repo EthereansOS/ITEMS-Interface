@@ -15,6 +15,7 @@ window.Main = async function Main() {
 window.connectFromHomepage = async function connectFromHomepage(button) {
     button && (button.innerHTML = '<spa class="loaderMinimino"></span>');
     button && (button.className = '');
+    button && button.dataset.section && window.setHomepageLink(`?section=spa/${button.dataset.section}`);
     window.choosePage();
 };
 
