@@ -11,15 +11,18 @@ var Menu = React.createClass({
     },
     render() {
         var _this = this;
-        return (<section>
-            <ul>
-                {this.state && this.state.menu && this.state.menu.map((it, i) => <li key={it.module}>
-                    <section>
-                        <a className="logo"><img src="assets/img/logo.png"></img><span className="BrandizedSS"> ETHITEM</span></a>
-                        <a href="javascript:;" data-index={i} className={"MenuItem" + ((i + "") === (this.state.selected + "") ? " Selected" : "")} onClick={_this.onSelection}>{it.name}</a>
-                    </section>
-                </li>)}
-            </ul>
-        </section>);
+        return (
+            <section>
+                <a className="logo"><img src="assets/img/logo.png"></img><span className="BrandizedSS"> ETHITEM</span></a>
+                {this.state && this.state.menu && this.state.menu.map((it, i) => 
+                    <section key={it.module}>
+                            <a href="javascript:;" data-index={i} className={"MenuItem" + ((i + "") === (this.state.selected + "") ? " Selected" : "")} onClick={_this.onSelection}>{it.name}</a>
+                    </section>)}
+                <section className="search">
+                    <input type="search"></input>
+                    <a>SEARCH</a>
+                </section>
+                <a className="connectWallet">Connect</a>
+            </section>);
     }
 });
