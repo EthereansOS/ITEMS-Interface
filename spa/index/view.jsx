@@ -5,8 +5,8 @@ var Index = React.createClass({
     getDefaultSubscriptions() {
         return {
             'ethereum/update' : this.controller.loadData,
-            'ethereum/ping' : this.controller.refreshUserData,
-            'items/refresh' : this.controller.loadItems
+            'ethereum/ping' : this.controller.refreshCollectionData,
+            'items/refresh' : this.controller.loadCollections
         }
     },
     componentDidMount() {

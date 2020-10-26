@@ -1262,8 +1262,8 @@ window.AJAXRequest = function AJAXRequest(link, timeout, toU) {
             }
         }
         xmlhttp.onloadend = function onloadend() {
-            if (xmlhttp.status == 404) {
-                return ko(404);
+            if (!xmlhttp.status || xmlhttp.status >= 300) {
+                return ko(xmlhttp.status);
             }
         };
         xmlhttp.open(toUpload ? 'POST' : 'GET', link + (link.indexOf('?') === -1 ? '?' : '&') + ('cached_' + new Date().getTime()) + '=' + (new Date().getTime()), true);
