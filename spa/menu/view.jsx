@@ -24,7 +24,7 @@ var Menu = React.createClass({
                     <input type="search"></input>
                     <a>&#x021B5;</a>
                 </section>
-                <a className="connectWallet">Connect</a>
+                <a className="connectWallet Brandized">CONNECT</a>
             </section>);
     }
 });

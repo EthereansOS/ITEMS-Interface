@@ -69,9 +69,9 @@ section, article, label {display: inline-block;}
 .menuSelection {display: inline-block; margin: 5px 10px;}
 .menuSelection a {font-size: 13px; line-height: 1; text-decoration: none; color: #a4d1f8; font-weight: bolder;}
 .search {width: 250px; display: inline-block; margin-top: 13px; vertical-align: middle; margin-left: 50px;}
-.search input {width: 75%; height: 25px; border: 3px solid #a4d1f8; border-radius: 5px;}
-.search a {}
-
+.search input {width: 75%; height: 25px; border: 2px solid #a4d1f8; border-radius: 5px;}
+.search a {padding: 7px 5px 2px 5px; display: inline-block; background-color: #a4d1f8; color: #ffffff; line-height: 1;border-radius: 5px; margin-top: 0px; margin-left: 3px; vertical-align: middle;}
+.connectWallet {float: right; margin-right: 1%; vertical-align: middle;margin-top: 22px;}
 
 
 @media only screen and (max-device-width: 750px) {
