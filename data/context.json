@@ -5,6 +5,9 @@
     },
     "ethItemOrchestratorAddress" : "0x8c53f63cb0e98fa28864202952ac08c81c4625ca",
     "ethItemOrchestratorAddressRopsten" : "0x156a0abbae157d8dbf0bee1f672ab1a7aec161c0",
+    "deploySearchStart" : "11092976",
+    "deploySearchStartRopsten" : "8900000",
+    "blockSearchLimit" : 50000,
     "ethItemFactoryEvents" : {
         "NewERC1155Created(address,uint256,address,address)" : "IERC1155ABI",
         "NewWrappedERC1155Created(address,uint256,address,address)" : "IERC1155WrapperABI",
