@@ -1565,7 +1565,7 @@ window.eliminateFloatingFinalZeroes = function eliminateFloatingFinalZeroes(valu
     return split[1].length === 0 ? split[0] : split.join(decSeparator);
 };
 
-function getPage() {
+window.getPage = function getPage() {
     var location;
     try {
         var search = {};
@@ -1600,6 +1600,12 @@ function getPage() {
     } catch (e) {}
     window.history.pushState({}, "", window.location.protocol + '//' + window.location.host);
     return location;
+};
+
+window.consumeAddressBarParam = function consumeAddressBarParam(paramName) {
+    var param = window.addressBarParams[paramName];
+    delete window.addressBarParams[paramName];
+    return param;
 };
 
 window.loadStakingData = async function loadStakingData(element) {
