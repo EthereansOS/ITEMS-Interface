@@ -46,7 +46,7 @@ section, article, label {display: inline-block;}
 @keyframes shine {to {background-position: 200% center;}}
 .BrandizedS {font-weight: bolder;text-align: center;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 70%, #9048fd 90%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;}
 .BrandizedSS {font-weight: bolder;text-align: center;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 70%, #9048fd 90%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;}
-.BrandizedSS:hover {font-weight: bolder;text-align: center;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 60%, #9048fd 80%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;animation: shine 3s linear infinite;}
+.BrandizedSS:hover, .logo:hover .BrandizedSS {font-weight: bolder;text-align: center;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 60%, #9048fd 80%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;animation: shine 3s linear infinite;}
 .Intro .Explainer a {font-size: 12px; font-weight: bold; display: inline-block; padding: 10px 20px; background: linear-gradient(to right, #9048fd 30%, #4bcbc9 90%); color: #f2eafc; margin: 10px 30px;text-decoration: none; width: 160px;}
 .Pager {width: 100%; margin-top: 100px;}
 .collections {width: 100%; max-width: 1600px; display: inline-block;}
@@ -56,6 +56,17 @@ section, article, label {display: inline-block;}
 .collection .collectionTitle {width: 95%; display: block; text-align: left; font-size: 20px;}
 .collection .collectionDesc {width: 95%; display: block; text-align: left; font-size: 13px;}
 .collection .collectionItems {width: 95%; display: block; text-align: left; font-size: 18px;}
+
+
+.menuMenu {width: 100%; position: fixed; top: 0; left: 0; height: 60px; border-bottom: 1px solid #6e6e6e;}
+.menuMenu .logo {display: inline-block; margin-left: 1%; text-decoration: none; cursor: pointer;}
+.menuMenu .logo img {width: 35px; height: 35px; display: inline-block; vertical-align: middle; margin-top: 14px;}
+.menuMenu .logo span {font-size: 20px; display: inline-block; vertical-align: middle; margin: 15px 0 0 5px;}
+.menuSelections {display: inline-block; margin: 15px 0 0 50px; vertical-align: middle}
+.menuSelection {display: inline-block; margin: 10px;}
+.menuSelection a {font-size: 13px; line-height: 0; text-decoration: none;}
+
+
 
 @media only screen and (max-device-width: 750px) {
    .Intro .Title, .Explainer, .ExplainerL, .ExplainerS, footer section {width: 90% !important; text-align: center;}
