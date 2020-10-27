@@ -11,12 +11,12 @@ var CollectionSingleItem = React.createClass({
     },
     onClick(e) {
         window.preventItem(e);
-        if (!this.state || !item) {
+        if (!this.state || !this.state.item) {
             return;
         }
         this.emit('section/change', 'spa/item', {
             collection: this.props.collection,
-            item: item
+            item: this.state.item
         });
     },
     componentDidMount() {
