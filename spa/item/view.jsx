@@ -8,10 +8,19 @@ var Item = React.createClass({
             "ethereum/ping" : () => window.updateItemDynamicData(this)
         }
     },
+    onClick(e) {
+        window.preventItem(e);
+        this.emit('section/change', 'spa/collection', {
+            collection: this.props.collection
+        });
+    },
     render() {
         var item = (this.state && this.state.item) || this.props.item;
         return (
             <section className="Pager">
+                <section className="returntocollection">
+                    <a href="javascript:;" onClick={this.onClick}><img src={this.props.collection.image}></img> &#8592; From the <b>{this.props.collection.name} <span>({this.props.collection.symbol})</span></b> collection</a>
+                </section>
                 <section className="itemPage">
                     <section className="itemPageInfo">
                         <figure className="itemIcon">

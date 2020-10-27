@@ -58,11 +58,12 @@ section, article, label {display: inline-block;}
 .collection .collectionIcon img {width: 90%; padding: 5%; }
 .collection .collectionInfo {width: 190px; display: inline-block; vertical-align: top; margin-left: 10px;}
 .collection .collectionTitle {width: 95%; display: block; text-align: left; font-size: 20px; color: #a4d1f8;}
+.collection .collectionTitle span {font-size: 13px;}
 .collection .collectionDesc {width: 95%; display: block; text-align: left; font-size: 11px; color: #9c9c9c; margin-top: 5px;}
 .collection .collectionItems {width: 95%; display: block; text-align: left; font-size: 18px;}
 
 
-.menuMenu {width: 100%; position: fixed; top: 0; left: 0; height: 60px; border-bottom: 2px solid #a4d1f8;}
+.menuMenu {width: 100%; position: fixed; top: 0; left: 0; height: 60px; border-bottom: 2px solid #a4d1f8;background-color: #ffffff;z-index: 999999999;}
 .menuMenu .logo {display: inline-block; margin-left: 1%; text-decoration: none; cursor: pointer;}
 .menuMenu .logo .logoimg {width: 35px; height: 35px; display: inline-block; vertical-align: middle; margin-top: 14px; background-image: url('special/logoS.png'); background-repeat: no-repeat; background-position: 0 -38;}
 .menuMenu .logo:hover .logoimg, .menuMenu .logo .logoimg:hover {background-position: 0 0px;}
@@ -83,6 +84,7 @@ section, article, label {display: inline-block;}
 .collectionPage .collectionPageInfo .collectionIcon img {width: 90%; padding: 5%;}
 .collectionPage .collectionPageInfo .collectionInfo {width: 500px; margin: 0 0 0 50px;}
 .collectionPage .collectionInfo .collectionTitle {font-size: 30px; color: #a4d1f8;}
+.collectionPage .collectionInfo .collectionTitle span {font-size: 14px;}
 .collectionPage .collectionInfo .collectionDesc {font-size: 16px; min-height: 145px;}
 .collectionPage .collectionInfo .collectionItems {display: inline-block; width: 20%; margin-top: 10px; font-size: 14px;}
 .collectionPage .collectionInfo .collectionLink {display: inline-block; width: 80%; margin-top: 10px;font-size: 14px; text-align: left; color: #a4d1f8; font-weight: bold;}
@@ -91,12 +93,16 @@ section, article, label {display: inline-block;}
 .collectionPageItemsOrder {padding: 50px 100px 20px 100px; -moz-column-gap: 10px;-moz-column-width: 200px;;column-gap: 10px;column-width: 200px;-webkit-column-gap: 10px;-webkit-column-width: 200px; max-width: 1200px;}
 .collectionPageItems .collectionSingleItem {width: 200px; vertical-align: middle; display: inline-block; margin: 15px auto;}
 .collectionPageItems .itemIcon {width: 200px;}
-.collectionPageItems .itemIcon img {width: 90%;}
+.collectionPageItems .itemIcon img {width: 95%;}
 .collectionPageItems .ItemInfo {width: 95%; margin-top: 5px;}
 .collectionPageItems .ItemInfo .ItemTitle {color: #a4d1f8;}
-.collectionPageItems .ItemInfo .ItemPrice {width: 49%; margin: 2px 0.2% 0px 0.2%; display: inline-block; color: #6e6e6e; font-size: 13px; font-weight: bold;}
+.collectionPageItems .ItemInfo .ItemPrice { margin: 2px 0.2% 0px 0.2%; display: inline-block; color: #ffffff; font-size: 11px; font-weight: bold; background-color: #a4d1f8; text-align: center; padding: 3px 7px; border-radius: 8px;}
 .collectionPageItems .ItemInfo .ItemSupply {width: 100%; margin: 2px 0.2%; display: inline-block; color: #6e6e6e; font-size: 13px;}
 .collectionPageItems .ItemInfo .ItemCollectionLink {width: 100%; margin: 2px 0.2%; display: inline-block; color: #6e6e6e; font-size: 13px;}
+
+.returntocollection {width: 100%; padding: 20px 0; background-color: #f1f8ff; text-align: center; border-bottom: 2px solid #a4d1f8;}
+.returntocollection a {font-size: 16px; color: #6e6e6e; text-decoration: none;}
+.returntocollection a img {display: inline-block; width: 30px; height: 30px; vertical-align: middle; border: 1px solid #a4d1f8; border-radius: 50%;}
 
 
 .collectionNav {width: 100%; background-color: #f1f8ff; height: 30px;text-align: center; border-bottom: 2px solid #a4d1f8;}

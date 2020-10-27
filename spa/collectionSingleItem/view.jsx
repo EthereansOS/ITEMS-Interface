@@ -20,6 +20,12 @@ var CollectionSingleItem = React.createClass({
             item: this.state.item
         });
     },
+    goToCollection(e) {
+        window.preventItem(e);
+        this.emit('section/change', 'spa/collection', {
+            collection: this.props.collection
+        });
+    },
     componentDidMount() {
         window.loadItemData(this);
     },
@@ -35,9 +41,9 @@ var CollectionSingleItem = React.createClass({
             {item && <article className="ItemInfo">
                 <h3 className="ItemTitle" style={{color}}>{item.name}</h3>
                 {item.dynamicData && item.dynamicData.tokenPriceInDollarsOnUniswap !== 0 && <a className="ItemPrice">&#129412; ${window.formatMoney(item.dynamicData.tokenPriceInDollarsOnUniswap)}</a>}
-                {item.dynamicData && item.dynamicData.tokenPriceInDollarsOnOpenSea !== 0 && <a className="ItemPrice">&#9973; ${window.formatMoney(item.dynamicData.tokenPriceInDollarsOnOpenSea)}</a>}
+                {item.dynamicData && item.dynamicData.tokenPriceInDollarsOnOpenSea !== 0 && <a target="_blank" href={window.context.openSeaCollectionLinkTemplate.format(this.props.collection.openSeaName)} className="ItemPrice">&#9973; ${window.formatMoney(item.dynamicData.tokenPriceInDollarsOnOpenSea)}</a>}
                 {item.dynamicData && item.dynamicData.totalSupply && <span className="ItemSupply">Supply: <b>{window.fromDecimals(item.dynamicData.totalSupply, item.decimals)}</b></span>}
-                <a className="ItemCollectionLink" target="_blank" href={window.context.openSeaCollectionLinkTemplate.format(this.props.collection.openSeaName)}>from <b>{this.props.collection.symbol}</b></a>
+                {this.props.showCollection && <a className="ItemCollectionLink" href="javascript:;" onClick={this.goToCollection} >from <b>{this.props.collection.symbol}</b></a>}
             </article>}
         </section>);
     }
