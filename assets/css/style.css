@@ -89,10 +89,15 @@ section, article, label {display: inline-block;}
 
 .collectionPageItems {background-color: #ffffff; width: 100%; display: inline-block; text-align: center;}
 .collectionPageItemsOrder {padding: 50px 100px 20px 100px; -moz-column-gap: 10px;-moz-column-width: 200px;;column-gap: 10px;column-width: 200px;-webkit-column-gap: 10px;-webkit-column-width: 200px; max-width: 1200px;}
-.collectionPageItems .collectionSingleItem {width: 200px; vertical-align: middle; display: inline-block;}
+.collectionPageItems .collectionSingleItem {width: 200px; vertical-align: middle; display: inline-block; margin: 15px auto;}
 .collectionPageItems .itemIcon {width: 200px;}
 .collectionPageItems .itemIcon img {width: 90%;}
-.collectionPageItems .ItemInfo {background-color: #f1f8ff;}
+.collectionPageItems .ItemInfo {width: 95%; margin-top: 5px;}
+.collectionPageItems .ItemInfo .ItemTitle {color: #a4d1f8;}
+.collectionPageItems .ItemInfo .ItemPrice {width: 49%; margin: 2px 0.2% 0px 0.2%; display: inline-block; color: #6e6e6e; font-size: 13px; font-weight: bold;}
+.collectionPageItems .ItemInfo .ItemSupply {width: 100%; margin: 2px 0.2%; display: inline-block; color: #6e6e6e; font-size: 13px;}
+.collectionPageItems .ItemInfo .ItemCollectionLink {width: 100%; margin: 2px 0.2%; display: inline-block; color: #6e6e6e; font-size: 13px;}
+
 
 .collectionNav {width: 100%; background-color: #f1f8ff; height: 30px;text-align: center; border-bottom: 2px solid #a4d1f8;}
 .collectionNav ul {width: 900px; text-align: center;height: 30px; display: inline-block;}

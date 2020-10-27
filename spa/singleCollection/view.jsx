@@ -20,7 +20,7 @@ var SingleCollection = React.createClass({
                 <LazyImageLoader src={this.props.collection.image} />
             </figure>}
             {this.props.collection.loaded && <article className="collectionInfo">
-                <h3 className="collectionTitle" style={{color}}>{this.props.collection.name}</h3>
+                <h3 className="collectionTitle" style={{color}}>{this.props.collection.name} ({this.props.collection.symbol})</h3>
                 <p className="collectionDesc">{!this.props.collection.collection_description ? "No description available" : window.shortenWord(this.props.collection.collection_description)}</p>
                 {this.props.showItemsCount && <span className="collectionItems BrandizedS">
                     {(!this.state || (this.state.itemsCount !== 0 && !this.state.itemsCount)) && <InnerLoader/>}
