@@ -3,20 +3,24 @@ var Wrap = React.createClass({
         return(
         <section className="Pager">
             <section className="wrapPage">
-                <section className="wrapSystem">
                     <section className="wrapBox">
                         <section className="WrapWhat">
+                            <p>Wrap an existing Token or NFT into an ITEM</p>
                             <input className="addressWrapSelector" type="text" placeholder="ERC20 721 1155 address"></input>
                             <a className="LoadToITEM">Load</a>
                         </section>
+
+
                         <section className="WrapWhat">
                             <h6 className="tokenSelectedToWrap">Penguin (WIMD)</h6>
                             <span className="tokenSelectedToWrapBalance">balance: 1,000</span>
-                            <input className="BalancetoWrapSelector" type="number"></input>
-                            <a>Accept</a><a className="WrapToITEM">ITEMIZE</a>
+                            <section className="tokenSelectedToWrapDecide">
+                                <a className="tokenSelectedToWrapBalanceALL">MAX</a>
+                                <input className="BalancetoWrapSelector" placeholder="Ammount" type="number"></input>
+                            </section>
+                            <a className="BeforeToWrapToITEM">Accept</a><a className="WrapToITEM">ITEMIZE</a>
                         </section>
                     </section>
-                </section>
             </section>
         </section>);
     }
