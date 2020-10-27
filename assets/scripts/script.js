@@ -2139,7 +2139,7 @@ window.tryRetrieveMetadata = async function tryRetrieveMetadata(item) {
     clearMetadata && (item.metadataLink = clearMetadata ? "blank" : item.metadataLink);
 };
 
-window.getTokenPriceInDollarsOnUniswap = async function getTokenPriceInDollarsOnUniswap(tokenAddress, decimals) {
+window.getTokenPriceInDollarsOnUniswap = async function getTokenPriceInDollarsOnUniswap(tokenAddress, decimals, amountPlain) {
     var uniswapV2Router = window.newContract(window.context.uniswapV2RouterABI, window.context.uniswapV2RouterAddress);
     var wethAddress = window.web3.utils.toChecksumAddress(await window.blockchainCall(uniswapV2Router.methods.WETH));
     var ethereumPrice = await window.getEthereumPrice();
@@ -2147,7 +2147,7 @@ window.getTokenPriceInDollarsOnUniswap = async function getTokenPriceInDollarsOn
         tokenAddress,
         wethAddress
     ];
-    var amount = window.toDecimals("1", decimals);
+    var amount = window.toDecimals(window.numberToString(!isNaN(amountPlain) ? amountPlain : 1), decimals);
     var ethereumValue = "0";
     try {
         ethereumValue = (await window.blockchainCall(uniswapV2Router.methods.getAmountsOut, amount, path))[1];
@@ -2170,8 +2170,22 @@ window.getTokenPriceInDollarsOnOpenSea = async function getTokenPriceInDollarsOn
         token_id,
         side: OpenSeaOrderSide.Sell
     });
-    //console.log(orders);
-    return 0;
+    var prices = [];
+    orders.forEach(it => {
+        var basePrice = it.basePrice.toNumber();
+        var quantity = it.quantity.toNumber();
+        var usdPrice = parseFloat(it.paymentTokenContract.usdPrice.split(',').join(''));
+        var singlePriceWeth = window.numberToString(basePrice / quantity);
+        var singlePrice = window.fromDecimals(singlePriceWeth, it.paymentTokenContract.decimals);
+        singlePrice = parseFloat(singlePrice.split(',').join(''));
+        var price = singlePrice * usdPrice;
+        prices.push(price);
+    });
+    var price = 0;
+    prices.forEach(it => price += it);
+    price = price / prices.length;
+    price = price[0];
+    return price;
 };
 
 window.loadItemData = async function loadItemData(view) {
@@ -2202,4 +2216,8 @@ window.updateItemDynamicData = async function updateItemDynamicData(view) {
     delete item.dynamicData.balanceOf;
     window.walletAddress && (item.dynamicData.balanceOf = await window.blockchainCall(item.token.methods.balanceOf, window.walletAddress));
     view.setState({item});
+};
+
+window.normalizeName = function normalizeName(name) {
+    return name.split('-').join(' ').split('_').join(' ').firstLetterToUpperCase();
 };
