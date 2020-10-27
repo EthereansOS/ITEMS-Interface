@@ -3,6 +3,11 @@ var Collection = React.createClass({
         'spa/singleCollection',
         'spa/collectionSingleItem'
     ],
+    getInitialState() {
+        return {
+            toggle : "items"
+        }
+    },
     toggle(e) {
         window.preventItem(e);
         var oldToggle = this.state && this.state.toggle;
@@ -28,7 +33,7 @@ var Collection = React.createClass({
                 {this.state && this.state.toggle === 'items' && <section className="collectionPageItems">
                     <section className="collectionPageItemsOrder">
                         {!this.state.collectionObjectIds && <Loader/>}
-                        {this.state.collectionObjectIds.map(it => <CollectionSingleItem key={it} objectId={it} collection={this.props.collection}/>)}
+                        {this.state.collectionObjectIds && this.state.collectionObjectIds.map(it => <CollectionSingleItem key={it} objectId={it} collection={this.props.collection}/>)}
                     </section>
                 </section>}
                 {this.state && this.state.toggle === 'farm' && <section className="collectionPageItemsFarm">

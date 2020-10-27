@@ -1,4 +1,7 @@
 var Item = React.createClass({
+    requiredScripts : [
+        "spa/lazyImageLoader.jsx"
+    ],
     getDefaultSubscriptions() {
         return {
             "collections/refresh": () => window.loadItemData(this),
@@ -12,7 +15,7 @@ var Item = React.createClass({
                 <section className="itemPage">
                     <section className="itemPageInfo">
                         <figure className="itemIcon">
-                            <img src={item.image}/>
+                            <LazyImageLoader src={item.image}/>
                         </figure>
                         <article className="itemInfo">
                             <h3 className="ItemTitle" className="BrandizedS">{item.name}</h3>

@@ -1,7 +1,8 @@
 var CollectionSingleItem = React.createClass({
     requiredScripts: [
         'spa/loader.jsx',
-        'spa/innerLoader.jsx'
+        'spa/innerLoader.jsx',
+        "spa/lazyImageLoader.jsx"
     ],
     getDefaultSubscriptions() {
         return {
@@ -28,7 +29,7 @@ var CollectionSingleItem = React.createClass({
         return (<section className="collectionPageItem">
             <a href={this.props.readOnly ? undefined : "javascript:;"} onClick={this.props.readOnly ? undefined : this.onClick}>
                 <figure className="ItemIcon" style={{"background-color" : color}}>
-                    {item && <img src={this.state && item.image} />}
+                    {item && <LazyImageLoader src={this.state && item.image}/>}
                 </figure>
             </a>
             {item && <article className="ItemInfo">

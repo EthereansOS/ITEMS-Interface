@@ -1,7 +1,8 @@
 var SingleCollection = React.createClass({
     requiredScripts: [
         'spa/loader.jsx',
-        'spa/innerLoader.jsx'
+        'spa/innerLoader.jsx',
+        "spa/lazyImageLoader.jsx"
     ],
     getDefaultSubscriptions() {
         return {
@@ -16,7 +17,7 @@ var SingleCollection = React.createClass({
         return (<section className={this.props.className || "collection"}>
             {!this.props.collection.loaded && <Loader />}
             {this.props.collection.loaded && this.props.collection.image && <figure className="collectionIcon" style={{"background-color" : color}}>
-                <img src={this.props.collection.image} />
+                <LazyImageLoader src={this.props.collection.image} />
             </figure>}
             {this.props.collection.loaded && <article className="collectionInfo">
                 <h3 className="collectionTitle" style={{color}}>{this.props.collection.name}</h3>
