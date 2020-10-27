@@ -1,26 +1,33 @@
 var Item = React.createClass({
+    getDefaultSubscriptions() {
+        return {
+            "collections/refresh": () => window.loadItemData(this),
+            "ethereum/ping" : () => window.updateItemDynamicData(this)
+        }
+    },
     render() {
+        var item = (this.state && this.state.item) || this.props.item;
         return (
             <section className="Pager">
                 <section className="itemPage">
                     <section className="itemPageInfo">
                         <figure className="itemIcon">
-                            <img src={this.props.item.image}/>
+                            <img src={item.image}/>
                         </figure>
                         <article className="itemInfo">
-                            <h3 className="ItemTitle" className="BrandizedS">{this.props.item.name}</h3>
+                            <h3 className="ItemTitle" className="BrandizedS">{item.name}</h3>
                             <section className="itemaddress">
-                                <h5 className="itemaddressnft">NFT: <a target="_blank" href={window.context.openSeaItemLinkTemplate.format(this.props.item.collection.address, this.props.item.objectId)}>{window.shortenWord(this.props.item.objectId, 9)}</a></h5>
-                                <h5 className="itemaddress20">ERC20: <a target="_blank" href={`${window.getNetworkElement("etherscanURL")}address/${this.props.item.address}`}>{window.shortenWord(this.props.item.address, 10)}</a></h5>
+                                <h5 className="itemaddressnft">NFT: <a target="_blank" href={window.context.openSeaItemLinkTemplate.format(this.props.collection.address, item.objectId)}>{window.shortenWord(item.objectId, 9)}</a></h5>
+                                <h5 className="itemaddress20">ERC20: <a target="_blank" href={`${window.getNetworkElement("etherscanURL")}address/${item.address}`}>{window.shortenWord(item.address, 10)}</a></h5>
                             </section>
-                            <p className="itemDesc">{window.shortenWord(this.props.item.description, 100)}</p>
-                            <a className="ItemCollectionLink" target="_blank" href={window.context.openSeaCollectionLinkTemplate.format(this.props.item.collection.openSeaName)}>Collection: {this.props.item.collection.symbol}</a>
+                            <p className="itemDesc">{window.shortenWord(item.description, 100)}</p>
+                            <a className="ItemCollectionLink" target="_blank" href={window.context.openSeaCollectionLinkTemplate.format(this.props.collection.openSeaName)}>Collection: {this.props.collection.symbol}</a>
                             <a className="ItemCollectionLink">Link: wimd.item.eth.link</a>
                             <section className="itemSide">
-                                <span className="ItemSupply">Quantity: {window.fromDecimals(this.props.item.dynamicData.totalSupply, this.props.item.decimals)}</span>
-                                {window.walletData && <span className="ItemBalance">Balance: {window.fromDecimals(this.props.item.dynamicData.balanceOf, this.props.item.decimals)}</span>}
-                                <span className="ItemPrice">&#129412; ${window.formatMoney(this.props.item.dynamicData.tokenPriceInDollarsOnUniswap)} <a target="_blank" href={window.context.uniswapSpawUrlTemplate.format(this.props.item.address)}>Swap</a><a target="_blank" href={window.context.uniswapInfoUrlTemplate.format(this.props.item.address)}>Info</a></span>
-                                <span className="ItemPrice">&#9973; ${window.formatMoney(this.props.item.dynamicData.tokenPriceInDollarsOnOpenSea)} <a target="_blank" href={window.context.openSeaItemLinkTemplate.format(this.props.item.collection.address, this.props.item.objectId)}>Info</a></span>
+                                <span className="ItemSupply">Quantity: {window.fromDecimals(item.dynamicData.totalSupply, item.decimals)}</span>
+                                {window.walletAddress && item.dynamicData && item.dynamicData.balanceOf && item.dynamicData.balanceOf !== '0' && <span className="ItemBalance">Balance: {window.fromDecimals(item.dynamicData.balanceOf, item.decimals)}</span>}
+                                <span className="ItemPrice">&#129412; ${window.formatMoney(item.dynamicData.tokenPriceInDollarsOnUniswap)} <a target="_blank" href={window.context.uniswapSpawUrlTemplate.format(item.address)}>Swap</a><a target="_blank" href={window.context.uniswapInfoUrlTemplate.format(item.address)}>Info</a></span>
+                                <span className="ItemPrice">&#9973; ${window.formatMoney(item.dynamicData.tokenPriceInDollarsOnOpenSea)} <a target="_blank" href={window.context.openSeaItemLinkTemplate.format(this.props.collection.address, item.objectId)}>Info</a></span>
                             </section>
                         </article>
                     </section>

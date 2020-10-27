@@ -1299,8 +1299,8 @@ window.getEthereumPrice = async function getEthereumPrice() {
     }).price;
 };
 
-window.shortenWord = function shortenWord(word, charsAmount) {
-    return word ? word.substring(0, word.length < (charsAmount = charsAmount || window.context.defaultCharsAmount) ? word.length : charsAmount) + (word.length < charsAmount ? '' : '...') : "";
+window.shortenWord = function shortenWord(word, charsAmount, noDots) {
+    return word ? word.substring(0, word.length < (charsAmount = charsAmount || window.context.defaultCharsAmount) ? word.length : charsAmount) + (word.length < charsAmount ? '' : (noDots ? '' : '...')) : "";
 };
 
 window.loadLogo = async function loadLogo(address) {
@@ -2172,4 +2172,34 @@ window.getTokenPriceInDollarsOnOpenSea = async function getTokenPriceInDollarsOn
     });
     //console.log(orders);
     return 0;
+};
+
+window.loadItemData = async function loadItemData(view) {
+    var propsItem = (view.props.collection.items && view.props.collection.items[view.props.objectId]) || {};
+    var stateItem = (view.state && view.state.item) || {};
+    var item = {};
+    item = window.deepCopy(item, propsItem);
+    item = window.deepCopy(item, stateItem);
+    view.props.collection.items = view.props.collection.items || {};
+    view.props.collection.items[view.props.objectId] = item;
+    item.objectId = view.props.objectId;
+    item.contract = view.props.collection.contract;
+    item.address = item.address || window.web3.utils.toChecksumAddress(await window.blockchainCall(item.contract.methods.asERC20, item.objectId));
+    item.token = item.token || window.newContract(window.context.IERC20ABI, item.address);
+    item.name = item.name || await window.blockchainCall(item.contract.methods.name, item.objectId);
+    item.symbol = item.symbol || await window.blockchainCall(item.contract.methods.symbol, item.objectId);
+    await window.tryRetrieveMetadata(item);
+    item.decimals = item.decimals || await window.blockchainCall(item.token.methods.decimals);
+    view.setState({item}, () => window.updateItemDynamicData(view));
+};
+
+window.updateItemDynamicData = async function updateItemDynamicData(view) {
+    var item = (view.state && view.state.item) || view.props.item;
+    item.dynamicData = item.dynamicData || {};
+    item.dynamicData.totalSupply = await window.blockchainCall(item.token.methods.totalSupply);
+    item.dynamicData.tokenPriceInDollarsOnUniswap = await window.getTokenPriceInDollarsOnUniswap(item.address, item.decimals);
+    item.dynamicData.tokenPriceInDollarsOnOpenSea = await window.getTokenPriceInDollarsOnOpenSea(view.props.collection.address, item.objectId);
+    delete item.dynamicData.balanceOf;
+    window.walletAddress && (item.dynamicData.balanceOf = await window.blockchainCall(item.token.methods.balanceOf, window.walletAddress));
+    view.setState({item});
 };

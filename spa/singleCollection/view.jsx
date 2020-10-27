@@ -12,9 +12,10 @@ var SingleCollection = React.createClass({
         this.controller.loadData(this);
     },
     render() {
+        var color = this.props.collection.backgroundImage;
         return (<section className={this.props.className || "collection"}>
             {!this.props.collection.loaded && <Loader />}
-            {this.props.collection.loaded && this.props.collection.image && <figure className="collectionIcon">
+            {this.props.collection.loaded && this.props.collection.image && <figure className="collectionIcon" style={{"background-color" : color}}>
                 <img src={this.props.collection.image} />
             </figure>}
             {this.props.collection.loaded && <article className="collectionInfo">
