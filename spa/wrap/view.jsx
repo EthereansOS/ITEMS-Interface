@@ -6,12 +6,13 @@ var Wrap = React.createClass({
                 <section className="wrapSystem">
                     <section className="wrapBox">
                         <section className="WrapWhat">
-                            <input className="addressWrapSelector" type="text">ERC20 721 1155 address</input>
+                            <input className="addressWrapSelector" type="text" placeholder="ERC20 721 1155 address"></input>
+                            <a className="LoadToITEM">Load</a>
                         </section>
                         <section className="WrapWhat">
                             <h6 className="tokenSelectedToWrap">Penguin (WIMD)</h6>
-                            <span className="tokenSelectedToWrapBalance" type="text">balance: 1,000</span>
-                            <input className="BalancetoWrapSelector" type=""></input>
+                            <span className="tokenSelectedToWrapBalance">balance: 1,000</span>
+                            <input className="BalancetoWrapSelector" type="number"></input>
                             <a>Accept</a><a className="WrapToITEM">ITEMIZE</a>
                         </section>
                     </section>
