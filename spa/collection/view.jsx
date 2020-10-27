@@ -26,8 +26,10 @@ var Collection = React.createClass({
                     </ul>
                 </section>
                 {this.state && this.state.toggle === 'items' && <section className="collectionPageItems">
-                    {!this.state.collectionObjectIds && <Loader/>}
-                    {this.state.collectionObjectIds.map(it => <CollectionSingleItem key={it} objectId={it} collection={this.props.collection}/>)}
+                    <section className="collectionPageItemsOrder">
+                        {!this.state.collectionObjectIds && <Loader/>}
+                        {this.state.collectionObjectIds.map(it => <CollectionSingleItem key={it} objectId={it} collection={this.props.collection}/>)}
+                    </section>
                 </section>}
                 {this.state && this.state.toggle === 'farm' && <section className="collectionPageItemsFarm">
                     Soon @ UniFi
