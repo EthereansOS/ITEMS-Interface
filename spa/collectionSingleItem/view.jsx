@@ -23,12 +23,12 @@ var CollectionSingleItem = React.createClass({
         window.loadItemData(this);
     },
     render() {
-        var item = (this.state && item) || this.props.item;
+        var item = (this.state && this.state.item) || this.props.item;
         var color = item && item.backgroundImage;
         return (<section className="collectionPageItem">
             <a href={this.props.readOnly ? undefined : "javascript:;"} onClick={this.props.readOnly ? undefined : this.onClick}>
                 <figure className="ItemIcon" style={{"background-color" : color}}>
-                    <img src={this.state && item.image} />
+                    {item && <img src={this.state && item.image} />}
                 </figure>
             </a>
             {item && <article className="ItemInfo">
