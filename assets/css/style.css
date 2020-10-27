@@ -131,16 +131,16 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .wrapBox {width: 230px; background-color: #f1f8ff; border-radius: 20px;display: inline-block; padding: 30px 70px;    margin-top: 100px;}
 .WrapWhat {width: 90%; display: inline-block; text-align: center;}
 .WrapWhat p {font-size: 18px; font-weight: bold; text-align: center; color: #a4d1f8; margin-bottom: 20px;}
-.WrapWhat input {width: 90%; background-color: #fafdff; border: 2px solid #a4d1f8; border-radius: 6px; height: 30px; color: #a4d1f8;}
+.WrapWhat input, .WrapWhatLoaded input {width: 90%; background-color: #fafdff; border: 2px solid #a4d1f8; border-radius: 6px; height: 30px; color: #a4d1f8;}
 .WrapWhat .LoadToITEM {padding: 5px 8px; font-weight: bold; background-color: #a4d1f8; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; color: #ffffff;}
-.WrapWhat .tokenSelectedToWrap {font-size: 18px;font-weight: bold; text-align: center; color: #a4d1f8; margin-bottom: 0px; margin-top: 18px;}
-.WrapWhat .tokenSelectedToWrapBalance {font-size: 13px; color: #6e6e6e; margin-bottom: 15px; display: inline-block;}
-.tokenSelectedToWrapDecide {width: 100%; text-align: center;}
-.WrapWhat .BalancetoWrapSelector {width: 60%;display: inline-block; vertical-align: middle;}
-.WrapWhat .tokenSelectedToWrapBalanceALL {padding: 8px 6px; border-radius: 6px; font-size: 9px; font-weight: bold; display: inline-block; background-color: #a4d1f8; vertical-align: middle; color: #ffffff; margin-right: 5px;}
+.WrapWhatLoaded .tokenSelectedToWrap {font-size: 18px;font-weight: bold; text-align: center; color: #a4d1f8; margin-bottom: 0px; margin-top: 18px;}
+.WrapWhatLoaded .tokenSelectedToWrapBalance {font-size: 13px; color: #6e6e6e; margin-bottom: 15px; display: inline-block;}
+.tokenSelectedToWrapDecide {width: 100%; text-align: center; margin-bottom: 10px;}
+.WrapWhatLoaded .BalancetoWrapSelector {width: 60%;display: inline-block; vertical-align: middle;}
+.WrapWhatLoaded .tokenSelectedToWrapBalanceALL {padding: 8px 6px; border-radius: 6px; font-size: 9px; font-weight: bold; display: inline-block; background-color: #a4d1f8; vertical-align: middle; color: #ffffff; margin-right: 5px;}
 .BeforeToWrapToITEM {padding: 8px 12px; font-weight: bold; background-color: #a4d1f8; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; margin-right: 10px; color: #ffffff;}
 .WrapToITEM {padding: 8px 12px; font-weight: bold; background-color: #a4d1f8; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; margin-right: 10px;background: linear-gradient(to right, #9048fd 30%, #4bcbc9 90%); color: #ffffff;}
-
+.WrapWhatLoaded .disabled {background-color: #e4e4e4 !important; color: #6e6e6e !important;}
 
 @media only screen and (max-device-width: 750px) {
    .Intro .Title, .Explainer, .ExplainerL, .ExplainerS, footer section {width: 90% !important; text-align: center;}

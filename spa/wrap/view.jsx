@@ -11,14 +11,14 @@ var Wrap = React.createClass({
                         </section>
 
 
-                        <section className="WrapWhat">
+                        <section className="WrapWhatLoaded">
                             <h6 className="tokenSelectedToWrap">Penguin (WIMD)</h6>
                             <span className="tokenSelectedToWrapBalance">balance: 1,000</span>
                             <section className="tokenSelectedToWrapDecide">
                                 <a className="tokenSelectedToWrapBalanceALL">MAX</a>
                                 <input className="BalancetoWrapSelector" placeholder="Ammount" type="number"></input>
                             </section>
-                            <a className="BeforeToWrapToITEM">Accept</a><a className="WrapToITEM">ITEMIZE</a>
+                            <a className="BeforeToWrapToITEM disabled">Accept</a><a className="WrapToITEM">ITEMIZE</a>
                         </section>
                     </section>
             </section>
