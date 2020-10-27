@@ -50,13 +50,13 @@ section, article, label {display: inline-block;}
 .BrandizedSSx:hover, .logo:hover .BrandizedSSx, .BrandizedSS:hover, .logo:hover .BrandizedSS {font-weight: bolder;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 60%, #9048fd 80%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;animation: shine 3s linear infinite;}
 .BrandizedSSS:hover {font-weight: bolder;text-align: center;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 60%, #9048fd 80%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;animation: shine 3s linear infinite;}
 .Intro .Explainer a {font-size: 12px; font-weight: bold; display: inline-block; padding: 10px 20px; background: linear-gradient(to right, #9048fd 30%, #4bcbc9 90%); color: #f2eafc; margin: 10px 30px;text-decoration: none; width: 160px;}
-.Pager {width: 100%; margin-top: 100px;}
+.Pager {width: 100% !important; margin: 100px 0 0 0 !important;}
 .collections {width: 100%; max-width: 1600px; display: inline-block;}
 .collectionsList {padding: 20px 100px 20px 100px}
-.collection {width: 300px; margin: 20px;}
+.collection {width: 300px; margin: 40px;}
 .collection .collectionIcon {width: 100px; height: 100px; border-radius: 50%; display: inline-block; vertical-align: top; background-color: #a4d1f8;}
-.collection .collectionIcon img {max-height: 100%; max-width: 100%; width: 100%;}
-.collection .collectionInfo {width: 190px; height: 140px; display: inline-block; vertical-align: top; margin-left: 10px;}
+.collection .collectionIcon img {border-radius: 50%; max-height: 100%; max-width: 100%; width: 100%;}
+.collection .collectionInfo {width: 190px; display: inline-block; vertical-align: top; margin-left: 10px;}
 .collection .collectionTitle {width: 95%; display: block; text-align: left; font-size: 20px;}
 .collection .collectionDesc {width: 95%; display: block; text-align: left; font-size: 11px; color: #9c9c9c; margin-top: 5px;}
 .collection .collectionItems {width: 95%; display: block; text-align: left; font-size: 18px;}
@@ -75,6 +75,17 @@ section, article, label {display: inline-block;}
 .search a {padding: 6px 5px 2px 5px; display: inline-block; background-color: #a4d1f8; color: #ffffff; line-height: 1;border-radius: 5px; margin-top: 0px; margin-left: 3px; vertical-align: middle;}
 .connectWallet {float: right; margin-right: 1%; vertical-align: middle;margin-top: 22px;}
 
+.collectionPage {width: 100%; min-width: 100%; display: block; text-align: center;}
+.collectionPage .collectionPageInfo {width: 990px; display: inline-block; margin: 30px 0;}
+.collectionPage .collectionPageInfo .collectionIcon {width: 240px; height: 240px;}
+.collectionPage .collectionPageInfo .collectionInfo {width: 500px; margin: 50px;}
+
+.collectionNav {width: 100%; background-color: #daedfd; height: 30px;text-align: center;}
+.collectionNav ul {width: 900px; text-align: center;height: 30px; display: inline-block;}
+.collectionNav ul li {width: 150px; display: inline-block; background-color: transparent;text-align: center;height: 30px;}
+.collectionNav ul li a {width: 100%; text-align: center; color: #ffffff; text-decoration: none; padding: 5px 0;display: block; font-size: 16px; font-weight: bolder;}
+.collectionNav ul .selected, .collectionNav ul li:hover {color: #a4d1f8; background-color: #ffffff;}
+.collectionNav ul .selected a, .collectionNav ul li:hover a, .collectionNav ul li a:hover {color: #a4d1f8;}
 
 @media only screen and (max-device-width: 750px) {
    .Intro .Title, .Explainer, .ExplainerL, .ExplainerS, footer section {width: 90% !important; text-align: center;}
