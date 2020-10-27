@@ -92,6 +92,7 @@ section, article, label {display: inline-block;}
 .collectionPageItems .collectionSingleItem {width: 200px; vertical-align: middle; display: inline-block;}
 .collectionPageItems .itemIcon {width: 200px;}
 .collectionPageItems .itemIcon img {width: 90%;}
+.collectionPageItems .ItemInfo {background-color: #f1f8ff;}
 
 .collectionNav {width: 100%; background-color: #f1f8ff; height: 30px;text-align: center; border-bottom: 2px solid #a4d1f8;}
 .collectionNav ul {width: 900px; text-align: center;height: 30px; display: inline-block;}
