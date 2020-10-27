@@ -54,10 +54,10 @@ section, article, label {display: inline-block;}
 .collections {width: 100%; max-width: 1600px; display: inline-block;}
 .collectionsList {padding: 20px 100px 20px 100px}
 .collection {width: 300px; margin: 40px;}
-.collection .collectionIcon {width: 100px; height: 100px; border-radius: 50%; display: inline-block; vertical-align: top; background-color: #a4d1f8;}
-.collection .collectionIcon img {border-radius: 50%; max-height: 100%; max-width: 100%; width: 100%;}
+.collection .collectionIcon {width: 100px; height: 100px; border-radius: 33%; display: inline-block; vertical-align: top; background-color: #f1f8ff;}
+.collection .collectionIcon img {width: 90%; padding: 5%; }
 .collection .collectionInfo {width: 190px; display: inline-block; vertical-align: top; margin-left: 10px;}
-.collection .collectionTitle {width: 95%; display: block; text-align: left; font-size: 20px;}
+.collection .collectionTitle {width: 95%; display: block; text-align: left; font-size: 20px; color: #a4d1f8;}
 .collection .collectionDesc {width: 95%; display: block; text-align: left; font-size: 11px; color: #9c9c9c; margin-top: 5px;}
 .collection .collectionItems {width: 95%; display: block; text-align: left; font-size: 18px;}
 
@@ -77,10 +77,13 @@ section, article, label {display: inline-block;}
 
 .collectionPage {width: 100%; min-width: 100%; display: block; text-align: center;background-color: #f1f8ff;}
 .collectionPage .collectionPageInfo {width: 990px; display: inline-block; margin: 30px 0;}
-.collectionPage .collectionPageInfo .collectionIcon {width: 240px; height: 240px;}
+.collectionPage .collectionPageInfo .collectionIcon {width: 240px; height: 240px; background-color: #f1f8ff;}
+.collectionPage .collectionPageInfo .collectionIcon img {width: 90%; padding: 5%;}
 .collectionPage .collectionPageInfo .collectionInfo {width: 500px; margin: 0 0 0 50px;}
-.collectionPage .collectionInfo .collectionTitle {font-size: 30px;}
-.collectionPage .collectionInfo .collectionDesc {font-size: 18px;}
+.collectionPage .collectionInfo .collectionTitle {font-size: 30px; color: #a4d1f8;}
+.collectionPage .collectionInfo .collectionDesc {font-size: 16px;}
+.collectionPage .collectionInfo .collectionItems {display: inline-block; width: 20%; margin-top: 10px; font-size: 14px;}
+.collectionPage .collectionInfo .collectionLink {display: inline-block; width: 80%; margin-top: 10px;font-size: 14px; text-align: left; color: #a4d1f8; font-weight: bold;}
 
 .collectionNav {width: 100%; background-color: #f1f8ff; height: 30px;text-align: center; border-bottom: 2px solid #a4d1f8;}
 .collectionNav ul {width: 900px; text-align: center;height: 30px; display: inline-block;}
