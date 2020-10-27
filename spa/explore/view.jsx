@@ -14,9 +14,11 @@ var Explore = React.createClass({
         return (<section className="Pager">
             {this.props.loadingCollections && <Loader />}
             {this.props.collections && <section className="collections">
-                {this.props.collections.map(it => <a key={it.key} data-index={it.index} href="javascript:;" onClick={_this.onClick}>
-                    <SingleCollection collection={it}/>
-                </a>)}
+                <section className="collectionsList">
+                    {this.props.collections.map(it => <a key={it.key} data-index={it.index} href="javascript:;" onClick={_this.onClick}>
+                        <SingleCollection collection={it}/>
+                    </a>)}
+                </section>
             </section>}
         </section>);
     }
