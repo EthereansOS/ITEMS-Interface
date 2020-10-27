@@ -23,7 +23,7 @@
         "NewWrappedERC721Created(address,uint256,address,address)" : "IERC721WrapperABI",
         "NewWrappedERC20Created(address,uint256,address,address)" : "IERC20WrapperABI"
     },
-    "uniswapSpawUrlTemplate" : "https://app.uniswap.org/#/swap?inputCurrency={0}",
+    "uniswapSpawUrlTemplate" : "https://bafybeidohofcst2oxulj75mxdogz77ky7ldhvz27pcqx7htyatuazrcvwi.ipfs.dweb.link/#/swap?inputCurrency={0}",
     "uniswapInfoUrlTemplate" : "https://uniswap.info/token/{0}",
     "collectionsWithMetadata" : ["ERC1155"],
     "allowedMetadataFields" : ["name", "external_url", "collection_description"],
