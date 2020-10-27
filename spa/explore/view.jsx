@@ -10,7 +10,6 @@ var Explore = React.createClass({
         this.emit('section/change', 'spa/collection', {collection: this.props.collections[parseInt(e.currentTarget.dataset.index)]});
     },
     render() {
-<<<<<<< Updated upstream
         var _this = this;
         return (<section className="Pager">
             {this.props.loadingCollections && <Loader />}
@@ -19,15 +18,6 @@ var Explore = React.createClass({
                     <SingleCollection collection={it}/>
                 </a>)}
             </section>}
-=======
-        return(
-        <section className="Pager">
-            <section className="collections">
-                <section className="collectionsList">
-                    <CollectionItem/>
-                </section>
-            </section>
->>>>>>> Stashed changes
         </section>);
     }
 });
