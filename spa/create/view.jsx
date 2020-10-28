@@ -38,8 +38,14 @@ var Create = React.createClass({
                         </section>
                         <section className="FormCreateThing">
                             <p>You'll maintain the right to mint new?</p>
-                            <input type="radio">Yes</input>
-                            <input type="radio">No</input>
+                            <label>
+                                <span>Yes</span>
+                                <input type="radio" name="maintainMintRight" value="true"/>
+                            </label>
+                            <label>
+                                <span>No</span>
+                                <input type="radio" name="maintainMintRight" value="false"/>
+                            </label>
                         </section>
                         <section className="FormCreateThing">
                             <a className="SuperActionBTN">NEXT</a>
