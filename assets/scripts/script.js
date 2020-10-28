@@ -2184,7 +2184,7 @@ window.getTokenPriceInDollarsOnOpenSea = async function getTokenPriceInDollarsOn
     var price = 0;
     prices.forEach(it => price += it);
     price = price / prices.length;
-    price = price[0];
+    price = prices[0];
     return price;
 };
 
