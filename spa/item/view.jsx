@@ -14,6 +14,13 @@ var Item = React.createClass({
             collection: this.props.collection
         });
     },
+    toggle(e) {
+        window.preventItem(e);
+        var oldToggle = this.state && this.state.toggle;
+        var toggle = e.currentTarget.innerHTML.toLowerCase();
+        toggle = oldToggle === toggle ? null : toggle;
+        this.setState({ toggle });
+    },
     renderMetadata(renderShowButton) {
         var item = (this.state && this.state.item) || this.props.item;
         var keys = Object.keys(item.metadata);
@@ -107,20 +114,12 @@ var Item = React.createClass({
                         </article>
                     </section>
                     <section className="collectionNav">
-                    <ul>
-                        <li>
-                            <a>METADATA</a>
-                        </li>
-                        <li>
-                            <a>CODE</a>
-                        </li>
-                        <li>
-                            <a>FARM</a>
-                        </li>
-                        <li>
-                            <a>ARBITRAGE</a>
-                        </li>
-                    </ul>
+                        <ul>
+                            <li className={this.state && this.state.toggle === 'metadata' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>METADATA</a></li>
+                            {this.props.collection.code && <li className={this.state && this.state.toggle === 'code' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>CODE</a></li>}
+                            <li className={this.state && this.state.toggle === 'farm' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>FARM</a></li>
+                            <li className={this.state && this.state.toggle === 'arbitrage' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>ARBITRAGE</a></li>
+                        </ul>
                     </section>
                     <section className="ItemStuff">
                         <section className="ItemFarm">
@@ -136,7 +135,7 @@ var Item = React.createClass({
                             {this.renderMetadata(true)}
                         </section>}
                         <section className="ItemCode">
-                            
+
                         </section>
                     </section>
                 </section>

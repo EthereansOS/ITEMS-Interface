@@ -196,8 +196,10 @@ window.loadContext = async function loadContext() {
 };
 
 window.deepCopy = function deepCopy(data, extension) {
-    data = data ? JSON.parse(JSON.stringify(data)) : {};
-    extension = extension ? JSON.parse(JSON.stringify(extension)) : {};
+    //data = data ? JSON.parse(JSON.stringify(data)) : {};
+    //extension = extension ? JSON.parse(JSON.stringify(extension)) : {};
+    data = data || {};
+    extension = extension || {};
     var keys = Object.keys(extension);
     for (var i in keys) {
         var key = keys[i];
