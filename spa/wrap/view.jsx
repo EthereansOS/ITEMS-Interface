@@ -75,11 +75,11 @@ var Wrap = React.createClass({
                     </section>
                     <section className="WrapWhatLoaded">
                         {state.selectedToken && (state.selectedToken.name || state.selectedToken.symbol) && <h6 className="tokenSelectedToWrap">{window.shortenWord(state.selectedToken.name, 4)} {state.selectedToken.symbol && state.selectedToken.name ? ` (${window.shortenWord(state.selectedToken.symbol, 4)})` : window.shortenWord(state.selectedToken.symbol, 4)}</h6>}
-                        {selectedTokenType !== 'ERC20' && <section className="tokenSelectedToWrapDecide">
+                        {state.selectedToken && selectedTokenType !== 'ERC20' && <section className="tokenSelectedToWrapDecide">
                             <input className="BalancetoWrapSelector" placeholder="Token ID" type="text" data-action="onTokenIdChange" onKeyPress={this.onChange} onChange={this.onChange}/>
                         </section>}
-                        {selectedTokenType !== 'ERC721' && state.selectedToken && state.selectedToken.balanceOfPlain && <span className="tokenSelectedToWrapBalance">balance: {state.selectedToken.balanceOfPlain}</span>}
-                        {selectedTokenType !== 'ERC721' && <section className="tokenSelectedToWrapDecide">
+                        {state.selectedToken && selectedTokenType !== 'ERC721' && state.selectedToken && state.selectedToken.balanceOfPlain && <span className="tokenSelectedToWrapBalance">balance: {state.selectedToken.balanceOfPlain}</span>}
+                        {state.selectedToken && selectedTokenType !== 'ERC721' && <section className="tokenSelectedToWrapDecide">
                             <a className="tokenSelectedToWrapBalanceALL" onClick={this.max}>MAX</a>
                             <input ref={ref => this.tokenAmountInput = ref} className="BalancetoWrapSelector" placeholder="Ammount" type="text" data-action="onTokenAmountChange" onKeyPress={this.onChange} onChange={this.onChange} />
                         </section>}

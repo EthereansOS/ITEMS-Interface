@@ -79,7 +79,11 @@ var CreateItemWizardController = function (view) {
     context.performDeploy = async function performDeploy() {
         var state = context.view.getState();
         var valueDecimals = context.toDecimals(state.selectedToken, state.itemSupply);
+        if(parseInt(valueDecimals) <= 0) {
+            throw "Supply must be greater than 0";
+        }
         var metadataLink = context.view.metadataLinkInput.value;
         await window.checkMetadataLink(metadataLink);
+        await window.blockchainCall(state.selectedToken.contract.methods.mint, valueDecimals, state.itemName, metadataLink, state.itemMintable);
     };
 };

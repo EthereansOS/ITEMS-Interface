@@ -19,12 +19,12 @@ var Create = React.createClass({
         var state = this.getState();
         return (<section className="Pager">
             <section className="createPage">
-                <section className="createStart">
+                {!state.create && <section className="createStart">
                     <h2>What do you want to do?</h2>
                     <a className={"" + (state.create === "CreateCollectionWizard" ? " selected" : "")} href="javascript:;" onClick={this.create} data-create="CreateCollectionWizard">Create a new Collection</a>
                     <a className={"" + (state.create === "CreateItemWizard" ? " selected" : "")} href="javascript:;" onClick={this.create} data-create="CreateItemWizard">Create a new ITEM</a>
-                </section>
-                {state && state.create && React.createElement(state.create, state)}
+                </section>}
+                {state.create && React.createElement(state.create, state)}
             </section>
         </section>);
     }

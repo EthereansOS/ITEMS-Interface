@@ -2264,7 +2264,7 @@ window.perform = function perform(e) {
     }
     var _this = view;
     var close = function close(e) {
-        var message = e && (e.message || e);
+        var message = e !== undefined && e !== null && (e.message || e);
         _this.setState({ performing: null }, function () {
             message && message.indexOf('denied') === -1 && setTimeout(function () {
                 alert(message);
@@ -2284,7 +2284,13 @@ window.checkMetadataLink = async function checkMetadataLink(metadataLink) {
     if(!metadataLink.indexOf("ipfs://ipfs/")) {
         return false;
     }
-    return checkMetadataValues(await window.AJAXRequest(window.formatLink(metadataLink)));
+    var metadata;
+    try {
+         metadata = await window.AJAXRequest(window.formatLink(metadataLink));
+    } catch(e) {
+        throw "Error loading metadata";
+    }
+    return checkMetadataValues(metadata);
 };
 
 window.checkMetadataValues = function checkMetadataValues(metadata) {
