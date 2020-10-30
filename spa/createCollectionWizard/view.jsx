@@ -1,4 +1,10 @@
 var CreateCollectionWizard = React.createClass({
+    requiredScripts: [
+        'spa/innerLoader.jsx'
+    ],
+    requiredModules: [
+        'spa/editor'
+    ],
     getState() {
         var state = {};
         this.props && Object.entries(this.props).forEach(entry => state[entry[0]] = entry[1]);
@@ -7,19 +13,22 @@ var CreateCollectionWizard = React.createClass({
         delete state.props;
         return state;
     },
+    onExtension(e) {
+        this.setState({ extension: e.currentTarget.value });
+    },
     catch(e) {
-        if(!e) {
+        if (!e) {
             return;
         }
         var message = e.message || e;
-        if(message.toLowerCase().indexOf("user denied") !== -1) {
+        if (message.toLowerCase().indexOf("user denied") !== -1) {
             return;
         }
         return alert(message);
     },
     next(e) {
         window.preventItem(e);
-        if(e.currentTarget.className.toLowerCase().indexOf("disabled") !== -1) {
+        if (e.currentTarget.className.toLowerCase().indexOf("disabled") !== -1) {
             return;
         }
         var currentStep = (this.getState().step || 0);
@@ -33,43 +42,51 @@ var CreateCollectionWizard = React.createClass({
         };
         try {
             var checkStepFunction = this.controller[`checkStep${currentStep}`] && this.controller[`checkStep${currentStep}`]();
-            if(!checkStepFunction || !checkStepFunction.then) {
+            if (!checkStepFunction || !checkStepFunction.then) {
                 return setState();
             }
             checkStepFunction.then(setState).catch(this.catch);
-        } catch(e) {
+        } catch (e) {
             this.catch(e);
         }
     },
     back(e) {
         window.preventItem(e);
         var currentStep = (this.getState().step || 0) - 1;
-        if(currentStep < 0) {
+        if (currentStep < 0) {
             return;
         }
-        this.setState({step : currentStep});
+        this.setState({ step: currentStep });
     },
-    steps : 2,
+    steps: 2,
     renderStep0() {
+        var state = this.getState();
         return (<section className="createCollection">
             <h2>Let's start from the basics</h2>
             <section className="FormCreate">
                 <section className="FormCreateThing">
                     <p>Name</p>
-                    <input />
+                    <input type="text" ref={ref => (this.collectionName = ref) && (ref.value = state.collectionName || "")} />
                 </section>
                 <section className="FormCreateThing">
                     <p>Symbol</p>
-                    <input />
+                    <input type="text" ref={ref => (this.collectionSymbol = ref) && (ref.value = state.collectionSymbol || "")} />
+                </section>
+                <section className="FormCreateThing">
+                    <label>
+                        <p>Has granularity</p>
+                        <input type="checkbox" ref={ref => (this.hasDecimals = ref) && (ref.checked = state.hasDecimals)} />
+                        <span>Selecting this option, all the Items of this Collection will have 18 decimals instead of 1</span>
+                    </label>
                 </section>
                 <section className="FormCreateThing">
                     <p>Description</p>
-                    <input />
+                    <textarea ref={ref => (this.collectionDescription = ref) && (ref.value = state.collectionDescription || "")} />
                 </section>
-                <section className="FormCreateThing">
+                {false && <section className="FormCreateThing">
                     <p>ENS</p>
-                    <input />
-                </section>
+                    <input type="text" />
+                </section>}
                 <section className="FormCreateThing">
                     <a className="SuperActionBTN" href="javascript:;" onClick={this.next}>NEXT</a>
                 </section>
@@ -77,23 +94,38 @@ var CreateCollectionWizard = React.createClass({
         </section>);
     },
     renderStep1() {
+        var state = this.getState();
+        var extension = state.extension || "wallet";
         return (<section className="createCollection">
             <h2>Who is the owner?</h2>
             <section className="FormCreate">
                 <section className="FormCreateThing">
-                    <select></select>
+                    <label>
+                        A wallet
+                        <input type="radio" name="extension" value="wallet" onClick={this.onExtension} ref={ref => ref && (ref.checked = extension === "wallet")} />
+                    </label>
                 </section>
                 <section className="FormCreateThing">
-                    <a>Anyone</a>
+                    <label>
+                        Contract
+                        <input type="radio" name="extension" value="contract" onClick={this.onExtension} ref={ref => ref && (ref.checked = extension === "contract")} />
+                    </label>
                 </section>
                 <section className="FormCreateThing">
-                    <a>Contract</a>
+                    <input type="text" placeholder="address" ref={ref => this.extensionAddressInput = ref} />
                 </section>
+                {extension === "contract" && <Editor ref={ref => this.editor = ref} />}
+                {extension === "contract" && <section className="FormCreateThing">
+                    <p>Extension init payload (optional)</p>
+                    <input type="text" placeholder="Payload" ref={ref => this.extensionAddressPayload = ref} />
+                    <span>You can put here an optional abi-encoded payload. This will be used by the collection during its initialization to call the extension. See the documentation for further information.</span>
+                </section>}
             </section>
             <section className="FormCreateThing">
                 <span>The owner of the collection is who have the ability to mint ITEMS, it can be anyone, an address or you can extend it with custom rules via deploying an extension conctract. More info <a>Here</a></span>
-                <a className="SuperActionBTN" href="javascript:;" onClick={this.back}>BACK</a>
-                <a className="SuperActionBTN">DEPLOY</a>
+                <a className={"SuperActionBTN" + (this.state && this.state.performing) ? " disabled" : ""} href="javascript:;" onClick={this.back}>BACK</a>
+                {(!this.state || this.state.performing !== 'deploy') && <a href="javascript:;" data-action="deploy" className="SuperActionBTN" onClick={window.perform}>DEPLOY</a>}
+                {this.state && this.state.performing === 'deploy' && <InnerLoader />}
             </section>
         </section>);
     },

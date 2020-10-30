@@ -83,7 +83,9 @@ var CreateItemWizardController = function (view) {
             throw "Supply must be greater than 0";
         }
         var metadataLink = context.view.metadataLinkInput.value;
-        await window.checkMetadataLink(metadataLink);
+        if(!(await window.checkMetadataLink(metadataLink))) {
+            throw "Invalid metadata link";
+        }
         await window.blockchainCall(state.selectedToken.contract.methods.mint, valueDecimals, state.itemName, metadataLink, state.itemMintable);
     };
 };

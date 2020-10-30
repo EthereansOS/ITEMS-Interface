@@ -13,6 +13,7 @@
     "deploySearchStart" : "11092976",
     "deploySearchStartRopsten" : "8900000",
     "blockSearchLimit" : 50000,
+    "ipfsHost": "https://ipfs.infura.io:5001/api/v0/",
     "ipfsUrlTemplates": ["ipfs://ipfs/", "ipfs://"],
     "ipfsUrlChanger" : "https://gateway.ipfs.io/ipfs/",
     "openSeaItemLinkTemplate" : "https://opensea.io/assets/{0}/{1}",

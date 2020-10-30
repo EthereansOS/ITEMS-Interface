@@ -1972,7 +1972,7 @@ window.proposeNewMetadataLink = async function proposeNewMetadataLink(element, m
     }, template, undefined, descriptions, updates);
 };
 
-window.deployMetadataLink = async function deployMetadata(metadata, functionalitiesManager) {
+window.deployMetadataLink = async function deployMetadataLink(metadata, functionalitiesManager) {
     if (metadata) {
         var aVar = false;
         Object.values(metadata).forEach(it => {
@@ -2281,7 +2281,7 @@ window.checkMetadataLink = async function checkMetadataLink(metadataLink) {
     if(!metadataLink) {
         return false;
     }
-    if(!metadataLink.indexOf("ipfs://ipfs/")) {
+    if(metadataLink.indexOf("ipfs://ipfs/") === -1) {
         return false;
     }
     var metadata;
