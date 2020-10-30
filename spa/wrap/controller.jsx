@@ -31,7 +31,7 @@ var WrapController = function (view) {
             selectedToken.decimals = await window.blockchainCall(selectedToken.contract.methods.decimals);
         } catch(e) {
         }
-        context.view.setState({selectedToken}, context.refreshBalanceOf);
+        context.view.setState({selectedToken}, context.refreshData);
     };
 
     context.refreshData = async function refreshData() {

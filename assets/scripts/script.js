@@ -689,7 +689,7 @@ window.numberToString = function numberToString(num, locale) {
 };
 
 window.asNumber = function asNumber(value) {
-    if(typeof value === 'undefined' || value === '') {
+    if (typeof value === 'undefined' || value === '') {
         return 0;
     }
     return parseFloat(window.numberToString(value.split(',').join('')));
@@ -2160,15 +2160,14 @@ window.getTokenPriceInDollarsOnUniswap = async function getTokenPriceInDollarsOn
     var ethereumValue = "0";
     try {
         ethereumValue = (await window.blockchainCall(uniswapV2Router.methods.getAmountsOut, amount, path))[1];
-    } catch(e) {
-    }
+    } catch (e) {}
     ethereumValue = parseFloat(window.fromDecimals(ethereumValue, decimals));
     ethereumValue *= ethereumPrice;
     return ethereumValue;
 };
 
 window.getTokenPriceInDollarsOnOpenSea = async function getTokenPriceInDollarsOnOpenSea(asset_contract_address, token_id) {
-    if(window.networkId !== 1) {
+    if (window.networkId !== 1) {
         return 0;
     }
     var seaport = new OpenSeaPort(window.web3.currentProvider, {
@@ -2213,7 +2212,7 @@ window.loadItemData = async function loadItemData(view) {
     item.symbol = item.symbol || await window.blockchainCall(item.contract.methods.symbol, item.objectId);
     await window.tryRetrieveMetadata(item);
     item.decimals = item.decimals || await window.blockchainCall(item.token.methods.decimals);
-    view.setState({item}, () => window.updateItemDynamicData(view));
+    view.setState({ item }, () => window.updateItemDynamicData(view));
 };
 
 window.updateItemDynamicData = async function updateItemDynamicData(view) {
@@ -2224,9 +2223,76 @@ window.updateItemDynamicData = async function updateItemDynamicData(view) {
     item.dynamicData.tokenPriceInDollarsOnOpenSea = await window.getTokenPriceInDollarsOnOpenSea(view.props.collection.address, item.objectId);
     delete item.dynamicData.balanceOf;
     window.walletAddress && (item.dynamicData.balanceOf = await window.blockchainCall(item.token.methods.balanceOf, window.walletAddress));
-    view.setState({item});
+    view.setState({ item });
 };
 
 window.normalizeName = function normalizeName(name) {
     return name.split('-').join(' ').split('_').join(' ').firstLetterToUpperCase();
 };
+
+window.loadBlockSearchTranches = async function loadBlockSearchTranches() {
+    var startBlock = parseInt(window.numberToString(window.getNetworkElement("deploySearchStart") || "0"));
+    var endBlock = parseInt(window.numberToString(await window.web3.eth.getBlockNumber()));
+    var limit = window.context.blockSearchLimit;
+    var toBlock = endBlock;
+    var fromBlock = endBlock - limit;
+    fromBlock = fromBlock < startBlock ? startBlock : fromBlock;
+    var blocks = [];
+    while (true) {
+        blocks.push([window.numberToString(fromBlock), window.numberToString(toBlock)]);
+        if (fromBlock === startBlock) {
+            break;
+        }
+        toBlock = fromBlock - 1;
+        fromBlock = toBlock - limit;
+        fromBlock = fromBlock < startBlock ? startBlock : fromBlock;
+    }
+    return blocks;
+};
+
+window.perform = function perform(e) {
+    window.preventItem(e);
+    var target = e.currentTarget;
+    var view = $(e.currentTarget).findReactComponent();
+    if ((view.state && view.state.performing) || target.className.toLowerCase().indexOf('disabled') !== -1) {
+        return;
+    }
+    var action = target.dataset.action;
+    var args = [];
+    for (var i = 1; i < arguments.length; i++) {
+        args.push(arguments[i]);
+    }
+    var _this = view;
+    var close = function close(e) {
+        var message = e && (e.message || e);
+        _this.setState({ performing: null }, function () {
+            message && message.indexOf('denied') === -1 && setTimeout(function () {
+                alert(message);
+            });
+            !message && _this.actionEnd && _this.actionEnd();
+        });
+    }
+    _this.setState({ performing: action }, function () {
+        _this.controller['perform' + action.firstLetterToUpperCase()].apply(view, args).catch(close).finally(close);
+    });
+};
+
+window.checkMetadataLink = async function checkMetadataLink(metadataLink) {
+    if(!metadataLink) {
+        return false;
+    }
+    if(!metadataLink.indexOf("ipfs://ipfs/")) {
+        return false;
+    }
+    return checkMetadataValues(await window.AJAXRequest(window.formatLink(metadataLink)));
+};
+
+window.checkMetadataValues = function checkMetadataValues(metadata) {
+    var errors = [];
+
+    if(errors && errors.length > 0) {
+        throw errors.join(',');
+    }
+
+    return true;
+}

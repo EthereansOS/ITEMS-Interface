@@ -27,7 +27,7 @@ var IndexController = function (view) {
         var topics = [Object.keys(map)];
         var address = await window.blockchainCall(window.ethItemOrchestrator.methods.factories);
         var collections = (context.view.state && context.view.state.collections) || [];
-        var blocks = await context.loadBlockSearchTranches();
+        var blocks = await window.loadBlockSearchTranches();
         var updateSubCollectionsPromise = function updateSubCollectionsPromise(subCollections) {
             return new Promise(function(ok) {
                 collections.push(...subCollections);
@@ -62,26 +62,6 @@ var IndexController = function (view) {
         }
         await Promise.all(subCollectionsPromises);
         context.view.setState({ loadingCollections: null })
-    };
-
-    context.loadBlockSearchTranches = async function loadBlockSearchTranches() {
-        var startBlock = parseInt(window.numberToString(window.getNetworkElement("deploySearchStart") || "0"));
-        var endBlock = parseInt(window.numberToString(await window.web3.eth.getBlockNumber()));
-        var limit = window.context.blockSearchLimit;
-        var toBlock = endBlock;
-        var fromBlock = endBlock - limit;
-        fromBlock = fromBlock < startBlock ? startBlock : fromBlock;
-        var blocks = [];
-        while (true) {
-            blocks.push([window.numberToString(fromBlock), window.numberToString(toBlock)]);
-            if (fromBlock === startBlock) {
-                break;
-            }
-            toBlock = fromBlock - 1;
-            fromBlock = toBlock - limit;
-            fromBlock = fromBlock < startBlock ? startBlock : fromBlock;
-        }
-        return blocks;
     };
 
     context.refreshCollectionData = async function refreshCollectionData(collections) {

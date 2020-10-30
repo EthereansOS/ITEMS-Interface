@@ -56,30 +56,8 @@ var Wrap = React.createClass({
         this.tokenAmountInput.value = window.asNumber(this.state.selectedToken.balanceOfPlain);
         this.setState({ selectedToken: this.state.selectedToken });
     },
-    perform(e) {
-        window.preventItem(e);
-        var target = e.currentTarget;
-        if ((this.state && this.state.performing) || target.className.toLowerCase().indexOf('disabled') !== -1) {
-            return;
-        }
-        var action = target.dataset.action;
-        var args = [];
-        for (var i = 1; i < arguments.length; i++) {
-            args.push(arguments[i]);
-        }
-        var _this = this;
-        var close = function close(e) {
-            var message = e && (e.message || e);
-            _this.setState({ performing: null }, function () {
-                message && message.indexOf('denied') === -1 && setTimeout(function () {
-                    alert(message);
-                });
-                !message && _this.controller.refreshData();
-            });
-        }
-        _this.setState({ performing: action }, function () {
-            _this.controller['perform' + action.firstLetterToUpperCase()].apply(this, args).catch(close).finally(close);
-        });
+    actionEnd() {
+        this.controller.refreshData()
     },
     render() {
         var selectedTokenType = this.getSelectedTokenType();
