@@ -90,7 +90,7 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .collectionPage .collectionInfo .collectionLink {display: inline-block; width: 80%; margin-top: 10px;font-size: 14px; text-align: left; color: #a4d1f8; font-weight: bold;}
 
 .collectionPageItems {background-color: #ffffff; width: 100%; display: inline-block; text-align: center;}
-.collectionPageItemsOrder {padding: 50px 100px 20px 100px; -moz-column-gap: 10px;-moz-column-width: 200px;;column-gap: 10px;column-width: 200px;-webkit-column-gap: 10px;-webkit-column-width: 200px; max-width: 1200px;}
+.collectionPageItemsOrder {padding: 50px 100px 20px 100px; -moz-column-gap: 10px;-moz-column-width: 200px;;column-gap: 10px;column-width: 200px;-webkit-column-gap: 10px;-webkit-column-width: 200px; max-width: 1200px;display: inline-block;}
 .collectionPageItems .collectionSingleItem {width: 200px; vertical-align: middle; display: inline-block; margin: 15px auto;}
 .collectionPageItems .itemIcon {width: 200px;}
 .collectionPageItems .itemIcon img {width: 95%;}
@@ -141,6 +141,17 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .BeforeToWrapToITEM {padding: 8px 12px; font-weight: bold; background-color: #a4d1f8; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; margin-right: 10px; color: #ffffff;}
 .WrapToITEM {padding: 8px 12px; font-weight: bold; background-color: #a4d1f8; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; margin-right: 10px;background: linear-gradient(to right, #9048fd 30%, #4bcbc9 90%); color: #ffffff;}
 .WrapWhatLoaded .disabled {background-color: #e4e4e4 !important; color: #6e6e6e !important;}
+
+.ItemData {max-width: 1200px; display: block; margin: 30px auto 100px auto; text-align:center; -moz-column-gap: 10px;-moz-column-width: 300px;;column-gap: 10px;column-width: 300px;-webkit-column-gap: 10px;-webkit-column-width: 300px; max-width: 1200px;}
+.swowThis {padding: 5px; font-size: 11px; font-weight: bold; color: #ffffff; text-decoration: none; background-color: #a4d1f8; border-radius: 5px; display: inline-block; margin: 10px auto;}
+.subMetaValueList {display: inline-block; text-align: center;width: 300px; background-color: #e2f0fd; padding: 20px 10px; margin: 10px; border-radius: 10px;}
+.subMetaValueList .subMetaValueList {width: 80%; background-color: transparent; border-top: 1px solid #9c9c9c; border-radius: 0%;}
+.ItemStuffOpen {text-align: center;}
+.subMetaValueOpen {font-weight: bold; font-size: 18px; color: #a4d1f8; margin: 10px auto;}
+.subMetaValueLink {background-color: #a4d1f8; text-decoration: none; color: #ffffff; padding: 5px 2.5%; display: inline-block; border-radius: 5px; margin-top: 5px; width: 95%; font-size: 14px;}
+.subMetaValue {font-size: 15px; color: #6e6e6e; width: 95%;padding: 5px 2.5%;}
+.subMetaValueString {font-size: 15px; text-align: left;color: #6e6e6e; width: 90%;}
+
 
 @media only screen and (max-device-width: 750px) {
    .Intro .Title, .Explainer, .ExplainerL, .ExplainerS, footer section {width: 90% !important; text-align: center;}

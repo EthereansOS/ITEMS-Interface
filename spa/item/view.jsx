@@ -29,30 +29,30 @@ var Item = React.createClass({
         if ((typeof data).toLowerCase() === 'object') {
             return this.renderMetadataObject(data, renderShowButton);
         }
-        var result = (<section>{data}</section>);
+        var result = (<section className="subMetaValue">{data}</section>);
         if((typeof data).toLowerCase() === "string" && data.length > 30) {
-            result = (<p>{data}</p>);
+            result = (<p className="subMetaValueString">{data}</p>);
         }
         if((typeof data).toLowerCase() === "string" && (data.toLowerCase().indexOf("http") === 0 || data.toLowerCase().indexOf("ipfs") === 0 || data.indexOf("//") === 0)) {
-            result = (<a href={window.formatLink(data)} target="_blank">{window.shortenWord(data, 30)}</a>);
+            result = (<a className="subMetaValueLink" href={window.formatLink(data)} target="_blank">{window.shortenWord(data, 30)}</a>);
         }
         return renderShowButton ? this.renderShowButton(result) : result;
     },
     renderMetadataObject(data, renderShowButton, renderShowButtonForChildrens) {
-        var result = (<ul>
-            {Object.entries(data).map(it => <li key={it[0]}>
-                <section>{renderShowButton || renderShowButtonForChildrens ? it[0] : window.normalizeName(it[0])}</section>
+        var result = (
+            Object.entries(data).map(it => <section className="subMetaValueList" key={it[0]}>
+                <section className="subMetaValueOpen">{renderShowButton || renderShowButtonForChildrens ? it[0] : window.normalizeName(it[0])}</section>
                 {this.renderMetadataValue(it[1], renderShowButton || renderShowButtonForChildrens)}
-            </li>)}
-        </ul>);
+            </section>)
+        );
         return renderShowButton ? this.renderShowButton(result) : result;
     },
     renderMetadataArray(array, renderShowButton) {
-        var result = (<ol>
+        var result = (<ul className="subMetaValueArrayList">
             {array.map((it, i) => <li key={i}>
                 {this.renderMetadataValue(it, renderShowButton)}
             </li>)}
-        </ol>);
+        </ul>);
         return renderShowButton ? this.renderShowButton(result) : renderShowButton;
     },
     renderShowButton(result) {
@@ -67,7 +67,7 @@ var Item = React.createClass({
             content.style.display = e.currentTarget.innerHTML === 'Show' ? 'none' : 'inline-block';
         };
         return (<section>
-            <a href="javascript:;" onClick={onClick}>
+            <a className="swowThis" href="javascript:;" onClick={onClick}>
                 Show
             </a>
             {result}
