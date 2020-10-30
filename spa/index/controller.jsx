@@ -13,7 +13,7 @@ var IndexController = function (view) {
         } catch(e) {
         }
         try {
-            window.currentEthItemERC20Wrapper = window.newContract(window.context.IERC20WrapperABI, await window.blockchainCall(window.currentKnowledgeBase.methods.erc20Wrapper));
+            window.currentEthItemERC20Wrapper = window.newContract(window.context.IERC20WrapperABI, await window.blockchainCall(window.currentEthItemKnowledgeBase.methods.erc20Wrapper));
         } catch(e) {
         }
         context.loadCollections(true);
