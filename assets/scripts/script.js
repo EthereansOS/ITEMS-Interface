@@ -688,6 +688,13 @@ window.numberToString = function numberToString(num, locale) {
     return numStr;
 };
 
+window.asNumber = function asNumber(value) {
+    if(typeof value === 'undefined' || value === '') {
+        return 0;
+    }
+    return parseFloat(window.numberToString(value.split(',').join('')));
+};
+
 window.onload = function() {
     Main().catch(function(e) {
         return alert(e.message || e);
@@ -1227,7 +1234,7 @@ window.dumpFunctionalities = async function dumpFunctionalities(dfo) {
 };
 
 window.formatMoney = function formatMoney(value, decPlaces, thouSeparator, decSeparator) {
-    value = (typeof value).toLowerCase() !== 'number' ? parseFloat(value) : value;
+    value = (typeof value).toLowerCase() !== 'number' ? window.asNumber(value) : value;
     var n = value,
         decPlaces = isNaN(decPlaces = Math.abs(decPlaces)) ? 2 : decPlaces,
         decSeparator = decSeparator == undefined ? "." : decSeparator,

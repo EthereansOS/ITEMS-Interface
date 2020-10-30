@@ -4,6 +4,18 @@ var IndexController = function (view) {
 
     context.loadData = async function loadData() {
         window.ethItemOrchestrator = window.newContract(window.context.ethItemOrchestratorABI, window.getNetworkElement("ethItemOrchestratorAddress"));
+        try {
+            window.currentEthItemKnowledgeBase = window.newContract(window.context.KnowledgeBaseABI, await window.blockchainCall(window.ethItemOrchestrator.methods.knowledgeBase));
+        } catch(e) {
+        }
+        try {
+            window.currentEthItemFactory = window.newContract(window.context.IEthItemFactoryABI, await window.blockchainCall(window.ethItemOrchestrator.methods.factory));
+        } catch(e) {
+        }
+        try {
+            window.currentEthItemERC20Wrapper = window.newContract(window.context.IERC20WrapperABI, await window.blockchainCall(window.currentKnowledgeBase.methods.erc20Wrapper));
+        } catch(e) {
+        }
         context.loadCollections(true);
     };
 

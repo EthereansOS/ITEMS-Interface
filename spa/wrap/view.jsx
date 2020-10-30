@@ -1,26 +1,116 @@
 var Wrap = React.createClass({
+    requiredScripts: [
+        'spa/innerLoader.jsx'
+    ],
+    getDefaultSubscriptions() {
+        return {
+            "ethereum/ping" : this.controller.refreshData
+        }
+    },
+    getSelectedTokenType() {
+        return (this.state && this.state.selectedTokenType) || window.context.supportedWrappedTokens[0];
+    },
+    reloadToken(e) {
+        window.preventItem(e);
+        this.controller.onTokenAddressChange(this.getSelectedTokenType(), this.tokenAddressInput.value);
+    },
+    onTokenTypeChange(e) {
+        window.preventItem(e);
+        var _this = this;
+        this.setState({
+            selectedTokenType: e.currentTarget.value,
+        }, function() {
+            _this.controller.onTokenAddressChange(_this.getSelectedTokenType(), _this.tokenAddressInput.value);
+        });
+    },
+    onChange(e) {
+        window.preventItem(e);
+        var value = e.currentTarget.value;
+        var callback = this[e.currentTarget.dataset.action];
+        var timeVar = e.currentTarget.dataset.action + "Timeout";
+        this[timeVar] && window.clearTimeout(this[timeVar]);
+        this[timeVar] = setTimeout(() => callback(value), window.context.inputTimeout);
+    },
+    onTokenAddressChange(value) {
+        var _this = this;
+        _this.setState({selectedToken : null}, () => _this.controller.onTokenAddressChange(_this.getSelectedTokenType(), value));
+    },
+    onTokenIdChange(value) {
+        if (!this.state || !this.state.selectedToken) {
+            return;
+        }
+        this.state.selectedToken.tokenId = value;
+        this.controller.refreshBalanceOf();
+    },
+    onTokenAmountChange(value) {
+        if (!this.state || !this.state.selectedToken) {
+            return;
+        }
+        this.state.selectedToken.tokenAmount = value;
+    },
+    max(e) {
+        window.preventItem(e);
+        if (!this.state || !this.state.selectedToken || !this.state.selectedToken.balanceOfPlain) {
+            return;
+        }
+        this.tokenAmountInput.value = window.asNumber(this.state.selectedToken.balanceOfPlain);
+        this.setState({ selectedToken: this.state.selectedToken });
+    },
+    perform(e) {
+        window.preventItem(e);
+        var target = e.currentTarget;
+        if ((this.state && this.state.performing) || target.className.toLowerCase().indexOf('disabled') !== -1) {
+            return;
+        }
+        var action = target.dataset.action;
+        var args = [];
+        for (var i = 1; i < arguments.length; i++) {
+            args.push(arguments[i]);
+        }
+        var _this = this;
+        var close = function close(e) {
+            var message = e && (e.message || e);
+            _this.setState({ performing: null }, function () {
+                message && message.indexOf('denied') === -1 && setTimeout(function () {
+                    alert(message);
+                });
+                !message && _this.controller.refreshData();
+            });
+        }
+        _this.setState({ performing: action }, function () {
+            _this.controller['perform' + action.firstLetterToUpperCase()].apply(this, args).catch(close).finally(close);
+        });
+    },
     render() {
-        return(
-        <section className="Pager">
+        var selectedTokenType = this.getSelectedTokenType();
+        var state = this.state || {};
+        return (<section className="Pager">
             <section className="wrapPage">
-                    <section className="wrapBox">
-                        <section className="WrapWhat">
-                            <p>Wrap an existing Token or NFT into an ITEM</p>
-                            <input className="addressWrapSelector" type="text" placeholder="ERC20 721 1155 address"></input>
-                            <a className="LoadToITEM">Load</a>
-                        </section>
-
-
-                        <section className="WrapWhatLoaded">
-                            <h6 className="tokenSelectedToWrap">Penguin (WIMD)</h6>
-                            <span className="tokenSelectedToWrapBalance">balance: 1,000</span>
-                            <section className="tokenSelectedToWrapDecide">
-                                <a className="tokenSelectedToWrapBalanceALL">MAX</a>
-                                <input className="BalancetoWrapSelector" placeholder="Ammount" type="number"></input>
-                            </section>
-                            <a className="BeforeToWrapToITEM disabled">Accept</a><a className="WrapToITEM">ITEMIZE</a>
-                        </section>
+                <section className="wrapBox">
+                    <section className="WrapWhat">
+                        <p>Wrap an existing Token or NFT into an ITEM</p>
+                        <select onChange={this.onTokenTypeChange}>
+                            {window.context.supportedWrappedTokens.map(it => <option key={it} selected={selectedTokenType === it} value={it}>{it}</option>)}
+                        </select>
+                        <input ref={ref => this.tokenAddressInput = ref} className="addressWrapSelector" type="text" placeholder="Token address" data-action="onTokenAddressChange" onKeyPress={this.onChange} onChange={this.onChange}/>
+                        <a className="LoadToITEM" href="javascript:;" onClick={this.reloadToken}>Load</a>
                     </section>
+                    <section className="WrapWhatLoaded">
+                        {state.selectedToken && (state.selectedToken.name || state.selectedToken.symbol) && <h6 className="tokenSelectedToWrap">{window.shortenWord(state.selectedToken.name, 4)} {state.selectedToken.symbol && state.selectedToken.name ? ` (${window.shortenWord(state.selectedToken.symbol, 4)})` : window.shortenWord(state.selectedToken.symbol, 4)}</h6>}
+                        {selectedTokenType !== 'ERC20' && <section className="tokenSelectedToWrapDecide">
+                            <input className="BalancetoWrapSelector" placeholder="Token ID" type="text" data-action="onTokenIdChange" onKeyPress={this.onChange} onChange={this.onChange}/>
+                        </section>}
+                        {selectedTokenType !== 'ERC721' && state.selectedToken && state.selectedToken.balanceOfPlain && <span className="tokenSelectedToWrapBalance">balance: {state.selectedToken.balanceOfPlain}</span>}
+                        {selectedTokenType !== 'ERC721' && <section className="tokenSelectedToWrapDecide">
+                            <a className="tokenSelectedToWrapBalanceALL" onClick={this.max}>MAX</a>
+                            <input ref={ref => this.tokenAmountInput = ref} className="BalancetoWrapSelector" placeholder="Ammount" type="text" data-action="onTokenAmountChange" onKeyPress={this.onChange} onChange={this.onChange} />
+                        </section>}
+                        {selectedTokenType === 'ERC20' && state.performing !== 'approve' && <a className={"BeforeToWrapToITEM" + (!state.selectedToken || state.selectedToken.approved ? " disabled" : "")} data-action="approve" onClick={this.perform} href="javascript:;">Approve</a>}
+                        {selectedTokenType === 'ERC20' && state.performing === 'approve' && <InnerLoader/>}
+                        {state.performing !== 'itemize' && <a className={"WrapToITEM" + (!state.selectedToken || !state.selectedToken.approved ? " disabled" : "")} data-action="itemize" onClick={this.perform} href="javascript:;">ITEMIZE</a>}
+                        {state.performing === 'itemize' && <InnerLoader/>}
+                    </section>
+                </section>
             </section>
         </section>);
     }
