@@ -122,21 +122,18 @@ var Item = React.createClass({
                         </ul>
                     </section>
                     <section className="ItemStuff">
-                        <section className="ItemFarm">
+                        {this.state && this.state.toggle === 'farm' && <section className="ItemFarm">
                             Soon @UniFi
-                        </section>
-                        <section className="ItemArbitrate">
+                        </section>}
+                        {this.state && this.state.toggle === 'arbitrage' && <section className="ItemArbitrate">
                             Soon @UniFi
-                        </section>
+                        </section>}
                         {item.metadata && <section className="ItemData">
                             <section className="ItemStuffOpen">
                             </section>
                             {this.renderMetadata()}
                             {this.renderMetadata(true)}
                         </section>}
-                        <section className="ItemCode">
-
-                        </section>
                     </section>
                 </section>
             </section>);

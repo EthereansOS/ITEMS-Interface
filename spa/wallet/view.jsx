@@ -16,13 +16,13 @@ var Wallet = React.createClass({
         this.emit('section/change', 'spa/item', {
             collection,
             item,
-            collections : state.collections
+            collections: state.collections
         });
     },
     getDefaultSubscriptions() {
         return {
             "collections/refresh": () => this.controller.loadData(),
-            "wallet/update" : () => this.controller.loadData()
+            "wallet/update": () => this.controller.loadData()
         }
     },
     render() {
@@ -31,7 +31,7 @@ var Wallet = React.createClass({
             return (<span style={{ "display": "none" }} />);
         }
         return (<section className="sideThing">
-            {!state.loaded && <Loader/>}
+            {!state.loaded && <Loader />}
             <section className="wallet">
                 {state.collections && this.getList().map(collection => <section key={collection.key} className="walletCollection">
                     <section className="walletCollectionOpener">
@@ -40,10 +40,11 @@ var Wallet = React.createClass({
                     <section className="walletCollectionItems">
                         {collection.items && Object.values(collection.items).map(item => <section key={item.key} className="walletCollectionItem">
                             <a href="javascript:;" onClick={this.onClick} data-collection={collection.key} data-item={item.key}>
-                                {item.image && <figure className="collectionIcon" style={{ "background-color": item.backgroundImage }}>
-                                    <LazyImageLoader src={item.image}/>
+                                <h6 className="walletCollectionOpenerName">{item.name}</h6>
+                                <figure className="collectionIcon" style={{ "background-color": item.backgroundImage }}>
+                                    {item.image && <LazyImageLoader src={item.image} />}
                                     {item.dynamicData && <span className="walletCollectionItemQuantity">{item.dynamicData.balanceOfPlain}</span>}
-                                </figure>}
+                                </figure>
                             </a>
                         </section>)}
                     </section>

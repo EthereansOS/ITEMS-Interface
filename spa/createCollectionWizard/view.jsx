@@ -73,20 +73,9 @@ var CreateCollectionWizard = React.createClass({
                     <input type="text" ref={ref => (this.collectionSymbol = ref) && (ref.value = state.collectionSymbol || "")} />
                 </section>
                 <section className="FormCreateThing">
-                    <label>
-                        <p>Has granularity</p>
-                        <input type="checkbox" ref={ref => (this.hasDecimals = ref) && (ref.checked = state.hasDecimals)} />
-                        <span>Selecting this option, all the Items of this Collection will have 18 decimals instead of 1</span>
-                    </label>
-                </section>
-                <section className="FormCreateThing">
-                    <p>Description</p>
-                    <textarea ref={ref => (this.collectionDescription = ref) && (ref.value = state.collectionDescription || "")} />
-                </section>
-                {false && <section className="FormCreateThing">
                     <p>ENS</p>
-                    <input type="text" />
-                </section>}
+                    <input type="text" ref={ref => (this.collectionENS = ref) && (ref.value = state.collectionENS || "")} />
+                </section>
                 <section className="FormCreateThing">
                     <a className="SuperActionBTN" href="javascript:;" onClick={this.next}>NEXT</a>
                 </section>
@@ -99,6 +88,18 @@ var CreateCollectionWizard = React.createClass({
         return (<section className="createCollection">
             <h2>Who is the owner?</h2>
             <section className="FormCreate">
+                <section className="FormCreateThing">
+                    <label>
+                        <p>Has granularity</p>
+                        <input type="checkbox" ref={ref => (this.hasDecimals = ref) && (ref.checked = state.hasDecimals)} />
+                        <span>Selecting this option, all the Items of this Collection will have 18 decimals instead of 1</span>
+                    </label>
+                </section>
+                <section className="FormCreateThing">
+                    <p>Metadata Link</p>
+                    <input type="text" ref={ref => (this.metadataLinkInput = ref) && (ref = this.state && this.state.metadataLink)}/>
+                    <span>The metadata file is a Json standard file containing all of the info and links to the file of the ITEM. <a>here</a> You can find a step by step guide to build your json file correctly.</span>
+                </section>
                 <section className="FormCreateThing">
                     <label>
                         A wallet

@@ -2253,7 +2253,7 @@ window.updateItemDynamicData = async function updateItemDynamicData(item, view) 
     } catch(e) {
     }
     try {
-        item.dynamicData.balanceOfPlain = window.formatMoney(window.fromDecimals(item.dynamicData.balanceOf, item.decimals), 1);
+        item.dynamicData.balanceOfPlain = window.formatMoney(window.fromDecimals(item.dynamicData.balanceOf, item.decimals), 4);
     } catch(e) {
     }
     view && view.setState({ item });
