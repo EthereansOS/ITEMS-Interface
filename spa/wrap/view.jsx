@@ -66,7 +66,8 @@ var Wrap = React.createClass({
             <section className="wrapPage">
                 <section className="wrapBox">
                     <section className="WrapWhat">
-                        <p>Wrap an existing Token or NFT into an ITEM</p>
+                        <p>Wrap Tokens to ITEMs</p>
+                        <br></br>
                         <select onChange={this.onTokenTypeChange}>
                             {window.context.supportedWrappedTokens.map(it => <option key={it} selected={selectedTokenType === it} value={it}>{it}</option>)}
                         </select>
