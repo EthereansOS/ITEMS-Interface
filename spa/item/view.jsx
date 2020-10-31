@@ -4,8 +4,8 @@ var Item = React.createClass({
     ],
     getDefaultSubscriptions() {
         return {
-            "collections/refresh": () => window.loadItemData(this),
-            "ethereum/ping": () => window.updateItemDynamicData(this)
+            "collections/refresh": () => window.loadItemData(undefined, undefined, this),
+            "ethereum/ping": () => window.updateItemDynamicData(undefined, this)
         }
     },
     onClick(e) {

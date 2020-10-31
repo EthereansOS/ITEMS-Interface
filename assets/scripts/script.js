@@ -2196,34 +2196,67 @@ window.getTokenPriceInDollarsOnOpenSea = async function getTokenPriceInDollarsOn
     return price;
 };
 
-window.loadItemData = async function loadItemData(view) {
-    var propsItem = (view.props.collection.items && view.props.collection.items[view.props.objectId]) || {};
-    var stateItem = (view.state && view.state.item) || {};
-    var item = {};
-    item = window.deepCopy(item, propsItem);
-    item = window.deepCopy(item, stateItem);
-    view.props.collection.items = view.props.collection.items || {};
-    view.props.collection.items[view.props.objectId] = item;
-    item.objectId = view.props.objectId;
-    item.contract = view.props.collection.contract;
+window.loadCollectionItems = async function loadCollectionItems(collectionAddress) {
+    var mintEvent = "Mint(uint256,address,uint256)";
+    var logs = await window.getLogs({
+        address : collectionAddress,
+        topics : [window.web3.utils.sha3(mintEvent)]
+    });
+    var collectionObjectIds = {};
+    for(var log of logs) {
+        var objectId = web3.eth.abi.decodeParameters(["uint256","address","uint256"], log.data)[0];
+        collectionObjectIds[objectId] = true;
+    }
+    return Object.keys(collectionObjectIds);
+}
+
+window.loadItemData = async function loadItemData(item, collection, view) {
+    collection = collection || (item && item.collection) || (view && view.props.collection);
+    if(!item) {
+        if(!view) {
+            return;
+        }
+        item = {};
+        var propsItem = (collection.items && collection.items[view.props.objectId]) || {};
+        var stateItem = (view.state && view.state.item) || {};
+        item = window.deepCopy(item, propsItem);
+        item = window.deepCopy(item, stateItem);
+    }
+    collection.items = collection.items || {};
+    item.objectId = item.objectId || view.props.objectId;
+    collection.items[item.objectId] = item;
+    item.collection = collection;
+    item.key = item.objectId;
+    item.contract = collection.contract;
     item.address = item.address || window.web3.utils.toChecksumAddress(await window.blockchainCall(item.contract.methods.asERC20, item.objectId));
     item.token = item.token || window.newContract(window.context.IERC20ABI, item.address);
     item.name = item.name || await window.blockchainCall(item.contract.methods.name, item.objectId);
     item.symbol = item.symbol || await window.blockchainCall(item.contract.methods.symbol, item.objectId);
-    await window.tryRetrieveMetadata(item);
+    window.tryRetrieveMetadata(item).then(() => view.setState({item}));
     item.decimals = item.decimals || await window.blockchainCall(item.token.methods.decimals);
-    view.setState({ item }, () => window.updateItemDynamicData(view));
+    view && view.setState({ item }, () => window.updateItemDynamicData(item, view));
+    !view && await window.updateItemDynamicData(item);
 };
 
-window.updateItemDynamicData = async function updateItemDynamicData(view) {
-    var item = (view.state && view.state.item) || view.props.item;
+window.updateItemDynamicData = async function updateItemDynamicData(item, view) {
+    var item = item || (view.state && view.state.item) || view.props.item;
     item.dynamicData = item.dynamicData || {};
     item.dynamicData.totalSupply = await window.blockchainCall(item.token.methods.totalSupply);
     item.dynamicData.tokenPriceInDollarsOnUniswap = await window.getTokenPriceInDollarsOnUniswap(item.address, item.decimals);
-    item.dynamicData.tokenPriceInDollarsOnOpenSea = await window.getTokenPriceInDollarsOnOpenSea(view.props.collection.address, item.objectId);
+    item.dynamicData.tokenPriceInDollarsOnOpenSea = await window.getTokenPriceInDollarsOnOpenSea(item.collection.address, item.objectId);
     delete item.dynamicData.balanceOf;
+    delete item.dynamicData.balanceOfPlain;
     window.walletAddress && (item.dynamicData.balanceOf = await window.blockchainCall(item.token.methods.balanceOf, window.walletAddress));
-    view.setState({ item });
+    delete item.collection.hasBalance;
+    try {
+        item.collection.hasBalance = parseInt(item.dynamicData.balanceOf) > 0;
+    } catch(e) {
+    }
+    try {
+        item.dynamicData.balanceOfPlain = window.formatMoney(window.fromDecimals(item.dynamicData.balanceOf, item.decimals), 1);
+    } catch(e) {
+    }
+    view && view.setState({ item });
 };
 
 window.normalizeName = function normalizeName(name) {
@@ -2301,4 +2334,13 @@ window.checkMetadataValues = function checkMetadataValues(metadata) {
     }
 
     return true;
-}
+};
+
+window.getState = function getState(view) {
+    var state = {};
+    view.props && Object.entries(view.props).forEach(entry => state[entry[0]] = entry[1]);
+    view.state && Object.entries(view.state).forEach(entry => state[entry[0]] = entry[1]);
+    state.props && Object.entries(state.props).forEach(entry => state[entry[0]] = entry[1]);
+    delete state.props;
+    return state;
+};

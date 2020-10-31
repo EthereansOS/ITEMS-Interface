@@ -6,8 +6,8 @@ var CollectionSingleItem = React.createClass({
     ],
     getDefaultSubscriptions() {
         return {
-            "collections/refresh": () => window.loadItemData(this),
-            "ethereum/ping" : () => window.updateItemDynamicData(this)
+            "collections/refresh": () => window.loadItemData(undefined, undefined, this),
+            "ethereum/ping" : () => window.updateItemDynamicData(undefined, this)
         }
     },
     onClick(e) {
@@ -27,7 +27,7 @@ var CollectionSingleItem = React.createClass({
         });
     },
     componentDidMount() {
-        window.loadItemData(this);
+        window.loadItemData(undefined, undefined, this);
     },
     render() {
         var item = (this.state && this.state.item) || this.props.item;

@@ -16,7 +16,7 @@ var IndexController = function (view) {
             window.currentEthItemERC20Wrapper = window.newContract(window.context.IERC20WrapperABI, await window.blockchainCall(window.currentEthItemKnowledgeBase.methods.erc20Wrapper));
         } catch(e) {
         }
-        context.loadCollections(true);
+        await context.loadCollections(true);
     };
 
     context.loadCollections = async function loadCollections(clear) {

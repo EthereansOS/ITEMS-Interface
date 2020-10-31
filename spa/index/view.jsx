@@ -1,17 +1,27 @@
 var Index = React.createClass({
     requiredModules : [
-        'spa/menu'
+        'spa/menu',
+        'spa/wallet'
     ],
     getDefaultSubscriptions() {
         return {
             'ethereum/update' : this.controller.loadData,
             'ethereum/ping' : this.controller.refreshCollectionData,
             'collections/refresh' : this.controller.loadCollections,
-            'section/change' : this.sectionChange
+            'section/change' : this.sectionChange,
+            "wallet/toggle" : this.toggleWallet
         }
     },
+    toggleWallet(w) {
+        var wallet = w;
+        if(wallet === undefined || wallet === null) {
+            wallet = !(this.state && this.state.wallet);
+        }
+        this.setState({wallet});
+    },
     componentDidMount() {
-        this.controller.loadData();
+        var _this = this;
+        this.controller.loadData().then(() => _this.emit('wallet/update'));
     },
     sectionChange(module, props) {
         var _this = this;
@@ -35,6 +45,7 @@ var Index = React.createClass({
             {props.section && <section>
                 {React.createElement(window[props.section], props)}
             </section>}
+            {React.createElement(Wallet, props)}
         </section>);
     }
 });

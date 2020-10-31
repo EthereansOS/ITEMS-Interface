@@ -22,7 +22,7 @@ var Collection = React.createClass({
     render() {
         return (<section className="Pager">
             <section className="collectionPage">
-                <SingleCollection collection={this.props.collection} className="collectionPageInfo" showLink showItemsCount  onCollectionObjectIds={this.onCollectionObjectIds}/>
+                <SingleCollection collection={this.props.collection} className="collectionPageInfo" showLink showItemsCount onCollectionObjectIds={this.onCollectionObjectIds}/>
                 <section className="collectionNav">
                     <ul>
                         <li className={this.state && this.state.toggle === 'items' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>Items</a></li>

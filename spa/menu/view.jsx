@@ -25,7 +25,7 @@ var Menu = React.createClass({
                     <a>&#x021B5;</a>
                 </section>
                 {!window.walletAddress && <a className="connectWallet Brandized" href="javascript:;" onClick={window.ethereum.enable}>CONNECT</a>}
-                {window.walletAddress && <a className="connectWallet" target="_blank" href={`${window.getNetworkElement("etherscanURL")}address/${window.walletAddress}`} onClick={window.ethereum.enable}><img src={window.makeBlockie(window.walletAddress)}/><span>{window.shortenWord(window.walletAddress, 5, true)} &#8592;</span></a>}
+                {window.walletAddress && <a className="connectWallet" href="javascript:;" onClick={() => this.emit('wallet/toggle')}><img src={window.makeBlockie(window.walletAddress)}/><span>{window.shortenWord(window.walletAddress, 5, true)} &#8592;</span></a>}
             </section>);
     }
 });
