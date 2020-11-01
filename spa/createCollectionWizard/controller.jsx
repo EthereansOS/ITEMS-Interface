@@ -16,6 +16,11 @@ var CreateCollectionWizardController = function (view) {
             throw "ENS is mandatory";
         }
 
+        var exists = await window.blockchainCall(window.ENSController.methods.recordExists, nameHash.hash(nameHash.normalize(`${collectionENS}.${window.context.ensDomainName}`)));
+        if(exists) {
+            throw "This ENS is already taken!";
+        }
+
         context.view.setState({
             collectionName,
             collectionSymbol,
@@ -64,6 +69,7 @@ var CreateCollectionWizardController = function (view) {
         var values = [state.collectionName, state.collectionSymbol, hasDecimals, metadataLink, extensionAddress || window.voidEthereumAddress, context.view.extensionAddressPayload && context.view.extensionAddressPayload.value || "0x"];
         var payload = window.web3.utils.sha3(`init(${params.join(",")})`);
         payload = payload.substring(0, 10) + window.web3.eth.abi.encodeParameters(params, values).substring(2);
-        await window.blockchainCall(window.ethItemOrchestrator.methods.createERC1155, payload);
+        await window.blockchainCall(window.ethItemOrchestrator.methods.createERC1155, payload, state.collectionENS);
+        context.view.emit('collections/refresh');
     };
 };
