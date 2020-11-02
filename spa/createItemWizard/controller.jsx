@@ -76,16 +76,43 @@ var CreateItemWizardController = function (view) {
         return value.split(',').join('');
     };
 
+    context.checkMetadata = async function checkMetadata() {
+        var state = context.view.getState();
+        if (!state.metadataType) {
+            throw "No metadata! Are you serious?";
+        }
+        if (state.metadataType === 'custom') {
+            var metadataLink = context.view.metadataLinkInput.value;
+            if (!metadataLink || !await window.checkMetadataLink(metadataLink)) {
+                throw "Not a valid metadata link!";
+            }
+            context.view.setState({
+                metadataLink
+            });
+        }
+        var metadata = context.view.getMetadataValues();
+        if(!window.checkMetadataValues(metadata)) {
+            throw "Invalid metadata values";
+        }
+        context.view.setState({
+            metadata
+        });
+    };
+
     context.performDeploy = async function performDeploy() {
         var state = context.view.getState();
         var valueDecimals = context.toDecimals(state.selectedToken, state.itemSupply);
         if(parseInt(valueDecimals) <= 0) {
             throw "Supply must be greater than 0";
         }
-        var metadataLink = context.view.metadataLinkInput.value;
-        if(!(await window.checkMetadataLink(metadataLink))) {
-            throw "Invalid metadata link";
+        await context.checkMetadata();
+        var metadataLink = state.metadataLink;
+        var metatada = state.metadata || {};
+        if(state.extension === 'contract') {
+            metatada = metatada || await window.AJAXRequest(window.formatLink(metadataLink));
+            metatada.code = context.view.editor.editor.getValue();
         }
+        metadataLink = metadataLink || await window.uploadToIPFS(metatada);
         await window.blockchainCall(state.selectedToken.contract.methods.mint, valueDecimals, state.itemName, state.itemSymbol, metadataLink, state.itemMintable);
     };
 };

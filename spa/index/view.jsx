@@ -20,6 +20,8 @@ var Index = React.createClass({
         if(wallet === undefined || wallet === null) {
             wallet = !(this.state && this.state.wallet);
         }
+        wallet && $('body').addClass('noScroll');
+        !wallet && $('body').removeClass('noScroll');
         this.setState({wallet});
     },
     componentDidMount() {

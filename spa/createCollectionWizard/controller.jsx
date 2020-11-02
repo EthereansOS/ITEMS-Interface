@@ -8,10 +8,12 @@ var CreateCollectionWizardController = function (view) {
         if (!collectionName) {
             throw "Name is mandatory";
         }
+
         var collectionSymbol = context.view.collectionSymbol.value;
         if (!collectionSymbol) {
             throw "Symbol is mandatory";
         }
+
         var ensResult = await context.checkENS();
         var collectionENS = ensResult[0];
         if (!collectionENS) {
@@ -19,7 +21,7 @@ var CreateCollectionWizardController = function (view) {
         }
 
         var exists = ensResult[1];
-        if(exists) {
+        if (exists) {
             throw "This ENS is already taken!";
         }
 
@@ -33,7 +35,7 @@ var CreateCollectionWizardController = function (view) {
     context.checkENS = async function checkENS() {
         var collectionENS = context.view.collectionENS.value;
         var exists = false;
-        if(collectionENS) {
+        if (collectionENS) {
             exists = await window.blockchainCall(window.ENSController.methods.recordExists, nameHash.hash(nameHash.normalize(`${collectionENS}.${window.context.ensDomainName}`)));
         }
         return [collectionENS, exists];
@@ -42,16 +44,47 @@ var CreateCollectionWizardController = function (view) {
     context.checkStep1 = async function checkStep1() {
         await window.waitForLateInput();
         var state = context.view.getState();
-        if(! state.extension) {throw "No owner! Are you serious?"}
-    };
-    context.checkStep2 = async function checkStep2() {
-        await window.waitForLateInput();
-        var state = context.view.getState();
-        var extension = state.extension || "wallet";
-        var hasDecimals = context.view.hasDecimals.checked;
-
+        if (!state.extension) {
+            throw "No owner! Are you serious?";
+        }
+        if (state.extension !== 'wallet') {
+            return;
+        }
+        var extensionAddress = context.view.extensionAddressInput.value;
+        if (!extensionAddress || !window.isEthereumAddress(extensionAddress)) {
+            throw "Extension must be a valid ethereum address!";
+        }
         context.view.setState({
-            hasDecimals
+            extensionAddress
+        });
+    };
+
+    context.checkStep2 = async function checkStep2() {
+        context.view.setState({
+            hasDecimals: context.view.hasDecimals.checked
+        });
+    };
+
+    context.checkStep3 = async function checkStep3() {
+        var state = context.view.getState();
+        if (!state.metadataType) {
+            throw "No metadata! Are you serious?";
+        }
+        if (state.metadataType === 'custom') {
+            var metadataLink = context.view.metadataLinkInput.value;
+            if (!metadataLink || !await window.checkMetadataLink(metadataLink)) {
+                throw "Not a valid metadata link!";
+            }
+            context.view.setState({
+                metadataLink
+            });
+        }
+        var metadata = context.view.getMetadataValues();
+        if(!window.checkMetadataValues(metadata)) {
+            throw "Invalid metadata values";
+        }
+        context.view.setState({
+            metadata
         });
     };
 
@@ -78,15 +111,15 @@ var CreateCollectionWizardController = function (view) {
         var contract;
         try {
             contract = compilation[context.view.contractSelect.value];
-        } catch(e) {
+        } catch (e) {
         }
-        if(!contract) {
+        if (!contract) {
             throw "You must compile and select a valid contract";
         }
         var extensionAddress = context.view.getState().extensionAddress;
-        if(extensionAddress && window.isEthereumAddress(extensionAddress)) {
+        if (extensionAddress && window.isEthereumAddress(extensionAddress)) {
             var compare = await window.SolidityUtilities.compare(extensionAddress, code);
-            if(!compare || Object.values(compare).length === 0) {
+            if (!compare || Object.values(compare).length === 0) {
                 throw 'Contract source code and given extension address are not aligned';
             }
             return await context.finalizeDeploy(extensionAddress);
@@ -100,9 +133,15 @@ var CreateCollectionWizardController = function (view) {
             throw "Extension Address is mandatory";
         }
         var state = context.view.getState();
-
+        var metadataLink = state.metadataLink;
+        var metatada = state.metadata || {};
+        if(state.extension === 'contract') {
+            metatada = metatada || await window.AJAXRequest(window.formatLink(metadataLink));
+            metatada.code = context.view.editor.editor.getValue();
+        }
+        metadataLink = metadataLink || await window.uploadToIPFS(metatada);
         var params = ["string", "string", "bool", "string", "address", "bytes"];
-        var values = [state.collectionName, state.collectionSymbol, state.hasDecimals, state.metadataLink, extensionAddress || window.voidEthereumAddress, context.view.extensionAddressPayload && context.view.extensionAddressPayload.value || "0x"];
+        var values = [state.collectionName, state.collectionSymbol, state.hasDecimals, metadataLink, extensionAddress || window.voidEthereumAddress, context.view.extensionAddressPayload && context.view.extensionAddressPayload.value || "0x"];
         var payload = window.web3.utils.sha3(`init(${params.join(",")})`);
         payload = payload.substring(0, 10) + window.web3.eth.abi.encodeParameters(params, values).substring(2);
         await window.blockchainCall(window.ethItemOrchestrator.methods.createERC1155, payload, state.collectionENS);

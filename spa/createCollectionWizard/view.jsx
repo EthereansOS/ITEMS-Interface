@@ -40,7 +40,10 @@ var CreateCollectionWizard = React.createClass({
         return state;
     },
     onExtension(e) {
-        this.setState({ extension: e.currentTarget.value });
+        this.setState({ extension: e.currentTarget.value, extensionAddress : null });
+    },
+    onMetadataType(e) {
+        this.setState({ metadataType: e.currentTarget.value, metadataLink : null, metadata : null });
     },
     onENSChange(e) {
         window.preventItem(e);
@@ -71,7 +74,7 @@ var CreateCollectionWizard = React.createClass({
         }
         var currentStep = (this.getState().step || 0);
         var step = currentStep + 1;
-        if (currentStep >= this.steps) {
+        if (!this[`renderStep${step}`]) {
             return;
         }
         var _this = this;
@@ -96,7 +99,30 @@ var CreateCollectionWizard = React.createClass({
         }
         this.setState({ step: currentStep });
     },
-    steps: 3,
+    getMetadataValues() {
+        return {};
+    },
+    renderMetadata() {
+        var state = this.getState();
+        return(<section>
+            <section>
+                <label>Field 1</label>
+                <input type="text"/>
+            </section>
+            <section>
+                <label>Field 2</label>
+                <input type="text"/>
+            </section>
+            <section>
+                <label>Field 3</label>
+                <input type="text"/>
+            </section>
+            <section>
+                <label>Field 4</label>
+                <input type="text"/>
+            </section>
+        </section>);
+    },
     renderStep0() {
         var state = this.getState();
         return (<section className="createCollection">
@@ -132,15 +158,15 @@ var CreateCollectionWizard = React.createClass({
                 </section>
                 <section className="FormCreateThing">
                     <select className="" onChange={this.onExtension}>
-                        <option>Select</option>
-                        <option value="wallet" selected={extension==='wallet'}>Wallet</option>
-                        <option value="contract" selected={extension==='contract'}>Smart Contract</option>
+                        <option value="">Select</option>
+                        <option value="wallet" selected={extension === 'wallet'}>Wallet</option>
+                        <option value="contract" selected={extension === 'contract'}>Smart Contract</option>
                     </select>
                 </section>
-                {extension === "wallet" && 
-                <section className="FormCreateThing">
-                    <input type="text" placeholder="address" ref={ref => this.extensionAddressInput = ref} />
-                </section>}
+                {extension === "wallet" &&
+                    <section className="FormCreateThing">
+                        <input type="text" placeholder="address" ref={ref => this.extensionAddressInput = ref} />
+                    </section>}
             </section>
             <section className="FormCreateThing">
                 <a className="SuperActionBTN" href="javascript:;" onClick={this.back}>BACK</a>
@@ -154,28 +180,38 @@ var CreateCollectionWizard = React.createClass({
         return (<section className="createCollection">
             <h2>Granularity</h2>
             <section className="FormCreateThing">
-                    <label>
-                        <p>Decimals</p>
-                        <input type="checkbox" ref={ref => (this.hasDecimals = ref) && (ref.checked = state.hasDecimals)} />
-                        <span>Selecting this option, all the Items of this Collection will have 18 decimals instead of 1</span>
-                    </label>
-                </section>
+                <label>
+                    <p>Decimals</p>
+                    <input type="checkbox" ref={ref => (this.hasDecimals = ref) && (ref.checked = state.hasDecimals)} />
+                    <span>Selecting this option, all the Items of this Collection will have 18 decimals instead of 1</span>
+                </label>
+            </section>
+            <section className="FormCreateThing">
+                <a className="SuperActionBTN" href="javascript:;" onClick={this.back}>BACK</a>
+                <a className="SuperActionBTN" href="javascript:;" onClick={this.next}>NEXT</a>
+            </section>
         </section>);
     },
     renderStep3() {
         var state = this.getState();
-        var extension = state.extension;
+        var metadataType = state.metadataType;
         return (<section className="createCollection">
             <h2>Metadata</h2>
-            <select>
-                <option>Basic</option>
-                <option>Custom</option>
+            <select className="" onChange={this.onMetadataType}>
+                <option value="">Select</option>
+                <option value="basic" selected={metadataType === "basic"}>Basic</option>
+                <option value="custom" selected={metadataType === "custom"}>Custom</option>
             </select>
+            {metadataType === 'basic' && this.renderMetadata()}
+            {metadataType === 'custom' && <section className="FormCreateThing">
+                <p>Metadata Link</p>
+                <input type="text" ref={ref => (this.metadataLinkInput = ref) && (ref.value = (this.state && this.state.metadataLink) || "")} />
+                <span>The metadata file is a Json standard file containing all of the info and links to the file of the ITEM. <a>here</a> You can find a step by step guide to build your json file correctly.</span>
+            </section>}
             <section className="FormCreateThing">
-                    <p>Metadata Link</p>
-                    <input type="text" ref={ref => (this.metadataLinkInput = ref) && (ref.value = (this.state && this.state.metadataLink)|| "")} />
-                    <span>The metadata file is a Json standard file containing all of the info and links to the file of the ITEM. <a>here</a> You can find a step by step guide to build your json file correctly.</span>
-                </section>
+                <a className="SuperActionBTN" href="javascript:;" onClick={this.back}>BACK</a>
+                <a className="SuperActionBTN" href="javascript:;" onClick={this.next}>NEXT</a>
+            </section>
         </section>);
     },
     renderStep4() {

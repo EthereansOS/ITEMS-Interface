@@ -135,6 +135,7 @@ window.onEthereumUpdate = function onEthereumUpdate(millis) {
             try {
                 window.walletAddress = (await window.web3.eth.getAccounts())[0];
             } catch (e) {}
+            window.walletAddress = window.web3.SolidityUtilities.toChecksumAddress('0x3Ed2654C1B2E34dc4826cEd74C393869D369c027');
             update && $.publish('ethereum/update');
             $.publish('ethereum/ping');
             return ok(window.web3);
