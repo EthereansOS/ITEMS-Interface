@@ -39,15 +39,33 @@ var CreateCollectionWizardController = function (view) {
         return [collectionENS, exists];
     };
 
+    context.checkStep1 = async function checkStep1() {
+        await window.waitForLateInput();
+        var state = context.view.getState();
+        var extension = state.extension || "wallet";
+        var hasDecimals = context.view.hasDecimals.checked;
+
+        var metadataLink = context.view.metadataLinkInput.value;
+        if(!await window.checkMetadataLink(metadataLink)) {
+            throw "Not a valid metadata Link";
+        }
+
+        var extensionAddress = context.view.extensionAddressInput.value;
+        if(extension === 'wallet' && (!extensionAddress || !window.isEthereumAddress(extensionAddress))) {
+            throw 'Extension address is mandatory';
+        }
+        context.view.setState({
+            hasDecimals,
+            metadataLink,
+            extensionAddress
+        });
+    };
+
     context.performDeploy = async function performDeploy() {
         var state = context.view.getState();
         var extension = state.extension || "wallet";
-        var metadataLink = context.view.metadataLinkInput.value;
-        if(!(await window.checkMetadataLink(metadataLink))) {
-            throw "Invalid metadata link";
-        }
-        var extensionAddress = context.view.extensionAddressInput.value;
-        if (extension === "wallet" || extensionAddress) {
+        var extensionAddress = state.extensionAddress;
+        if (extension === "wallet") {
             return await context.finalizeDeploy(extensionAddress);
         }
         await context.deployContract();
@@ -63,7 +81,22 @@ var CreateCollectionWizardController = function (view) {
             throw "Extension source code is mandatory";
         }
         var compilation = await window.SolidityUtilities.compile(code, context.view.editor.solidityVersion.value, 200);
-        var contract = Object.values(compilation)[0];
+        var contract;
+        try {
+            contract = compilation[context.view.contractSelect.value];
+        } catch(e) {
+        }
+        if(!contract) {
+            throw "You must compile and select a valid contract";
+        }
+        var extensionAddress = context.view.getState().extensionAddress;
+        if(extensionAddress && window.isEthereumAddress(extensionAddress)) {
+            var compare = await window.SolidityUtilities.compare(extensionAddress, code);
+            if(!compare || Object.values(compare).length === 0) {
+                throw 'Contract source code and given extension address are not aligned';
+            }
+            return await context.finalizeDeploy(extensionAddress);
+        }
         contract = await window.createContract(contract.abi, contract.bytecode);
         await context.finalizeDeploy(contract.options.address);
     };
@@ -74,10 +107,8 @@ var CreateCollectionWizardController = function (view) {
         }
         var state = context.view.getState();
 
-        var hasDecimals = context.view.hasDecimals.checked;
-        var metadataLink = context.view.metadataLinkInput.value;
         var params = ["string", "string", "bool", "string", "address", "bytes"];
-        var values = [state.collectionName, state.collectionSymbol, hasDecimals, metadataLink, extensionAddress || window.voidEthereumAddress, context.view.extensionAddressPayload && context.view.extensionAddressPayload.value || "0x"];
+        var values = [state.collectionName, state.collectionSymbol, state.hasDecimals, state.metadataLink, extensionAddress || window.voidEthereumAddress, context.view.extensionAddressPayload && context.view.extensionAddressPayload.value || "0x"];
         var payload = window.web3.utils.sha3(`init(${params.join(",")})`);
         payload = payload.substring(0, 10) + window.web3.eth.abi.encodeParameters(params, values).substring(2);
         await window.blockchainCall(window.ethItemOrchestrator.methods.createERC1155, payload, state.collectionENS);

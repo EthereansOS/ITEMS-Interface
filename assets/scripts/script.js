@@ -2062,6 +2062,9 @@ window.formatLink = function formatLink(link) {
     while (link && link.startsWith('/')) {
         link = link.substring(1);
     }
+    if(link.endsWith('.eth')) {
+        link += ".link";
+    }
     return (!link ? '' : link.indexOf('http') === -1 ? ('https://' + link) : link).split('https:').join('').split('http:').join('');
 };
 
@@ -2433,7 +2436,7 @@ window.loadCollectionENS = async function loadCollectionENS(collection) {
     collection.ens = "";
     try {
         var address = await window.blockchainCall(window.ethItemOrchestrator.methods.ENSController);
-        var ensEvent = "ENSAttached(address,string)";
+        var ensEvent = "ENSAttached(address,string,string)";
         var topics = [
             window.web3.utils.sha3(ensEvent),
             window.web3.eth.abi.encodeParameter("address", collection.address)
@@ -2453,4 +2456,18 @@ window.loadCollectionENS = async function loadCollectionENS(collection) {
 
 window.waitForLateInput = function waitForLateInput() {
     return window.sleep(window.context.inputTimeout);
+};
+
+window.formatLinkForExpose = function formatLinkForExpose(link) {
+    if(!link) {
+        return link;
+    }
+    link = window.formatLink(link);
+    if(link.endsWith('.eth.link')) {
+        link = link.substring(0, link.length - 5);
+    }
+    if(link.startsWith("//")) {
+        link = window.location.protocol + link;
+    }
+    return link;
 };

@@ -5,6 +5,32 @@ var CreateCollectionWizard = React.createClass({
     requiredModules: [
         'spa/editor'
     ],
+    getDefaultSubscriptions() {
+        return {
+            'smartContract/compilation': this.onSmartContract
+        };
+    },
+    compile(e) {
+        window.preventItem(e);
+        this.contractSelect.innerHTML = "";
+        this.emit('editor/compile');
+    },
+    onSmartContract(contract) {
+        this.contractSelect.innerHTML = "";
+        if (!contract) {
+            return;
+        }
+        var data = [];
+        var keys = Object.keys(contract);
+        for (var key of keys) {
+            var item = contract[key];
+            if (item.bytecode === '0x') {
+                continue;
+            }
+            data.push(key);
+        }
+        this.contractSelect.innerHTML = data.map(it => `<option value="${it}">${it}</option>`).join('');
+    },
     getState() {
         var state = {};
         this.props && Object.entries(this.props).forEach(entry => state[entry[0]] = entry[1]);
@@ -21,7 +47,7 @@ var CreateCollectionWizard = React.createClass({
         var _this = this;
         var then = function then(ensResult) {
             var result = "";
-            if(ensResult[0]) {
+            if (ensResult[0]) {
                 result = "&#" + (ensResult[1] ? "9940" : "9989") + ";";
             }
             _this.result.innerHTML = result;
@@ -70,7 +96,7 @@ var CreateCollectionWizard = React.createClass({
         }
         this.setState({ step: currentStep });
     },
-    steps: 2,
+    steps: 3,
     renderStep0() {
         var state = this.getState();
         return (<section className="createCollection">
@@ -86,8 +112,8 @@ var CreateCollectionWizard = React.createClass({
                 </section>
                 <section className="FormCreateThing">
                     <p>ENS</p>
-                    <input data-action="onENSChange" type="text" ref={ref => (this.collectionENS = ref) && (ref.value = state.collectionENS || "")} onChange={window.onTextChange} onKeyUp={window.onTextChange}/>
-                    <span ref={ref => this.result = ref}/>
+                    <input data-action="onENSChange" type="text" ref={ref => (this.collectionENS = ref) && (ref.value = state.collectionENS || "")} onChange={window.onTextChange} onKeyUp={window.onTextChange} />
+                    <span ref={ref => this.result = ref} />
                 </section>
                 <section className="FormCreateThing">
                     <a className="SuperActionBTN" href="javascript:;" onClick={this.next}>NEXT</a>
@@ -110,7 +136,7 @@ var CreateCollectionWizard = React.createClass({
                 </section>
                 <section className="FormCreateThing">
                     <p>Metadata Link</p>
-                    <input type="text" ref={ref => (this.metadataLinkInput = ref) && (ref = this.state && this.state.metadataLink)}/>
+                    <input type="text" ref={ref => (this.metadataLinkInput = ref) && (ref = this.state && this.state.metadataLink)} />
                     <span>The metadata file is a Json standard file containing all of the info and links to the file of the ITEM. <a>here</a> You can find a step by step guide to build your json file correctly.</span>
                 </section>
                 <section className="FormCreateThing">
@@ -128,15 +154,33 @@ var CreateCollectionWizard = React.createClass({
                 <section className="FormCreateThing">
                     <input type="text" placeholder="address" ref={ref => this.extensionAddressInput = ref} />
                 </section>
-                {extension === "contract" && <Editor ref={ref => this.editor = ref} />}
-                {extension === "contract" && <section className="FormCreateThing">
-                    <p>Extension init payload (optional)</p>
-                    <input type="text" placeholder="Payload" ref={ref => this.extensionAddressPayload = ref} />
-                    <span>You can put here an optional abi-encoded payload. This will be used by the collection during its initialization to call the extension. See the documentation for further information.</span>
-                </section>}
             </section>
             <section className="FormCreateThing">
                 <span>The owner of the collection is who have the ability to mint ITEMS, it can be anyone, an address or you can extend it with custom rules via deploying an extension conctract. More info <a>Here</a></span>
+                <a className="SuperActionBTN" href="javascript:;" onClick={this.back}>BACK</a>
+                <a className="SuperActionBTN" href="javascript:;" onClick={this.next}>NEXT</a>
+            </section>
+        </section>);
+    },
+    renderStep2() {
+        var state = this.getState();
+        var extension = state.extension || "wallet";
+        return (<section className="createCollection">
+            {extension === "contract" && <h2>Etension Contract</h2>}
+            {extension !== "contract" && <h2>Deploy</h2>}
+            {extension === "contract" && <section className="FormCreate">
+                <section className="FormCreateThing">
+                    <Editor ref={ref => this.editor = ref} />
+                    <button onClick={this.compile}>Compile</button>
+                    <select ref={ref => this.contractSelect = ref} />
+                    <section>
+                        <p>Extension init payload (optional)</p>
+                        <input type="text" placeholder="Payload" ref={ref => this.extensionAddressPayload = ref} />
+                        <span>See the documentation for further details.</span>
+                    </section>
+                </section>
+            </section>}
+            <section className="FormCreateThing">
                 <a className={"SuperActionBTN" + (this.state && this.state.performing) ? " disabled" : ""} href="javascript:;" onClick={this.back}>BACK</a>
                 {(!this.state || this.state.performing !== 'deploy') && <a href="javascript:;" data-action="deploy" className="SuperActionBTN" onClick={window.perform}>DEPLOY</a>}
                 {this.state && this.state.performing === 'deploy' && <InnerLoader />}

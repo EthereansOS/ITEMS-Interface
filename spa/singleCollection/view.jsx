@@ -26,7 +26,8 @@ var SingleCollection = React.createClass({
                     {(!this.state || (this.state.itemsCount !== 0 && !this.state.itemsCount)) && <InnerLoader/>}
                     {this.state && this.state.itemsCount > 0 && `${this.state.itemsCount} ITEMS`}
                 </span>}
-                {this.props.showLink && <span className="collectionLink">https://wimd.item.eth.link</span>}
+                {this.props.collection.ens && this.props.showLink && <a target="_blank" href={`https://${this.props.collection.ens}.link`} className="collectionLink">{this.props.collection.ens}</a>}
+                {this.props.collection.external_url && this.props.showLink && <a target="_blank" href={window.formatLink(this.props.collection.external_url)} className="collectionLink">{window.formatLinkForExpose(this.props.collection.external_url)}</a>}
             </article>}
         </section>);
     }
