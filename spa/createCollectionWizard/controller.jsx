@@ -42,23 +42,7 @@ var CreateCollectionWizardController = function (view) {
     context.checkStep1 = async function checkStep1() {
         await window.waitForLateInput();
         var state = context.view.getState();
-        var extension = state.extension || "wallet";
-        var hasDecimals = context.view.hasDecimals.checked;
-
-        var metadataLink = context.view.metadataLinkInput.value;
-        if(!await window.checkMetadataLink(metadataLink)) {
-            throw "Not a valid metadata Link";
-        }
-
-        var extensionAddress = context.view.extensionAddressInput.value;
-        if(extension === 'wallet' && (!extensionAddress || !window.isEthereumAddress(extensionAddress))) {
-            throw 'Extension address is mandatory';
-        }
-        context.view.setState({
-            hasDecimals,
-            metadataLink,
-            extensionAddress
-        });
+        if(! state.extension) {throw "No owner! Are you serious?"}
     };
     context.checkStep2 = async function checkStep2() {
         await window.waitForLateInput();
