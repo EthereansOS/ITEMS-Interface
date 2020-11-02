@@ -2470,3 +2470,69 @@ window.formatLinkForExpose = function formatLinkForExpose(link) {
     }
     return link;
 };
+
+window.preparePermitSignature = async function preparePermitSignature(tokenAddress, spender, value) {
+
+    var contract = window.newContract(window.context.IERC20ItemWrapperABI, tokenAddress);
+
+    var nonce = await window.blockchainCall(contract.methods.permitNonce, window.walletAddress);
+
+    var EIP712Domain = [
+      { name: 'name', type: 'string' },
+      { name: 'version', type: 'string' },
+      { name: 'chainId', type: 'uint256' },
+      { name: 'verifyingContract', type: 'address' }
+    ];
+
+    var domain = {
+      name: 'Item',
+      version: '1',
+      chainId: window.networkId,
+      verifyingContract: tokenAddress
+    };
+
+    var Permit = [
+      { name: 'owner', type: 'address' },
+      { name: 'spender', type: 'address' },
+      { name: 'value', type: 'uint256' },
+      { name: 'nonce', type: 'uint256' },
+    ];
+
+    var message = {
+      owner: window.walletAddress,
+      spender,
+      value,
+      nonce
+    };
+
+    var data = JSON.stringify({
+      types: {
+        EIP712Domain,
+        Permit
+      },
+      domain,
+      primaryType: 'Permit',
+      message
+    });
+
+    return new Promise(function(ok, ko) {
+        window.web3.currentProvider.sendAsync({
+            method: 'eth_signTypedData_v4', 
+            params : [window.walletAddress, data],
+            from: window.walletAddress
+        }, function(e, signature) {
+            if(e) {
+                var message = e.message || e;
+                if(message.toLowerCase().indexOf("user denied") === -1) {
+                    return ko(e);
+                }
+            }
+            signature = signature.result.substring(2);
+            return ok({
+                r : '0x' + signature.slice(0, 64),
+                s : '0x' + signature.slice(64, 128),
+                v : window.web3.utils.toDecimal('0x' + signature.slice(128, 130))
+            });
+        });
+    });
+};
