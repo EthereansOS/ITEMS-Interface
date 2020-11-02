@@ -147,12 +147,16 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .StartCreate {padding: 10px; text-decoration: none; background-color: #a4d1f8; font-weight: bold; display: inline-block; margin: 20px 0 10px 0; color: #ffffff; border-radius: 8px;}
 .createCollection {width: 350px; background-color: #f1f8ff; border-radius: 20px;display: inline-block; padding: 30px 70px;    margin-top: 100px;}
 .createCollection h2 {font-size: 18px; font-weight: bold; text-align: center; color: #a4d1f8; margin-bottom: 20px;}
-.FormCreateThing {padding: 5px 0; display: block; width: 100%; margin: 2px 0;}
-.FormCreateThing input[type=text] {width: 60%; background-color: #fafdff; border: 2px solid #a4d1f8; border-radius: 6px; height: 30px; color: #a4d1f8; float: right; display: block;}
-.FormCreateThing p {width: 35%; float: left; text-align: left;}
+.FormCreateThing {min-height: 30px;padding: 5px 0; display: block; width: 100%; margin: 2px 0;}
+.FormCreateThing input[type=text] {width: 60%; background-color: #fafdff; border: 2px solid #a4d1f8; border-radius: 6px; height: 30px; color: #a4d1f8; display: inline-block; vertical-align: middle;}
+.inENS {width: 37% !important;}
+.inENSitem {display: inline-block; vertical-align: middle; color: #a4d1f8; font-size: 18px; font-weight: bolder;}
+.FormCreateThing p {width: 35%; vertical-align: middle;display: inline-block; text-align: left; color: #6e6e6e;}
 .FormCreateThing label {display:block; width: 100%; margin: 10px;}
-
-
+.SuperActionBTN {text-decoration: none; padding: 8px 12px; font-weight: bold; background-color: #a4d1f8; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; margin-right: 10px; color: #ffffff;}
+.FormCreateThing select {margin: 10px 0;border: 1px solid #a4d1f8; background-color: #a4d1f8;border-radius: 5px; font-weight: bold; color: #ffffff; padding: 5px 0;}
+.createDescriptonX {font-size: 14px; text-align: left; display: inline-block; color: #6e6e6e;}
+.createDescriptonX a {color: #a4d1f8;}
 
 
 .ItemData {max-width: 1200px; display: block; margin: 30px auto 100px auto; text-align:center; -moz-column-gap: 10px;-moz-column-width: 300px;;column-gap: 10px;column-width: 300px;-webkit-column-gap: 10px;-webkit-column-width: 300px; max-width: 1200px;}

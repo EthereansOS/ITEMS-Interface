@@ -60,6 +60,16 @@ var CreateCollectionWizardController = function (view) {
             extensionAddress
         });
     };
+    context.checkStep2 = async function checkStep2() {
+        await window.waitForLateInput();
+        var state = context.view.getState();
+        var extension = state.extension || "wallet";
+        var hasDecimals = context.view.hasDecimals.checked;
+
+        context.view.setState({
+            hasDecimals
+        });
+    };
 
     context.performDeploy = async function performDeploy() {
         var state = context.view.getState();

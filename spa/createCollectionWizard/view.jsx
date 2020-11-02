@@ -111,9 +111,9 @@ var CreateCollectionWizard = React.createClass({
                     <input type="text" ref={ref => (this.collectionSymbol = ref) && (ref.value = state.collectionSymbol || "")} />
                 </section>
                 <section className="FormCreateThing">
-                    <p>ENS</p>
-                    <input data-action="onENSChange" type="text" ref={ref => (this.collectionENS = ref) && (ref.value = state.collectionENS || "")} onChange={window.onTextChange} onKeyUp={window.onTextChange} />
-                    <span ref={ref => this.result = ref} />
+                    <p>ENS <span ref={ref => this.result = ref} /></p>
+                    <input data-action="onENSChange" className="inENS" type="text" ref={ref => (this.collectionENS = ref) && (ref.value = state.collectionENS || "")} onChange={window.onTextChange} onKeyUp={window.onTextChange} />
+                    <span className="inENSitem">.ITEM.eth</span>
                 </section>
                 <section className="FormCreateThing">
                     <a className="SuperActionBTN" href="javascript:;" onClick={this.next}>NEXT</a>
@@ -123,40 +123,26 @@ var CreateCollectionWizard = React.createClass({
     },
     renderStep1() {
         var state = this.getState();
-        var extension = state.extension || "wallet";
+        var extension = state.extension;
         return (<section className="createCollection">
             <h2>Who is the owner?</h2>
             <section className="FormCreate">
                 <section className="FormCreateThing">
-                    <label>
-                        <p>Has granularity</p>
-                        <input type="checkbox" ref={ref => (this.hasDecimals = ref) && (ref.checked = state.hasDecimals)} />
-                        <span>Selecting this option, all the Items of this Collection will have 18 decimals instead of 1</span>
-                    </label>
+                    <span className="createDescriptonX">The owner of the collection is who have the ability to mint ITEMS, it can be anyone, an address or you can extend it with custom rules via deploying an extension conctract. <a href="">More info</a></span>
                 </section>
                 <section className="FormCreateThing">
-                    <p>Metadata Link</p>
-                    <input type="text" ref={ref => (this.metadataLinkInput = ref) && (ref = this.state && this.state.metadataLink)} />
-                    <span>The metadata file is a Json standard file containing all of the info and links to the file of the ITEM. <a>here</a> You can find a step by step guide to build your json file correctly.</span>
+                    <select className="" onChange={this.onExtension}>
+                        <option>Select</option>
+                        <option value="wallet" selected={extension==='wallet'}>Wallet</option>
+                        <option value="contract" selected={extension==='contract'}>Smart Contract</option>
+                    </select>
                 </section>
-                <section className="FormCreateThing">
-                    <label>
-                        A wallet
-                        <input type="radio" name="extension" value="wallet" onClick={this.onExtension} ref={ref => ref && (ref.checked = extension === "wallet")} />
-                    </label>
-                </section>
-                <section className="FormCreateThing">
-                    <label>
-                        Contract
-                        <input type="radio" name="extension" value="contract" onClick={this.onExtension} ref={ref => ref && (ref.checked = extension === "contract")} />
-                    </label>
-                </section>
+                {extension === "wallet" && 
                 <section className="FormCreateThing">
                     <input type="text" placeholder="address" ref={ref => this.extensionAddressInput = ref} />
-                </section>
+                </section>}
             </section>
             <section className="FormCreateThing">
-                <span>The owner of the collection is who have the ability to mint ITEMS, it can be anyone, an address or you can extend it with custom rules via deploying an extension conctract. More info <a>Here</a></span>
                 <a className="SuperActionBTN" href="javascript:;" onClick={this.back}>BACK</a>
                 <a className="SuperActionBTN" href="javascript:;" onClick={this.next}>NEXT</a>
             </section>
@@ -164,7 +150,37 @@ var CreateCollectionWizard = React.createClass({
     },
     renderStep2() {
         var state = this.getState();
-        var extension = state.extension || "wallet";
+        var extension = state.extension;
+        return (<section className="createCollection">
+            <h2>Granularity</h2>
+            <section className="FormCreateThing">
+                    <label>
+                        <p>Decimals</p>
+                        <input type="checkbox" ref={ref => (this.hasDecimals = ref) && (ref.checked = state.hasDecimals)} />
+                        <span>Selecting this option, all the Items of this Collection will have 18 decimals instead of 1</span>
+                    </label>
+                </section>
+        </section>);
+    },
+    renderStep3() {
+        var state = this.getState();
+        var extension = state.extension;
+        return (<section className="createCollection">
+            <h2>Metadata</h2>
+            <select>
+                <option>Basic</option>
+                <option>Custom</option>
+            </select>
+            <section className="FormCreateThing">
+                    <p>Metadata Link</p>
+                    <input type="text" ref={ref => (this.metadataLinkInput = ref) && (ref.value = (this.state && this.state.metadataLink)|| "")} />
+                    <span>The metadata file is a Json standard file containing all of the info and links to the file of the ITEM. <a>here</a> You can find a step by step guide to build your json file correctly.</span>
+                </section>
+        </section>);
+    },
+    renderStep4() {
+        var state = this.getState();
+        var extension = state.extension;
         return (<section className="createCollection">
             {extension === "contract" && <h2>Etension Contract</h2>}
             {extension !== "contract" && <h2>Deploy</h2>}
