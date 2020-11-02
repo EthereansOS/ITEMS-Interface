@@ -73,9 +73,11 @@ var IndexController = function (view) {
         if(!collections) {
             return;
         }
+        var promises = [];
         for (var collection of collections) {
-            window.refreshSingleCollection(collection, context.view);
+            promises.push(window.refreshSingleCollection(collection, context.view));
         }
+        await Promise.all(promises);
         context.view.setState({ collections: context.view.state.collections });
     };
 };

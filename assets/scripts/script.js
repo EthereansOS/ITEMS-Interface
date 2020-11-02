@@ -2450,7 +2450,6 @@ window.loadCollectionENS = async function loadCollectionENS(collection) {
             collection.ens = `${subdomain}.${window.context.ensDomainName}`;
         }
     } catch (e) {
-        console.error(e);
     }
 };
 
