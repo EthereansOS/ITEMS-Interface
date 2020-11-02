@@ -34,13 +34,13 @@ var Item = React.createClass({
             return this.renderMetadataArray(data, renderShowButton);
         }
         if ((typeof data).toLowerCase() === 'object') {
-            return this.renderMetadataObject(data, renderShowButton);
+            return this.renderMetadataObject(data);
         }
         var result = (<section className="subMetaValue">{data}</section>);
-        if((typeof data).toLowerCase() === "string" && data.length > 30) {
-            result = (<p className="subMetaValueString">{data}</p>);
+        if ((typeof data).toLowerCase() === "string" && data.length > 30) {
+            result = (<p className="subMetaValueString" ref={ref => ref && (ref.innerHTML = window.convertTextWithLinksInHTML(data))}></p>);
         }
-        if((typeof data).toLowerCase() === "string" && (data.toLowerCase().indexOf("http") === 0 || data.toLowerCase().indexOf("ipfs") === 0 || data.indexOf("//") === 0)) {
+        if ((typeof data).toLowerCase() === "string" && (data.toLowerCase().indexOf("http") === 0 || data.toLowerCase().indexOf("ipfs") === 0 || data.indexOf("//") === 0)) {
             result = (<a className="subMetaValueLink" href={window.formatLink(data)} target="_blank">{window.shortenWord(data, 30)}</a>);
         }
         return renderShowButton ? this.renderShowButton(result) : result;
@@ -57,17 +57,21 @@ var Item = React.createClass({
     renderMetadataArray(array, renderShowButton) {
         var result = (<ul className="subMetaValueArrayList">
             {array.map((it, i) => <li key={i}>
-                {this.renderMetadataValue(it, renderShowButton)}
+                {this.renderMetadataValue(it)}
             </li>)}
         </ul>);
-        return renderShowButton ? this.renderShowButton(result) : renderShowButton;
+        return renderShowButton ? this.renderShowButton(result) : result;
     },
     renderShowButton(result) {
         var content;
         result.props = result.props || {};
         result.props.style = result.props.style || {};
         result.props.style.display = "none";
-        result.ref = ref => content = ref;
+        var oldRef = result.ref;
+        result.ref = ref => {
+            content = ref;
+            oldRef && oldRef(ref);
+        };
         var onClick = function onClick(e) {
             window.preventItem(e);
             e.currentTarget.innerHTML = e.currentTarget.innerHTML === 'Show' ? 'Hide' : 'Show';
@@ -82,6 +86,7 @@ var Item = React.createClass({
     },
     render() {
         var item = (this.state && this.state.item) || this.props.item;
+        var toggle = !this.state ? item.metadata ? 'metadata' : 'farm' : this.state.toggle;
         return (
             <section className="Pager">
                 <section className="returntocollection">
@@ -105,7 +110,7 @@ var Item = React.createClass({
                                     {window.walletAddress && item.dynamicData && item.dynamicData.balanceOf && item.dynamicData.balanceOf !== '0' && <span className="ItemBalance">| You own: {window.fromDecimals(item.dynamicData.balanceOf, item.decimals)}</span>}
                                 </section>
                             </section>
-                            <p className="itemDesc">{window.shortenWord(item.description, 1000)}</p>
+                            {window.renderExpandibleElement(!item.description ? "No description available" : window.convertTextWithLinksInHTML(item.description), <p className="itemDesc"/>)}
                             <section className="itemSide">
                                 <a className="ItemPrice" target="_blank" href={window.context.uniswapSpawUrlTemplate.format(item.address)}>&#129412; $ {item.dynamicData.tokenPriceInDollarsOnUniswap ? window.formatMoney(item.dynamicData.tokenPriceInDollarsOnUniswap, 1) : "--"}</a>
                                 <a className="ItemPrice" target="_blank" href={window.context.uniswapInfoUrlTemplate.format(item.address)}>&#128039; Info</a>
@@ -115,24 +120,23 @@ var Item = React.createClass({
                     </section>
                     <section className="collectionNav">
                         <ul>
-                            <li className={this.state && this.state.toggle === 'metadata' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>METADATA</a></li>
-                            {this.props.collection.code && <li className={this.state && this.state.toggle === 'code' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>CODE</a></li>}
-                            <li className={this.state && this.state.toggle === 'farm' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>FARM</a></li>
-                            <li className={this.state && this.state.toggle === 'arbitrage' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>ARBITRAGE</a></li>
+                            {item.metadata && <li className={toggle === 'metadata' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>METADATA</a></li>}
+                            <li className={toggle === 'farm' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>FARM</a></li>
+                            <li className={toggle === 'arbitrage' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>ARBITRAGE</a></li>
                         </ul>
                     </section>
                     <section className="ItemStuff">
-                        {this.state && this.state.toggle === 'farm' && <section className="ItemFarm">
-                            Soon @UniFi
-                        </section>}
-                        {this.state && this.state.toggle === 'arbitrage' && <section className="ItemArbitrate">
-                            Soon @UniFi
-                        </section>}
-                        {item.metadata && <section className="ItemData">
+                        {toggle === 'metadata' && <section className="ItemData">
                             <section className="ItemStuffOpen">
                             </section>
                             {this.renderMetadata()}
                             {this.renderMetadata(true)}
+                        </section>}
+                        {toggle === 'farm' && <section className="ItemFarm">
+                            Soon @UniFi
+                        </section>}
+                        {toggle === 'arbitrage' && <section className="ItemArbitrate">
+                            Soon @UniFi
                         </section>}
                     </section>
                 </section>

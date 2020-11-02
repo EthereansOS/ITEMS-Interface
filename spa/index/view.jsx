@@ -3,6 +3,9 @@ var Index = React.createClass({
         'spa/menu',
         'spa/wallet'
     ],
+    requiredScripts: [
+        'spa/connect.jsx'
+    ],
     getDefaultSubscriptions() {
         return {
             'ethereum/update' : this.controller.loadData,
@@ -38,6 +41,9 @@ var Index = React.createClass({
         this.state && Object.entries(this.state).forEach(entry => props[entry[0]] = entry[1]);
         props.props && Object.entries(props.props).forEach(entry => props[entry[0]] = entry[1]);
         delete props.props;
+        if(!window.walletAddress) {
+            return (<Connect/>);
+        }
         return (<section>
             <section>
                 <Menu onSelection={this.sectionChange}/>

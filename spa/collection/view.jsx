@@ -1,7 +1,8 @@
 var Collection = React.createClass({
     requiredModules : [
         'spa/singleCollection',
-        'spa/collectionSingleItem'
+        'spa/collectionSingleItem',
+        'spa/editor'
     ],
     getInitialState() {
         return {
@@ -40,7 +41,7 @@ var Collection = React.createClass({
                     Soon @ UniFi
                 </section>}
                 {this.state && this.state.toggle === 'code' && <section className="collectionPageItemsCode">
-                    Code
+                    <Editor readonly firstCode={this.props.collection.code}/>
                 </section>}
             </section>
         </section>);

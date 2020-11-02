@@ -16,6 +16,18 @@ var CreateCollectionWizard = React.createClass({
     onExtension(e) {
         this.setState({ extension: e.currentTarget.value });
     },
+    onENSChange(e) {
+        window.preventItem(e);
+        var _this = this;
+        var then = function then(ensResult) {
+            var result = "";
+            if(ensResult[0]) {
+                result = "&#" + (ensResult[1] ? "9940" : "9989") + ";";
+            }
+            _this.result.innerHTML = result;
+        };
+        _this.controller.checkENS().then(then);
+    },
     catch(e) {
         if (!e) {
             return;
@@ -74,7 +86,8 @@ var CreateCollectionWizard = React.createClass({
                 </section>
                 <section className="FormCreateThing">
                     <p>ENS</p>
-                    <input type="text" ref={ref => (this.collectionENS = ref) && (ref.value = state.collectionENS || "")} />
+                    <input data-action="onENSChange" type="text" ref={ref => (this.collectionENS = ref) && (ref.value = state.collectionENS || "")} onChange={window.onTextChange} onKeyUp={window.onTextChange}/>
+                    <span ref={ref => this.result = ref}/>
                 </section>
                 <section className="FormCreateThing">
                     <a className="SuperActionBTN" href="javascript:;" onClick={this.next}>NEXT</a>

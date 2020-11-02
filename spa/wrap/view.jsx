@@ -84,9 +84,9 @@ var Wrap = React.createClass({
                             <a className="tokenSelectedToWrapBalanceALL" onClick={this.max}>MAX</a>
                             <input ref={ref => this.tokenAmountInput = ref} className="BalancetoWrapSelector" placeholder="Ammount" type="text" data-action="onTokenAmountChange" onKeyPress={this.onChange} onChange={this.onChange} />
                         </section>}
-                        {selectedTokenType === 'ERC20' && state.performing !== 'approve' && <a className={"BeforeToWrapToITEM" + (!state.selectedToken || state.selectedToken.approved ? " disabled" : "")} data-action="approve" onClick={this.perform} href="javascript:;">Approve</a>}
+                        {selectedTokenType === 'ERC20' && state.performing !== 'approve' && <a className={"BeforeToWrapToITEM" + (!state.selectedToken || state.selectedToken.approved ? " disabled" : "")} data-action="approve" onClick={window.perform} href="javascript:;">Approve</a>}
                         {selectedTokenType === 'ERC20' && state.performing === 'approve' && <InnerLoader/>}
-                        {state.performing !== 'itemize' && <a className={"WrapToITEM" + (!state.selectedToken || !state.selectedToken.approved ? " disabled" : "")} data-action="itemize" onClick={this.perform} href="javascript:;">ITEMIZE</a>}
+                        {state.performing !== 'itemize' && <a className={"WrapToITEM" + (!state.selectedToken || !state.selectedToken.approved ? " disabled" : "")} data-action="itemize" onClick={window.perform} href="javascript:;">ITEMIZE</a>}
                         {state.performing === 'itemize' && <InnerLoader/>}
                     </section>
                 </section>

@@ -13,8 +13,8 @@ window.Main = async function Main() {
 };
 
 window.connectFromHomepage = async function connectFromHomepage(button) {
-    button && (button.innerHTML = '<spa class="loaderMinimino"></span>');
-    button && (button.className = '');
+    //button && (button.innerHTML = '<spa class="loaderMinimino"></span>');
+    //button && (button.className = '');
     button && button.dataset.section && window.setHomepageLink(`?section=spa/${button.dataset.section}`);
     window.choosePage();
 };
@@ -2199,12 +2199,12 @@ window.getTokenPriceInDollarsOnOpenSea = async function getTokenPriceInDollarsOn
 window.loadCollectionItems = async function loadCollectionItems(collectionAddress) {
     var mintEvent = "Mint(uint256,address,uint256)";
     var logs = await window.getLogs({
-        address : collectionAddress,
-        topics : [window.web3.utils.sha3(mintEvent)]
+        address: collectionAddress,
+        topics: [window.web3.utils.sha3(mintEvent)]
     });
     var collectionObjectIds = {};
-    for(var log of logs) {
-        var objectId = web3.eth.abi.decodeParameters(["uint256","address","uint256"], log.data)[0];
+    for (var log of logs) {
+        var objectId = web3.eth.abi.decodeParameters(["uint256", "address", "uint256"], log.data)[0];
         collectionObjectIds[objectId] = true;
     }
     return Object.keys(collectionObjectIds);
@@ -2212,8 +2212,8 @@ window.loadCollectionItems = async function loadCollectionItems(collectionAddres
 
 window.loadItemData = async function loadItemData(item, collection, view) {
     collection = collection || (item && item.collection) || (view && view.props.collection);
-    if(!item) {
-        if(!view) {
+    if (!item) {
+        if (!view) {
             return;
         }
         item = {};
@@ -2232,7 +2232,7 @@ window.loadItemData = async function loadItemData(item, collection, view) {
     item.token = item.token || window.newContract(window.context.IERC20ABI, item.address);
     item.name = item.name || await window.blockchainCall(item.contract.methods.name, item.objectId);
     item.symbol = item.symbol || await window.blockchainCall(item.contract.methods.symbol, item.objectId);
-    window.tryRetrieveMetadata(item).then(() => view.setState({item}));
+    window.tryRetrieveMetadata(item).then(() => view.setState({ item }));
     item.decimals = item.decimals || await window.blockchainCall(item.token.methods.decimals);
     view && view.setState({ item }, () => window.updateItemDynamicData(item, view));
     !view && await window.updateItemDynamicData(item);
@@ -2250,12 +2250,10 @@ window.updateItemDynamicData = async function updateItemDynamicData(item, view) 
     delete item.collection.hasBalance;
     try {
         item.collection.hasBalance = parseInt(item.dynamicData.balanceOf) > 0;
-    } catch(e) {
-    }
+    } catch (e) {}
     try {
         item.dynamicData.balanceOfPlain = window.formatMoney(window.fromDecimals(item.dynamicData.balanceOf, item.decimals), 4);
-    } catch(e) {
-    }
+    } catch (e) {}
     view && view.setState({ item });
 };
 
@@ -2298,29 +2296,29 @@ window.perform = function perform(e) {
     var _this = view;
     var close = function close(e) {
         var message = e !== undefined && e !== null && (e.message || e);
-        _this.setState({ performing: null }, function () {
-            message && message.indexOf('denied') === -1 && setTimeout(function () {
+        _this.setState({ performing: null }, function() {
+            message && message.indexOf('denied') === -1 && setTimeout(function() {
                 alert(message);
             });
             !message && _this.actionEnd && _this.actionEnd();
         });
     }
-    _this.setState({ performing: action }, function () {
+    _this.setState({ performing: action }, function() {
         _this.controller['perform' + action.firstLetterToUpperCase()].apply(view, args).catch(close).finally(close);
     });
 };
 
 window.checkMetadataLink = async function checkMetadataLink(metadataLink) {
-    if(!metadataLink) {
+    if (!metadataLink) {
         return false;
     }
-    if(metadataLink.indexOf("ipfs://ipfs/") === -1) {
+    if (metadataLink.indexOf("ipfs://ipfs/") === -1) {
         return false;
     }
     var metadata;
     try {
-         metadata = await window.AJAXRequest(window.formatLink(metadataLink));
-    } catch(e) {
+        metadata = await window.AJAXRequest(window.formatLink(metadataLink));
+    } catch (e) {
         throw "Error loading metadata";
     }
     return checkMetadataValues(metadata);
@@ -2329,7 +2327,7 @@ window.checkMetadataLink = async function checkMetadataLink(metadataLink) {
 window.checkMetadataValues = function checkMetadataValues(metadata) {
     var errors = [];
 
-    if(errors && errors.length > 0) {
+    if (errors && errors.length > 0) {
         throw errors.join(',');
     }
 
@@ -2343,4 +2341,116 @@ window.getState = function getState(view) {
     state.props && Object.entries(state.props).forEach(entry => state[entry[0]] = entry[1]);
     delete state.props;
     return state;
+};
+
+window.onTextChange = function onTextChange(e) {
+    window.preventItem(e);
+    var view = $(e.currentTarget).findReactComponent();
+    if (view.state && view.state.performing) {
+        return;
+    }
+    var value = e.currentTarget.value;
+    var callback = view[e.currentTarget.dataset.action];
+    var timeVar = e.currentTarget.dataset.action + "Timeout";
+    view[timeVar] && window.clearTimeout(view[timeVar]);
+    view[timeVar] = setTimeout(() => callback(value), window.context.inputTimeout);
+};
+
+window.loadSingleCollection = async function loadSingleCollection(address) {
+    Object.entries(window.context.ethItemFactoryEvents).forEach(it => map[window.web3.utils.sha3(it[0])] = it[1]);
+    var topics = [
+        Object.keys(map), [],
+        [],
+        window.web3.eth.abi.encodeParameter('address', address)
+    ];
+    var address = await window.blockchainCall(window.ethItemOrchestrator.methods.factories);
+    var logs = await window.getLogs({
+        address,
+        topics
+    }, true);
+    for (var log of logs) {
+        var abi = window.context[map[log.topics[0]]];
+        var category = map[log.topics[0]];
+        category = category.substring(1, category.length - 3);
+        var contract = window.newContract(abi, address);
+        var collection = {
+            key: log.blockNumber + "_" + address,
+            index: collections.length + subCollections.length,
+            address,
+            category,
+            contract
+        }
+        return await window.refreshSingleCollection(collection);
+    }
+};
+
+window.refreshSingleCollection = async function refreshSingleCollection(collection, view) {
+    collection.name = collection.name || await window.blockchainCall(collection.contract.methods.name);
+    collection.symbol = collection.symbol || await window.blockchainCall(collection.contract.methods.symbol);
+    await window.tryRetrieveMetadata(collection, collection.category).then(() => view && view.forceUpdate());
+    collection.openSeaName = collection.name.toLowerCase().split(' ').join('-');
+    window.loadCollectionENS(collection);
+    collection.loaded = true;
+    return collection;
+};
+
+window.convertTextWithLinksInHTML = function convertTextWithLinksInHTML(text) {
+    return text;
+};
+
+window.renderExpandibleElement = function renderExpandibleElement(text, p) {
+    p = p || React.createElement("p");
+    p.props = p.props || {};
+    var shortText = window.shortenWord(text, 150);
+    var container;
+    var span = React.createElement("span", {
+        ref: ref => container = ref
+    }, shortText);
+    var children = [span];
+    if (text !== shortText) {
+        var onClick = function onClick(e) {
+            window.preventItem(e);
+            var label = e.currentTarget.innerHTML;
+            var other = label === "More" ? "Less" : "More";
+            var newText = other === "More" ? shortText : text;
+            e.currentTarget.innerHTML = other;
+            container.innerHTML = newText;
+        };
+        var a = React.createElement("a", {
+            href: "javascript:;",
+            onClick: onClick
+        }, "More");
+        children = [span, React.createElement("br"), a];
+    }
+    p.props.children = children;
+    return p;
+}
+
+window.loadCollectionENS = async function loadCollectionENS(collection) {
+    if (collection.ens !== undefined && collection.ens !== null) {
+        return;
+    }
+    collection.ens = "";
+    try {
+        var address = await window.blockchainCall(window.ethItemOrchestrator.methods.ENSController);
+        var ensEvent = "ENSAttached(address,string)";
+        var topics = [
+            window.web3.utils.sha3(ensEvent),
+            window.web3.eth.abi.encodeParameter("address", collection.address)
+        ];
+        var logs = await window.getLogs({
+            address,
+            topics
+        }, true);
+        for (var log of logs) {
+            var subdomain = window.web3.eth.abi.decodeParameter("string", log.data);
+            collection.ens = `${subdomain}.${window.context.ensDomainName}`;
+        }
+    } catch (e) {
+        console.error(e);
+    }
+};
+
+window.waitForLateInput = function waitForLateInput() {
+    return window.sleep(window.context.inputTimeout);
 };

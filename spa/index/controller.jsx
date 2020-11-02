@@ -74,11 +74,7 @@ var IndexController = function (view) {
             return;
         }
         for (var collection of collections) {
-            collection.name = collection.name || await window.blockchainCall(collection.contract.methods.name);
-            collection.symbol = collection.symbol || await window.blockchainCall(collection.contract.methods.symbol);
-            await window.tryRetrieveMetadata(collection, collection.category);
-            collection.openSeaName = collection.name.toLowerCase().split(' ').join('-');
-            collection.loaded = true;
+            window.refreshSingleCollection(collection, context.view);
         }
         context.view.setState({ collections: context.view.state.collections });
     };

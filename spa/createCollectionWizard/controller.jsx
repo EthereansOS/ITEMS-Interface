@@ -3,6 +3,7 @@ var CreateCollectionWizardController = function (view) {
     context.view = view;
 
     context.checkStep0 = async function checkStep0() {
+        await window.waitForLateInput();
         var collectionName = context.view.collectionName.value;
         if (!collectionName) {
             throw "Name is mandatory";
@@ -11,12 +12,13 @@ var CreateCollectionWizardController = function (view) {
         if (!collectionSymbol) {
             throw "Symbol is mandatory";
         }
-        var collectionENS = context.view.collectionENS.value;
+        var ensResult = await context.checkENS();
+        var collectionENS = ensResult[0];
         if (!collectionENS) {
             throw "ENS is mandatory";
         }
 
-        var exists = await window.blockchainCall(window.ENSController.methods.recordExists, nameHash.hash(nameHash.normalize(`${collectionENS}.${window.context.ensDomainName}`)));
+        var exists = ensResult[1];
         if(exists) {
             throw "This ENS is already taken!";
         }
@@ -26,6 +28,15 @@ var CreateCollectionWizardController = function (view) {
             collectionSymbol,
             collectionENS
         });
+    };
+
+    context.checkENS = async function checkENS() {
+        var collectionENS = context.view.collectionENS.value;
+        var exists = false;
+        if(collectionENS) {
+            exists = await window.blockchainCall(window.ENSController.methods.recordExists, nameHash.hash(nameHash.normalize(`${collectionENS}.${window.context.ensDomainName}`)));
+        }
+        return [collectionENS, exists];
     };
 
     context.performDeploy = async function performDeploy() {
