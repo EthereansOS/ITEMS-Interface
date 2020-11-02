@@ -86,7 +86,7 @@ var CreateItemWizardController = function (view) {
             if (!metadataLink || !await window.checkMetadataLink(metadataLink)) {
                 throw "Not a valid metadata link!";
             }
-            context.view.setState({
+            return context.view.setState({
                 metadataLink
             });
         }
@@ -100,12 +100,12 @@ var CreateItemWizardController = function (view) {
     };
 
     context.performDeploy = async function performDeploy() {
+        await context.checkMetadata();
         var state = context.view.getState();
         var valueDecimals = context.toDecimals(state.selectedToken, state.itemSupply);
         if(parseInt(valueDecimals) <= 0) {
             throw "Supply must be greater than 0";
         }
-        await context.checkMetadata();
         var metadataLink = state.metadataLink;
         var metatada = state.metadata || {};
         if(state.extension === 'contract') {

@@ -3,16 +3,21 @@ var WalletController = function (view) {
     context.view = view;
 
     context.loadData = async function loadData() {
-        for(var collection of view.props.collections) {
-            collection.items = collection.items || {};
-            var collectionObjectIds = await window.loadCollectionItems(collection.address);
-            for(var objectId of collectionObjectIds) {
-                await window.loadItemData(collection[objectId] = collection[objectId] || {
-                    objectId,
-                    collection
-                }, collection, context.view);
+        try {
+            var promises = [];
+            for (var collection of view.props.collections) {
+                collection.items = collection.items || {};
+                var collectionObjectIds = await window.loadCollectionItems(collection.address);
+                for (var objectId of collectionObjectIds) {
+                    promises.push(window.loadItemData(collection[objectId] = collection[objectId] || {
+                        objectId,
+                        collection
+                    }, collection, context.view));
+                }
             }
+            await Promise.all(promises);
+            context.view.setState({ loaded: true });
+        } catch (e) {
         }
-        context.view.setState({loaded : true});
     };
 };

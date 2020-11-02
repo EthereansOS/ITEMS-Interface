@@ -135,7 +135,6 @@ window.onEthereumUpdate = function onEthereumUpdate(millis) {
             try {
                 window.walletAddress = (await window.web3.eth.getAccounts())[0];
             } catch (e) {}
-            window.walletAddress = window.web3.SolidityUtilities.toChecksumAddress('0x3Ed2654C1B2E34dc4826cEd74C393869D369c027');
             update && $.publish('ethereum/update');
             $.publish('ethereum/ping');
             return ok(window.web3);
@@ -2236,6 +2235,7 @@ window.loadItemData = async function loadItemData(item, collection, view) {
     item.token = item.token || window.newContract(window.context.IERC20ABI, item.address);
     item.name = item.name || await window.blockchainCall(item.contract.methods.name, item.objectId);
     item.symbol = item.symbol || await window.blockchainCall(item.contract.methods.symbol, item.objectId);
+    delete item.collection.hasBalance;
     window.tryRetrieveMetadata(item).then(() => view.setState({ item }));
     item.decimals = item.decimals || await window.blockchainCall(item.token.methods.decimals);
     view && view.setState({ item }, () => window.updateItemDynamicData(item, view));
@@ -2251,13 +2251,12 @@ window.updateItemDynamicData = async function updateItemDynamicData(item, view) 
     delete item.dynamicData.balanceOf;
     delete item.dynamicData.balanceOfPlain;
     window.walletAddress && (item.dynamicData.balanceOf = await window.blockchainCall(item.token.methods.balanceOf, window.walletAddress));
-    delete item.collection.hasBalance;
-    try {
-        item.collection.hasBalance = parseInt(item.dynamicData.balanceOf) > 0;
-    } catch (e) {}
     try {
         item.dynamicData.balanceOfPlain = window.formatMoney(window.fromDecimals(item.dynamicData.balanceOf, item.decimals), 4);
     } catch (e) {}
+    try {
+        item.collection.hasBalance = item.collection.hasBalance || parseInt(item.dynamicData.balanceOf) > 0;
+    } catch (e) { }
     view && view.setState({ item });
 };
 

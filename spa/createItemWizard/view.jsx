@@ -154,7 +154,7 @@ var CreateItemWizard = React.createClass({
                 {metadataType === 'basic' && this.renderMetadata()}
                 {metadataType === 'custom' && <section className="FormCreateThing">
                     <p>Metadata Link</p>
-                    <input type="text" ref={ref => (this.metadataLinkInput = ref) && (ref.value = (this.state && this.state.metadataLink) || "")} />
+                    <input type="text" ref={ref => (this.metadataLinkInput = ref) && (this.state && this.state.metadataLink && (ref.value = (this.state && this.state.metadataLink)))} />
                     <span>The metadata file is a Json standard file containing all of the info and links to the file of the ITEM. <a>here</a> You can find a step by step guide to build your json file correctly.</span>
                 </section>}
                 <section className="FormCreateThing">

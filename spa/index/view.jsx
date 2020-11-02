@@ -1,5 +1,5 @@
 var Index = React.createClass({
-    requiredModules : [
+    requiredModules: [
         'spa/menu',
         'spa/wallet'
     ],
@@ -8,21 +8,22 @@ var Index = React.createClass({
     ],
     getDefaultSubscriptions() {
         return {
-            'ethereum/update' : this.controller.loadData,
-            'ethereum/ping' : this.controller.refreshCollectionData,
-            'collections/refresh' : this.controller.loadCollections,
-            'section/change' : this.sectionChange,
-            "wallet/toggle" : this.toggleWallet
+            'ethereum/update': this.controller.loadData,
+            'ethereum/ping': this.controller.refreshCollectionData,
+            'collections/refresh': this.controller.loadCollections,
+            'section/change': this.sectionChange,
+            "wallet/toggle": this.toggleWallet
         }
     },
     toggleWallet(w) {
         var wallet = w;
-        if(wallet === undefined || wallet === null) {
+        if (wallet === undefined || wallet === null) {
             wallet = !(this.state && this.state.wallet);
         }
         wallet && $('body').addClass('noScroll');
         !wallet && $('body').removeClass('noScroll');
-        this.setState({wallet});
+        wallet && this.emit("wallet/update");
+        this.setState({ wallet });
     },
     componentDidMount() {
         var _this = this;
@@ -34,7 +35,7 @@ var Index = React.createClass({
         section = section[section.length - 1].firstLetterToUpperCase();
         ReactModuleLoader.load({
             modules: [module],
-            callback: () => _this.setState({section, props})
+            callback: () => _this.setState({ section, props })
         });
     },
     render() {
@@ -43,12 +44,12 @@ var Index = React.createClass({
         this.state && Object.entries(this.state).forEach(entry => props[entry[0]] = entry[1]);
         props.props && Object.entries(props.props).forEach(entry => props[entry[0]] = entry[1]);
         delete props.props;
-        if(!window.walletAddress) {
-            return (<Connect/>);
+        if (!window.walletAddress) {
+            return (<Connect />);
         }
         return (<section>
             <section>
-                <Menu onSelection={this.sectionChange}/>
+                <Menu onSelection={this.sectionChange} />
             </section>
             {props.section && <section>
                 {React.createElement(window[props.section], props)}
