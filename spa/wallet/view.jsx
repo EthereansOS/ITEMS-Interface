@@ -1,6 +1,7 @@
 var Wallet = React.createClass({
     requiredScripts: [
-        'spa/loader.jsx'
+        'spa/loader.jsx',
+        'spa/lazyImageLoader.jsx'
     ],
     getList() {
         var state = window.getState(this);
@@ -22,7 +23,8 @@ var Wallet = React.createClass({
     getDefaultSubscriptions() {
         return {
             "collections/refresh": () => this.controller.loadData(),
-            "wallet/update": () => this.controller.loadData()
+            "wallet/update": () => this.controller.loadData(),
+            "ethereum/ping": () => this.controller.loadData()
         }
     },
     render() {
@@ -30,7 +32,9 @@ var Wallet = React.createClass({
         if (!state.wallet) {
             return (<span style={{ "display": "none" }} />);
         }
-        return (<section className="sideThing">
+        return (
+        <section className="sideALLThing">
+        <section className="sideThing">
             {!state.loaded && <Loader />}
             <section className="wallet">
                 {state.collections && this.getList().map(collection => <section key={collection.key} className="walletCollection">
@@ -50,6 +54,7 @@ var Wallet = React.createClass({
                     </section>
                 </section>)}
             </section>
+        </section>
         </section>);
     }
 });
