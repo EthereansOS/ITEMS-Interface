@@ -30,7 +30,8 @@ var IndexController = function (view) {
         Object.entries(window.context.ethItemFactoryEvents).forEach(it => map[window.web3.utils.sha3(it[0])] = it[1]);
         var topics = [Object.keys(map)];
         var address = await window.blockchainCall(window.ethItemOrchestrator.methods.factories);
-        var collections = (context.view.state && context.view.state.collections) || [];
+        var oldCollections = (context.view.state && context.view.state.collections) || [];
+        var collections = [];
         var blocks = await window.loadBlockSearchTranches();
         var updateSubCollectionsPromise = function updateSubCollectionsPromise(subCollections) {
             return new Promise(function(ok) {
@@ -53,7 +54,9 @@ var IndexController = function (view) {
                 var category = map[log.topics[0]];
                 category = category.substring(1, category.length - 3);
                 var contract = window.newContract(abi, address);
-                var collection = {
+                var key = log.blockNumber + "_" + address;
+                var collection = oldCollections.filter(it => it.key === key);
+                collection = collection.length > 0 ? collection[0] : {
                     key: log.blockNumber + "_" + address,
                     index : collections.length + subCollections.length,
                     address,

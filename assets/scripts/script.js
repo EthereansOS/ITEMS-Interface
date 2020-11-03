@@ -2367,8 +2367,17 @@ window.uploadMetadata = async function uploadMetadata(metadata) {
 };
 
 window.normalizeMetadata = async function normalizeMetadata(metadata) {
-    if(metadata.image) {
-        
+    if(metadata.image && metadata.image instanceof Array) {
+        metadata.image = metadata.image[0];
+        if(metadata.image && metadata.image.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
+            metadata.image = "https://ipfs.io/ipfs/" + metadata.image.split("ipfs://ipfs/")[1];
+        }
+    }
+    if(metadata.image_data && metadata.image_data instanceof Array) {
+        metadata.image_data = metadata.image_data[0];
+        if(metadata.image_data && metadata.image_data.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
+            metadata.image_data = "https://ipfs.io/ipfs/" + metadata.image_data.split("ipfs://ipfs/")[1];
+        }
     }
 };
 

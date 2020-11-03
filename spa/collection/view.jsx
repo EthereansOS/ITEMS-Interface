@@ -28,7 +28,7 @@ var Collection = React.createClass({
                     <ul>
                         <li className={this.state && this.state.toggle === 'items' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>Items</a></li>
                         <li className={this.state && this.state.toggle === 'farm' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>Farm</a></li>
-                        {this.props.collection.code && <li className={this.state && this.state.toggle === 'code' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>Code</a></li>}
+                        {this.props.collection.extensionCode && <li className={this.state && this.state.toggle === 'code' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>Code</a></li>}
                     </ul>
                 </section>
                 {this.state && this.state.toggle === 'items' && <section className="collectionPageItems">
@@ -41,7 +41,7 @@ var Collection = React.createClass({
                     Soon @ UniFi
                 </section>}
                 {this.state && this.state.toggle === 'code' && <section className="collectionPageItemsCode">
-                    <Editor readonly firstCode={this.props.collection.code}/>
+                    <Editor readonly firstCode={this.props.collection.extensionCode}/>
                 </section>}
             </section>
         </section>);
