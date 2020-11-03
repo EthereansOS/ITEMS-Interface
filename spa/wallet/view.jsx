@@ -41,7 +41,7 @@ var Wallet = React.createClass({
         }
         return (
             <section className="sideALLThing">
-                <a className="BoBoBoaThings"></a>
+                <a className="BoBoBoaThings" href="javascript:;" onClick={() => this.emit('wallet/toggle', false)}></a>
                 <section className="sideThing">
                     {!state.loaded && <Loader />}
                     <section className="Thewallet">

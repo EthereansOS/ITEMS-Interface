@@ -142,6 +142,7 @@ var CreateCollectionWizardController = function (view) {
         metadata.originalCreator = window.web3.utils.toChecksumAddress(window.walletAddress);
         metadata.extensionAddress = extensionAddress;
         metadata.external_url = `${state.collectionENS}.${window.context.ensDomainName}`;
+        delete state.extensionCode;
         if(state.extension === 'contract') {
             metadata.extensionCode = context.view.editor.editor.getValue();
         }

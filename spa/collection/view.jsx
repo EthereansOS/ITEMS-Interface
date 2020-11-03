@@ -22,7 +22,7 @@ var Collection = React.createClass({
     },
     createMoreItems(e) {
         window.preventItem(e);
-        this.emit('section/change', 'spa/create', {create: "CreateItemWizard", address : this.props.collection.address});
+        this.emit('section/change', 'spa/create', {create: "CreateItemWizard", collectionAddress : this.props.collection.address});
     },
     render() {
         return (<section className="Pager">

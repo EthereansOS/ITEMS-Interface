@@ -2412,10 +2412,19 @@ window.normalizeMetadata = async function normalizeMetadata(metadata) {
             metadata.folder = "https://ipfs.io/ipfs/" + metadata.folder.split("ipfs://ipfs/")[1];
         }
     }
+    var keys = Object.keys(metadata);
+    for(var key of keys) {
+        if(metadata[key] === "" || metadata[key] === undefined || metadata[key] === null) {
+            delete metadata[key];
+        }
+    }
 };
 
 window.prepareMetadata = async function prepareMetadata(data) {
     if(data instanceof FileList) {
+        if(data.length === 0) {
+            return "";
+        }
         return await window.uploadToIPFS(data);
     }
     if (data instanceof Array) {

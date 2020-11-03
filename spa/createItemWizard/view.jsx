@@ -186,7 +186,7 @@ var CreateItemWizard = React.createClass({
         </section>);
     },
     componentDidMount() {
-        this.props.address && this.controller.onTokenAddressChange(this.props.address);
+        this.props.collectionAddress && this.controller.onTokenAddressChange(this.props.collectionAddress);
     },
     render() {
         return (this[`renderStep${this.getState().step || 0}`]());
