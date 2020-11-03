@@ -2360,9 +2360,33 @@ window.checkMetadataValuesForItem = async function checkMetadataValuesForItem(me
     return true;
 };
 
-window.uploadMetadata = async function uploadMetadata(metatada) {
-    return await window.uploadToIPFS(metadata);
+window.uploadMetadata = async function uploadMetadata(metadata) {
+    var cleanMetadata = await window.prepareMetadata(metadata);
+    console.log(cleanMetadata);
+    return await window.uploadToIPFS(cleanMetadata);
 };
+
+window.prepareMetadata = async function prepareMetadata(data) {
+    if(data instanceof FileList) {
+        return await window.uploadToIPFS(data);
+    }
+    if (data instanceof Array) {
+        var array = [];
+        for(var item of data) {
+            array.push(await window.prepareMetadata(item));
+        }
+        return array;
+    }
+    if ((typeof data).toLowerCase() === 'object') {
+        var newData = {};
+        var entries = Object.entries(data);
+        for(var entry of entries) {
+            newData[entry[0]] = await window.prepareMetadata(entry[1]);
+        }
+        return newData;
+    }
+    return data;
+}
 
 window.getState = function getState(view) {
     var state = {};
@@ -2506,19 +2530,7 @@ window.formatLinkForExpose = function formatLinkForExpose(link) {
 window.checkCoverSize = async function checkCoverSize(file) {
     var cover;
     if ((typeof file).toLowerCase() === "string") {
-        /*cover = window.Base64.encode();
-        var BASE64_MARKER = ';base64,';
-        var parts = cover.split(BASE64_MARKER);
-        var contentType = parts[0].split(':')[1];*/
-        var raw = await window.AJAXRequest(window.formatLink(file));
-        var rawLength = raw.length;
-        var uInt8Array = new Uint8Array(rawLength);
-
-        for (let i = 0; i < rawLength; ++i) {
-            uInt8Array[i] = raw.charCodeAt(i);
-        }
-
-        cover = new Blob([uInt8Array], { type: 'image/png' });
+        cover = await window.downloadBase64Image(window.formatLink(file));
     } else {
         cover = file.size ? file : file.item ? file.item(0) : file.get(0);
     }
@@ -2536,6 +2548,23 @@ window.checkCoverSize = async function checkCoverSize(file) {
         reader.readAsDataURL(cover);
     });
 };
+
+window.downloadBase64Image = function downloadBase64Image(url) {
+    return new Promise(function(ok, ko) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200){
+                return ok(this.response);
+            }
+            if(this.readyState === 4 && (!this.status || this.status >= 300)) {
+                return ko(this.status);
+            }
+        }
+        xhr.open('GET', url);
+        xhr.responseType = 'blob';
+        xhr.send();
+    });
+}
 
 window.checkURL = function checkURL(url) {
     if (new RegExp(window.urlRegex).test(url)) {

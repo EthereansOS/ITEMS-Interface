@@ -25,9 +25,7 @@ var Explore = React.createClass({
             {(!this.state || !this.state.searchedCollection) && this.props.loadingCollections && <Loader />}
             {(!this.state || !this.state.searchedCollection) && this.props.collections && <section className="collections">
                 <section className="collectionsList">
-                    {this.props.collections.map(it => <a key={it.key} data-index={it.index} href="javascript:;" onClick={_this.onClick}>
-                        <SingleCollection collection={it} />
-                    </a>)}
+                    {this.props.collections.map(it => <SingleCollection collection={it} key={it.key} data-index={it.index} onClick={_this.onClick}/>)}
                 </section>
             </section>}
             {this.state && this.state.searchedCollection && <section className="collections">
