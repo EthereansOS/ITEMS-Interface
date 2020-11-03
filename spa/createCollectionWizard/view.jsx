@@ -40,10 +40,10 @@ var CreateCollectionWizard = React.createClass({
         return state;
     },
     onExtension(e) {
-        this.setState({ extension: e.currentTarget.value, extensionAddress : null });
+        this.setState({ extension: e.currentTarget.value, extensionAddress: null });
     },
     onMetadataType(e) {
-        this.setState({ metadataType: e.currentTarget.value, metadataLink : null, metadata : null });
+        this.setState({ metadataType: e.currentTarget.value, metadataLink: null, metadata: null });
     },
     onENSChange(e) {
         window.preventItem(e);
@@ -100,26 +100,58 @@ var CreateCollectionWizard = React.createClass({
         this.setState({ step: currentStep });
     },
     getMetadataValues() {
-        return {};
+        return window.getData(this.metadataPage);
     },
     renderMetadata() {
         var state = this.getState();
-        return(<section>
+        return (<section ref={ref => window.setData(this.metadataPage = ref, state.metadata)}>
             <section>
-                <label>Field 1</label>
-                <input type="text"/>
+                <label>
+                    <span>Image (mandatory)</span>
+                    <input id="image" data-mandatory="true" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
+                </label>
             </section>
             <section>
-                <label>Field 2</label>
-                <input type="text"/>
+                <label>
+                    <span>HD Image</span>
+                    <input id="image_data" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
+                </label>
             </section>
             <section>
-                <label>Field 3</label>
-                <input type="text"/>
+                <label>
+                    <span>Description (mandatory)</span>
+                    <textarea id="description" data-mandatory="true" />
+                </label>
             </section>
             <section>
-                <label>Field 4</label>
-                <input type="text"/>
+                <label>
+                    <span>Background Color (mandatory)</span>
+                    <input id="background_color" data-mandatory="true" type="color" />
+                </label>
+            </section>
+            <section>
+                <label>
+                    <span>Discussion link</span>
+                    <input id="discussionUri" type="text" />
+                </label>
+            </section>
+            <section>
+                <label>
+                    <span>DNS link</span>
+                    <input id="externalDNS" type="text" />
+                </label>
+            </section>
+            <section>
+                <label>
+                    <span>ENS link</span>
+                    <input id="externalENS" type="text" />
+                </label>
+            </section>
+            <section>
+                <label>
+                    <span>Repo link</span>
+                    <input id="repoUri" type="text" />
+                </label>
             </section>
         </section>);
     },

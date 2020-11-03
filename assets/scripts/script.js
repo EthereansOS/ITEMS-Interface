@@ -3,6 +3,7 @@ window.voidEthereumAddressExtended = '0x0000000000000000000000000000000000000000
 window.descriptionWordLimit = 300;
 window.oldUrlRegex = new RegExp("(https?:\\/\\/[^\s]+)", "gs");
 window.urlRegex = new RegExp("(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$", "gs");
+window.IPFSRegex = new RegExp("(.+)(\/ipfs\/)[a-zA-Z0-9]+$", "gs");
 window.solidityImportRule = new RegExp("import( )+\"(\\d+)\"( )*;", "gs");
 window.pragmaSolidityRule = new RegExp("pragma( )+solidity( )*(\\^|>)\\d+.\\d+.\\d+;", "gs");
 window.base64Regex = new RegExp("data:([\\S]+)\\/([\\S]+);base64", "gs");
@@ -253,6 +254,7 @@ window.getData = function getData(root, checkValidation) {
     if (!root) {
         return;
     }
+    root = root.length ? root : $(root);
     var data = {};
     var children = root.children().find('input,select,textarea');
     children.length === 0 && (children = root.children('input,select,textarea'));
@@ -287,6 +289,7 @@ window.setData = function setData(root, data) {
     if (!root || !data) {
         return;
     }
+    root = root.length ? root : $(root);
     var children = root.children().find('input,select,textarea');
     children.length === 0 && (children = root.children('input,select,textarea'));
     children.each(function(i, input) {
@@ -2034,23 +2037,6 @@ contract GetStringValue {
     return await window.createContract.apply(window, args);
 };
 
-window.checkCoverSize = function checkCoverSize(cover, width, height) {
-    cover = (cover.item && cover.item(0)) || cover;
-    width = width || 320;
-    height = height || width;
-    return new Promise(function(ok) {
-        var reader = new FileReader();
-        reader.addEventListener("load", function() {
-            var image = new Image();
-            image.onload = function onload() {
-                return ok(image.width === width && image.height === height);
-            };
-            image.src = (window.URL || window.webkitURL).createObjectURL(cover);
-        }, false);
-        reader.readAsDataURL(cover);
-    });
-};
-
 window.formatLink = function formatLink(link) {
     link = (link ? link instanceof Array ? link[0] : link : '');
     if (link.indexOf('assets') === 0 || link.indexOf('/assets') === 0) {
@@ -2062,7 +2048,7 @@ window.formatLink = function formatLink(link) {
     while (link && link.startsWith('/')) {
         link = link.substring(1);
     }
-    if(link.endsWith('.eth')) {
+    if (link.endsWith('.eth')) {
         link += ".link";
     }
     return (!link ? '' : link.indexOf('http') === -1 ? ('https://' + link) : link).split('https:').join('').split('http:').join('');
@@ -2256,7 +2242,7 @@ window.updateItemDynamicData = async function updateItemDynamicData(item, view) 
     } catch (e) {}
     try {
         item.collection.hasBalance = item.collection.hasBalance || parseInt(item.dynamicData.balanceOf) > 0;
-    } catch (e) { }
+    } catch (e) {}
     view && view.setState({ item });
 };
 
@@ -2311,7 +2297,7 @@ window.perform = function perform(e) {
     });
 };
 
-window.checkMetadataLink = async function checkMetadataLink(metadataLink) {
+window.checkMetadataLink = async function checkMetadataLink(metadataLink, item) {
     if (!metadataLink) {
         return false;
     }
@@ -2324,10 +2310,48 @@ window.checkMetadataLink = async function checkMetadataLink(metadataLink) {
     } catch (e) {
         throw "Error loading metadata";
     }
-    return checkMetadataValues(metadata);
+    return await window[`checkMetadataValuesFor${item ? "Item" : "Collection"}`](metadata);
 };
 
-window.checkMetadataValues = function checkMetadataValues(metadata) {
+window.checkMetadataValuesForCollection = async function checkMetadataValuesForCollection(metadata) {
+    var errors = [];
+
+    if(!await window.checkCoverSize(metadata.image)) {
+        errors.push(`Cover size cannot have a width greater than ${window.context.imageMaxWidth} pixels and a size greater than ${window.context.imageMaxWeightInMB} MB`);
+    }
+
+    if(!metadata.description) {
+        errors.push(`Description is mandatory`);
+    }
+
+    if(!metadata.background_color) {
+        errors.push(`Background color is mandatory`);
+    }
+
+    if(metadata.discussionUri && !window.checkURL(metadata.discussionUri)) {
+        errors.push(`Discussion Link must be a valid URL`);
+    }
+
+    if(metadata.externalDNS && !window.checkURL(metadata.externalDNS)) {
+        errors.push(`DNS Link must be a valid URL`);
+    }
+
+    if(metadata.externalENS && !window.checkURL(metadata.externalENS) && metadata.externalENS.indexOf('.eth') === -1) {
+        errors.push(`ENS Link must be a valid URL`);
+    }
+
+    if(metadata.repoUri && !window.checkURL(metadata.repoUri)) {
+        errors.push(`Repo Link must be a valid URL`);
+    }
+
+    if (errors && errors.length > 0) {
+        throw errors.join(',');
+    }
+
+    return true;
+};
+
+window.checkMetadataValuesForItem = async function checkMetadataValuesForItem(metadata) {
     var errors = [];
 
     if (errors && errors.length > 0) {
@@ -2335,6 +2359,10 @@ window.checkMetadataValues = function checkMetadataValues(metadata) {
     }
 
     return true;
+};
+
+window.uploadMetadata = async function uploadMetadata(metatada) {
+    return await window.uploadToIPFS(metadata);
 };
 
 window.getState = function getState(view) {
@@ -2449,8 +2477,7 @@ window.loadCollectionENS = async function loadCollectionENS(collection) {
             var subdomain = window.web3.eth.abi.decodeParameter("string", log.data);
             collection.ens = `${subdomain}.${window.context.ensDomainName}`;
         }
-    } catch (e) {
-    }
+    } catch (e) {}
 };
 
 window.waitForLateInput = function waitForLateInput() {
@@ -2458,17 +2485,47 @@ window.waitForLateInput = function waitForLateInput() {
 };
 
 window.formatLinkForExpose = function formatLinkForExpose(link) {
-    if(!link) {
+    if (!link) {
         return link;
     }
     link = window.formatLink(link);
-    if(link.endsWith('.eth.link')) {
+    if (link.endsWith('.eth.link')) {
         link = link.substring(0, link.length - 5);
     }
-    if(link.startsWith("//")) {
+    if (link.startsWith("//")) {
         link = window.location.protocol + link;
     }
     return link;
+};
+
+window.checkCoverSize = function checkCoverSize(file) {
+    var cover;
+    if((typeof file).toLowerCase() === "string") {
+        cover = window.Base64.encode(await window.AJAXRequest(window.formatLink(file)));
+        console.log(cover);
+    } else {
+        cover = file.size ? file : file.item ? file.item(0) : file.get(0);
+    }
+    return new Promise(function(ok) {
+        var reader = new FileReader();
+        reader.addEventListener("load", function() {
+            var image = new Image();
+            image.onload = function onload() {
+                var byteLength = parseInt(reader.result.substring(reader.result.indexOf(',') + 1).replace(/=/g,"").length * 0.75);
+                var mBLength = byteLength / 1024 / 1024;
+                return ok(image.width <= window.context.imageMaxWidth && mBLength <= window.context.imageMaxWeightInMB);
+            };
+            image.src = (window.URL || window.webkitURL).createObjectURL(cover);
+        }, false);
+        reader.readAsDataURL(cover);
+    });
+};
+
+window.checkURL = function checkURL(url) {
+    if(new RegExp(window.urlRegex).test(url)) {
+        return true;
+    }
+    return new RegExp(window.IPFSRegex).test(url)
 };
 
 window.preparePermitSignature = async function preparePermitSignature(tokenAddress, spender, value) {
@@ -2478,60 +2535,60 @@ window.preparePermitSignature = async function preparePermitSignature(tokenAddre
     var nonce = await window.blockchainCall(contract.methods.permitNonce, window.walletAddress);
 
     var EIP712Domain = [
-      { name: 'name', type: 'string' },
-      { name: 'version', type: 'string' },
-      { name: 'chainId', type: 'uint256' },
-      { name: 'verifyingContract', type: 'address' }
+        { name: 'name', type: 'string' },
+        { name: 'version', type: 'string' },
+        { name: 'chainId', type: 'uint256' },
+        { name: 'verifyingContract', type: 'address' }
     ];
 
     var domain = {
-      name: 'Item',
-      version: '1',
-      chainId: window.networkId,
-      verifyingContract: tokenAddress
+        name: 'Item',
+        version: '1',
+        chainId: window.networkId,
+        verifyingContract: tokenAddress
     };
 
     var Permit = [
-      { name: 'owner', type: 'address' },
-      { name: 'spender', type: 'address' },
-      { name: 'value', type: 'uint256' },
-      { name: 'nonce', type: 'uint256' },
+        { name: 'owner', type: 'address' },
+        { name: 'spender', type: 'address' },
+        { name: 'value', type: 'uint256' },
+        { name: 'nonce', type: 'uint256' },
     ];
 
     var message = {
-      owner: window.walletAddress,
-      spender,
-      value,
-      nonce
+        owner: window.walletAddress,
+        spender,
+        value,
+        nonce
     };
 
     var data = JSON.stringify({
-      types: {
-        EIP712Domain,
-        Permit
-      },
-      domain,
-      primaryType: 'Permit',
-      message
+        types: {
+            EIP712Domain,
+            Permit
+        },
+        domain,
+        primaryType: 'Permit',
+        message
     });
 
     return new Promise(function(ok, ko) {
         window.web3.currentProvider.sendAsync({
-            method: 'eth_signTypedData_v4', 
-            params : [window.walletAddress, data],
+            method: 'eth_signTypedData_v4',
+            params: [window.walletAddress, data],
             from: window.walletAddress
         }, function(e, signature) {
-            if(e) {
+            if (e) {
                 var message = e.message || e;
-                if(message.toLowerCase().indexOf("user denied") === -1) {
+                if (message.toLowerCase().indexOf("user denied") === -1) {
                     return ko(e);
                 }
             }
             signature = signature.result.substring(2);
             return ok({
-                r : '0x' + signature.slice(0, 64),
-                s : '0x' + signature.slice(64, 128),
-                v : window.web3.utils.toDecimal('0x' + signature.slice(128, 130))
+                r: '0x' + signature.slice(0, 64),
+                s: '0x' + signature.slice(64, 128),
+                v: window.web3.utils.toDecimal('0x' + signature.slice(128, 130))
             });
         });
     });

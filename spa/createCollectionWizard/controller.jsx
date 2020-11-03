@@ -79,8 +79,8 @@ var CreateCollectionWizardController = function (view) {
                 metadataLink
             });
         }
-        var metadata = context.view.getMetadataValues();
-        if(!window.checkMetadataValues(metadata)) {
+        var metadata = await context.view.getMetadataValues();
+        if(!await window.checkMetadataValuesForCollection(metadata)) {
             throw "Invalid metadata values";
         }
         context.view.setState({
@@ -139,7 +139,7 @@ var CreateCollectionWizardController = function (view) {
             metatada = metatada || await window.AJAXRequest(window.formatLink(metadataLink));
             metatada.code = context.view.editor.editor.getValue();
         }
-        metadataLink = metadataLink || await window.uploadToIPFS(metatada);
+        metadataLink = metadataLink || await window.uploadMetadata(metatada);
         var params = ["string", "string", "bool", "string", "address", "bytes"];
         var values = [state.collectionName, state.collectionSymbol, state.hasDecimals, metadataLink, extensionAddress || window.voidEthereumAddress, context.view.extensionAddressPayload && context.view.extensionAddressPayload.value || "0x"];
         var payload = window.web3.utils.sha3(`init(${params.join(",")})`);

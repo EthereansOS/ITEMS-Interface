@@ -76,19 +76,31 @@ var CreateItemWizard = React.createClass({
         var state = this.getState();
         return(<section>
             <section>
-                <label>Field 1</label>
+                <label>Image (mandatory)</label>
+                <input name="image" data-mandatory="true" type="text"/>
+            </section>
+            <section>
+                <label>Img hd</label>
                 <input type="text"/>
             </section>
             <section>
-                <label>Field 2</label>
+                <label>Desc (forza)</label>
                 <input type="text"/>
             </section>
             <section>
-                <label>Field 3</label>
+                <label>File</label>
                 <input type="text"/>
             </section>
             <section>
-                <label>Field 4</label>
+                <label>Folder</label>
+                <input type="text"/>
+            </section>
+            <section>
+                <label>backgrond color (forza)</label>
+                <input type="text"/>
+            </section>
+            <section>
+                <label>Animation file</label>
                 <input type="text"/>
             </section>
         </section>);

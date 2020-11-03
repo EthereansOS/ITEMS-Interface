@@ -31,6 +31,12 @@
         "ERC721",
         "ERC1155"
     ],
+    "supportedImageFileExtensions" : {
+        "png" : "image/png",
+        "gif" : "image/gif"
+    },
+    "imageMaxWidth" : 350,
+    "imageMaxWeightInMB" : 5,
     "inputTimeout" : 500,
     "uniswapSpawUrlTemplate" : "https://bafybeidohofcst2oxulj75mxdogz77ky7ldhvz27pcqx7htyatuazrcvwi.ipfs.dweb.link/#/swap?inputCurrency={0}",
     "uniswapInfoUrlTemplate" : "https://uniswap.info/token/{0}",

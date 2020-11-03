@@ -91,7 +91,7 @@ var CreateItemWizardController = function (view) {
             });
         }
         var metadata = context.view.getMetadataValues();
-        if(!window.checkMetadataValues(metadata)) {
+        if(!await window.checkMetadataValuesForItem(metadata)) {
             throw "Invalid metadata values";
         }
         context.view.setState({
@@ -112,7 +112,7 @@ var CreateItemWizardController = function (view) {
             metatada = metatada || await window.AJAXRequest(window.formatLink(metadataLink));
             metatada.code = context.view.editor.editor.getValue();
         }
-        metadataLink = metadataLink || await window.uploadToIPFS(metatada);
+        metadataLink = metadataLink || await window.uploadMetadata(metatada);
         await window.blockchainCall(state.selectedToken.contract.methods.mint, valueDecimals, state.itemName, state.itemSymbol, metadataLink, state.itemMintable);
     };
 };
