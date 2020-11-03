@@ -2362,8 +2362,14 @@ window.checkMetadataValuesForItem = async function checkMetadataValuesForItem(me
 
 window.uploadMetadata = async function uploadMetadata(metadata) {
     var cleanMetadata = await window.prepareMetadata(metadata);
-    console.log(cleanMetadata);
+    await normalizeMetadata(cleanMetadata);
     return await window.uploadToIPFS(cleanMetadata);
+};
+
+window.normalizeMetadata = async function normalizeMetadata(metadata) {
+    if(metadata.image) {
+        
+    }
 };
 
 window.prepareMetadata = async function prepareMetadata(data) {
