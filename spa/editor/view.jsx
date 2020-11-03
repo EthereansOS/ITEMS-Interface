@@ -15,7 +15,7 @@ var Editor = React.createClass({
         }
         ref && ((_this.props.secondCode === undefined || _this.props.secondCode === null) && (_this.props.second === undefined || _this.props.second === null)) && (_this.editor = window.monaco.editor.create(ref, {
             language: _this.props.lang || 'sol',
-            theme: 'vs-dark',
+            theme: 'vs-light',
             minimap: {
                 enabled: false
             },
@@ -156,7 +156,7 @@ var Editor = React.createClass({
         return (
             <section className={this.props.className}>
                 {!this.props.readonly && !this.props.firstCode && !this.props.first && !this.props.secondCode && !this.props.second && <div className="CodeEditorOptionsFrom">
-                    <p className="CodeEditorOptionsWhat">Load from File: </p>
+                    <p className="CodeEditorOptionsWhat">Load: </p>
                     <input className="CodeEditorOptionsLoad" type="file" onChange={this.uploadFile} accept={this.props.lang && ("." + this.props.lang) || ".sol"} />
                 </div>}
                 {((this.props.readonly && this.props.compileAtStart) || (!this.props.readonly && !this.props.firstCode && !this.props.first && !this.props.secondCode && !this.props.second)) && <div className="CodeEditorOptionsCoding">

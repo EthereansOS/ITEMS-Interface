@@ -148,9 +148,9 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .createPage {width: 100%; display: block; text-align: center; margin-top: 100px;min-width: 100%;}
 .createStart {width: 230px; background-color: #f1f8ff; border-radius: 20px;display: inline-block; padding: 30px 70px;    margin-top: 100px;}
 .StartCreate {padding: 10px; text-decoration: none; background-color: #a4d1f8; font-weight: bold; display: inline-block; margin: 20px 0 10px 0; color: #ffffff; border-radius: 8px;}
-.createCollection {width: 350px; background-color: #f1f8ff; border-radius: 20px;display: inline-block; padding: 30px 70px;    margin-top: 100px;}
+.createCollection {width: 600px; background-color: #f1f8ff; border-radius: 20px;display: inline-block; padding: 30px 70px;    margin-top: 100px;}
 .createCollection h2 {font-size: 18px; font-weight: bold; text-align: center; color: #a4d1f8; margin-bottom: 20px;}
-.FormCreateThing {min-height: 30px;padding: 5px 0; display: block; width: 100%; margin: 2px 0;}
+.FormCreateThing {min-height: 30px;padding: 5px 0; display: block; width: 350px; margin: 2px auto;}
 .FormCreateThing input[type=text] {width: 60%; background-color: #fafdff; border: 2px solid #a4d1f8; border-radius: 6px; height: 30px; color: #a4d1f8; display: inline-block; vertical-align: middle;}
 .inENS {width: 37% !important;}
 .inENSitem {display: inline-block; vertical-align: middle; color: #a4d1f8; font-size: 18px; font-weight: bolder;}
@@ -160,7 +160,27 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .FormCreateThing select {margin: 10px 0;border: 1px solid #a4d1f8; background-color: #a4d1f8;border-radius: 5px; font-weight: bold; color: #ffffff; padding: 5px 0;}
 .createDescriptonX {font-size: 14px; text-align: left; display: inline-block; color: #6e6e6e;}
 .createDescriptonX a {color: #a4d1f8;}
-.ExplBoom {font-size: 14px; text-align: left; display: inline-block; color: #6e6e6e;}
+.ExplBoom {font-size: 14px; text-align: left; display: inline-block; color: #6e6e6e; margin: 10px auto;}
+.createCollection select {margin: 10px 0 25px 0;padding:5px;border: 1px solid #a4d1f8; background-color: #a4d1f8;border-radius: 5px; font-weight: bold; color: #ffffff;}
+.createWhat {width: 90%; display: inline-block; text-align: center;}
+.createWhat p {font-size: 18px; font-weight: bold; text-align: center; color: #a4d1f8; margin-bottom: 20px;}
+.createWhat input, .createWhat textarea {width: 90%;background-color: #fafdff; border: 2px solid #a4d1f8; border-radius: 6px; height: 30px; color: #a4d1f8;}
+.createWhat textarea {height: 80px;}
+.spacialImputs {display: block; width: 100%; margin-top: 20px;}
+.spacialImputs input {width: 40%;background-color: transparent; border: none;  color: #a4d1f8;}
+.spacialImputs p {font-size: 15px; font-weight: bold; text-align: left; color: #a4d1f8; margin-bottom: 20px; width: 55%; margin-right: 4%;}
+.MetaDataThings {width: 350px; display: block; margin: 5px auto;}
+.MetaDataThings .ExplBoom {width: 90%; font-size: 12px;}
+.spacialImputs .createWhat {margin: 10px 0;}
+.CodeEditorOptionsFrom, .CodeEditorOptionsCoding {width: 50%; display: inline-block; margin: 10px auto; text-align: center;}
+.CodeEditorOptionsFrom .CodeEditorOptionsLoad {font-size: 14px; width: 90px;}
+.FormCreateThingBig {min-height: 30px;padding: 5px 0; display: block; width: 550px; margin: 2px auto;}
+.CodeEditorOptionsWhat {font-size: 13px; width: auto;width: auto !important;margin: 5px;}
+.NewProposaleditor {height: 450px;}
+.editor {height: 540px !important;}
+.NewProposaleditor {height: 450px !important; text-align: left;}
+.BTNweirdo {text-decoration: none; padding: 8px 12px; font-weight: bold; background-color: #a4d1f8; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; margin-right: 10px; color: #ffffff;border: none;}
+
 
 .ItemData {max-width: 1200px; display: block; margin: 30px auto 100px auto; text-align:center; -moz-column-gap: 10px;-moz-column-width: 300px;;column-gap: 10px;column-width: 300px;-webkit-column-gap: 10px;-webkit-column-width: 300px; max-width: 1200px;}
 .swowThis {padding: 5px; font-size: 11px; font-weight: bold; color: #ffffff; text-decoration: none; background-color: #a4d1f8; border-radius: 5px; display: inline-block; margin: 10px auto;}

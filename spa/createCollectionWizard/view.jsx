@@ -104,54 +104,64 @@ var CreateCollectionWizard = React.createClass({
     },
     renderMetadata() {
         var state = this.getState();
-        return (<section ref={ref => window.setData(this.metadataPage = ref, state.metadata)}>
+        return (<section className="MetaDataThings" ref={ref => window.setData(this.metadataPage = ref, state.metadata)}>
             <section>
-                <label>
-                    <span>Image (mandatory)</span>
-                    <input id="image" data-mandatory="true" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
-                </label>
-            </section>
-            <section>
-                <label>
-                    <span>HD Image</span>
-                    <input id="image_data" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
-                </label>
-            </section>
-            <section>
-                <label>
-                    <span>Description (mandatory)</span>
+                <label className="createWhat">
+                    <p>Description<b>*</b></p>
                     <textarea id="description" data-mandatory="true" />
                 </label>
+                <span className="ExplBoom">The description of this new awesome collection</span>
             </section>
             <section>
-                <label>
-                    <span>Background Color (mandatory)</span>
-                    <input id="background_color" data-mandatory="true" type="color" />
-                </label>
-            </section>
-            <section>
-                <label>
-                    <span>Discussion link</span>
+                <label className="createWhat">
+                    <p>Discussion link</p>
                     <input id="discussionUri" type="text" />
                 </label>
+                <span className="ExplBoom">A link to a forum, chat o community where people can interact about this project</span>
             </section>
             <section>
-                <label>
-                    <span>DNS link</span>
+                <label className="createWhat">
+                    <p>DNS link</p>
                     <input id="externalDNS" type="text" />
                 </label>
+                <span className="ExplBoom">A link to the official website of this project</span>
             </section>
             <section>
-                <label>
-                    <span>ENS link</span>
+                <label className="createWhat">
+                    <p>ENS link</p>
                     <input id="externalENS" type="text" />
                 </label>
+                <span className="ExplBoom">An ENS link to the official website of this project</span>
             </section>
             <section>
-                <label>
-                    <span>Repo link</span>
+                <label className="createWhat">
+                    <p>Repo link</p>
                     <input id="repoUri" type="text" />
                 </label>
+                <span className="ExplBoom">A link to the official repo of this project</span>
+            </section>
+            <section className="spacialImputs">
+                <section>
+                    <label className="createWhat">
+                        <p>Cover Regular<b>*</b></p>
+                        <input id="image" data-mandatory="true" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
+                    </label>
+                    <span className="ExplBoom">The cover img must be .png or .gif and at least 5mb lenght with a max with of 350px, due to users experience in IPFS download speed limitations</span>
+                </section>
+                <section>
+                    <label className="createWhat">
+                        <p>Cover High Quality</p>
+                        <input id="image_data" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
+                    </label>
+                    <span className="ExplBoom">No limitation for the HQ version on the image</span>
+                </section>
+                <section>
+                    <label className="createWhat">
+                        <p>Background Color<b>*</b></p>
+                        <input id="background_color" data-mandatory="true" type="color" />
+                    </label>
+                    <span className="ExplBoom">The background color used in most of the dapps behind your cover if not fixed with their standard image sizes</span>
+                </section>
             </section>
         </section>);
     },
@@ -253,19 +263,17 @@ var CreateCollectionWizard = React.createClass({
             {extension === "contract" && <h2>Etension Contract</h2>}
             {extension !== "contract" && <h2>Deploy</h2>}
             {extension === "contract" && <section className="FormCreate">
-                <section className="FormCreateThing">
+                <section className="FormCreateThing FormCreateThingBig">
                     <Editor ref={ref => this.editor = ref} />
-                    <button onClick={this.compile}>Compile</button>
+                    <button className="BTNweirdo" onClick={this.compile}>Compile</button>
                     <select ref={ref => this.contractSelect = ref} />
-                    <section>
-                        <p>Extension init payload (optional)</p>
-                        <input type="text" placeholder="Payload" ref={ref => this.extensionAddressPayload = ref} />
-                        <span>See the documentation for further details.</span>
+                    <section className="FormCreateThing">
+                        <input className="payloadThing" type="text" placeholder="Payload if any" ref={ref => this.extensionAddressPayload = ref} />
                     </section>
                 </section>
             </section>}
             <section className="FormCreateThing">
-                <a className={"SuperActionBTN" + (this.state && this.state.performing) ? " disabled" : ""} href="javascript:;" onClick={this.back}>BACK</a>
+                <a className="SuperActionBTN" href="javascript:;" onClick={this.back}>BACK</a>
                 {(!this.state || this.state.performing !== 'deploy') && <a href="javascript:;" data-action="deploy" className="SuperActionBTN" onClick={window.perform}>DEPLOY</a>}
                 {this.state && this.state.performing === 'deploy' && <InnerLoader />}
             </section>
