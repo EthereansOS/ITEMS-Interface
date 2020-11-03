@@ -160,7 +160,7 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .FormCreateThing select {margin: 10px 0;border: 1px solid #a4d1f8; background-color: #a4d1f8;border-radius: 5px; font-weight: bold; color: #ffffff; padding: 5px 0;}
 .createDescriptonX {font-size: 14px; text-align: left; display: inline-block; color: #6e6e6e;}
 .createDescriptonX a {color: #a4d1f8;}
-
+.ExplBoom {font-size: 14px; text-align: left; display: inline-block; color: #6e6e6e;}
 
 .ItemData {max-width: 1200px; display: block; margin: 30px auto 100px auto; text-align:center; -moz-column-gap: 10px;-moz-column-width: 300px;;column-gap: 10px;column-width: 300px;-webkit-column-gap: 10px;-webkit-column-width: 300px; max-width: 1200px;}
 .swowThis {padding: 5px; font-size: 11px; font-weight: bold; color: #ffffff; text-decoration: none; background-color: #a4d1f8; border-radius: 5px; display: inline-block; margin: 10px auto;}

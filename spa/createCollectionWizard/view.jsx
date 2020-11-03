@@ -216,7 +216,7 @@ var CreateCollectionWizard = React.createClass({
                     <p>Decimals</p>
                     <input type="checkbox" ref={ref => (this.hasDecimals = ref) && (ref.checked = state.hasDecimals)} />
                 </label>
-                <span>Selecting this option, all of the Items in this Collection will have 18 decimals in both implementations (Racomended only if you need decimals in the NFT implementation too due to some special functions like in-game consumable items)</span>
+                <span className="ExplBoom">Selecting this option, all of the Items in this Collection will have 18 decimals in both implementations (Racomended only if you need decimals in the NFT implementation too due to some special functions like in-game consumable items)</span>
             </section>
             <section className="FormCreateThing">
                 <a className="SuperActionBTN" href="javascript:;" onClick={this.back}>BACK</a>
@@ -238,7 +238,7 @@ var CreateCollectionWizard = React.createClass({
             {metadataType === 'custom' && <section className="FormCreateThing">
                 <p>Metadata Link</p>
                 <input type="text" ref={ref => (this.metadataLinkInput = ref) && (ref.value = (this.state && this.state.metadataLink) || "")} />
-                <span>The metadata file is a Json standard file containing all of the info and links to the file of the ITEM. <a>here</a> You can find a step by step guide to build your json file correctly.</span>
+                <span className="ExplBoom">The metadata file is a Json standard file containing all of the info and links to the file of the ITEM. <a>here</a> You can find a step by step guide to build your json file correctly.</span>
             </section>}
             <section className="FormCreateThing">
                 <a className="SuperActionBTN" href="javascript:;" onClick={this.back}>BACK</a>
