@@ -41,6 +41,7 @@ var Wallet = React.createClass({
         }
         return (
             <section className="sideALLThing">
+                <a className="BoBoBoaThings"></a>
                 <section className="sideThing">
                     {!state.loaded && <Loader />}
                     <section className="Thewallet">

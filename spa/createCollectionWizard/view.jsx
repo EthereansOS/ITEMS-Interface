@@ -215,8 +215,8 @@ var CreateCollectionWizard = React.createClass({
                 <label>
                     <p>Decimals</p>
                     <input type="checkbox" ref={ref => (this.hasDecimals = ref) && (ref.checked = state.hasDecimals)} />
-                    <span>Selecting this option, all the Items of this Collection will have 18 decimals instead of 1</span>
                 </label>
+                <span>Selecting this option, all of the Items in this Collection will have 18 decimals in both implementations (Racomended only if you need decimals in the NFT implementation too due to some special functions like in-game consumable items)</span>
             </section>
             <section className="FormCreateThing">
                 <a className="SuperActionBTN" href="javascript:;" onClick={this.back}>BACK</a>
