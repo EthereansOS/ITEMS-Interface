@@ -2221,7 +2221,6 @@ window.loadItemData = async function loadItemData(item, collection, view) {
     item.token = item.token || window.newContract(window.context.IERC20ABI, item.address);
     item.name = item.name || await window.blockchainCall(item.contract.methods.name, item.objectId);
     item.symbol = item.symbol || await window.blockchainCall(item.contract.methods.symbol, item.objectId);
-    delete item.collection.hasBalance;
     window.tryRetrieveMetadata(item).then(() => view.setState({ item }));
     item.decimals = item.decimals || await window.blockchainCall(item.token.methods.decimals);
     view && view.setState({ item }, () => window.updateItemDynamicData(item, view));
@@ -2316,31 +2315,31 @@ window.checkMetadataLink = async function checkMetadataLink(metadataLink, item) 
 window.checkMetadataValuesForCollection = async function checkMetadataValuesForCollection(metadata) {
     var errors = [];
 
-    if(!await window.checkCoverSize(metadata.image)) {
+    if (!await window.checkCoverSize(metadata.image)) {
         errors.push(`Cover size cannot have a width greater than ${window.context.imageMaxWidth} pixels and a size greater than ${window.context.imageMaxWeightInMB} MB`);
     }
 
-    if(!metadata.description) {
+    if (!metadata.description) {
         errors.push(`Description is mandatory`);
     }
 
-    if(!metadata.background_color) {
+    if (!metadata.background_color) {
         errors.push(`Background color is mandatory`);
     }
 
-    if(metadata.discussionUri && !window.checkURL(metadata.discussionUri)) {
+    if (metadata.discussionUri && !window.checkURL(metadata.discussionUri)) {
         errors.push(`Discussion Link must be a valid URL`);
     }
 
-    if(metadata.externalDNS && !window.checkURL(metadata.externalDNS)) {
+    if (metadata.externalDNS && !window.checkURL(metadata.externalDNS)) {
         errors.push(`DNS Link must be a valid URL`);
     }
 
-    if(metadata.externalENS && !window.checkURL(metadata.externalENS) && metadata.externalENS.indexOf('.eth') === -1) {
+    if (metadata.externalENS && !window.checkURL(metadata.externalENS) && metadata.externalENS.indexOf('.eth') === -1) {
         errors.push(`ENS Link must be a valid URL`);
     }
 
-    if(metadata.repoUri && !window.checkURL(metadata.repoUri)) {
+    if (metadata.repoUri && !window.checkURL(metadata.repoUri)) {
         errors.push(`Repo Link must be a valid URL`);
     }
 
@@ -2420,6 +2419,12 @@ window.refreshSingleCollection = async function refreshSingleCollection(collecti
     collection.symbol = collection.symbol || await window.blockchainCall(collection.contract.methods.symbol);
     await window.tryRetrieveMetadata(collection, collection.category).then(() => view && view.forceUpdate());
     collection.openSeaName = collection.name.toLowerCase().split(' ').join('-');
+    delete collection.hasBalance;
+    delete collection.isOwner;
+    try {
+        collection.isOwner = window.web3.utils.toChecksumAddress(await window.blockchainCall(collection.contract.methods.extension)) === window.walletAddress;
+    } catch(e) {
+    }
     window.loadCollectionENS(collection);
     collection.loaded = true;
     return collection;
@@ -2498,20 +2503,31 @@ window.formatLinkForExpose = function formatLinkForExpose(link) {
     return link;
 };
 
-window.checkCoverSize = function checkCoverSize(file) {
+window.checkCoverSize = async function checkCoverSize(file) {
     var cover;
-    if((typeof file).toLowerCase() === "string") {
-        cover = window.Base64.encode(await window.AJAXRequest(window.formatLink(file)));
-        console.log(cover);
+    if ((typeof file).toLowerCase() === "string") {
+        /*cover = window.Base64.encode();
+        var BASE64_MARKER = ';base64,';
+        var parts = cover.split(BASE64_MARKER);
+        var contentType = parts[0].split(':')[1];*/
+        var raw = await window.AJAXRequest(window.formatLink(file));
+        var rawLength = raw.length;
+        var uInt8Array = new Uint8Array(rawLength);
+
+        for (let i = 0; i < rawLength; ++i) {
+            uInt8Array[i] = raw.charCodeAt(i);
+        }
+
+        cover = new Blob([uInt8Array], { type: 'image/png' });
     } else {
         cover = file.size ? file : file.item ? file.item(0) : file.get(0);
     }
-    return new Promise(function(ok) {
+    return await new Promise(function(ok) {
         var reader = new FileReader();
         reader.addEventListener("load", function() {
             var image = new Image();
             image.onload = function onload() {
-                var byteLength = parseInt(reader.result.substring(reader.result.indexOf(',') + 1).replace(/=/g,"").length * 0.75);
+                var byteLength = parseInt(reader.result.substring(reader.result.indexOf(',') + 1).replace(/=/g, "").length * 0.75);
                 var mBLength = byteLength / 1024 / 1024;
                 return ok(image.width <= window.context.imageMaxWidth && mBLength <= window.context.imageMaxWeightInMB);
             };
@@ -2522,7 +2538,7 @@ window.checkCoverSize = function checkCoverSize(file) {
 };
 
 window.checkURL = function checkURL(url) {
-    if(new RegExp(window.urlRegex).test(url)) {
+    if (new RegExp(window.urlRegex).test(url)) {
         return true;
     }
     return new RegExp(window.IPFSRegex).test(url)

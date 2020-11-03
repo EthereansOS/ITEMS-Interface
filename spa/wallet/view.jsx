@@ -8,6 +8,13 @@ var Wallet = React.createClass({
         var collections = state.collections;
         return collections.filter(it => it.hasBalance);
     },
+    toggle(e) {
+        window.preventItem(e);
+        var oldToggle = this.state && this.state.toggle;
+        var toggle = e.currentTarget.dataset.key;
+        toggle = toggle === oldToggle ? null : toggle;
+        this.setState({toggle});
+    },
     onClick(e) {
         window.preventItem(e);
         var state = window.getState(this);
@@ -39,10 +46,13 @@ var Wallet = React.createClass({
                     <section className="Thewallet">
                         {state.collections && this.getList().map(collection => <section key={collection.key} className="walletCollection">
                             <section className="walletCollectionOpener">
-                                <h5 className="walletCollectionOpenerName">{collection.name}</h5>
+                                <a href="javascript:;" data-key={collection.key} onClick={this.toggle}>
+                                    <h5 className="walletCollectionOpenerName">{collection.name}</h5>
+                                    {collection.isOwner && <h6>I am the owner</h6>}
+                                </a>
                             </section>
-                            <section className="walletCollectionItems">
-                                {collection.items && Object.values(collection.items).map(item => <section key={item.key} className="walletCollectionItem">
+                            {this.state && this.state.toggle === collection.key && <section className="walletCollectionItems">
+                                {collection.items && Object.values(collection.items).filter(it => it.dynamicData && it.dynamicData.balanceOf && it.dynamicData.balanceOf !== '0').map(item => <section key={item.key} className="walletCollectionItem">
                                     <a href="javascript:;" onClick={this.onClick} data-collection={collection.key} data-item={item.key}>
                                         <figure className="collectionIcon" style={{ "background-color": item.backgroundImage }}>
                                             {item.image && <LazyImageLoader src={item.image} />}
@@ -50,7 +60,7 @@ var Wallet = React.createClass({
                                         </figure>
                                     </a>
                                 </section>)}
-                            </section>
+                            </section>}
                         </section>)}
                     </section>
                 </section>

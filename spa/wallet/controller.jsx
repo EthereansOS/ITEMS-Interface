@@ -6,6 +6,7 @@ var WalletController = function (view) {
         try {
             var promises = [];
             for (var collection of view.props.collections) {
+                await window.refreshSingleCollection(collection);
                 collection.items = collection.items || {};
                 var collectionObjectIds = await window.loadCollectionItems(collection.address);
                 for (var objectId of collectionObjectIds) {
