@@ -70,38 +70,46 @@ var CreateItemWizard = React.createClass({
         this.setState({ step: currentStep });
     },
     getMetadataValues() {
-        return {};
+        return window.getData(this.metadataPage);
     },
     renderMetadata() {
         var state = this.getState();
-        return(<section>
+        return (<section ref={ref => window.setData(this.metadataPage = ref, state.metadata)}>
             <section>
-                <label>Image (mandatory)</label>
-                <input name="image" data-mandatory="true" type="text"/>
+                <label>
+                    <span>Image (mandatory)</span>
+                    <input id="image" data-mandatory="true" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
+                </label>
             </section>
             <section>
-                <label>Img hd</label>
-                <input type="text"/>
+                <label>
+                    <span>HD Image</span>
+                    <input id="image_data" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
+                </label>
             </section>
             <section>
-                <label>Desc (forza)</label>
-                <input type="text"/>
+                <label>
+                    <span>Description (mandatory)</span>
+                    <textarea id="description" data-mandatory="true" />
+                </label>
+            </section>
+            <section>
+                <label>
+                    <span>Background Color (mandatory)</span>
+                    <input id="background_color" data-mandatory="true" type="color" />
+                </label>
             </section>
             <section>
                 <label>File</label>
-                <input type="text"/>
+                <input id="file" type="file"/>
             </section>
             <section>
                 <label>Folder</label>
-                <input type="text"/>
-            </section>
-            <section>
-                <label>backgrond color (forza)</label>
-                <input type="text"/>
+                <input id="folder" type="file" webkitdirectory mozdirectory/>
             </section>
             <section>
                 <label>Animation file</label>
-                <input type="text"/>
+                <input id="animation_url" type="file" accept=".gif,.mp4"/>
             </section>
         </section>);
     },

@@ -2242,6 +2242,9 @@ window.updateItemDynamicData = async function updateItemDynamicData(item, view) 
     try {
         item.collection.hasBalance = item.collection.hasBalance || parseInt(item.dynamicData.balanceOf) > 0;
     } catch (e) {}
+    try {
+        item.dynamicData.canMint = item.collection.isOwner && await window.blockchainCall(item.collection.contract.methods.isEditable, item.objectId);
+    } catch(e) {}
     view && view.setState({ item });
 };
 
@@ -2353,6 +2356,18 @@ window.checkMetadataValuesForCollection = async function checkMetadataValuesForC
 window.checkMetadataValuesForItem = async function checkMetadataValuesForItem(metadata) {
     var errors = [];
 
+    if (!await window.checkCoverSize(metadata.image)) {
+        errors.push(`Cover size cannot have a width greater than ${window.context.imageMaxWidth} pixels and a size greater than ${window.context.imageMaxWeightInMB} MB`);
+    }
+
+    if (!metadata.description) {
+        errors.push(`Description is mandatory`);
+    }
+
+    if (!metadata.background_color) {
+        errors.push(`Background color is mandatory`);
+    }
+
     if (errors && errors.length > 0) {
         throw errors.join(',');
     }
@@ -2377,6 +2392,24 @@ window.normalizeMetadata = async function normalizeMetadata(metadata) {
         metadata.image_data = metadata.image_data[0];
         if(metadata.image_data && metadata.image_data.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
             metadata.image_data = "https://ipfs.io/ipfs/" + metadata.image_data.split("ipfs://ipfs/")[1];
+        }
+    }
+    if(metadata.animation_url && metadata.animation_url instanceof Array) {
+        metadata.animation_url = metadata.animation_url[0];
+        if(metadata.animation_url && metadata.animation_url.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
+            metadata.animation_url = "https://ipfs.io/ipfs/" + metadata.animation_url.split("ipfs://ipfs/")[1];
+        }
+    }
+    if(metadata.file && metadata.file instanceof Array) {
+        metadata.file = metadata.file[0];
+        if(metadata.file && metadata.file.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
+            metadata.file = "https://ipfs.io/ipfs/" + metadata.file.split("ipfs://ipfs/")[1];
+        }
+    }
+    if(metadata.folder && metadata.folder instanceof Array) {
+        metadata.folder = metadata.folder[0];
+        if(metadata.folder && metadata.folder.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
+            metadata.folder = "https://ipfs.io/ipfs/" + metadata.folder.split("ipfs://ipfs/")[1];
         }
     }
 };

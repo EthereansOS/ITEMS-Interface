@@ -22,7 +22,6 @@ var Index = React.createClass({
         }
         wallet && $('body').addClass('noScroll');
         !wallet && $('body').removeClass('noScroll');
-        //wallet && this.emit("wallet/update");
         this.setState({ wallet });
     },
     componentDidMount() {

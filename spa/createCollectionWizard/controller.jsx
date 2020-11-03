@@ -71,11 +71,12 @@ var CreateCollectionWizardController = function (view) {
             throw "No metadata! Are you serious?";
         }
         if (state.metadataType === 'custom') {
+            await window.waitForLateInput();
             var metadataLink = context.view.metadataLinkInput.value;
             if (!metadataLink || !await window.checkMetadataLink(metadataLink)) {
                 throw "Not a valid metadata link!";
             }
-            context.view.setState({
+            return context.view.setState({
                 metadataLink
             });
         }

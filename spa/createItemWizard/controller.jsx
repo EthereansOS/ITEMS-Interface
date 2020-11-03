@@ -82,6 +82,7 @@ var CreateItemWizardController = function (view) {
             throw "No metadata! Are you serious?";
         }
         if (state.metadataType === 'custom') {
+            await window.waitForLateInput();
             var metadataLink = context.view.metadataLinkInput.value;
             if (!metadataLink || !await window.checkMetadataLink(metadataLink)) {
                 throw "Not a valid metadata link!";
@@ -90,7 +91,7 @@ var CreateItemWizardController = function (view) {
                 metadataLink
             });
         }
-        var metadata = context.view.getMetadataValues();
+        var metadata = await context.view.getMetadataValues();
         if(!await window.checkMetadataValuesForItem(metadata)) {
             throw "Invalid metadata values";
         }
@@ -106,13 +107,7 @@ var CreateItemWizardController = function (view) {
         if(parseInt(valueDecimals) <= 0) {
             throw "Supply must be greater than 0";
         }
-        var metadataLink = state.metadataLink;
-        var metatada = state.metadata || {};
-        if(state.extension === 'contract') {
-            metatada = metatada || await window.AJAXRequest(window.formatLink(metadataLink));
-            metatada.code = context.view.editor.editor.getValue();
-        }
-        metadataLink = metadataLink || await window.uploadMetadata(metatada);
+        var metadataLink = state.metadataLink || await window.uploadMetadata(state.metatada);
         await window.blockchainCall(state.selectedToken.contract.methods.mint, valueDecimals, state.itemName, state.itemSymbol, metadataLink, state.itemMintable);
     };
 };

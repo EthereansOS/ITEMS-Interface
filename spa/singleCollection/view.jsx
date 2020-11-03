@@ -13,7 +13,7 @@ var SingleCollection = React.createClass({
         this.controller.loadData(this);
     },
     render() {
-        var color = this.props.collection.backgroundImage;
+        var color = this.props.collection.background_color;
         var children = [<Loader />];
         if (this.props.collection.loaded) {
             children = [
@@ -23,7 +23,8 @@ var SingleCollection = React.createClass({
                 </figure>,
                 <article className="collectionInfo">
                     <h3 className="collectionTitle" style={{ color }}>{window.shortenWord(this.props.collection.name, 25)} <span>({window.shortenWord(this.props.collection.symbol, 6)})</span></h3>
-                    {window.renderExpandibleElement(!this.props.collection.collection_description ? "No description available" : window.convertTextWithLinksInHTML(this.props.collection.collection_description), <p className="collectionDesc" />)}
+                    {/*this.props.collection.isOwner && */<h6>I am the owner</h6>}
+                    {window.renderExpandibleElement(!this.props.collection.description ? "No description available" : window.convertTextWithLinksInHTML(this.props.collection.description), <p className="collectionDesc" />)}
                     {this.props.showItemsCount && <span className="collectionItems BrandizedS">
                         {(!this.state || (this.state.itemsCount !== 0 && !this.state.itemsCount)) && <InnerLoader />}
                         {this.state && this.state.itemsCount > 0 && `${this.state.itemsCount} ITEMS`}

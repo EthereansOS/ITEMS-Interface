@@ -31,7 +31,7 @@ var CollectionSingleItem = React.createClass({
     },
     render() {
         var item = (this.state && this.state.item) || this.props.item;
-        var color = item && item.backgroundImage;
+        var color = item && item.background_color;
         return (<section className="collectionPageItem">
             <a href={this.props.readOnly ? undefined : "javascript:;"} onClick={this.props.readOnly ? undefined : this.onClick}>
                 <figure className="ItemIcon" style={{"background-color" : color}}>
