@@ -148,8 +148,8 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .createPage {width: 100%; display: block; text-align: center; margin-top: 100px;min-width: 100%;}
 .createStart {width: 230px; background-color: #f1f8ff; border-radius: 20px;display: inline-block; padding: 30px 70px;    margin-top: 100px;}
 .StartCreate {padding: 10px; text-decoration: none; background-color: #a4d1f8; font-weight: bold; display: inline-block; margin: 20px 0 10px 0; color: #ffffff; border-radius: 8px;}
-.createCollection {width: 600px; background-color: #f1f8ff; border-radius: 20px;display: inline-block; padding: 30px 70px;    margin-top: 100px;}
-.createCollection h2 {font-size: 18px; font-weight: bold; text-align: center; color: #a4d1f8; margin-bottom: 20px;}
+.createCollection, .createITEM {width: 600px; background-color: #f1f8ff; border-radius: 20px;display: inline-block; padding: 30px 70px;    margin-top: 100px;}
+.createCollection h2, .createITEM h2 {font-size: 18px; font-weight: bold; text-align: center; color: #a4d1f8; margin-bottom: 20px;}
 .FormCreateThing {min-height: 30px;padding: 5px 0; display: block; width: 350px; margin: 2px auto;}
 .FormCreateThing input[type=text] {width: 60%; background-color: #fafdff; border: 2px solid #a4d1f8; border-radius: 6px; height: 30px; color: #a4d1f8; display: inline-block; vertical-align: middle;}
 .inENS {width: 37% !important;}

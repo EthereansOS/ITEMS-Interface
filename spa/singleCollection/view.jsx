@@ -22,7 +22,7 @@ var SingleCollection = React.createClass({
                     {this.props.collection.isOwner && <h6>Owner</h6>}
                 </figure>,
                 <article className="collectionInfo">
-                    <h3 className="collectionTitle" style={{ color }}>{window.shortenWord(this.props.collection.name, 25)} <span>({window.shortenWord(this.props.collection.symbol, 6)})</span></h3>
+                    <h3 className="collectionTitle">{window.shortenWord(this.props.collection.name, 25)} <span>({window.shortenWord(this.props.collection.symbol, 6)})</span></h3>
                     {window.renderExpandibleElement(!this.props.collection.description ? "No description available" : window.convertTextWithLinksInHTML(this.props.collection.description), <p className="collectionDesc" />)}
                     {this.props.showItemsCount && <span className="collectionItems BrandizedS">
                         {(!this.state || (this.state.itemsCount !== 0 && !this.state.itemsCount)) && <InnerLoader />}
