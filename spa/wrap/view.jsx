@@ -53,7 +53,7 @@ var Wrap = React.createClass({
         if (!this.state || !this.state.selectedToken || !this.state.selectedToken.balanceOfPlain) {
             return;
         }
-        this.tokenAmountInput.value = window.asNumber(this.state.selectedToken.balanceOfPlain);
+        this.tokenAmountInput.value = this.state.selectedToken.tokenAmount = this.state.selectedToken.balanceOfPlain.split(",").join("");
         this.setState({ selectedToken: this.state.selectedToken });
     },
     actionEnd() {
