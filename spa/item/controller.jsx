@@ -13,6 +13,6 @@ var ItemController = function (view) {
         var amount = decimals === 1 ? amountPlain : window.toDecimals(amountPlain, decimals);
 
         await window.blockchainCall(context.view.props.item.collection.contract.methods['mint(uint256,uint256)'], context.view.props.item.objectId, amount);
-        window.context.updateItemDynamicData(this.props.item, context.view);
+        window.updateItemDynamicData(this.props.item, context.view);
     }
 };
