@@ -695,7 +695,11 @@ window.asNumber = function asNumber(value) {
     if (typeof value === 'undefined' || value === '') {
         return 0;
     }
-    return parseFloat(window.numberToString(value.split(',').join('')));
+    try {
+        value = value.split(',').join('');
+    } catch(e) {
+    }
+    return parseFloat(window.numberToString(value));
 };
 
 window.onload = function() {

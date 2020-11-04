@@ -1,6 +1,7 @@
 var Item = React.createClass({
     requiredScripts: [
-        "spa/lazyImageLoader.jsx"
+        "spa/lazyImageLoader.jsx",
+        "spa/innerLoader.jsx"
     ],
     getDefaultSubscriptions() {
         return {
@@ -116,6 +117,14 @@ var Item = React.createClass({
                                 <a className="ItemPrice" target="_blank" href={window.context.uniswapInfoUrlTemplate.format(item.address)}>&#128039; Info</a>
                                 <a className="ItemPrice" target="_blank" href={window.context.openSeaItemLinkTemplate.format(this.props.collection.address, item.objectId)}>&#9973; $ {item.dynamicData.tokenPriceInDollarsOnOpenSea ? window.formatMoney(item.dynamicData.tokenPriceInDollarsOnOpenSea, 1) : "--"}</a>
                             </section>
+                            {this.props.item.dynamicData && this.props.item.dynamicData.canMint && <section>
+                                <label>
+                                    Mint more
+                                    <input ref={ref => this.mintMoreInput = ref} type="text"/>
+                                </label>
+                                {(!this.state || !this.state.performing) && <a className="" href="javascript:;" data-action="mint" onClick={window.perform}>Mint</a>}
+                                {this.state && this.state.performing === 'mint' && <InnerLoader/>}
+                            </section>}
                         </article>
                     </section>
                     <section className="collectionNav">
