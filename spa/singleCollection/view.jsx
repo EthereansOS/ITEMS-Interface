@@ -17,7 +17,7 @@ var SingleCollection = React.createClass({
         var children = [<Loader />];
         if (this.props.collection.loaded) {
             children = [
-                <figure className="collectionIcon" style={{ "background-color": color }}>
+                <figure className="collectionIcon">
                     {this.props.collection.image && <LazyImageLoader src={this.props.collection.image}/>}
                     {this.props.collection.isOwner && <h6>Owner</h6>}
                 </figure>,

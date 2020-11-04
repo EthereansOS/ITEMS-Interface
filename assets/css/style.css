@@ -54,8 +54,8 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .collectionsList {padding: 20px 2% 20px 2%;display: inline-block; text-align: center;}
 .collectionsList > a {width: 300px; margin: 40px 0; display: inline-block;}
 .collection {width: 300px; margin: 40px;display: inline-block;}
-.collection .collectionIcon {width: 100px; height: 100px; border-radius: 33%; display: inline-block; vertical-align: top; background-color: #f1f8ff;overflow: hidden; position: relative;}
-.collection .collectionIcon img {width: 90%; padding: 5%; }
+.collection .collectionIcon {width: 100px; height: 100px; display: inline-block; vertical-align: top; overflow: hidden; position: relative; /* border: solid; border-image-source: linear-gradient(to left, #743ad5, #d53a9d);border-image-slice: 1;border-width: 3px; */}
+.collection .collectionIcon img {width: 100%;}
 .collection .collectionIcon h6 {position: absolute; bottom: 0; right: 30px; background-color: black; color: #ffffff; font-weight: bolder; padding: 2px; font-size: 11px; border-radius: 5px;}
 .collection .collectionInfo {width: 190px; display: inline-block; vertical-align: top; margin-left: 10px;}
 .collection .collectionTitle {width: 95%; display: block; text-align: left; font-size: 20px; color: #a4d1f8;-ms-word-break: break-all;word-break: break-all;word-break: break-word;-webkit-hyphens: auto;-moz-hyphens: auto;hyphens: auto;}
@@ -88,7 +88,7 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .collectionPage .collectionPageInfo .collectionInfo {width: 500px; margin: 0 0 0 50px;}
 .collectionPage .collectionInfo .collectionTitle {font-size: 30px; color: #a4d1f8;}
 .collectionPage .collectionInfo .collectionTitle span {font-size: 14px;}
-.collectionPage .collectionInfo .collectionDesc {font-size: 16px; min-height: 145px;}
+.collectionPage .collectionInfo .collectionDesc {font-size: 13px; min-height: 145px; color: #6e6e6e; line-height: 1.5;}
 .collectionPage .collectionInfo .collectionItems {display: inline-block; width: 20%; margin-top: 10px; font-size: 14px;}
 .collectionPage .collectionInfo .collectionLink {display: inline-block; width: 80%; margin-top: 10px;font-size: 14px; text-align: left; color: #a4d1f8; font-weight: bold;}
 
