@@ -85,6 +85,10 @@ var Item = React.createClass({
             {result}
         </section>);
     },
+    max(e) {
+        window.preventItem(e);
+        this.unwrapInput.value = this.props.item.dynamicData.balanceOfCollectionSidePlain.split(',').join();
+    },
     render() {
         var item = (this.state && this.state.item) || this.props.item;
         var toggle = !this.state ? item.metadata ? 'metadata' : 'farm' : this.state.toggle;
@@ -122,8 +126,17 @@ var Item = React.createClass({
                                     Mint more
                                     <input ref={ref => this.mintMoreInput = ref} type="text"/>
                                 </label>
-                                {(!this.state || !this.state.performing) && <a className="" href="javascript:;" data-action="mint" onClick={window.perform}>Mint</a>}
+                                {(!this.state || this.state.performing !== 'mint') && <a className={"" + (this.state && this.state.performing ? ' disabled' : '')} href="javascript:;" data-action="mint" onClick={window.perform}>Mint</a>}
                                 {this.state && this.state.performing === 'mint' && <InnerLoader/>}
+                            </section>}
+                            {/*this.props.item.dynamicData && this.props.item.dynamicData.canMint && */<section>
+                                <label>
+                                    Unwrap
+                                    <a href="javascript:;" onClick={this.max}>Max</a>
+                                    <input ref={ref => this.unwrapInput = ref} type="text"/>
+                                </label>
+                                {(!this.state || this.state.performing !== "unwrap") && <a className={"" + (this.state && this.state.performing ? ' disabled' : '')} href="javascript:;" data-action="unwrap" onClick={window.perform}>Unwrap</a>}
+                                {this.state && this.state.performing === 'unwrap' && <InnerLoader/>}
                             </section>}
                         </article>
                     </section>

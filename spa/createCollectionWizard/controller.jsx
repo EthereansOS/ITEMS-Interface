@@ -107,6 +107,7 @@ var CreateCollectionWizardController = function (view) {
         if (!contract) {
             throw "You must compile and select a valid contract";
         }
+        context.view.setState({loadingMessage : "Deploying Smart Contract"});
         var deployedContract = await window.createContract(contract.abi, contract.bytecode);
         context.view.setState({
             code,
@@ -134,11 +135,13 @@ var CreateCollectionWizardController = function (view) {
         metadata.originalCreator = window.web3.utils.toChecksumAddress(window.walletAddress);
         metadata.extensionAddress = extensionAddress;
         metadata.external_url = `${state.collectionENS}.${window.context.ensDomainName}`;
+        context.view.setState({loadingMessage : "Uploading metadata"});
         var metadataLink = await window.uploadMetadata(metadata);
         var params = ["string", "string", "bool", "string", "address", "bytes"];
         var values = [state.collectionName, state.collectionSymbol, state.hasDecimals, metadataLink, extensionAddress || window.voidEthereumAddress, context.view.extensionAddressPayload && context.view.extensionAddressPayload.value || "0x"];
         var payload = window.web3.utils.sha3(`init(${params.join(",")})`);
         payload = payload.substring(0, 10) + window.web3.eth.abi.encodeParameters(params, values).substring(2);
+        context.view.setState({loadingMessage : "Creating Collection"});
         await window.blockchainCall(window.ethItemOrchestrator.methods.createERC1155, payload, state.collectionENS);
         context.view.emit('collections/refresh');
     };

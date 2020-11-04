@@ -15,5 +15,9 @@
     {
         "name" : "FARM",
         "module" : "spa/farm"
+    },
+    {
+        "name" : "SUCCESS",
+        "module" : "spa/successPage"
     }
 ]

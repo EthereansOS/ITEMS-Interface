@@ -107,7 +107,10 @@ var CreateItemWizardController = function (view) {
         if(parseInt(valueDecimals) <= 0) {
             throw "Supply must be greater than 0";
         }
+        context.view.setState({loadingMessage : "Uploading metadata"});
         var metadataLink = state.metadataLink || await window.uploadMetadata(state.metadata);
+        context.view.setState({loadingMessage : "Deploying Item"});
         await window.blockchainCall(state.selectedToken.contract.methods.mint, valueDecimals, state.itemName, state.itemSymbol, metadataLink, state.itemMintable);
+        context.view.emit('collections/refresh');
     };
 };

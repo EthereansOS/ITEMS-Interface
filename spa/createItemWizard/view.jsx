@@ -181,6 +181,7 @@ var CreateItemWizard = React.createClass({
                     <a className={"SuperActionBTN" + (this.state && this.state.performing) ? " disabled" : ""} href="javascript:;" onClick={this.back}>BACK</a>
                     {(!this.state || this.state.performing !== 'deploy') && <a href="javascript:;" data-action="deploy" className="SuperActionBTN" onClick={window.perform}>DEPLOY</a>}
                     {this.state && this.state.performing === 'deploy' && <InnerLoader />}
+                    {this.state && this.state.loadingMessage && <span>{this.state.loadingMessage}</span>}
                 </section>
             </section>
         </section>);

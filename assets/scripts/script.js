@@ -2256,8 +2256,12 @@ window.updateItemDynamicData = async function updateItemDynamicData(item, view) 
     delete item.dynamicData.balanceOf;
     delete item.dynamicData.balanceOfPlain;
     window.walletAddress && (item.dynamicData.balanceOf = await window.blockchainCall(item.token.methods.balanceOf, window.walletAddress));
+    window.walletAddress && (item.dynamicData.balanceOfCollectionSide = await window.blockchainCall(item.collection.contract.methods.balanceOf, window.walletAddress, item.objectId));
     try {
         item.dynamicData.balanceOfPlain = window.formatMoney(window.fromDecimals(item.dynamicData.balanceOf, item.decimals), 4);
+    } catch (e) {}
+    try {
+        item.dynamicData.balanceOfCollectionSidePlain = window.formatMoney(item.collection.decimals ? window.fromDecimals(item.dynamicData.balanceOfCollectionSide, item.collection.decimals) : item.dynamicData.balanceOfCollectionSide, 4);
     } catch (e) {}
     try {
         item.collection.hasBalance = item.collection.hasBalance || parseInt(item.dynamicData.balanceOf) > 0;
@@ -2307,7 +2311,7 @@ window.perform = function perform(e) {
     var _this = view;
     var close = function close(e) {
         var message = e !== undefined && e !== null && (e.message || e);
-        _this.setState({ performing: null }, function() {
+        _this.setState({ performing: null, loadingMessage : null }, function() {
             message && message.indexOf('denied') === -1 && setTimeout(function() {
                 alert(message);
             });
@@ -2518,6 +2522,10 @@ window.loadSingleCollection = async function loadSingleCollection(address) {
 window.refreshSingleCollection = async function refreshSingleCollection(collection, view) {
     collection.name = collection.name || await window.blockchainCall(collection.contract.methods.name);
     collection.symbol = collection.symbol || await window.blockchainCall(collection.contract.methods.symbol);
+    try {
+        collection.decimals = collection.decimals || await window.blockchainCall(collection.contract.methods.decimals);
+    } catch(e) {
+    }
     await window.tryRetrieveMetadata(collection, collection.category).then(() => view && view.forceUpdate());
     collection.openSeaName = collection.name.toLowerCase().split(' ').join('-');
     delete collection.hasBalance;

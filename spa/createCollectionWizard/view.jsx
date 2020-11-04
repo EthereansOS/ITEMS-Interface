@@ -279,6 +279,7 @@ var CreateCollectionWizard = React.createClass({
                 {this.state && !this.state.performing && !this.state.extensionAddress && <a href="javascript:;" data-action="deploySmartContract" className="SuperActionBTN" onClick={window.perform}>DEPLOY SMART CONTRACT</a>}
                 {this.state && !this.state.performing && this.state.extensionAddress && <a href="javascript:;" data-action="deploy" className="SuperActionBTN" onClick={window.perform}>CREATE COLLECTION</a>}
                 {this.state && this.state.performing && <InnerLoader />}
+                {this.state && this.state.loadingMessage && <span>{this.state.loadingMessage}</span>}
             </section>
         </section>);
     },
