@@ -44,7 +44,7 @@ var CreateItemWizard = React.createClass({
         }
         var currentStep = (this.getState().step || 0);
         var step = currentStep + 1;
-        if (!this[`renderStep${step}`]) {
+        if (!this[`renderStep${step}`] || e.currentTarget.className.toLowerCase().indexOf("disabled") !== -1) {
             return;
         }
         var _this = this;
@@ -64,7 +64,7 @@ var CreateItemWizard = React.createClass({
     back(e) {
         window.preventItem(e);
         var currentStep = (this.getState().step || 0) - 1;
-        if (currentStep < 0) {
+        if (currentStep < 0 || e.currentTarget.className.toLowerCase().indexOf("disabled") !== -1) {
             return;
         }
         this.setState({ step: currentStep });

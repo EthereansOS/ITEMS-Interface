@@ -81,7 +81,7 @@ var CreateCollectionWizardController = function (view) {
             });
         }
         var metadata = await context.view.getMetadataValues();
-        if(!await window.checkMetadataValuesForCollection(metadata)) {
+        if (!await window.checkMetadataValuesForCollection(metadata)) {
             throw "Invalid metadata values";
         }
         context.view.setState({
@@ -89,17 +89,7 @@ var CreateCollectionWizardController = function (view) {
         });
     };
 
-    context.performDeploy = async function performDeploy() {
-        var state = context.view.getState();
-        var extension = state.extension || "wallet";
-        var extensionAddress = state.extensionAddress;
-        if (extension === "wallet") {
-            return await context.finalizeDeploy(extensionAddress);
-        }
-        await context.deployContract();
-    };
-
-    context.deployContract = async function deployContract() {
+    context.performDeploySmartContract = async function performDeploySmartContract() {
         var code = "";
         try {
             code = context.view.editor.editor.getValue();
@@ -117,24 +107,26 @@ var CreateCollectionWizardController = function (view) {
         if (!contract) {
             throw "You must compile and select a valid contract";
         }
-        var extensionAddress = context.view.getState().extensionAddress;
-        if (extensionAddress && window.isEthereumAddress(extensionAddress)) {
-            var compare = await window.SolidityUtilities.compare(extensionAddress, code);
+        var deployedContract = await window.createContract(contract.abi, contract.bytecode);
+        context.view.setState({
+            code,
+            extensionAddress: deployedContract.options.address
+        });
+    };
+
+    context.performDeploy = async function performDeploy() {
+        var state = context.view.getState();
+        var extensionAddress = state.extensionAddress;
+        var metadata = state.metadata || await window.AJAXRequest(window.formatLink(state.metadataLink));
+
+        if(state.extension === 'contract') {
+            var compare = await window.SolidityUtilities.compare(extensionAddress, state.code);
             if (!compare || Object.values(compare).length === 0) {
                 throw 'Contract source code and given extension address are not aligned';
             }
-            return await context.finalizeDeploy(extensionAddress);
+            state.extension === 'contract' && (metadata.extensionCode = state.code);
         }
-        contract = await window.createContract(contract.abi, contract.bytecode);
-        await context.finalizeDeploy(contract.options.address);
-    };
 
-    context.finalizeDeploy = async function finalizeDeploy(extensionAddress) {
-        if (!extensionAddress || !window.isEthereumAddress(window.web3.utils.toChecksumAddress(extensionAddress))) {
-            throw "Extension Address is mandatory";
-        }
-        var state = context.view.getState();
-        var metadata = state.metadata || await window.AJAXRequest(window.formatLink(state.metadataLink));
         metadata.name = state.collectionName;
         metadata.symbol = state.collectionSymbol;
         metadata.decimals = state.hasDecimals ? 18 : 1;
@@ -142,7 +134,6 @@ var CreateCollectionWizardController = function (view) {
         metadata.originalCreator = window.web3.utils.toChecksumAddress(window.walletAddress);
         metadata.extensionAddress = extensionAddress;
         metadata.external_url = `${state.collectionENS}.${window.context.ensDomainName}`;
-        state.extension === 'contract' && (metadata.extensionCode = context.view.editor.editor.getValue());
         var metadataLink = await window.uploadMetadata(metadata);
         var params = ["string", "string", "bool", "string", "address", "bytes"];
         var values = [state.collectionName, state.collectionSymbol, state.hasDecimals, metadataLink, extensionAddress || window.voidEthereumAddress, context.view.extensionAddressPayload && context.view.extensionAddressPayload.value || "0x"];

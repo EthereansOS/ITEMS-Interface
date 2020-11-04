@@ -7,7 +7,8 @@ var CreateCollectionWizard = React.createClass({
     ],
     getDefaultSubscriptions() {
         return {
-            'smartContract/compilation': this.onSmartContract
+            'smartContract/compilation': this.onSmartContract,
+            'smartContract/compiling' : () => this.compileButton.innerHTML = "Compiling..."
         };
     },
     compile(e) {
@@ -16,6 +17,7 @@ var CreateCollectionWizard = React.createClass({
         this.emit('editor/compile');
     },
     onSmartContract(contract) {
+        this.compileButton.innerHTML = "Compile";
         this.contractSelect.innerHTML = "";
         if (!contract) {
             return;
@@ -74,7 +76,7 @@ var CreateCollectionWizard = React.createClass({
         }
         var currentStep = (this.getState().step || 0);
         var step = currentStep + 1;
-        if (!this[`renderStep${step}`]) {
+        if (!this[`renderStep${step}`] || e.currentTarget.className.toLowerCase().indexOf("disabled") !== -1) {
             return;
         }
         var _this = this;
@@ -94,7 +96,7 @@ var CreateCollectionWizard = React.createClass({
     back(e) {
         window.preventItem(e);
         var currentStep = (this.getState().step || 0) - 1;
-        if (currentStep < 0) {
+        if (currentStep < 0 || e.currentTarget.className.toLowerCase().indexOf("disabled") !== -1) {
             return;
         }
         this.setState({ step: currentStep });
@@ -265,7 +267,7 @@ var CreateCollectionWizard = React.createClass({
             {extension === "contract" && <section className="FormCreate">
                 <section className="FormCreateThing FormCreateThingBig">
                     <Editor ref={ref => this.editor = ref} />
-                    <button className="BTNweirdo" onClick={this.compile}>Compile</button>
+                    <button className="BTNweirdo" ref={ref => this.compileButton = ref} onClick={this.compile}>Compile</button>
                     <select ref={ref => this.contractSelect = ref} />
                     <section className="FormCreateThing">
                         <input className="payloadThing" type="text" placeholder="Payload if any" ref={ref => this.extensionAddressPayload = ref} />
@@ -273,9 +275,10 @@ var CreateCollectionWizard = React.createClass({
                 </section>
             </section>}
             <section className="FormCreateThing">
-                <a className="SuperActionBTN" href="javascript:;" onClick={this.back}>BACK</a>
-                {(!this.state || this.state.performing !== 'deploy') && <a href="javascript:;" data-action="deploy" className="SuperActionBTN" onClick={window.perform}>DEPLOY</a>}
-                {this.state && this.state.performing === 'deploy' && <InnerLoader />}
+                <a className={"SuperActionBTN" + (this.state && this.state.performing ? " disabled" : "")} href="javascript:;" onClick={this.back}>BACK</a>
+                {this.state && !this.state.performing && !this.state.extensionAddress && <a href="javascript:;" data-action="deploySmartContract" className="SuperActionBTN" onClick={window.perform}>DEPLOY SMART CONTRACT</a>}
+                {this.state && !this.state.performing && this.state.extensionAddress && <a href="javascript:;" data-action="deploy" className="SuperActionBTN" onClick={window.perform}>CREATE COLLECTION</a>}
+                {this.state && this.state.performing && <InnerLoader />}
             </section>
         </section>);
     },
