@@ -142,10 +142,7 @@ var CreateCollectionWizardController = function (view) {
         metadata.originalCreator = window.web3.utils.toChecksumAddress(window.walletAddress);
         metadata.extensionAddress = extensionAddress;
         metadata.external_url = `${state.collectionENS}.${window.context.ensDomainName}`;
-        delete state.extensionCode;
-        if(state.extension === 'contract') {
-            metadata.extensionCode = context.view.editor.editor.getValue();
-        }
+        state.extension === 'contract' && (metadata.extensionCode = context.view.editor.editor.getValue());
         var metadataLink = await window.uploadMetadata(metadata);
         var params = ["string", "string", "bool", "string", "address", "bytes"];
         var values = [state.collectionName, state.collectionSymbol, state.hasDecimals, metadataLink, extensionAddress || window.voidEthereumAddress, context.view.extensionAddressPayload && context.view.extensionAddressPayload.value || "0x"];
