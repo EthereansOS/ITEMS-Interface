@@ -34,7 +34,7 @@ var Index = React.createClass({
         section = section[section.length - 1].firstLetterToUpperCase();
         ReactModuleLoader.load({
             modules: [module],
-            callback: () => _this.setState({ section, props })
+            callback: () => _this.setState({ section, props }, () => _this.toggleWallet(false))
         });
     },
     render() {
