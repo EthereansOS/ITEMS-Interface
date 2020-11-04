@@ -251,7 +251,10 @@ var ReactModuleManager = function() {
                 viewName = elementName
             }
         } else if (window.loadedModules[viewName] !== undefined) {
-            element = window.loadedModules[viewName]
+            element = window.loadedModules[viewName];
+            if(callerArguments.length > 1) {
+                element.props = callerArguments[1];
+            }
         } else {
             callerArguments[0] = window[viewName];
             element = React.createElement2.apply(React, callerArguments)
