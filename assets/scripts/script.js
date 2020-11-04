@@ -11,13 +11,31 @@ window.base64Regex = new RegExp("data:([\\S]+)\\/([\\S]+);base64", "gs");
 window.Main = async function Main() {
     await window.loadContext();
     await window.onEthereumUpdate(0);
+    window.tryLoadSection();
 };
 
 window.connectFromHomepage = async function connectFromHomepage(button) {
-    //button && (button.innerHTML = '<spa class="loaderMinimino"></span>');
-    //button && (button.className = '');
     button && button.dataset.section && window.setHomepageLink(`?section=spa/${button.dataset.section}`);
     window.choosePage();
+};
+
+window.tryLoadSection = function tryLoadSection() {
+    window.getPage();
+    var section = window.consumeAddressBarParam("section");
+    if(section) {
+        return window.connectFromHomepage({
+            dataset : {
+                section
+            }
+        });
+    }
+    if(window.addressBarParams.collection) {
+        return window.connectFromHomepage({
+            dataset : {
+                section : 'explore'
+            }
+        });
+    }
 };
 
 window.newContract = function newContract(abi, address) {
@@ -197,8 +215,6 @@ window.loadContext = async function loadContext() {
 };
 
 window.deepCopy = function deepCopy(data, extension) {
-    //data = data ? JSON.parse(JSON.stringify(data)) : {};
-    //extension = extension ? JSON.parse(JSON.stringify(extension)) : {};
     data = data || {};
     extension = extension || {};
     var keys = Object.keys(extension);
@@ -1582,7 +1598,7 @@ window.eliminateFloatingFinalZeroes = function eliminateFloatingFinalZeroes(valu
 window.getPage = function getPage() {
     var location;
     try {
-        var search = {};
+        var search = window.addressBarParams || {};
         var splits = window.location.search.split('?');
         for (var z in splits) {
             var split = splits[z].trim();
@@ -2512,7 +2528,20 @@ window.refreshSingleCollection = async function refreshSingleCollection(collecti
     }
     window.loadCollectionENS(collection);
     collection.loaded = true;
+    window.checkAddressBarCollection(collection);
     return collection;
+};
+
+window.checkAddressBarCollection = function checkAddressBarCollection(collection) {
+    if(!window.addressBarParams.collection) {
+        return;
+    }
+    var addr = window.web3.utils.toChecksumAddress(window.addressBarParams.collection);
+    if(addr !== collection.address) {
+        return;
+    }
+    window.consumeAddressBarParam("collection");
+    $.publish('section/change', ['spa/collection', {collection}]);
 };
 
 window.convertTextWithLinksInHTML = function convertTextWithLinksInHTML(text) {

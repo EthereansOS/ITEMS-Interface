@@ -118,7 +118,7 @@ var CreateItemWizard = React.createClass({
         return (<section className="createITEM">
             <section className="FormCreateThing">
                 <h2>Collection:</h2>
-                <input ref={ref => (this.tokenAddressInput = ref) && (ref.value = (state.selectedToken && state.selectedToken.address) || "")} className="addressWrapSelector" type="text" placeholder="Token address" data-action="onTokenAddressChange" onKeyPress={this.onChange} onChange={this.onChange} />
+                <input ref={ref => (this.tokenAddressInput = ref) && (ref.value = (state.selectedToken && state.selectedToken.address) || "")} className="addressWrapSelector" type="text" placeholder="Token address" data-action="onTokenAddressChange" onKeyUp={this.onChange} onChange={this.onChange} />
             </section>
             {state.selectedToken && <section>
                 <span>Name: {state.selectedToken.name}</span>

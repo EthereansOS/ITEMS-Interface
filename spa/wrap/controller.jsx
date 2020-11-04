@@ -118,7 +118,7 @@ var WrapController = function (view) {
         if(parseInt(value) > parseInt(selectedToken.balanceOf)) {
             throw "You have insufficient amount to wrap";
         }
-        await window.blockchainCall(window.currentEthItemERC20Wrapper.methods.mint, selectedToken.address, value);
+        await window.blockchainCall(window.currentEthItemERC20Wrapper.methods['mint(address,uint256)'], selectedToken.address, value);
     };
 
     context.performItemizeERC1155 = async function performItemizeERC1155(selectedToken) {
