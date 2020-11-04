@@ -39,7 +39,7 @@ var CollectionSingleItem = React.createClass({
                 </figure>
             </a>
             {item && <article className="ItemInfo">
-                <h3 className="ItemTitle" style={{color}}>{item.name}</h3>
+                <h3 className="ItemTitle">{item.name}</h3>
                 {item.dynamicData && <a target="_blank" href={window.context.uniswapSpawUrlTemplate.format(item.address)} className="ItemPrice">&#129412; $ {item.dynamicData.tokenPriceInDollarsOnUniswap ? window.formatMoney(item.dynamicData.tokenPriceInDollarsOnUniswap, 1) : "--"}</a>}
                 {item.dynamicData && <a target="_blank" href={window.context.openSeaItemLinkTemplate.format(this.props.collection.address, item.objectId)} className="ItemPrice">&#9973; $ {item.dynamicData.tokenPriceInDollarsOnOpenSea ? window.formatMoney(item.dynamicData.tokenPriceInDollarsOnOpenSea, 1) : "--"}</a>}
                 {item.dynamicData && item.dynamicData.totalSupply && <span className="ItemSupply">Supply: <b>{window.fromDecimals(item.dynamicData.totalSupply, item.decimals)}</b></span>}
