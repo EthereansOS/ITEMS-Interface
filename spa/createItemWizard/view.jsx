@@ -154,7 +154,7 @@ var CreateItemWizard = React.createClass({
                 </section>
                 <section className="FormCreateThing">
                     <p>Supply</p>
-                    <input type="text" ref={ref => (this.itemSupply = ref) && (ref.value = this.state.itemSupply || "")} />
+                    <input type="text" placeholder="0.00" spellcheck="false" autocomplete="off" autocorrect="off" inputmode="decimal" pattern="^[0-9][.,]?[0-9]$" ref={ref => (this.itemSupply = ref) && (ref.value = this.state.itemSupply || "")} />
                 </section>
                 <section className="FormCreateThing">
                     <label>

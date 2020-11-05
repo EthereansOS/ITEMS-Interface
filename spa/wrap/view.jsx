@@ -82,7 +82,7 @@ var Wrap = React.createClass({
                         {state.selectedToken && selectedTokenType !== 'ERC721' && state.selectedToken && state.selectedToken.balanceOfPlain && <span className="tokenSelectedToWrapBalance">balance: {state.selectedToken.balanceOfPlain}</span>}
                         {state.selectedToken && selectedTokenType !== 'ERC721' && <section className="tokenSelectedToWrapDecide">
                             <a className="tokenSelectedToWrapBalanceALL" onClick={this.max}>MAX</a>
-                            <input ref={ref => this.tokenAmountInput = ref} className="BalancetoWrapSelector" placeholder="Ammount" type="text" data-action="onTokenAmountChange" onKeyUp={this.onChange} onChange={this.onChange} />
+                            <input ref={ref => this.tokenAmountInput = ref} className="BalancetoWrapSelector" placeholder="Ammount" type="text" placeholder="0.00" spellcheck="false" autocomplete="off" autocorrect="off" inputmode="decimal" pattern="^[0-9][.,]?[0-9]$" data-action="onTokenAmountChange" onKeyUp={this.onChange} onChange={this.onChange} />
                         </section>}
                         {selectedTokenType === 'ERC20' && state.performing !== 'approve' && <a className={"BeforeToWrapToITEM" + (!state.selectedToken || state.selectedToken.approved ? " disabled" : "")} data-action="approve" onClick={window.perform} href="javascript:;">Approve</a>}
                         {selectedTokenType === 'ERC20' && state.performing === 'approve' && <InnerLoader/>}
