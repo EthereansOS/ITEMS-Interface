@@ -123,6 +123,11 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .itemSide {width: 100%; text-align: left;}
 .itemSide .ItemPrice {text-decoration: none; margin: 5px 1% 10px 0px; display: inline-block; color: #ffffff; font-size: 11px; font-weight: bold; background-color: #a4d1f8; text-align: center; padding: 3px 7px; border-radius: 8px;}
 
+.SettingsForOwn {width: 100%; text-align: left;}
+.SettingsForOwn input {width: 30%; background-color: #fafdff; border: 2px solid #a4d1f8; border-radius: 6px; height: 30px; color: #a4d1f8;}
+.SettingsForOwn a {padding: 6px 8px; font-weight: bold; background-color: #a4d1f8; display: inline-block; margin: 10px 0 0 5px; border-radius: 6px; font-size: 13px; color: #ffffff; text-decoration: none;}
+.SettingsForOwn .MaximumBro {font-size: 9px; font-weight: bolder;padding: 3px 5px; margin: 10px 5px 0 0;}
+
 .collectionNav {width: 100%; background-color: #f1f8ff; height: 30px;text-align: center; border-bottom: 2px solid #a4d1f8;}
 .collectionNav ul {width: 900px; text-align: center;height: 30px; display: inline-block;}
 .collectionNav ul li {width: 150px; display: inline-block; background-color: transparent;text-align: center;height: 30px;}

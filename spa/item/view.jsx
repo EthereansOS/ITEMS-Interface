@@ -113,31 +113,29 @@ var Item = React.createClass({
                                 <section className="itemFundamentalsThing">
                                     <span className="ItemSupply">Supply: {window.fromDecimals(item.dynamicData.totalSupply, item.decimals)} </span>
                                     {window.walletAddress && item.dynamicData && item.dynamicData.balanceOf && item.dynamicData.balanceOf !== '0' && <span className="ItemBalance">| You own: {window.fromDecimals(item.dynamicData.balanceOf, item.decimals)}</span>}
+                                    <section className="itemSide">
+                                        <a className="ItemPrice" target="_blank" href={window.context.uniswapSpawUrlTemplate.format(item.address)}>&#129412; $ {item.dynamicData.tokenPriceInDollarsOnUniswap ? window.formatMoney(item.dynamicData.tokenPriceInDollarsOnUniswap, 1) : "--"}</a>
+                                        <a className="ItemPrice" target="_blank" href={window.context.uniswapInfoUrlTemplate.format(item.address)}>&#128039; Info</a>
+                                        <a className="ItemPrice" target="_blank" href={window.context.openSeaItemLinkTemplate.format(this.props.collection.address, item.objectId)}>&#9973; $ {item.dynamicData.tokenPriceInDollarsOnOpenSea ? window.formatMoney(item.dynamicData.tokenPriceInDollarsOnOpenSea, 1) : "--"}</a>
+                                        {/*this.props.item.dynamicData && this.props.item.dynamicData.canMint && */<section className="SettingsForOwn">
+                                            <label>
+                                                <input type="text" placeholder="0.00" spellcheck="false" autocomplete="off" autocorrect="off" inputmode="decimal" pattern="^[0-9][.,]?[0-9]$" ref={ref => this.mintMoreInput = ref} type="text"/>
+                                            </label>
+                                            {(!this.state || this.state.performing !== 'mint') && <a className={"" + (this.state && this.state.performing ? ' disabled' : '')} href="javascript:;" data-action="mint" onClick={window.perform}>Mint</a>}
+                                            {this.state && this.state.performing === 'mint' && <InnerLoader/>}
+                                        </section>}
+                                        {/*this.props.item.dynamicData && this.props.item.dynamicData.canMint && */<section className="SettingsForOwn">
+                                            <label>
+                                                <a className="MaximumBro" href="javascript:;" onClick={this.max}>Max</a>
+                                                <input type="text" placeholder="0.00" spellcheck="false" autocomplete="off" autocorrect="off" inputmode="decimal" pattern="^[0-9][.,]?[0-9]$" ref={ref => this.unwrapInput = ref} type="text"/>
+                                            </label>
+                                            {(!this.state || this.state.performing !== "unwrap") && <a className={"" + (this.state && this.state.performing ? ' disabled' : '')} href="javascript:;" data-action="unwrap" onClick={window.perform}>Unwrap</a>}
+                                            {this.state && this.state.performing === 'unwrap' && <InnerLoader/>}
+                                        </section>}
+                                    </section>
                                 </section>
                             </section>
                             {window.renderExpandibleElement(!item.description ? "No description available" : window.convertTextWithLinksInHTML(item.description), <p className="itemDesc"/>)}
-                            <section className="itemSide">
-                                <a className="ItemPrice" target="_blank" href={window.context.uniswapSpawUrlTemplate.format(item.address)}>&#129412; $ {item.dynamicData.tokenPriceInDollarsOnUniswap ? window.formatMoney(item.dynamicData.tokenPriceInDollarsOnUniswap, 1) : "--"}</a>
-                                <a className="ItemPrice" target="_blank" href={window.context.uniswapInfoUrlTemplate.format(item.address)}>&#128039; Info</a>
-                                <a className="ItemPrice" target="_blank" href={window.context.openSeaItemLinkTemplate.format(this.props.collection.address, item.objectId)}>&#9973; $ {item.dynamicData.tokenPriceInDollarsOnOpenSea ? window.formatMoney(item.dynamicData.tokenPriceInDollarsOnOpenSea, 1) : "--"}</a>
-                            </section>
-                            {/*this.props.item.dynamicData && this.props.item.dynamicData.canMint && */<section>
-                                <label>
-                                    Mint more
-                                    <input ref={ref => this.mintMoreInput = ref} type="text"/>
-                                </label>
-                                {(!this.state || this.state.performing !== 'mint') && <a className={"" + (this.state && this.state.performing ? ' disabled' : '')} href="javascript:;" data-action="mint" onClick={window.perform}>Mint</a>}
-                                {this.state && this.state.performing === 'mint' && <InnerLoader/>}
-                            </section>}
-                            {/*this.props.item.dynamicData && this.props.item.dynamicData.canMint && */<section>
-                                <label>
-                                    Unwrap
-                                    <a href="javascript:;" onClick={this.max}>Max</a>
-                                    <input ref={ref => this.unwrapInput = ref} type="text"/>
-                                </label>
-                                {(!this.state || this.state.performing !== "unwrap") && <a className={"" + (this.state && this.state.performing ? ' disabled' : '')} href="javascript:;" data-action="unwrap" onClick={window.perform}>Unwrap</a>}
-                                {this.state && this.state.performing === 'unwrap' && <InnerLoader/>}
-                            </section>}
                         </article>
                     </section>
                     <section className="collectionNav">
