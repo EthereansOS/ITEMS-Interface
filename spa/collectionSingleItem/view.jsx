@@ -34,7 +34,7 @@ var CollectionSingleItem = React.createClass({
         var color = item && item.background_color;
         return (<section className="collectionPageItem">
             <a href={this.props.readOnly ? undefined : "javascript:;"} onClick={this.props.readOnly ? undefined : this.onClick}>
-                <figure className="ItemIcon" style={{"background-color" : color}}>
+                <figure className="ItemIcon">
                     {item && <LazyImageLoader src={this.state && item.image}/>}
                 </figure>
             </a>

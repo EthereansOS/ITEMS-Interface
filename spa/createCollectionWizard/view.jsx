@@ -107,35 +107,35 @@ var CreateCollectionWizard = React.createClass({
     renderMetadata() {
         var state = this.getState();
         return (<section className="MetaDataThings" ref={ref => window.setData(this.metadataPage = ref, state.metadata)}>
-            <section>
+            <section className="MetaImputThings">
                 <label className="createWhat">
                     <p>Description<b>*</b></p>
                     <textarea id="description" data-mandatory="true" />
                 </label>
                 <span className="ExplBoom">The description of this new awesome collection</span>
             </section>
-            <section>
+            <section className="MetaImputThings">
                 <label className="createWhat">
                     <p>Discussion link</p>
                     <input id="discussionUri" type="text" />
                 </label>
                 <span className="ExplBoom">A link to a forum, chat o community where people can interact about this project</span>
             </section>
-            <section>
+            <section className="MetaImputThings">
                 <label className="createWhat">
                     <p>DNS link</p>
                     <input id="externalDNS" type="text" />
                 </label>
                 <span className="ExplBoom">A link to the official website of this project</span>
             </section>
-            <section>
+            <section className="MetaImputThings">
                 <label className="createWhat">
                     <p>ENS link</p>
                     <input id="externalENS" type="text" />
                 </label>
                 <span className="ExplBoom">An ENS link to the official website of this project</span>
             </section>
-            <section>
+            <section className="MetaImputThings">
                 <label className="createWhat">
                     <p>Repo link</p>
                     <input id="repoUri" type="text" />
@@ -143,21 +143,21 @@ var CreateCollectionWizard = React.createClass({
                 <span className="ExplBoom">A link to the official repo of this project</span>
             </section>
             <section className="spacialImputs">
-                <section>
+                <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Cover Regular<b>*</b></p>
                         <input id="image" data-mandatory="true" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
                     </label>
                     <span className="ExplBoom">The cover img must be .png or .gif and at least 5mb lenght with a max with of 350px, due to users experience in IPFS download speed limitations</span>
                 </section>
-                <section>
+                <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Cover High Quality</p>
                         <input id="image_data" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
                     </label>
-                    <span className="ExplBoom">No limitation for the HQ version on the image</span>
+                    <span className="ExplBoom">No limitations for the HQ version of the image</span>
                 </section>
-                <section>
+                <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Background Color<b>*</b></p>
                         <input id="background_color" data-mandatory="true" type="color" />

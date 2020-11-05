@@ -74,42 +74,53 @@ var CreateItemWizard = React.createClass({
     },
     renderMetadata() {
         var state = this.getState();
-        return (<section ref={ref => window.setData(this.metadataPage = ref, state.metadata)}>
-            <section>
-                <label>
-                    <span>Image (mandatory)</span>
-                    <input id="image" data-mandatory="true" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
-                </label>
-            </section>
-            <section>
-                <label>
-                    <span>HD Image</span>
-                    <input id="image_data" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
-                </label>
-            </section>
-            <section>
-                <label>
-                    <span>Description (mandatory)</span>
+        return (<section className="MetaDataThings" ref={ref => window.setData(this.metadataPage = ref, state.metadata)}>
+            <section className="MetaImputThings">
+                <label className="createWhat">
+                    <p>Description<b>*</b></p>
                     <textarea id="description" data-mandatory="true" />
                 </label>
+                <span className="ExplBoom">The description of this new awesome collection</span>
             </section>
-            <section>
-                <label>
-                    <span>Background Color (mandatory)</span>
-                    <input id="background_color" data-mandatory="true" type="color" />
-                </label>
-            </section>
-            <section>
-                <label>File</label>
-                <input id="file" type="file"/>
-            </section>
-            <section>
-                <label>Folder</label>
-                <input id="folder" type="file" webkitdirectory mozdirectory/>
-            </section>
-            <section>
-                <label>Animation file</label>
-                <input id="animation_url" type="file" accept=".gif,.mp4"/>
+            <section className="spacialImputs">
+                <section className="MetaImputThings">
+                    <label className="createWhat">
+                        <p>ITEM Img Regular<b>*</b></p>
+                        <input id="image" data-mandatory="true" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
+                    </label>
+                    <span className="ExplBoom">The cover img must be .png or .gif and at least 5mb lenght with a max with of 350px, due to users experience in IPFS download speed limitations</span>
+                </section>
+                <section className="MetaImputThings">
+                    <label className="createWhat">
+                        <p>ITEM Img HD</p>
+                        <input id="image_data" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
+                    </label>
+                    <span className="ExplBoom">No limitations for the HQ version of the image</span>
+                </section>
+                <section className="MetaImputThings">
+                    <label className="createWhat">
+                        <p>Background Color<b>*</b></p>
+                        <input id="background_color" data-mandatory="true" type="color" />
+                    </label>
+                    <span className="ExplBoom">The background color used in most of the dapps behind your cover if not fixed with their standard image sizes</span>
+                </section>
+                <section className="MetaImputThings">
+                    <section className="createWhat">
+                        <select>
+                            <option>File</option>
+                            <option>Folder</option>
+                        </select>
+                        <input id="file" type="file"/>
+                    </section>
+                </section>
+                <span className="ExplBoom">The file or folder of the ITEM (if Any).</span>
+                <section className="MetaImputThings">
+                    <label className="createWhat">
+                        <p>Licence File</p>
+                        <input id="licence_url" type="file" accept=".gif,.mp4"/>
+                    </label>
+                    <span className="ExplBoom">A file that represent the legal licence of the file (if Any).</span>
+                </section>
             </section>
         </section>);
     },
@@ -120,9 +131,8 @@ var CreateItemWizard = React.createClass({
                 <h2>Collection:</h2>
                 <input ref={ref => (this.tokenAddressInput = ref) && (ref.value = (state.selectedToken && state.selectedToken.address) || "")} className="addressWrapSelector" type="text" placeholder="Token address" data-action="onTokenAddressChange" onKeyUp={this.onChange} onChange={this.onChange} />
             </section>
-            {state.selectedToken && <section>
-                <span>Name: {state.selectedToken.name}</span>
-                <span>Symbol: {state.selectedToken.symbol}</span>
+            {state.selectedToken && <section className="CollectionLoaded">
+                <p>{state.selectedToken.name} <span> ({state.selectedToken.symbol})</span></p>
                 {!state.selectedToken.canMint && <span>This Collection cannot be extended any more</span>}
             </section>}
             <section className="FormCreateThing">
@@ -163,7 +173,6 @@ var CreateItemWizard = React.createClass({
         var state = this.getState();
         var metadataType = state.metadataType;
         return (<section className="createITEM">
-            <h2>Now it's time to add some info</h2>
             <section className="FormCreate">
                 <h2>Metadata</h2>
                 <select className="" onChange={this.onMetadataType}>
@@ -175,10 +184,10 @@ var CreateItemWizard = React.createClass({
                 {metadataType === 'custom' && <section className="FormCreateThing">
                     <p>Metadata Link</p>
                     <input type="text" ref={ref => (this.metadataLinkInput = ref) && (this.state && this.state.metadataLink && (ref.value = (this.state && this.state.metadataLink)))} />
-                    <span>The metadata file is a Json standard file containing all of the info and links to the file of the ITEM. <a>here</a> You can find a step by step guide to build your json file correctly.</span>
+                    <span className="ExplBoom">The metadata file is a Json standard file containing all of the info and links to the file of the ITEM. <a>here</a> You can find a step by step guide to build your json file correctly.</span>
                 </section>}
                 <section className="FormCreateThing">
-                    <a className={"SuperActionBTN" + (this.state && this.state.performing) ? " disabled" : ""} href="javascript:;" onClick={this.back}>BACK</a>
+                    <a className={"SuperActionBTN" + (this.state && this.state.performing ? " disabled" : "")} href="javascript:;" onClick={this.back}>BACK</a>
                     {(!this.state || this.state.performing !== 'deploy') && <a href="javascript:;" data-action="deploy" className="SuperActionBTN" onClick={window.perform}>DEPLOY</a>}
                     {this.state && this.state.performing === 'deploy' && <InnerLoader />}
                     {this.state && this.state.loadingMessage && <span>{this.state.loadingMessage}</span>}

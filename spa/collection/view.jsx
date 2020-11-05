@@ -36,7 +36,7 @@ var Collection = React.createClass({
                     </ul>
                 </section>
                 {this.state && this.state.toggle === 'items' && <section className="collectionPageItems">
-                    {/*this.props.collection.isOwner && */<a className="awesomeBTN" href="javascript:;" onClick={this.createMoreItems}>Add New</a>}
+                    {/*this.props.collection.isOwner && */<a className="Enter" href="javascript:;" onClick={this.createMoreItems}>Add New</a>}
                     <section className="collectionPageItemsOrder">
                         {!this.state.collectionObjectIds && <Loader/>}
                         {this.state.collectionObjectIds && this.state.collectionObjectIds.map(it => <CollectionSingleItem key={it} objectId={it} collection={this.props.collection}/>)}
