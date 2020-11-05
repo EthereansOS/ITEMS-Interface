@@ -16,10 +16,10 @@ function Boot() {
     }
     ReactModuleLoader.load({
         modules: ['spa/' + pathName],
-        scripts : ['spa/loader.jsx'],
+        scripts : ['spa/fullLoader.jsx'],
         callback : function() {
             React.globalLoader = function() {
-                return React.createElement(Loader);
+                return React.createElement(FullLoader);
             };
             ReactDOM.render(React.createElement(window[pathName.firstLetterToUpperCase()], props), document.body, callback);
         }

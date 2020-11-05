@@ -237,6 +237,11 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .yeahPage {text-align: center;}
 .AllDoneBro {display: inline-block; margin: 50px auto; width: 600px;}
 
+.LoaderFull {width: 100%; height: 100%; position: fixed; top: 0; left: 0; overflow: hidden; text-align: center;}
+.LoaderFull .LoadImg {width: 500px; height:500px;margin-top: 25%; display: inline-block;}
+.LoaderFull .LoadImg img {display: inline-block; width: 100%;}
+
+
 @media only screen and (max-device-width: 750px) {
    .Intro .Title, .Explainer, .ExplainerL, .ExplainerS, footer section {width: 90% !important; text-align: center;}
    .Intro .Title img {width: 90%; height: auto;}

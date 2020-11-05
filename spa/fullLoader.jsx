@@ -1,5 +1,10 @@
 var FullLoader = React.createClass({
     render() {
-        return(<span><br/><br/><br/><br/><br/><br/><br/><br/><br/>BIG GIANT LOADER WIDDA A HUUUUGE BUNCH OF BREAKLINES BECAUSE THE ABOVE MENU BAR COVERS EVERYTHIIIIIIIIIIIIIIIIINGGGGGGGGGGGGG</span>);
+        return(
+        <section className="LoaderFull">
+            <figure className="LoadImg">
+                <img img src="assets/img/loadMonolith.png"></img>
+            </figure>
+        </section>);
     }
 });

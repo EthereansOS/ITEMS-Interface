@@ -2574,7 +2574,7 @@ window.convertTextWithLinksInHTML = function convertTextWithLinksInHTML(text) {
 window.renderExpandibleElement = function renderExpandibleElement(text, p, length) {
     p = p || React.createElement("p");
     p.props = p.props || {};
-    var shortText = window.shortenWord(text, length || 500);
+    var shortText = window.shortenWord(text, length || 800);
     var container;
     var span = React.createElement("span", {
         ref: ref => container = ref
