@@ -23,8 +23,7 @@
     "ethItemFactoryEvents" : {
         "NewERC1155Created(address,uint256,address,address)" : "IERC1155ABI",
         "NewWrappedERC1155Created(address,uint256,address,address)" : "IERC1155WrapperABI",
-        "NewWrappedERC721Created(address,uint256,address,address)" : "IERC721WrapperABI",
-        "NewWrappedERC20Created(address,uint256,address,address)" : "IERC20WrapperABI"
+        "NewWrappedERC721Created(address,uint256,address,address)" : "IERC721WrapperABI"
     },
     "supportedWrappedTokens" : [
         "ERC20",

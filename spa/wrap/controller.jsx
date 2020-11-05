@@ -49,7 +49,7 @@ var WrapController = function (view) {
             await context.refreshBalanceOfERC20(selectedToken);
         } else {
             try {
-                selectedToken.balanceOf = await window.blockchainCall(selectedToken.contract.methods.balanceOf, selectedToken.tokenId, window.walletAddress);
+                selectedToken.balanceOf = await window.blockchainCall(selectedToken.contract.methods.balanceOf, window.walletAddress, selectedToken.tokenId);
             } catch(e) {
             }
         }

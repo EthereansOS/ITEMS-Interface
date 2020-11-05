@@ -117,14 +117,14 @@ var Item = React.createClass({
                                         <a className="ItemPrice" target="_blank" href={window.context.uniswapSpawUrlTemplate.format(item.address)}>&#129412; $ {item.dynamicData.tokenPriceInDollarsOnUniswap ? window.formatMoney(item.dynamicData.tokenPriceInDollarsOnUniswap, 1) : "--"}</a>
                                         <a className="ItemPrice" target="_blank" href={window.context.uniswapInfoUrlTemplate.format(item.address)}>&#128039; Info</a>
                                         <a className="ItemPrice" target="_blank" href={window.context.openSeaItemLinkTemplate.format(this.props.collection.address, item.objectId)}>&#9973; $ {item.dynamicData.tokenPriceInDollarsOnOpenSea ? window.formatMoney(item.dynamicData.tokenPriceInDollarsOnOpenSea, 1) : "--"}</a>
-                                        {/*this.props.item.dynamicData && this.props.item.dynamicData.canMint && */<section className="SettingsForOwn">
+                                        {this.props.item.dynamicData && this.props.item.dynamicData.canMint && <section className="SettingsForOwn">
                                             <label>
                                                 <input type="text" placeholder="0.00" spellcheck="false" autocomplete="off" autocorrect="off" inputmode="decimal" pattern="^[0-9][.,]?[0-9]$" ref={ref => this.mintMoreInput = ref}/>
                                             </label>
                                             {(!this.state || this.state.performing !== 'mint') && <a className={"" + (this.state && this.state.performing ? ' disabled' : '')} href="javascript:;" data-action="mint" onClick={window.perform}>Mint</a>}
                                             {this.state && this.state.performing === 'mint' && <InnerLoader/>}
                                         </section>}
-                                        {/*this.props.item.dynamicData && this.props.item.dynamicData.canMint && */<section className="SettingsForOwn">
+                                        {this.props.item.collection.category !== 'ERC1155' && this.props.item.dynamicData && parseFloat(this.props.item.dynamicData.balanceOfCollectionSidePlain) > 0 && <section className="SettingsForOwn">
                                             <label>
                                                 <a className="MaximumBro" href="javascript:;" onClick={this.max}>Max</a>
                                                 <input type="text" placeholder="0.00" spellcheck="false" autocomplete="off" autocorrect="off" inputmode="decimal" pattern="^[0-9][.,]?[0-9]$" ref={ref => this.unwrapInput = ref}/>
