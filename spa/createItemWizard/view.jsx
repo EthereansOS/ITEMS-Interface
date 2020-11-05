@@ -117,9 +117,9 @@ var CreateItemWizard = React.createClass({
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Licence File</p>
-                        <input id="licence_url" type="file" accept=".gif,.mp4"/>
+                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt"/>
                     </label>
-                    <span className="ExplBoom">A file that represent the legal licence of the file (if Any).</span>
+                    <span className="ExplBoom">A file that represent the legal licence of the file (if Any). Accepted file: .pdf, .html, .md, .txt</span>
                 </section>
             </section>
         </section>);

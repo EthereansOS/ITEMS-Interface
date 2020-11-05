@@ -164,6 +164,13 @@ var CreateCollectionWizard = React.createClass({
                     </label>
                     <span className="ExplBoom">The background color used in most of the dapps behind your cover if not fixed with their standard image sizes</span>
                 </section>
+                <section className="MetaImputThings">
+                    <label className="createWhat">
+                        <p>Licence File</p>
+                        <input id="licence_url" type="file" accept=".pdf,.html,.md,.txt"/>
+                    </label>
+                    <span className="ExplBoom">A file that represent the legal licence of all of ITEMs in the collection (if Any). Accepted file: .pdf, .html, .md, .txt</span>
+                </section>
             </section>
         </section>);
     },
