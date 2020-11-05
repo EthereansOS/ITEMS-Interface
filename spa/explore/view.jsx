@@ -5,36 +5,33 @@ var Explore = React.createClass({
         }
     },
     requiredScripts: [
-        'spa/loader.jsx'
+        'spa/loader.jsx',
+        'spa/innerLoader.jsx',
+        "spa/lazyImageLoader.jsx"
     ],
     requiredModules: [
         'spa/singleCollection'
     ],
     onClick(e) {
         window.preventItem(e);
-        var collection = this.state && this.state.searchedCollection;
-        var index = e.currentTarget.dataset.index;
-        if(index !== undefined && index !== null) {
-            collection = this.props.collections[parseInt(index)];
+        var key = e.currentTarget.dataset.key;
+        var collection;
+        if(key !== undefined && key !== null) {
+            collection = this.props.collections.filter(it => it.key === key)[0];
         }
         this.emit('section/change', 'spa/collection', { collection });
     },
     render() {
         var _this = this;
+        var state = window.getState(this);
         return (<section className="Pager">
-            {(!this.state || !this.state.searchedCollection) && this.props.loadingCollections && <Loader />}
-            {(!this.state || !this.state.searchedCollection) && this.props.collections && <section className="collections">
+            {!state.searchedCollection && state.loadingCollections && <Loader />}
+            <section className="collections">
                 <section className="collectionsList">
-                    {this.props.collections.map(it => <SingleCollection collection={it} key={it.key} index={it.index} onClick={_this.onClick}/>)}
+                    {state.searchedCollection && <SingleCollection collection={state.searchedCollection} collectionKey={state.searchedCollection.key} onClick={_this.onClick} miniature/>}
+                    {!state.searchedCollection && state.collections && state.collections.map(it => <SingleCollection collection={it} collectionKey={it.key} key={it.key} onClick={_this.onClick} miniature/>)}
                 </section>
-            </section>}
-            {this.state && this.state.searchedCollection && <section className="collections">
-                <section className="collectionsList">
-                    <a href="javascript:;" onClick={_this.onClick}>
-                        <SingleCollection collection={this.state.searchedCollection} />
-                    </a>
-                </section>
-            </section>}
+            </section>
         </section>);
     }
 });

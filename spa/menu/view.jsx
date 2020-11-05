@@ -1,4 +1,12 @@
 var Menu = React.createClass({
+    getDefaultSubscriptions() {
+        return {
+            'section/change' : this.onSection
+        }
+    },
+    onSection(section) {
+        this.setState({selected : this.state.menu.indexOf(this.state.menu.filter(it => it.module === section)[0])});
+    },
     componentDidMount() {
         this.controller.loadData();
     },

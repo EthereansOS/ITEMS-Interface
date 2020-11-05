@@ -4,7 +4,8 @@ var Index = React.createClass({
         'spa/wallet'
     ],
     requiredScripts: [
-        'spa/connect.jsx'
+        'spa/connect.jsx',
+        "spa/fullLoader.jsx"
     ],
     getDefaultSubscriptions() {
         return {
@@ -50,7 +51,8 @@ var Index = React.createClass({
             <section>
                 <Menu onSelection={this.sectionChange} />
             </section>
-            {props.section && <section>
+            {props.loadingCollections && <FullLoader/>}
+            {props.section && !props.loadingCollections && <section>
                 {React.createElement(window[props.section], props)}
             </section>}
             {React.createElement(Wallet, props)}

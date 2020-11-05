@@ -2241,10 +2241,17 @@ window.loadItemData = async function loadItemData(item, collection, view) {
     item.token = item.token || window.newContract(window.context.IERC20ABI, item.address);
     item.name = item.name || await window.blockchainCall(item.contract.methods.name, item.objectId);
     item.symbol = item.symbol || await window.blockchainCall(item.contract.methods.symbol, item.objectId);
-    window.tryRetrieveMetadata(item).then(() => view.setState({ item }));
+    var metadataPromise = window.tryRetrieveMetadata(item);
+    if(view) {
+        metadataPromise.then(() => view.setState({ item }));
+    } else {
+        await metadataPromise;
+    }
     item.decimals = item.decimals || await window.blockchainCall(item.token.methods.decimals);
+    item.collectionDecimals = item.collectionDecimals || await window.blockchainCall(item.collection.contract.methods.decimals, item.objectId);
     view && view.setState({ item }, () => window.updateItemDynamicData(item, view));
     !view && await window.updateItemDynamicData(item);
+    return item;
 };
 
 window.updateItemDynamicData = async function updateItemDynamicData(item, view) {
@@ -2258,10 +2265,10 @@ window.updateItemDynamicData = async function updateItemDynamicData(item, view) 
     window.walletAddress && (item.dynamicData.balanceOf = await window.blockchainCall(item.token.methods.balanceOf, window.walletAddress));
     window.walletAddress && (item.dynamicData.balanceOfCollectionSide = await window.blockchainCall(item.collection.contract.methods.balanceOf, window.walletAddress, item.objectId));
     try {
-        item.dynamicData.balanceOfPlain = window.formatMoney(window.fromDecimals(item.dynamicData.balanceOf, item.decimals), 4);
+        item.dynamicData.balanceOfPlain = window.fromDecimals(item.dynamicData.balanceOf, item.decimals, true);
     } catch (e) {}
     try {
-        item.dynamicData.balanceOfCollectionSidePlain = window.formatMoney(item.collection.decimals ? window.fromDecimals(item.dynamicData.balanceOfCollectionSide, item.collection.decimals) : item.dynamicData.balanceOfCollectionSide, 4);
+        item.dynamicData.balanceOfCollectionSidePlain = item.collectionDecimals ? window.fromDecimals(item.dynamicData.balanceOfCollectionSide, item.collectionDecimals, true) : item.dynamicData.balanceOfCollectionSide;
     } catch (e) {}
     try {
         item.collection.hasBalance = item.collection.hasBalance || parseInt(item.dynamicData.balanceOf) > 0;
@@ -2492,40 +2499,48 @@ window.onTextChange = function onTextChange(e) {
 };
 
 window.loadSingleCollection = async function loadSingleCollection(address) {
+    address = window.web3.utils.toChecksumAddress(address);
+    try {
+        var erc20Wrappers = (await window.blockchainCall(window.currentEthItemKnowledgeBase.methods.erc20Wrappers)).map(it => window.web3.utils.toChecksumAddress(it));
+        if(erc20Wrappers.indexOf(address) !== -1) {
+            return await window.refreshSingleCollection(window.packCollection(address, "IERC20WrapperABI"));
+        }
+    } catch(e) {
+    }
+    var map = {};
     Object.entries(window.context.ethItemFactoryEvents).forEach(it => map[window.web3.utils.sha3(it[0])] = it[1]);
     var topics = [
         Object.keys(map), [],
         [],
         window.web3.eth.abi.encodeParameter('address', address)
     ];
-    var address = await window.blockchainCall(window.ethItemOrchestrator.methods.factories);
+    var addresses = await window.blockchainCall(window.ethItemOrchestrator.methods.factories);
     var logs = await window.getLogs({
-        address,
+        addresses,
         topics
     }, true);
     for (var log of logs) {
-        var abi = window.context[map[log.topics[0]]];
-        var category = map[log.topics[0]];
-        category = category.substring(1, category.length - 3);
-        var contract = window.newContract(abi, address);
-        var collection = {
-            key: log.blockNumber + "_" + address,
-            index: collections.length + subCollections.length,
-            address,
-            category,
-            contract
-        }
-        return await window.refreshSingleCollection(collection);
+        return await window.refreshSingleCollection(window.packCollection(address, map[log.topics[0]]));
+    }
+};
+
+window.packCollection = function packCollection(address, category, oldCollections) {
+    var abi = window.context[category];
+    var contract = window.newContract(abi, address);
+    var key = address;
+    var collection = oldCollections && oldCollections.filter(it => it.key === key);
+    category = category.substring(1, category.length - 3);
+    return collection = collection && collection.length > 0 ? collection[0] : {
+        key,
+        address,
+        category,
+        contract
     }
 };
 
 window.refreshSingleCollection = async function refreshSingleCollection(collection, view) {
     collection.name = collection.name || await window.blockchainCall(collection.contract.methods.name);
     collection.symbol = collection.symbol || await window.blockchainCall(collection.contract.methods.symbol);
-    try {
-        collection.decimals = collection.decimals || await window.blockchainCall(collection.contract.methods.decimals);
-    } catch(e) {
-    }
     await window.tryRetrieveMetadata(collection, collection.category).then(() => view && view.forceUpdate());
     collection.openSeaName = collection.name.toLowerCase().split(' ').join('-');
     delete collection.hasBalance;
@@ -2556,10 +2571,10 @@ window.convertTextWithLinksInHTML = function convertTextWithLinksInHTML(text) {
     return text;
 };
 
-window.renderExpandibleElement = function renderExpandibleElement(text, p) {
+window.renderExpandibleElement = function renderExpandibleElement(text, p, length) {
     p = p || React.createElement("p");
     p.props = p.props || {};
-    var shortText = window.shortenWord(text, 150);
+    var shortText = window.shortenWord(text, length || 500);
     var container;
     var span = React.createElement("span", {
         ref: ref => container = ref

@@ -23,7 +23,7 @@ var ItemController = function (view) {
             throw "Amount to unwrap must be a number greater than 0";
         }
 
-        var decimals = window.asNumber(context.view.props.item.collection.decimals);
+        var decimals = window.asNumber(context.view.props.item.collectionDecimals);
         var amount = decimals === 1 ? amountPlain : window.toDecimals(amountPlain, decimals);
         if(window.asNumber(amount) > window.asNumber(context.view.props.item.dynamicData.balanceOfCollectionSide)) {
             throw "You specified an insufficient amount";

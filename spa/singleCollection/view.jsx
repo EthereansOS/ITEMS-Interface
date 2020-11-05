@@ -12,18 +12,29 @@ var SingleCollection = React.createClass({
     componentDidMount() {
         this.controller.loadData(this);
     },
+    getCustomLoader() {
+        return (<section className={"singleCollection" + (this.props.className || "collection")}>
+            <figure className="collectionIcon">
+                <img src="assets/img/loadMonolith.png"/>
+            </figure>
+            <article className="collectionInfo">
+                <h3 className="collectionTitle">{'\u00a0'}<span>{'\u00a0'}</span></h3>
+            </article>
+        </section>);
+    },
     render() {
         var color = this.props.collection.background_color;
         var children = [<Loader />];
         if (this.props.collection.loaded) {
             children = [
                 <figure className="collectionIcon">
-                    {this.props.collection.image && <LazyImageLoader src={this.props.collection.image}/>}
+                    {this.props.collection.image && <LazyImageLoader src={this.props.collection.image} />}
                     {this.props.collection.isOwner && <h6>Owner</h6>}
                 </figure>,
                 <article className="collectionInfo">
                     <h3 className="collectionTitle">{window.shortenWord(this.props.collection.name, 25)} <span>({window.shortenWord(this.props.collection.symbol, 6)})</span></h3>
-                    {window.renderExpandibleElement(!this.props.collection.description ? "No description available" : window.convertTextWithLinksInHTML(this.props.collection.description), <p className="collectionDesc" />)}
+                    {!this.props.miniature && window.renderExpandibleElement(!this.props.collection.description ? "No description available" : window.convertTextWithLinksInHTML(this.props.collection.description), <p className="collectionDesc" />)}
+                    {this.props.miniature && <p className="collectionDesc">{!this.props.collection.description ? "No description available" : window.shortenWord(this.props.collection.description, 100)}</p>}
                     {this.props.showItemsCount && <span className="collectionItems BrandizedS">
                         {(!this.state || (this.state.itemsCount !== 0 && !this.state.itemsCount)) && <InnerLoader />}
                         {this.state && this.state.itemsCount > 0 && `${this.state.itemsCount} ITEMS`}
@@ -33,8 +44,8 @@ var SingleCollection = React.createClass({
                 </article>
             ];
         }
-        if(this.props.onClick) {
-            children = (<a href="javascript:;" data-index={this.props.index} onClick={this.props.onClick}>
+        if (this.props.onClick) {
+            children = (<a href="javascript:;" data-key={this.props.collectionKey} onClick={this.props.onClick}>
                 {children}
             </a>);
         }

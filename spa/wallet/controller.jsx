@@ -10,7 +10,7 @@ var WalletController = function (view) {
                 collection.items = collection.items || {};
                 var collectionObjectIds = await window.loadCollectionItems(collection.address);
                 for (var objectId of collectionObjectIds) {
-                    promises.push(window.loadItemData(collection[objectId] = collection[objectId] || {
+                    promises.push(window.loadItemData(collection.items[objectId] = collection.items[objectId] || {
                         objectId,
                         collection
                     }, collection, context.view));

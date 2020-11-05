@@ -111,6 +111,10 @@ var WrapController = function (view) {
         }
         await window.sleep(window.context.inputTimeout);
         await context[`performItemize${selectedToken.type}`](selectedToken);
+        await context.view.emit('collections/refresh');
+        var collectionAndItem = await context.recoverCollectionAndItem(selectedToken);
+        collectionAndItem.created = 'wrap';
+        context.view.emit('section/change', 'spa/successPage', collectionAndItem);
     };
 
     context.performItemizeERC20 = async function performItemizeERC20(selectedToken) {
@@ -119,6 +123,8 @@ var WrapController = function (view) {
             throw "You have insufficient amount to wrap";
         }
         await window.blockchainCall(window.currentEthItemERC20Wrapper.methods['mint(address,uint256)'], selectedToken.address, value);
+        selectedToken.tokenId = await blockchainCall(window.currentEthItemERC20Wrapper.methods.object, selectedToken.address);
+        selectedToken.wrappedAddress = window.currentEthItemERC20Wrapper.options.address;
     };
 
     context.performItemizeERC1155 = async function performItemizeERC1155(selectedToken) {
@@ -137,6 +143,8 @@ var WrapController = function (view) {
         } catch(e) {
         }
         await window.blockchainCall(selectedToken.contract.methods.safeTransferFrom, window.walletAddress, window.ethItemOrchestrator.options.address, selectedToken.tokenId, value, "0x");
+        var version = (await window.blockchainCall(window.currentEthItemFactory.methods.erc1155WrapperModel))[1];
+        selectedToken.wrappedAddress = await window.blockchainCall(window.currentEthItemKnowledgeBase.methods.wrapper, selectedToken.address, version);
     }
 
     context.performItemizeERC721 = async function performItemizeERC721(selectedToken) {
@@ -156,5 +164,23 @@ var WrapController = function (view) {
         } catch(e) {
         }
         await window.blockchainCall(selectedToken.erc721Contract.methods.safeTransferFrom, window.walletAddress, recipient, selectedToken.tokenId, "0x");
-    }
+        var version = (await window.blockchainCall(window.currentEthItemFactory.methods.erc721WrapperModel))[1];
+        selectedToken.wrappedAddress = await window.blockchainCall(window.currentEthItemKnowledgeBase.methods.wrapper, selectedToken.address, version);
+    };
+
+    context.recoverCollectionAndItem = async function recoverCollectionAndItem(selectedToken) {
+        selectedToken.wrappedAddress = window.web3.utils.toChecksumAddress(selectedToken.wrappedAddress);
+        var collection = await window.loadSingleCollection(selectedToken.wrappedAddress);
+        collection.items = collection.items || {};
+        await window.loadItemData(collection.items[selectedToken.tokenId] = collection.items[selectedToken.tokenId] || {
+            objectId : selectedToken.tokenId,
+            collection
+        });
+        return {
+            collection,
+            item : collection.items[selectedToken.tokenId],
+            name : collection.items[selectedToken.tokenId].name,
+            tokenAmount : selectedToken.tokenAmount || 1
+        }
+    };
 };

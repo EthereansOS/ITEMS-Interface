@@ -142,7 +142,35 @@ var CreateCollectionWizardController = function (view) {
         var payload = window.web3.utils.sha3(`init(${params.join(",")})`);
         payload = payload.substring(0, 10) + window.web3.eth.abi.encodeParameters(params, values).substring(2);
         context.view.setState({loadingMessage : "Creating Collection"});
-        await window.blockchainCall(window.ethItemOrchestrator.methods.createERC1155, payload, state.collectionENS);
+        var transaction = await window.blockchainCall(window.ethItemOrchestrator.methods.createERC1155, payload, state.collectionENS);
         context.view.emit('collections/refresh');
+        var events = transaction.events;
+        if(!(events instanceof Array)) {
+            events = Object.values(events);
+        }
+        var factoryAddress = window.web3.utils.toChecksumAddress(await window.blockchainCall(window.ethItemOrchestrator.methods.factory));
+        var topic = window.web3.utils.sha3(Object.entries(window.context.ethItemFactoryEvents).filter(it => it[1] === "IERC1155ABI").map(it => it[0])[0]);
+        var collectionAddress;
+        for(var event of events) {
+            if(window.web3.utils.toChecksumAddress(event.address) !== factoryAddress) {
+                continue;
+            }
+            if(event.raw.topics[0] !== topic) {
+                continue;
+            }
+            collectionAddress = window.web3.utils.toChecksumAddress(window.web3.eth.abi.decodeParameter("address", event.raw.topics[3]));
+            break;
+        }
+        var collection = await window.loadSingleCollection(collectionAddress);
+        var newMetadata = await window.AJAXRequest(window.formatLink(metadataLink));
+        var collectionAndItem = {
+            name : newMetadata.name,
+            image : newMetadata.image,
+            external_url : newMetadata.external_url,
+            collection,
+            collectionAddress
+        }
+        collectionAndItem.created = 'collection';
+        context.view.emit('section/change', 'spa/successPage', collectionAndItem);
     };
 };

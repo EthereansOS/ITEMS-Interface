@@ -10,23 +10,7 @@ var CreateItemWizardController = function (view) {
         } catch(e) {
             return context.view.setState({selectedToken : null});
         }
-        var factories = await window.blockchainCall(window.ethItemOrchestrator.methods.factories);
-        var logs = await window.getLogs({
-            factories,
-            topics : [
-                [window.web3.utils.sha3(context.newERC1155CreatedEvent)],
-                [],
-                [],
-                [window.web3.eth.abi.encodeParameter("address", address)]
-            ]
-        });
-        if(logs.length === 0) {
-            return context.view.setState({selectedToken : null});
-        }
-        var selectedToken = {
-            address,
-            contract : window.newContract(window.context.IERC1155ABI, address),
-        };
+        var selectedToken = await window.loadSingleCollection(address);
         try {
             selectedToken.name = await window.blockchainCall(selectedToken.contract.methods.name);
         } catch(e) {
@@ -110,7 +94,39 @@ var CreateItemWizardController = function (view) {
         context.view.setState({loadingMessage : "Uploading metadata"});
         var metadataLink = state.metadataLink || await window.uploadMetadata(state.metadata);
         context.view.setState({loadingMessage : "Deploying Item"});
-        await window.blockchainCall(state.selectedToken.contract.methods.mint, valueDecimals, state.itemName, state.itemSymbol, metadataLink, state.itemMintable);
+        var transaction = await window.blockchainCall(state.selectedToken.contract.methods.mint, valueDecimals, state.itemName, state.itemSymbol, metadataLink, state.itemMintable);
         context.view.emit('collections/refresh');
+        var events = transaction.events;
+        if(!(events instanceof Array)) {
+            events = Object.values(events);
+        }
+        var collectionAddress = window.web3.utils.toChecksumAddress(state.selectedToken.contract.options.address);
+        var topic = window.web3.utils.sha3("Mint(uint256,address,uint256)");
+        var objectId;
+        for(var event of events) {
+            if(window.web3.utils.toChecksumAddress(event.address) !== collectionAddress) {
+                continue;
+            }
+            if(event.raw.topics[0] !== topic) {
+                continue;
+            }
+            objectId = web3.eth.abi.decodeParameters(["uint256", "address", "uint256"], event.raw.data)[0];
+            break;
+        }
+        var item = await window.loadItemData({
+            objectId,
+            collection : state.selectedToken
+        });
+        var newMetadata = await window.AJAXRequest(window.formatLink(metadataLink));
+        var collectionAndItem = {
+            name : newMetadata.name,
+            image : newMetadata.image,
+            external_url : newMetadata.external_url,
+            collection : state.selectedToken,
+            collectionAddress,
+            item 
+        }
+        collectionAndItem.created = 'item';
+        context.view.emit('section/change', 'spa/successPage', collectionAndItem);
     };
 };

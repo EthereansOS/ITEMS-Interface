@@ -40,6 +40,13 @@ var IndexController = function (view) {
             });
         }
         var subCollectionsPromises = [];
+        try {
+            var erc20Wrappers = await window.blockchainCall(window.currentEthItemKnowledgeBase.methods.erc20Wrappers);
+            var subCollections = [];
+            erc20Wrappers.forEach(it => subCollections.push(window.packCollection(window.web3.utils.toChecksumAddress(it), "IERC20WrapperABI", oldCollections)));
+            subCollectionsPromises.push(updateSubCollectionsPromise(subCollections));
+        } catch(e) {
+        }
         for (var block of blocks) {
             var subCollections = [];
             var logs = await window.getLogs({
@@ -50,20 +57,8 @@ var IndexController = function (view) {
             });
             for (var log of logs) {
                 var address = window.web3.utils.toChecksumAddress(window.web3.eth.abi.decodeParameter("address", log.topics[log.topics.length - 1]));
-                var abi = window.context[map[log.topics[0]]];
                 var category = map[log.topics[0]];
-                category = category.substring(1, category.length - 3);
-                var contract = window.newContract(abi, address);
-                var key = log.blockNumber + "_" + address;
-                var collection = oldCollections.filter(it => it.key === key);
-                collection = collection.length > 0 ? collection[0] : {
-                    key: log.blockNumber + "_" + address,
-                    index : collections.length + subCollections.length,
-                    address,
-                    category,
-                    contract
-                }
-                subCollections.push(collection);
+                subCollections.push(window.packCollection(address, category, oldCollections));
             }
             subCollectionsPromises.push(updateSubCollectionsPromise(subCollections));
         }
