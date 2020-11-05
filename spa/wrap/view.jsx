@@ -20,7 +20,7 @@ var Wrap = React.createClass({
         this.setState({
             selectedTokenType: e.currentTarget.value,
         }, function() {
-            _this.controller.onTokenAddressChange(_this.getSelectedTokenType(), _this.tokenAddressInput.value);
+            _this.controller.onTokenAddressChange(_this.getSelectedTokenType(), _this.tokenAddressInput && _this.tokenAddressInput.value);
         });
     },
     onChange(e) {
@@ -59,6 +59,9 @@ var Wrap = React.createClass({
     actionEnd() {
         this.controller.refreshData()
     },
+    componentDidMount() {
+        this.controller.onTokenAddressChange(this.getSelectedTokenType(), this.tokenAddressInput && this.tokenAddressInput.value);
+    },
     render() {
         var selectedTokenType = this.getSelectedTokenType();
         var state = this.state || {};
@@ -71,12 +74,12 @@ var Wrap = React.createClass({
                         <select onChange={this.onTokenTypeChange}>
                             {window.context.supportedWrappedTokens.map(it => <option key={it} selected={selectedTokenType === it} value={it}>{it}</option>)}
                         </select>
-                        <input ref={ref => this.tokenAddressInput = ref} className="addressWrapSelector" type="text" placeholder="Token address" data-action="onTokenAddressChange" onKeyUp={this.onChange} onChange={this.onChange}/>
-                        <a className="LoadToITEM" href="javascript:;" onClick={this.reloadToken}>Load</a>
+                        {selectedTokenType !== 'ETH' && <input ref={ref => this.tokenAddressInput = ref} className="addressWrapSelector" type="text" placeholder="Token address" data-action="onTokenAddressChange" onKeyUp={this.onChange} onChange={this.onChange}/>}
+                        {selectedTokenType !== 'ETH' && <a className="LoadToITEM" href="javascript:;" onClick={this.reloadToken}>Load</a>}
                     </section>
                     <section className="WrapWhatLoaded">
                         {state.selectedToken && (state.selectedToken.name || state.selectedToken.symbol) && <h6 className="tokenSelectedToWrap">{window.shortenWord(state.selectedToken.name, 10)} {state.selectedToken.symbol && state.selectedToken.name ? ` (${window.shortenWord(state.selectedToken.symbol, 10)})` : window.shortenWord(state.selectedToken.symbol, 10)}</h6>}
-                        {state.selectedToken && selectedTokenType !== 'ERC20' && <section className="tokenSelectedToWrapDecide">
+                        {state.selectedToken && selectedTokenType !== 'ERC20' && selectedTokenType !== 'ETH' && <section className="tokenSelectedToWrapDecide">
                             <input className="BalancetoWrapSelector" placeholder="Token ID" type="text" data-action="onTokenIdChange" onKeyUp={this.onChange} onChange={this.onChange}/>
                         </section>}
                         {state.selectedToken && selectedTokenType !== 'ERC721' && state.selectedToken && state.selectedToken.balanceOfPlain && <span className="tokenSelectedToWrapBalance">balance: {state.selectedToken.balanceOfPlain}</span>}

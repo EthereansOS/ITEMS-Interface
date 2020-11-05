@@ -10,7 +10,15 @@ var WrapController = function (view) {
         try {
             address = window.web3.utils.toChecksumAddress(address);
         } catch(e) {
-            return context.view.setState({selectedToken : null});
+            address = undefined;
+        }
+        if(!address) {
+            return context.view.setState({selectedToken : type !== 'ETH' ? null : {
+                type,
+                name : 'Ethereum',
+                symbol : 'ETH',
+                decimals : 18
+            }}, type !== 'ETH' ? undefined : context.refreshData);
         }
         var selectedToken = {
             type,
@@ -47,6 +55,8 @@ var WrapController = function (view) {
         selectedToken.approved = true;
         if(selectedToken.type === 'ERC20') {
             await context.refreshBalanceOfERC20(selectedToken);
+        } if(selectedToken.type === 'ETH') {
+            selectedToken.balanceOf = await window.web3.eth.getBalance(window.walletAddress);
         } else {
             try {
                 selectedToken.balanceOf = await window.blockchainCall(selectedToken.contract.methods.balanceOf, window.walletAddress, selectedToken.tokenId);
@@ -115,6 +125,16 @@ var WrapController = function (view) {
         var collectionAndItem = await context.recoverCollectionAndItem(selectedToken);
         collectionAndItem.created = 'wrap';
         context.view.emit('section/change', 'spa/successPage', collectionAndItem);
+    };
+
+    context.performItemizeETH = async function performItemizeETH(selectedToken) {
+        var value = context.toDecimals(selectedToken.tokenAmount);
+        if(parseInt(value) > parseInt(selectedToken.balanceOf)) {
+            throw "You have insufficient amount to wrap";
+        }
+        await window.blockchainCall(value, window.currentEthItemERC20Wrapper.methods.mintETH);
+        selectedToken.tokenId = await blockchainCall(window.currentEthItemERC20Wrapper.methods.ETHEREUM_OBJECT_ID);
+        selectedToken.wrappedAddress = window.currentEthItemERC20Wrapper.options.address;
     };
 
     context.performItemizeERC20 = async function performItemizeERC20(selectedToken) {

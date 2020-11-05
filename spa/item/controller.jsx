@@ -29,6 +29,6 @@ var ItemController = function (view) {
             throw "You specified an insufficient amount";
         }
         await window.blockchainCall(context.view.props.item.collection.contract.methods.burn, context.view.props.item.objectId, amount);
-        context.view.emit('collections/refresh');
+        window.updateItemDynamicData(this.props.item, context.view);
     };
 };
