@@ -15,6 +15,9 @@ var Create = React.createClass({
         window.preventItem(e);
         this.setState({ create: e.currentTarget.dataset.create });
     },
+    componentDidMount() {
+        window.setHomepageLink(`?section=create`);
+    },
     render() {
         var state = this.getState();
         return (<section className="Pager">

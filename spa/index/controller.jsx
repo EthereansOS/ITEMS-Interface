@@ -2,6 +2,17 @@ var IndexController = function (view) {
     var context = this;
     context.view = view;
 
+    context.tryCheckAddressBarParams = async function tryCheckAddressBarParams() {
+        var collectionAddress = window.consumeAddressBarParam("collection");
+        if(!collectionAddress) {
+            return;
+        }
+        var props = {collection : await window.loadSingleCollection(collectionAddress)};
+        (props.objectId = window.consumeAddressBarParam("item")) && (props.item = await window.loadItemData(props));
+        delete props.objectId;
+        context.view.emit('section/change', `spa/${props.item ? 'item' : 'collection'}`, props);
+    };
+
     context.loadData = async function loadData() {
         window.ethItemOrchestrator = window.newContract(window.context.ethItemOrchestratorABI, window.getNetworkElement("ethItemOrchestratorAddress"));
         try {
@@ -20,6 +31,7 @@ var IndexController = function (view) {
             window.ENSController = window.newContract(window.context.ENSABI, window.context.ENSControllerAddres);
         } catch (e) {
         }
+        context.tryCheckAddressBarParams();
         await context.loadCollections(true);
     };
 

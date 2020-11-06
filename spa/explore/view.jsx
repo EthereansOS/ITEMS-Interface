@@ -21,6 +21,9 @@ var Explore = React.createClass({
         }
         this.emit('section/change', 'spa/collection', { collection });
     },
+    componentDidMount() {
+        window.setHomepageLink(`?section=explore`);
+    },
     render() {
         var _this = this;
         var state = window.getState(this);

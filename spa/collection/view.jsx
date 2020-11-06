@@ -24,6 +24,11 @@ var Collection = React.createClass({
         window.preventItem(e);
         this.emit('section/change', 'spa/create', {create: "CreateItemWizard", collectionAddress : this.props.collection.address});
     },
+    componentDidMount() {
+        var _this = this;
+        window.setHomepageLink(`?collection=${this.props.collection.address}`);
+        window.retrieveAndCheckCode(this.props.collection).then(() => _this.forceUpdate());
+    },
     render() {
         return (<section className="Pager">
             <section className="collectionPage">
@@ -32,10 +37,10 @@ var Collection = React.createClass({
                     <ul>
                         <li className={this.state && this.state.toggle === 'items' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle} data-toggle="items">Items</a></li>
                         <li className={this.state && this.state.toggle === 'farm' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle} data-toggle="farm">Farm</a></li>
-                        {(this.props.collection.extensionCode || this.props.collection.modelCode) && <li className={this.state && this.state.toggle === 'code' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle} data-toggle="code">{this.props.collection.extensionCode ? "Extension" : "Model"} Code</a></li>}
+                        {this.props.collection && (this.props.collection.extensionCode || this.props.collection.modelCode) && <li className={this.state && this.state.toggle === 'code' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle} data-toggle="code">Code</a></li>}
                     </ul>
                 </section>
-                {this.state && this.state.toggle === 'items' && <section className="collectionPageItems">
+                {this.props.collection && this.state && this.state.toggle === 'items' && <section className="collectionPageItems">
                     {this.props.collection.isOwner && <a className="Enter" href="javascript:;" onClick={this.createMoreItems}>Add New</a>}
                     <section className="collectionPageItemsOrder">
                         {!this.state.collectionObjectIds && <Loader/>}

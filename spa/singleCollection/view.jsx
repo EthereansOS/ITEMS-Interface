@@ -34,7 +34,7 @@ var SingleCollection = React.createClass({
         if (this.props.collection.loaded) {
             children = [
                 <figure className="collectionIcon">
-                    <LazyImageLoader src={window.getElementImage(this.props.collection)}/>
+                    {(this.props.collection.metadata || this.props.collection.category !== 'ERC1155') && <LazyImageLoader src={window.getElementImage(this.props.collection)}/>}
                     {this.props.collection.isOwner && <h6>Owner</h6>}
                 </figure>,
                 <article className="collectionInfo">
@@ -42,7 +42,6 @@ var SingleCollection = React.createClass({
                     {this.props.miniature && <h3 className="collectionTitle">{window.shortenWord(this.props.collection.name, 25)} <span>({window.shortenWord(this.props.collection.symbol, 6)})</span></h3>}
                     {!this.props.miniature && window.renderExpandibleElement(!this.props.collection.description ? "No description available" : window.convertTextWithLinksInHTML(this.props.collection.description), <p className="collectionDesc" />)}
                     {this.props.miniature && <p className="collectionDesc">{!this.props.collection.description ? "No description available" : window.shortenWord(this.props.collection.description, 100)}</p>}
-                    {!this.props.miniature && this.props.collection.extensionAddress && this.props.collection.extensionAddress !== window.voidEthereumAddress && <span>Mintable by this {this.props.collection.extensionIsContract ? "Contract" : "Wallet"}: <a target="_blank" href={`${window.getNetworkElement('etherscanURL')}address/${this.props.collection.extensionAddress}`}>{this.props.collection.extensionAddress}</a></span>}
                     {!this.props.miniature && this.props.collection.problems && this.props.collection.problems.length > 0 && this.renderCollectionProblems(this.props.collection.problems)}
                     {this.props.showItemsCount && <span className="collectionItems BrandizedS">
                         {(!this.state || (this.state.itemsCount !== 0 && !this.state.itemsCount)) && <InnerLoader />}

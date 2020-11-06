@@ -6,14 +6,28 @@ var Wallet = React.createClass({
     getList() {
         var state = window.getState(this);
         var collections = state.collections;
-        return collections.filter(it => it.hasBalance);
+        collections = collections.filter(it => it.hasBalance || it.isOwner);
+        var orderedList = collections.filter(it => it.isOwner);
+        orderedList.push(...collections.filter(it => !it.isOwner));
+        return orderedList;
     },
     toggle(e) {
         window.preventItem(e);
-        var oldToggle = this.state && this.state.toggle;
+        var state = window.getState(this);
+        var oldToggle = state.toggle;
         var toggle = e.currentTarget.dataset.key;
         toggle = toggle === oldToggle ? null : toggle;
-        this.setState({toggle});
+        var collections = state.collections;
+        var collection = collections.filter(it => it.key === toggle)[0];
+        var _this = this;
+        var sectionChange = function() {
+            _this.emit('section/change', 'spa/collection', {
+                collection,
+                collectionAddress : collection.address,
+                collections
+            });
+        }
+        this.setState({toggle : collection.hasBalance ? toggle : null}, collection.hasBalance ? undefined : sectionChange);
     },
     onClick(e) {
         window.preventItem(e);
@@ -56,8 +70,8 @@ var Wallet = React.createClass({
                                 {collection.items && Object.values(collection.items).filter(it => it.dynamicData && it.dynamicData.balanceOf && it.dynamicData.balanceOf !== '0').map(item => <section key={item.key} className="walletCollectionItem">
                                     <a href="javascript:;" onClick={this.onClick} data-collection={collection.key} data-item={item.key}>
                                         <figure className="collectionIcon" style={{ "background-color": item.backgroundImage }}>
-                                            {item.image && <LazyImageLoader src={item.image} />}
-                                            {item.dynamicData && <span className="walletCollectionItemQuantity">{item.dynamicData.balanceOfPlain}</span>}
+                                            <LazyImageLoader src={window.getElementImage(item)}/>
+                                            {item.dynamicData && <span className="walletCollectionItemQuantity">{window.formatMoney(item.dynamicData.balanceOfPlain, 1)}</span>}
                                         </figure>
                                     </a>
                                 </section>)}

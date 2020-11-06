@@ -89,6 +89,9 @@ var Item = React.createClass({
         window.preventItem(e);
         this.unwrapInput.value = this.props.item.dynamicData.balanceOfCollectionSidePlain.split(',').join();
     },
+    componentDidMount() {
+        window.setHomepageLink(`?collection=${this.props.item.collection.address}&item=${this.props.item.objectId}`);
+    },
     render() {
         var item = (this.state && this.state.item) || this.props.item;
         var toggle = !this.state ? item.metadata ? 'metadata' : 'farm' : this.state.toggle;
@@ -104,7 +107,7 @@ var Item = React.createClass({
                         </figure>
                         <article className="itemInfo">
                             <section className="itemFundamentals">
-                                <h3 className="ItemTitle">{item.name} <span> ({this.props.collection.symbol})</span></h3>
+                                <h3 className="ItemTitle">{item.name} <span> ({item.symbol})</span></h3>
                                 <section className="itemFundamentalsThing">
                                     <h5 className="itemaddress"><a target="_blank" href={window.context.openSeaItemLinkTemplate.format(this.props.collection.address, item.objectId)}>NFT Address</a></h5>
                                     <h5 className="itemaddress"><a target="_blank" href={`${window.getNetworkElement("etherscanURL")}token/${item.address}`}>ERC20 Address</a></h5>
@@ -113,6 +116,8 @@ var Item = React.createClass({
                                 <section className="itemFundamentalsThing">
                                     <span className="ItemSupply">Supply: {window.fromDecimals(item.dynamicData.totalSupply, item.decimals)} </span>
                                     {window.walletAddress && item.dynamicData && item.dynamicData.balanceOf && item.dynamicData.balanceOf !== '0' && <span className="ItemBalance">| You own: {window.fromDecimals(item.dynamicData.balanceOf, item.decimals, true)}</span>}
+                                    {item.dynamicData && item.dynamicData.isEditable && item.collection.extensionAddress && item.collection.extensionAddress !== window.voidEthereumAddress && <span>Editable by {item.collection.extensionIsContract ? "Contract" : "Wallet"}: <a target="_blank" href={`${window.getNetworkElement('etherscanURL')}address/${item.collection.extensionAddress}`}>{item.collection.extensionAddress}</a></span>}
+                                    {((item.sourceAddress !== 'blank' && item.sourceAddress !== window.voidEthereumAddress) || item.collection.sourceAddress !== 'blank') && <span>Source address: <a target="_blank" href={`${window.getNetworkElement('etherscanURL')}address/${item.sourceAddress !== 'blank' ? item.sourceAddress : item.collection.sourceAddress}`}>{item.sourceAddress !== 'blank' ? item.sourceAddress : item.collection.sourceAddress}</a></span>}
                                     <section className="itemSide">
                                         <a className="ItemPrice" target="_blank" href={window.context.uniswapSpawUrlTemplate.format(item.address)}>&#129412; $ {item.dynamicData.tokenPriceInDollarsOnUniswap ? window.formatMoney(item.dynamicData.tokenPriceInDollarsOnUniswap, 1) : "--"}</a>
                                         <a className="ItemPrice" target="_blank" href={window.context.uniswapInfoUrlTemplate.format(item.address)}>&#128039; Info</a>

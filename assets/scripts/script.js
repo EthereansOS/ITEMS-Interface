@@ -2240,6 +2240,13 @@ window.loadItemData = async function loadItemData(item, collection, view) {
     item.token = item.token || window.newContract(window.context.IERC20ABI, item.address);
     item.name = item.name || await window.blockchainCall(item.contract.methods.name, item.objectId);
     item.symbol = item.symbol || await window.blockchainCall(item.contract.methods.symbol, item.objectId);
+    if(!item.sourceAddress) {
+        item.sourceAddress = "blank";
+        try {
+            item.sourceAddress = await window.blockchainCall(item.collection.contract.methods.source, item.objectId);
+        } catch(e) {
+        }
+    }
     var metadataPromise = window.tryRetrieveMetadata(item);
     if (view) {
         metadataPromise.then(() => view.setState({ item }));
@@ -2273,7 +2280,7 @@ window.updateItemDynamicData = async function updateItemDynamicData(item, view) 
         item.collection.hasBalance = item.collection.hasBalance || parseInt(item.dynamicData.balanceOf) > 0;
     } catch (e) {}
     try {
-        item.dynamicData.canMint = item.collection.isOwner && await window.blockchainCall(item.collection.contract.methods.isEditable, item.objectId);
+        item.dynamicData.canMint = item.collection.isOwner && (item.dynamicData.isEditable = await window.blockchainCall(item.collection.contract.methods.isEditable, item.objectId));
     } catch (e) {}
     view && view.setState({ item });
 };
@@ -2501,8 +2508,8 @@ window.loadSingleCollection = async function loadSingleCollection(collectionAddr
     collectionAddress = window.web3.utils.toChecksumAddress(collectionAddress);
     try {
         var erc20Wrappers = (await window.blockchainCall(window.currentEthItemKnowledgeBase.methods.erc20Wrappers)).map(it => window.web3.utils.toChecksumAddress(it));
-        if (erc20Wrappers.indexOf(address) !== -1) {
-            return await window.refreshSingleCollection(window.packCollection(address, "IERC20WrapperABI"));
+        if (erc20Wrappers.indexOf(collectionAddress) !== -1) {
+            return await window.refreshSingleCollection(window.packCollection(collectionAddress, "IERC20WrapperABI"));
         }
     } catch (e) {}
     var map = {};
@@ -2541,6 +2548,13 @@ window.packCollection = function packCollection(address, category) {
 window.refreshSingleCollection = async function refreshSingleCollection(collection, view) {
     collection.name = collection.name || await window.blockchainCall(collection.contract.methods.name);
     collection.symbol = collection.symbol || await window.blockchainCall(collection.contract.methods.symbol);
+    if(!collection.sourceAddress) {
+        collection.sourceAddress = "blank";
+        try {
+            collection.sourceAddress = await window.blockchainCall(collection.contract.methods.source);
+        } catch(e) {
+        }
+    }
     try {
         collection.modelVersion = collection.modelVersion || await window.blockchainCall(collection.contract.methods.modelVersion);
     } catch (e) {}
@@ -2552,17 +2566,7 @@ window.refreshSingleCollection = async function refreshSingleCollection(collecti
         collection.extensionIsContract = (await window.web3.eth.getCode(collection.extensionAddress)) !== '0x';
     } catch (e) {}
     delete collection.problems;
-    var retrieveMetadataPromise = window.tryRetrieveMetadata(collection, collection.category).then(async() => {
-        try {
-            if (!collection.modelCode) {
-                window.modelCodes = window.modelCodes || {};
-                window.modelCodes[collection.category] = window.modelCodes[collection.category] || {};
-                window.modelCodes[collection.category][collection.modelVersion] = window.modelCodes[collection.category][collection.modelVersion] || await window.AJAXRequest(window.formatLink(window.context.defaultItemData[collection.category].collection.modelCode[collection.modelVersion]));
-                collection.modelCode = window.modelCodes[collection.category][collection.modelVersion];
-            }
-        } catch (e) {}
-        collection.problems = await window.getCollectionProblems(collection);
-    });
+    var retrieveMetadataPromise = window.tryRetrieveMetadata(collection, collection.category);
     if (!view) {
         await retrieveMetadataPromise;
     } else {
@@ -2572,20 +2576,19 @@ window.refreshSingleCollection = async function refreshSingleCollection(collecti
     delete collection.hasBalance;
     window.loadCollectionENS(collection);
     collection.loaded = true;
-    window.checkAddressBarCollection(collection);
     return collection;
 };
 
-window.checkAddressBarCollection = function checkAddressBarCollection(collection) {
-    if (!window.addressBarParams.collection) {
-        return;
-    }
-    var addr = window.web3.utils.toChecksumAddress(window.addressBarParams.collection);
-    if (addr !== collection.address) {
-        return;
-    }
-    window.consumeAddressBarParam("collection");
-    $.publish('section/change', ['spa/collection', { collection }]);
+window.retrieveAndCheckCode = async function retrieveAndCheckCode(collection) {
+    try {
+        if (!collection.modelCode) {
+            window.modelCodes = window.modelCodes || {};
+            window.modelCodes[collection.category] = window.modelCodes[collection.category] || {};
+            window.modelCodes[collection.category][collection.modelVersion] = window.modelCodes[collection.category][collection.modelVersion] || await window.AJAXRequest(window.formatLink(window.context.defaultItemData[collection.category].collection.modelCode[collection.modelVersion]));
+            collection.modelCode = window.modelCodes[collection.category][collection.modelVersion];
+        }
+    } catch (e) {}
+    collection.problems = await window.getCollectionProblems(collection);
 };
 
 window.getCollectionProblems = async function getCollectionProblems(collection) {

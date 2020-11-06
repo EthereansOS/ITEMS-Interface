@@ -61,6 +61,7 @@ var Wrap = React.createClass({
     },
     componentDidMount() {
         this.controller.onTokenAddressChange(this.getSelectedTokenType(), this.tokenAddressInput && this.tokenAddressInput.value);
+        window.setHomepageLink(`?section=wrap`);
     },
     render() {
         var selectedTokenType = this.getSelectedTokenType();
