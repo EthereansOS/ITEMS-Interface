@@ -8,7 +8,7 @@
     "coingeckoEthereumPriceURL": "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=ethereum",
     "coingeckoEthereumPriceRequestInterval": 600000,
     "ethItemOrchestratorAddress" : "0x8c53f63cb0e98fa28864202952ac08c81c4625ca",
-    "ethItemOrchestratorAddressRopsten" : "0x5C44D546Aa794B79b21dab008EDeaac495C8f74c",
+    "ethItemOrchestratorAddressRopsten" : "0x6C6b82Df6F41c4A1e18bBaDB01a455105994E44A",
     "uniswapV2RouterAddress": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
     "ensDomainName" : "itempesta.eth",
     "ENSControllerAddres" : "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
@@ -20,6 +20,52 @@
     "ipfsUrlChanger" : "https://gateway.ipfs.io/ipfs/",
     "openSeaItemLinkTemplate" : "https://opensea.io/assets/{0}/{1}",
     "openSeaCollectionLinkTemplate" : "https://opensea.io/assets/{0}",
+    "defaultItemData" : {
+        "ERC1155" : {
+            "collection" : {
+                "image" : "https://cdn.shopify.com/s/files/1/1578/5251/products/4983164166590_x700.png?v=1585635232",
+                "modelCode" : {
+                    "1" : "ipfs://ipfs/QmWTas1y3RuAkApRh6HaHPM1SancvKiefmnfxNKcFMSRYw"
+                }
+            },
+            "item" : {
+                "image" : "https://wiki.p-insurgence.com/images/0/09/722.png"
+            }
+        },
+        "ERC1155Wrapper" : {
+            "collection" : {
+                "image" : "https://cdn.shopify.com/s/files/1/1578/5251/products/4983164166590_x700.png?v=1585635232",
+                "modelCode" : {
+                    "1" : "ipfs://ipfs/QmbZ1HUgH1NFQvDUjRMrTp6r7j2Z6brLAPZzqQrLGLY6gE"
+                }
+            },
+            "item" : {
+                "image" : "https://wiki.p-insurgence.com/images/0/09/722.png"
+            }
+        },
+        "ERC721Wrapper" : {
+            "collection" : {
+                "image" : "https://cdn.shopify.com/s/files/1/1578/5251/products/4983164166590_x700.png?v=1585635232",
+                "modelCode" : {
+                    "1" : "ipfs://ipfs/QmezxWeR5gcR1jbfdq59HacFyps7mRvcqsYNAeFUritdwB"
+                }
+            },
+            "item" : {
+                "image" : "https://wiki.p-insurgence.com/images/0/09/722.png"
+            }
+        },
+        "ERC20Wrapper" : {
+            "collection" : {
+                "image" : "https://cdn.shopify.com/s/files/1/1578/5251/products/4983164166590_x700.png?v=1585635232",
+                "modelCode" : {
+                    "1" : "ipfs://ipfs/QmTUSevGbSZcCWiyUg5ureLLxkrTA2JH87PW9r8BdBEGyz"
+                }
+            },
+            "item" : {
+                "image" : "https://wiki.p-insurgence.com/images/0/09/722.png"
+            }
+        }
+    },
     "ethItemFactoryEvents" : {
         "NewERC1155Created(address,uint256,address,address)" : "IERC1155ABI",
         "NewWrappedERC1155Created(address,uint256,address,address)" : "IERC1155WrapperABI",

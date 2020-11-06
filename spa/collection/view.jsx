@@ -12,7 +12,7 @@ var Collection = React.createClass({
     toggle(e) {
         window.preventItem(e);
         var oldToggle = this.state && this.state.toggle;
-        var toggle = e.currentTarget.innerHTML.toLowerCase();
+        var toggle = e.currentTarget.dataset.toggle;
         toggle = oldToggle === toggle ? null : toggle;
         this.setState({toggle});
     },
@@ -30,23 +30,23 @@ var Collection = React.createClass({
                 <SingleCollection collection={this.props.collection} className="collectionPageInfo" showLink showItemsCount onCollectionObjectIds={this.onCollectionObjectIds}/>
                 <section className="collectionNav">
                     <ul>
-                        <li className={this.state && this.state.toggle === 'items' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>Items</a></li>
-                        <li className={this.state && this.state.toggle === 'farm' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>Farm</a></li>
-                        {this.props.collection.extensionCode && <li className={this.state && this.state.toggle === 'code' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>Code</a></li>}
+                        <li className={this.state && this.state.toggle === 'items' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle} data-toggle="items">Items</a></li>
+                        <li className={this.state && this.state.toggle === 'farm' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle} data-toggle="farm">Farm</a></li>
+                        {(this.props.collection.extensionCode || this.props.collection.modelCode) && <li className={this.state && this.state.toggle === 'code' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle} data-toggle="code">{this.props.collection.extensionCode ? "Extension" : "Model"} Code</a></li>}
                     </ul>
                 </section>
                 {this.state && this.state.toggle === 'items' && <section className="collectionPageItems">
                     {this.props.collection.isOwner && <a className="Enter" href="javascript:;" onClick={this.createMoreItems}>Add New</a>}
                     <section className="collectionPageItemsOrder">
                         {!this.state.collectionObjectIds && <Loader/>}
-                        {this.state.collectionObjectIds && this.state.collectionObjectIds.map(it => <CollectionSingleItem key={it} objectId={it} collection={this.props.collection}/>)}
+                        {this.state.collectionObjectIds && this.state.collectionObjectIds.map(it => <CollectionSingleItem key={it} objectId={it} collection={this.props.collection} miniature/>)}
                     </section>
                 </section>}
                 {this.state && this.state.toggle === 'farm' && <section className="collectionPageItemsFarm">
                     Soon @ UniFi
                 </section>}
                 {this.state && this.state.toggle === 'code' && <section className="collectionPageItemsCode">
-                    <Editor readonly firstCode={this.props.collection.extensionCode}/>
+                    <Editor readonly firstCode={this.props.collection.extensionCode || this.props.collection.modelCode}/>
                 </section>}
             </section>
         </section>);

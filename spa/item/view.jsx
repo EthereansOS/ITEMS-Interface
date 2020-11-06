@@ -95,19 +95,19 @@ var Item = React.createClass({
         return (
             <section className="Pager">
                 <section className="returntocollection">
-                    <a href="javascript:;" onClick={this.onClick}><img src={this.props.collection.image}></img> &#8592; From the <b>{this.props.collection.name} <span>({this.props.collection.symbol})</span></b> collection</a>
+                    <a href="javascript:;" onClick={this.onClick}><img src={window.getElementImage(this.props.collection)}></img> &#8592; From the <b>{this.props.collection.name} <span>({this.props.collection.symbol})</span></b> collection</a>
                 </section>
                 <section className="itemPage">
                     <section className="itemPageInfo">
                         <figure className="itemIcon">
-                            <LazyImageLoader src={item.image} />
+                            <LazyImageLoader src={window.getElementImage(item)} />
                         </figure>
                         <article className="itemInfo">
                             <section className="itemFundamentals">
                                 <h3 className="ItemTitle">{item.name} <span> ({this.props.collection.symbol})</span></h3>
                                 <section className="itemFundamentalsThing">
                                     <h5 className="itemaddress"><a target="_blank" href={window.context.openSeaItemLinkTemplate.format(this.props.collection.address, item.objectId)}>NFT Address</a></h5>
-                                    <h5 className="itemaddress"><a target="_blank" href={`${window.getNetworkElement("etherscanURL")}address/${item.address}`}>ERC20 Address</a></h5>
+                                    <h5 className="itemaddress"><a target="_blank" href={`${window.getNetworkElement("etherscanURL")}token/${item.address}`}>ERC20 Address</a></h5>
                                 </section>
                                 <span className="ItemCollectionLink">wimd.item.eth.link</span>
                                 <section className="itemFundamentalsThing">

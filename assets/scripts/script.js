@@ -22,17 +22,17 @@ window.connectFromHomepage = async function connectFromHomepage(button) {
 window.tryLoadSection = function tryLoadSection() {
     window.getPage();
     var section = window.consumeAddressBarParam("section");
-    if(section) {
+    if (section) {
         return window.connectFromHomepage({
-            dataset : {
+            dataset: {
                 section
             }
         });
     }
-    if(window.addressBarParams.collection) {
+    if (window.addressBarParams.collection) {
         return window.connectFromHomepage({
-            dataset : {
-                section : 'explore'
+            dataset: {
+                section: 'explore'
             }
         });
     }
@@ -103,10 +103,8 @@ window.loadDFO = async function loadDFO(address, allAddresses) {
 window.getLogs = async function(a, endOnFirstResult) {
     var args = JSON.parse(JSON.stringify(a));
     var logs = [];
-    args.fromBlock = args.fromBlock || (window.getNetworkElement('deploySearchStart') + '');
-    args.toBlock = args.toBlock || (await window.web3.eth.getBlockNumber() + '');
-    args.fromBlock = args.fromBlock !== "undefined" ? args.fromBlock : "0";
-    var to = parseInt(args.toBlock);
+    args.fromBlock = args.fromBlock || window.numberToString(window.getNetworkElement('deploySearchStart') || 0);
+    args.toBlock = args.toBlock || window.numberToString(await window.web3.eth.getBlockNumber());
     var fillWithWeb3Logs = async function(logs, args) {
         if (window.web3.currentProvider === window.web3ForLogs.currentProvider) {
             return logs;
@@ -118,15 +116,16 @@ window.getLogs = async function(a, endOnFirstResult) {
         logs.push(...(await window.web3.eth.getPastLogs(newArgs)));
         return logs;
     };
-    while (isNaN(to) || parseInt(args.fromBlock) <= to) {
-        var newTo = parseInt(args.fromBlock) + window.context.blockSearchSection;
-        newTo = newTo <= to ? newTo : to;
-        args.toBlock = isNaN(newTo) ? args.toBlock : (newTo + '');
+    while (true) {
         logs.push(...(await window.web3ForLogs.eth.getPastLogs(args)));
-        if (isNaN(to) || logs.length > 0 && endOnFirstResult === true) {
-            return await fillWithWeb3Logs(logs, args);
+        args.toBlock = window.numberToString(parseInt(args.fromBlock) - 1);
+        args.fromBlock = window.numberToString(parseInt(args.toBlock) - (window.context.blockSearchSection || 0));
+        if (parseInt(args.fromBlock) >= parseInt(args.toBlock)) {
+            if (logs.length > 0 && endOnFirstResult === true) {
+                return await fillWithWeb3Logs(logs, args);
+            }
+            break;
         }
-        args.fromBlock = (parseInt(args.toBlock) + 1) + '';
     }
     return await fillWithWeb3Logs(logs, args);
 };
@@ -714,8 +713,7 @@ window.asNumber = function asNumber(value) {
     }
     try {
         value = value.split(',').join('');
-    } catch(e) {
-    }
+    } catch (e) {}
     return parseFloat(window.numberToString(value));
 };
 
@@ -2243,7 +2241,7 @@ window.loadItemData = async function loadItemData(item, collection, view) {
     item.name = item.name || await window.blockchainCall(item.contract.methods.name, item.objectId);
     item.symbol = item.symbol || await window.blockchainCall(item.contract.methods.symbol, item.objectId);
     var metadataPromise = window.tryRetrieveMetadata(item);
-    if(view) {
+    if (view) {
         metadataPromise.then(() => view.setState({ item }));
     } else {
         await metadataPromise;
@@ -2276,7 +2274,7 @@ window.updateItemDynamicData = async function updateItemDynamicData(item, view) 
     } catch (e) {}
     try {
         item.dynamicData.canMint = item.collection.isOwner && await window.blockchainCall(item.collection.contract.methods.isEditable, item.objectId);
-    } catch(e) {}
+    } catch (e) {}
     view && view.setState({ item });
 };
 
@@ -2319,7 +2317,7 @@ window.perform = function perform(e) {
     var _this = view;
     var close = function close(e) {
         var message = e !== undefined && e !== null && (e.message || e);
-        _this.setState({ performing: null, loadingMessage : null }, function() {
+        _this.setState({ performing: null, loadingMessage: null }, function() {
             message && message.indexOf('denied') === -1 && setTimeout(function() {
                 alert(message);
             });
@@ -2414,54 +2412,54 @@ window.uploadMetadata = async function uploadMetadata(metadata) {
 };
 
 window.normalizeMetadata = async function normalizeMetadata(metadata) {
-    if(metadata.image && metadata.image instanceof Array) {
+    if (metadata.image && metadata.image instanceof Array) {
         metadata.image = metadata.image[0];
-        if(metadata.image && metadata.image.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
+        if (metadata.image && metadata.image.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
             metadata.image = "https://ipfs.io/ipfs/" + metadata.image.split("ipfs://ipfs/")[1];
         }
     }
-    if(metadata.image_data && metadata.image_data instanceof Array) {
+    if (metadata.image_data && metadata.image_data instanceof Array) {
         metadata.image_data = metadata.image_data[0];
-        if(metadata.image_data && metadata.image_data.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
+        if (metadata.image_data && metadata.image_data.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
             metadata.image_data = "https://ipfs.io/ipfs/" + metadata.image_data.split("ipfs://ipfs/")[1];
         }
     }
-    if(metadata.animation_url && metadata.animation_url instanceof Array) {
+    if (metadata.animation_url && metadata.animation_url instanceof Array) {
         metadata.animation_url = metadata.animation_url[0];
-        if(metadata.animation_url && metadata.animation_url.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
+        if (metadata.animation_url && metadata.animation_url.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
             metadata.animation_url = "https://ipfs.io/ipfs/" + metadata.animation_url.split("ipfs://ipfs/")[1];
         }
     }
-    if(metadata.file && metadata.file instanceof Array) {
+    if (metadata.file && metadata.file instanceof Array) {
         metadata.file = metadata.file[0];
-        if(metadata.file && metadata.file.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
+        if (metadata.file && metadata.file.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
             metadata.file = "https://ipfs.io/ipfs/" + metadata.file.split("ipfs://ipfs/")[1];
         }
     }
-    if(metadata.folder && metadata.folder instanceof Array) {
+    if (metadata.folder && metadata.folder instanceof Array) {
         metadata.folder = metadata.folder[0];
-        if(metadata.folder && metadata.folder.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
+        if (metadata.folder && metadata.folder.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
             metadata.folder = "https://ipfs.io/ipfs/" + metadata.folder.split("ipfs://ipfs/")[1];
         }
     }
     var keys = Object.keys(metadata);
-    for(var key of keys) {
-        if(metadata[key] === "" || metadata[key] === undefined || metadata[key] === null) {
+    for (var key of keys) {
+        if (metadata[key] === "" || metadata[key] === undefined || metadata[key] === null) {
             delete metadata[key];
         }
     }
 };
 
 window.prepareMetadata = async function prepareMetadata(data) {
-    if(data instanceof FileList) {
-        if(data.length === 0) {
+    if (data instanceof FileList) {
+        if (data.length === 0) {
             return "";
         }
         return await window.uploadToIPFS(data);
     }
     if (data instanceof Array) {
         var array = [];
-        for(var item of data) {
+        for (var item of data) {
             array.push(await window.prepareMetadata(item));
         }
         return array;
@@ -2469,7 +2467,7 @@ window.prepareMetadata = async function prepareMetadata(data) {
     if ((typeof data).toLowerCase() === 'object') {
         var newData = {};
         var entries = Object.entries(data);
-        for(var entry of entries) {
+        for (var entry of entries) {
             newData[entry[0]] = await window.prepareMetadata(entry[1]);
         }
         return newData;
@@ -2499,29 +2497,28 @@ window.onTextChange = function onTextChange(e) {
     view[timeVar] = setTimeout(() => callback(value), window.context.inputTimeout);
 };
 
-window.loadSingleCollection = async function loadSingleCollection(address) {
-    address = window.web3.utils.toChecksumAddress(address);
+window.loadSingleCollection = async function loadSingleCollection(collectionAddress) {
+    collectionAddress = window.web3.utils.toChecksumAddress(collectionAddress);
     try {
         var erc20Wrappers = (await window.blockchainCall(window.currentEthItemKnowledgeBase.methods.erc20Wrappers)).map(it => window.web3.utils.toChecksumAddress(it));
-        if(erc20Wrappers.indexOf(address) !== -1) {
+        if (erc20Wrappers.indexOf(address) !== -1) {
             return await window.refreshSingleCollection(window.packCollection(address, "IERC20WrapperABI"));
         }
-    } catch(e) {
-    }
+    } catch (e) {}
     var map = {};
     Object.entries(window.context.ethItemFactoryEvents).forEach(it => map[window.web3.utils.sha3(it[0])] = it[1]);
     var topics = [
         Object.keys(map), [],
         [],
-        window.web3.eth.abi.encodeParameter('address', address)
+        window.web3.eth.abi.encodeParameter('address', collectionAddress)
     ];
-    var addresses = await window.blockchainCall(window.ethItemOrchestrator.methods.factories);
+    var address = await window.blockchainCall(window.ethItemOrchestrator.methods.factories);
     var logs = await window.getLogs({
-        addresses,
+        address,
         topics
     }, true);
     for (var log of logs) {
-        return await window.refreshSingleCollection(window.packCollection(address, map[log.topics[0]]));
+        return await window.refreshSingleCollection(window.packCollection(collectionAddress, map[log.topics[0]]));
     }
 };
 
@@ -2544,14 +2541,35 @@ window.packCollection = function packCollection(address, category) {
 window.refreshSingleCollection = async function refreshSingleCollection(collection, view) {
     collection.name = collection.name || await window.blockchainCall(collection.contract.methods.name);
     collection.symbol = collection.symbol || await window.blockchainCall(collection.contract.methods.symbol);
-    await window.tryRetrieveMetadata(collection, collection.category).then(() => view && view.forceUpdate());
-    collection.openSeaName = collection.name.toLowerCase().split(' ').join('-');
-    delete collection.hasBalance;
+    try {
+        collection.modelVersion = collection.modelVersion || await window.blockchainCall(collection.contract.methods.modelVersion);
+    } catch (e) {}
     delete collection.isOwner;
     try {
-        collection.isOwner = window.web3.utils.toChecksumAddress(await window.blockchainCall(collection.contract.methods.extension)) === window.walletAddress;
-    } catch(e) {
+        collection.isOwner = (collection.extensionAddress = window.web3.utils.toChecksumAddress(await window.blockchainCall(collection.contract.methods.extension))) === window.walletAddress;
+    } catch (e) {}
+    try {
+        collection.extensionIsContract = (await window.web3.eth.getCode(collection.extensionAddress)) !== '0x';
+    } catch (e) {}
+    delete collection.problems;
+    var retrieveMetadataPromise = window.tryRetrieveMetadata(collection, collection.category).then(async() => {
+        try {
+            if (!collection.modelCode) {
+                window.modelCodes = window.modelCodes || {};
+                window.modelCodes[collection.category] = window.modelCodes[collection.category] || {};
+                window.modelCodes[collection.category][collection.modelVersion] = window.modelCodes[collection.category][collection.modelVersion] || await window.AJAXRequest(window.formatLink(window.context.defaultItemData[collection.category].collection.modelCode[collection.modelVersion]));
+                collection.modelCode = window.modelCodes[collection.category][collection.modelVersion];
+            }
+        } catch (e) {}
+        collection.problems = await window.getCollectionProblems(collection);
+    });
+    if (!view) {
+        await retrieveMetadataPromise;
+    } else {
+        retrieveMetadataPromise.then(() => view && view.forceUpdate());
     }
+    collection.openSeaName = collection.name.toLowerCase().split(' ').join('-');
+    delete collection.hasBalance;
     window.loadCollectionENS(collection);
     collection.loaded = true;
     window.checkAddressBarCollection(collection);
@@ -2559,16 +2577,60 @@ window.refreshSingleCollection = async function refreshSingleCollection(collecti
 };
 
 window.checkAddressBarCollection = function checkAddressBarCollection(collection) {
-    if(!window.addressBarParams.collection) {
+    if (!window.addressBarParams.collection) {
         return;
     }
     var addr = window.web3.utils.toChecksumAddress(window.addressBarParams.collection);
-    if(addr !== collection.address) {
+    if (addr !== collection.address) {
         return;
     }
     window.consumeAddressBarParam("collection");
-    $.publish('section/change', ['spa/collection', {collection}]);
+    $.publish('section/change', ['spa/collection', { collection }]);
 };
+
+window.getCollectionProblems = async function getCollectionProblems(collection) {
+    var problems = collection.problems || [];
+    var extensionCodeProblems = await checkCollectionExtensionCode(collection);
+    extensionCodeProblems && problems.push(...extensionCodeProblems);
+    var modelCodeProblems = await checkCollectionModelCode(collection);
+    modelCodeProblems && problems.push(...modelCodeProblems);
+    var onlyUnique = function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+    }
+    return problems.filter(onlyUnique);
+};
+
+window.checkCollectionExtensionCode = async function checkCollectionExtensionCode(collection) {
+    if (!collection || collection.category !== 'ERC1155' || !collection.extensionIsContract || collection.extensionCodeVerified) {
+        return;
+    }
+    collection.extensionCodeVerified = true;
+    var problems = [];
+    if (!collection.extensionCode) {
+        return ["Extension code is missing"];
+    }
+    var compare;
+    try {
+        compare = await window.SolidityUtilities.compare(collection.extensionAddress, collection.extensionCode);
+    } catch (e) {}!compare && problems.push("Extension source code and Extension address do not match");
+    return problems;
+};
+
+window.checkCollectionModelCode = async function checkCollectionModelCode(collection) {
+    if (!collection || collection.extensionIsContract || collection.modelCodeVerified) {
+        return;
+    }
+    collection.modelCodeVerified = true;
+    var problems = [];
+    if (!collection.modelCode) {
+        return ["Collection source code is missing"];
+    }
+    var compare;
+    try {
+        compare = await window.SolidityUtilities.compare(collection.address, collection.modelCode);
+    } catch (e) {}!compare && problems.push("Collection source code and collection address do not match");
+    return problems;
+}
 
 window.convertTextWithLinksInHTML = function convertTextWithLinksInHTML(text) {
     return text;
@@ -2669,10 +2731,10 @@ window.downloadBase64Image = function downloadBase64Image(url) {
     return new Promise(function(ok, ko) {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
-            if (this.readyState === 4 && this.status === 200){
+            if (this.readyState === 4 && this.status === 200) {
                 return ok(this.response);
             }
-            if(this.readyState === 4 && (!this.status || this.status >= 300)) {
+            if (this.readyState === 4 && (!this.status || this.status >= 300)) {
                 return ko(this.status);
             }
         }
@@ -2687,6 +2749,10 @@ window.checkURL = function checkURL(url) {
         return true;
     }
     return new RegExp(window.IPFSRegex).test(url)
+};
+
+window.getElementImage = function getElementImage(element) {
+    return window.formatLink(element.image || window.context.defaultItemData[element.category || element.collection.category][element.collection ? 'item' : 'collection'].image);
 };
 
 window.preparePermitSignature = async function preparePermitSignature(tokenAddress, spender, value) {

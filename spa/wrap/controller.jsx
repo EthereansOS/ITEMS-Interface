@@ -73,9 +73,9 @@ var WrapController = function (view) {
             return;
         }
         if(selectedToken.decimals && window.asNumber(selectedToken.decimals) > 1) {
-            value = window.fromDecimals(value, selectedToken.decimals);
+            value = window.fromDecimals(value, selectedToken.decimals, true);
         }
-        return window.formatMoney(value, 1);
+        return value;
     };
 
     context.toDecimals = function toDecimals(value) {

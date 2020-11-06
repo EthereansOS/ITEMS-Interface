@@ -35,11 +35,12 @@ var CollectionSingleItem = React.createClass({
         return (<section className="collectionPageItem">
             <a href={this.props.readOnly ? undefined : "javascript:;"} onClick={this.props.readOnly ? undefined : this.onClick}>
                 <figure className="ItemIcon">
-                    {item && <LazyImageLoader src={this.state && item.image}/>}
+                    {item && <LazyImageLoader src={window.getElementImage(item)}/>}
                 </figure>
             </a>
             {item && <article className="ItemInfo">
-                <h3 className="ItemTitle">{item.name}</h3>
+                {!this.props.miniature && <h3 className="ItemTitle">{item.name}</h3>}
+                {this.props.miniature && <h3 className="ItemTitle">{window.shortenWord(item.name, 25)}</h3>}
                 {item.dynamicData && <a target="_blank" href={window.context.uniswapSpawUrlTemplate.format(item.address)} className="ItemPrice">&#129412; $ {item.dynamicData.tokenPriceInDollarsOnUniswap ? window.formatMoney(item.dynamicData.tokenPriceInDollarsOnUniswap, 1) : "--"}</a>}
                 {item.dynamicData && <a target="_blank" href={window.context.openSeaItemLinkTemplate.format(this.props.collection.address, item.objectId)} className="ItemPrice">&#9973; $ {item.dynamicData.tokenPriceInDollarsOnOpenSea ? window.formatMoney(item.dynamicData.tokenPriceInDollarsOnOpenSea, 1) : "--"}</a>}
                 {item.dynamicData && item.dynamicData.totalSupply && <span className="ItemSupply">Supply: <b>{window.fromDecimals(item.dynamicData.totalSupply, item.decimals)}</b></span>}
