@@ -149,6 +149,7 @@ window.onEthereumUpdate = function onEthereumUpdate(millis) {
                     return alert('This network is actually not supported!');
                 }
                 update = true;
+                window.globalCollections = [];
             }
             delete window.walletAddress;
             try {
@@ -2524,18 +2525,20 @@ window.loadSingleCollection = async function loadSingleCollection(address) {
     }
 };
 
-window.packCollection = function packCollection(address, category, oldCollections) {
+window.packCollection = function packCollection(address, category) {
+    window.globalCollections = window.globalCollections || [];
     var abi = window.context[category];
     var contract = window.newContract(abi, address);
-    var key = address;
-    var collection = oldCollections && oldCollections.filter(it => it.key === key);
     category = category.substring(1, category.length - 3);
-    return collection = collection && collection.length > 0 ? collection[0] : {
+    var key = address;
+    var collection = window.globalCollections.filter(it => it.key === key)[0];
+    !collection && window.globalCollections.push(collection = {
         key,
         address,
         category,
         contract
-    }
+    });
+    return collection;
 };
 
 window.refreshSingleCollection = async function refreshSingleCollection(collection, view) {

@@ -30,7 +30,6 @@ var IndexController = function (view) {
         Object.entries(window.context.ethItemFactoryEvents).forEach(it => map[window.web3.utils.sha3(it[0])] = it[1]);
         var topics = [Object.keys(map)];
         var address = await window.blockchainCall(window.ethItemOrchestrator.methods.factories);
-        var oldCollections = (context.view.state && context.view.state.collections) || [];
         var collections = [];
         var blocks = await window.loadBlockSearchTranches();
         var updateSubCollectionsPromise = function updateSubCollectionsPromise(subCollections) {
@@ -43,7 +42,7 @@ var IndexController = function (view) {
         try {
             var erc20Wrappers = await window.blockchainCall(window.currentEthItemKnowledgeBase.methods.erc20Wrappers);
             var subCollections = [];
-            erc20Wrappers.forEach(it => subCollections.push(window.packCollection(window.web3.utils.toChecksumAddress(it), "IERC20WrapperABI", oldCollections)));
+            erc20Wrappers.forEach(it => subCollections.push(window.packCollection(window.web3.utils.toChecksumAddress(it), "IERC20WrapperABI")));
             subCollectionsPromises.push(updateSubCollectionsPromise(subCollections));
         } catch(e) {
         }
@@ -58,7 +57,7 @@ var IndexController = function (view) {
             for (var log of logs) {
                 var address = window.web3.utils.toChecksumAddress(window.web3.eth.abi.decodeParameter("address", log.topics[log.topics.length - 1]));
                 var category = map[log.topics[0]];
-                subCollections.push(window.packCollection(address, category, oldCollections));
+                subCollections.push(window.packCollection(address, category));
             }
             subCollectionsPromises.push(updateSubCollectionsPromise(subCollections));
         }

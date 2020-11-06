@@ -121,6 +121,13 @@ var CreateCollectionWizard = React.createClass({
                 </label>
                 <span className="ExplBoom">A link to a forum, chat o community where people can interact about this project</span>
             </section>
+            {/*<section className="MetaImputThings">
+                <label className="createWhat">
+                    <p>External URL<b>*</b></p>
+                    <input id="external_url" type="text" />
+                </label>
+                <span className="ExplBoom">The external URL to reach info about this collection</span>
+            </section>*/}
             <section className="MetaImputThings">
                 <label className="createWhat">
                     <p>DNS link</p>
@@ -187,11 +194,11 @@ var CreateCollectionWizard = React.createClass({
                     <p>Symbol</p>
                     <input type="text" ref={ref => (this.collectionSymbol = ref) && (ref.value = state.collectionSymbol || "")} />
                 </section>
-                <section className="FormCreateThing">
+                {/*<section className="FormCreateThing">
                     <p>ENS <span ref={ref => this.result = ref} /></p>
                     <input data-action="onENSChange" className="inENS" type="text" ref={ref => (this.collectionENS = ref) && (ref.value = state.collectionENS || "")} onChange={window.onTextChange} onKeyUp={window.onTextChange} />
                     <span className="inENSitem">.ITEM.eth</span>
-                </section>
+                </section>*/}
                 <section className="FormCreateThing">
                     <a className="SuperActionBTN" href="javascript:;" onClick={this.next}>NEXT</a>
                 </section>

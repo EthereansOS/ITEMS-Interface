@@ -14,6 +14,7 @@ var ItemController = function (view) {
 
         await window.blockchainCall(context.view.props.item.collection.contract.methods['mint(uint256,uint256)'], context.view.props.item.objectId, amount);
         window.updateItemDynamicData(this.props.item, context.view);
+        context.view.emit('collections/refresh');
     };
 
     context.performUnwrap = async function performUnwrap() {
@@ -30,5 +31,6 @@ var ItemController = function (view) {
         }
         await window.blockchainCall(context.view.props.item.collection.contract.methods.burn, context.view.props.item.objectId, amount);
         window.updateItemDynamicData(this.props.item, context.view);
+        context.view.emit('collections/refresh');
     };
 };

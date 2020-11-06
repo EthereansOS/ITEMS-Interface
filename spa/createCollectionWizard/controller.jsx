@@ -14,8 +14,10 @@ var CreateCollectionWizardController = function (view) {
             throw "Symbol is mandatory";
         }
 
-        var ensResult = await context.checkENS();
-        var collectionENS = ensResult[0];
+        var collectionENS = "";
+
+        /*var ensResult = await context.checkENS();
+        collectionENS = ensResult[0];
         if (!collectionENS) {
             throw "ENS is mandatory";
         }
@@ -23,7 +25,7 @@ var CreateCollectionWizardController = function (view) {
         var exists = ensResult[1];
         if (exists) {
             throw "This ENS is already taken!";
-        }
+        }*/
 
         context.view.setState({
             collectionName,
@@ -134,7 +136,7 @@ var CreateCollectionWizardController = function (view) {
         metadata.hasDecimals = state.hasDecimals;
         metadata.originalCreator = window.web3.utils.toChecksumAddress(window.walletAddress);
         metadata.extensionAddress = extensionAddress;
-        metadata.external_url = `${state.collectionENS}.${window.context.ensDomainName}`;
+        //metadata.external_url = `${state.collectionENS}.${window.context.ensDomainName}`;
         context.view.setState({loadingMessage : "Uploading metadata"});
         var metadataLink = await window.uploadMetadata(metadata);
         var params = ["string", "string", "bool", "string", "address", "bytes"];
