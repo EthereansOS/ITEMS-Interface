@@ -139,6 +139,7 @@ contract ERC1155WrapperV1 is IERC1155WrapperV1, EthItemModelBase {
             name = _idAsName ? _toString(objectId) : name;
             _decimalsMap[objectId] = dec;
             IERC20NFTWrapper(wrapperAddress).init(objectId, name, symbol, _decimals);
+            emit NewItem(objectId, wrapperAddress);
         }
         uint256 itemDecimalsUnity = 10**_decimals;
 

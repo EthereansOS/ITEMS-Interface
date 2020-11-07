@@ -105,6 +105,7 @@ contract ERC1155V1 is IERC1155V1, EthItemModelBase {
         _objectUris[objectId] = objectUri;
         _editable[objectId] = editable;
         wrapper.init(objectId, name, symbol, _decimals);
+        emit NewItem(objectId, wrapperAddress);
         _mint(objectId, amount);
     }
 

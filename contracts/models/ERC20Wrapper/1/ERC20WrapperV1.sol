@@ -22,6 +22,7 @@ contract ERC20WrapperV1 is IERC20WrapperV1, EthItemModelBase {
         (address ethItemERC20WrapperModelAddress,) = erc20NFTWrapperModel();
         _isMine[_dest[ETHEREUM_OBJECT_ID] = _clone(ethItemERC20WrapperModelAddress)] = true;
         IERC20NFTWrapper(_dest[ETHEREUM_OBJECT_ID]).init(ETHEREUM_OBJECT_ID, "EthereumItem", "IETH", _decimalsMap[ETHEREUM_OBJECT_ID] = _decimals);
+        emit NewItem(ETHEREUM_OBJECT_ID, _dest[ETHEREUM_OBJECT_ID]);
         emit Mint(ETHEREUM_OBJECT_ID, _dest[ETHEREUM_OBJECT_ID], 0);
     }
 
@@ -54,6 +55,7 @@ contract ERC20WrapperV1 is IERC20WrapperV1, EthItemModelBase {
             (string memory name, string memory symbol, uint256 dec) = _getMintData(erc20TokenAddress);
             _decimalsMap[objectId] = dec;
             IERC20NFTWrapper(wrapperAddress).init(objectId, name, symbol, _decimals);
+            emit NewItem(objectId, wrapperAddress);
         }
         _safeTransferFrom(IERC20Data(erc20TokenAddress), msg.sender, address(this), amount);
         _mintItems(objectId, wrapperAddress, amount);

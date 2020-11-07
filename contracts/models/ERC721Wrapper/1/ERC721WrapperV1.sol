@@ -85,6 +85,7 @@ contract ERC721WrapperV1 is IERC721WrapperV1, EthItemModelBase {
             _isMine[_dest[objectId] = wrapperAddress = _clone(ethItemERC20WrapperModelAddress)] = true;
             string memory name = _idAsName ? _toString(objectId) : _name;
             IERC20NFTWrapper(wrapperAddress).init(objectId, name, _symbol, _decimals);
+            emit NewItem(objectId, wrapperAddress);
         }
         uint256 toMint = (10**_decimals) - asERC20(objectId).totalSupply();
         asERC20(objectId).mint(from, toMint);
