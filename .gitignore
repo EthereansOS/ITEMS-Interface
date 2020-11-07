@@ -4,6 +4,8 @@
 /**/node_modules
 /**/package-lock.json
 /**/npm/dist
-/**/*context.local.json
-contracts/original
+/**/contracts-out
+/**/truffle-config.js
 /**/artifacts
+/**/eth-item-token-standard-old
+/**/bin

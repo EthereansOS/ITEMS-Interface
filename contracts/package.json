@@ -1,0 +1,23 @@
+{
+  "name": "ethart-v2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build-contracts.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/b-u-i-d-l/ethart-v2.git"
+  },
+  "author": "The DFOhub Team",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/b-u-i-d-l/ethart-v2/issues"
+  },
+  "homepage": "https://github.com/b-u-i-d-l/ethart-v2#readme",
+  "dependencies": {
+    "eth-item-token-standard": "git+https://github.com/b-u-i-d-l/eth-item-token-standard.git",
+    "truffle-flattener-wrapper": "git+https://github.com/b-u-i-d-l/truffle-flattener-wrapper.git"
+  }
+}
