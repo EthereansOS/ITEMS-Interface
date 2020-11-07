@@ -2205,14 +2205,22 @@ window.getTokenPriceInDollarsOnOpenSea = async function getTokenPriceInDollarsOn
 };
 
 window.loadCollectionItems = async function loadCollectionItems(collectionAddress) {
-    var mintEvent = "Mint(uint256,address,uint256)";
     var logs = await window.getLogs({
         address: collectionAddress,
-        topics: [window.web3.utils.sha3(mintEvent)]
+        topics: [window.web3.utils.sha3("NewItem(uint256,address)")]
+    });
+    logs = logs && logs.length > 0 ? logs : await window.getLogs({
+        address: collectionAddress,
+        topics: [window.web3.utils.sha3("Mint(uint256,address,uint256)")]
     });
     var collectionObjectIds = {};
     for (var log of logs) {
-        var objectId = web3.eth.abi.decodeParameters(["uint256", "address", "uint256"], log.data)[0];
+        var objectId;
+        try {
+            objectId = web3.eth.abi.decodeParameter("uint256", log.topics[1]);
+        } catch(e) {
+            objectId = web3.eth.abi.decodeParameters(["uint256", "address", "uint256"], log.data)[0];
+        }
         collectionObjectIds[objectId] = true;
     }
     return Object.keys(collectionObjectIds);
