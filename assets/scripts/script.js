@@ -29,7 +29,7 @@ window.tryLoadSection = function tryLoadSection() {
             }
         });
     }
-    if (window.addressBarParams.collection) {
+    if (window.addressBarParams.collection || window.addressBarParams.wrappedItem) {
         return window.connectFromHomepage({
             dataset: {
                 section: 'explore'
@@ -2137,7 +2137,7 @@ window.sleep = function sleep(millis) {
 };
 
 window.tryRetrieveMetadata = async function tryRetrieveMetadata(item) {
-    if (item.metadataLink || (item.category && window.context.collectionsWithMetadata.indexOf(item.category) === -1)) {
+    if (item.metadataLink) {// || (item.category && window.context.collectionsWithMetadata.indexOf(item.category) === -1)) {
         return;
     }
     var clearMetadata = true;
@@ -2260,6 +2260,10 @@ window.loadItemData = async function loadItemData(item, collection, view) {
         metadataPromise.then(() => view.setState({ item }));
     } else {
         await metadataPromise;
+    }
+    if(item.collection.category === 'W20' && !item.trustWalletURI) {
+        item.trustWalletURI = window.context.trustwalletImgURLTemplate.format(item.sourceAddress);
+        window.AJAXRequest(item.trustWalletURI = window.context.trustwalletImgURLTemplate.format(item.sourceAddress)).then(() => (item.image = item.trustWalletURI) && view && view.setState({item}));
     }
     item.decimals = item.decimals || await window.blockchainCall(item.token.methods.decimals);
     item.collectionDecimals = item.collectionDecimals || await window.blockchainCall(item.collection.contract.methods.decimals, item.objectId);
@@ -2457,6 +2461,7 @@ window.normalizeMetadata = async function normalizeMetadata(metadata) {
             metadata.folder = "https://ipfs.io/ipfs/" + metadata.folder.split("ipfs://ipfs/")[1];
         }
     }
+    delete metadata.fileType;
     var keys = Object.keys(metadata);
     for (var key of keys) {
         if (metadata[key] === "" || metadata[key] === undefined || metadata[key] === null) {
@@ -2517,7 +2522,7 @@ window.loadSingleCollection = async function loadSingleCollection(collectionAddr
     try {
         var erc20Wrappers = (await window.blockchainCall(window.currentEthItemKnowledgeBase.methods.erc20Wrappers)).map(it => window.web3.utils.toChecksumAddress(it));
         if (erc20Wrappers.indexOf(collectionAddress) !== -1) {
-            return await window.refreshSingleCollection(window.packCollection(collectionAddress, "IERC20WrapperABI"));
+            return await window.refreshSingleCollection(window.packCollection(collectionAddress, "W20ABI"));
         }
     } catch (e) {}
     var map = {};
@@ -2541,7 +2546,7 @@ window.packCollection = function packCollection(address, category) {
     window.globalCollections = window.globalCollections || [];
     var abi = window.context[category];
     var contract = window.newContract(abi, address);
-    category = category.substring(1, category.length - 3);
+    category = category.substring(0, category.length - 3);
     var key = address;
     var collection = window.globalCollections.filter(it => it.key === key)[0];
     !collection && window.globalCollections.push(collection = {
@@ -2565,7 +2570,9 @@ window.refreshSingleCollection = async function refreshSingleCollection(collecti
     }
     try {
         collection.modelVersion = collection.modelVersion || await window.blockchainCall(collection.contract.methods.modelVersion);
-    } catch (e) {}
+    } catch (e) {
+        collection.modelVersion = 1;
+    }
     delete collection.isOwner;
     try {
         collection.isOwner = (collection.extensionAddress = window.web3.utils.toChecksumAddress(await window.blockchainCall(collection.contract.methods.extension))) === window.walletAddress;
@@ -2573,6 +2580,16 @@ window.refreshSingleCollection = async function refreshSingleCollection(collecti
     try {
         collection.extensionIsContract = (await window.web3.eth.getCode(collection.extensionAddress)) !== '0x';
     } catch (e) {}
+    try {
+        collection.standardVersion = collection.standardVersion || (await window.blockchainCall(collection.contract.methods.standardVersion));
+    } catch(e) {
+        collection.standardVersion = 1;
+    }
+    try {
+        collection.erc20WrappedItemVersion = collection.erc20WrappedItemVersion || (await window.blockchainCall(collection.contract.methods.erc20NFTWrapperModel))[1];
+    } catch(e) {
+        collection.erc20WrappedItemVersion = 1;
+    }
     delete collection.problems;
     var retrieveMetadataPromise = window.tryRetrieveMetadata(collection, collection.category);
     if (!view) {
@@ -2587,7 +2604,7 @@ window.refreshSingleCollection = async function refreshSingleCollection(collecti
     return collection;
 };
 
-window.retrieveAndCheckCode = async function retrieveAndCheckCode(collection) {
+window.retrieveAndCheckModelCode = async function retrieveAndCheckModelCode(collection) {
     try {
         if (!collection.modelCode) {
             window.modelCodes = window.modelCodes || {};
@@ -2597,6 +2614,20 @@ window.retrieveAndCheckCode = async function retrieveAndCheckCode(collection) {
         }
     } catch (e) {}
     collection.problems = await window.getCollectionProblems(collection);
+};
+
+window.retrieveWrappedCode = async function retrieveWrappedCode(item) {
+    try {
+        var collection = item.collection;
+        if (!collection.wrappedCode) {
+            window.wrappedCodes = window.wrappedCodes || {};
+            window.wrappedCodes[collection.category] = window.wrappedCodes[collection.category] || {};
+            window.wrappedCodes[collection.category][collection.erc20WrappedItemVersion] = window.wrappedCodes[collection.category][collection.erc20WrappedItemVersion] || await window.AJAXRequest(window.formatLink(window.context.defaultItemData[collection.category].item.code[collection.erc20WrappedItemVersion]));
+            collection.wrappedCode = window.wrappedCodes[collection.category][collection.erc20WrappedItemVersion];
+        }
+    } catch (e) {
+        console.error(e);
+    }
 };
 
 window.getCollectionProblems = async function getCollectionProblems(collection) {
@@ -2612,7 +2643,7 @@ window.getCollectionProblems = async function getCollectionProblems(collection) 
 };
 
 window.checkCollectionExtensionCode = async function checkCollectionExtensionCode(collection) {
-    if (!collection || collection.category !== 'ERC1155' || !collection.extensionIsContract || collection.extensionCodeVerified) {
+    if (!collection || collection.category !== 'Native' || !collection.extensionIsContract || collection.extensionCodeVerified) {
         return;
     }
     collection.extensionCodeVerified = true;

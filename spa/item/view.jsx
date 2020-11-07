@@ -90,7 +90,9 @@ var Item = React.createClass({
         this.unwrapInput.value = this.props.item.dynamicData.balanceOfCollectionSidePlain.split(',').join();
     },
     componentDidMount() {
-        window.setHomepageLink(`?collection=${this.props.item.collection.address}&item=${this.props.item.objectId}`);
+        window.setHomepageLink(`?wrappedItem=${this.props.item.address}`);
+        var _this = this;
+        window.retrieveWrappedCode(this.props.item).then(() => _this.forceUpdate());
     },
     render() {
         var item = (this.state && this.state.item) || this.props.item;
@@ -124,23 +126,23 @@ var Item = React.createClass({
                                         <a className="ItemPrice" target="_blank" href={window.context.openSeaItemLinkTemplate.format(this.props.collection.address, item.objectId)}>&#9973; $ {item.dynamicData.tokenPriceInDollarsOnOpenSea ? window.formatMoney(item.dynamicData.tokenPriceInDollarsOnOpenSea, 1) : "--"}</a>
                                         {this.props.item.dynamicData && this.props.item.dynamicData.canMint && <section className="SettingsForOwn">
                                             <label>
-                                                <input type="text" placeholder="0.00" spellcheck="false" autocomplete="off" autocorrect="off" inputmode="decimal" pattern="^[0-9][.,]?[0-9]$" ref={ref => this.mintMoreInput = ref}/>
+                                                <input type="text" placeholder="0.00" spellcheck="false" autocomplete="off" autocorrect="off" inputmode="decimal" pattern="^[0-9][.,]?[0-9]$" ref={ref => this.mintMoreInput = ref} />
                                             </label>
                                             {(!this.state || this.state.performing !== 'mint') && <a className={"" + (this.state && this.state.performing ? ' disabled' : '')} href="javascript:;" data-action="mint" onClick={window.perform}>Mint</a>}
-                                            {this.state && this.state.performing === 'mint' && <InnerLoader/>}
+                                            {this.state && this.state.performing === 'mint' && <InnerLoader />}
                                         </section>}
-                                        {this.props.item.collection.category !== 'ERC1155' && this.props.item.dynamicData && parseFloat(this.props.item.dynamicData.balanceOfCollectionSidePlain) > 0 && <section className="SettingsForOwn">
+                                        {this.props.item.collection.category !== 'Native' && this.props.item.dynamicData && parseFloat(this.props.item.dynamicData.balanceOfCollectionSidePlain) > 0 && <section className="SettingsForOwn">
                                             <label>
                                                 <a className="MaximumBro" href="javascript:;" onClick={this.max}>Max</a>
-                                                <input type="text" placeholder="0.00" spellcheck="false" autocomplete="off" autocorrect="off" inputmode="decimal" pattern="^[0-9][.,]?[0-9]$" ref={ref => this.unwrapInput = ref}/>
+                                                <input type="text" placeholder="0.00" spellcheck="false" autocomplete="off" autocorrect="off" inputmode="decimal" pattern="^[0-9][.,]?[0-9]$" ref={ref => this.unwrapInput = ref} />
                                             </label>
                                             {(!this.state || this.state.performing !== "unwrap") && <a className={"" + (this.state && this.state.performing ? ' disabled' : '')} href="javascript:;" data-action="unwrap" onClick={window.perform}>Unwrap</a>}
-                                            {this.state && this.state.performing === 'unwrap' && <InnerLoader/>}
+                                            {this.state && this.state.performing === 'unwrap' && <InnerLoader />}
                                         </section>}
                                     </section>
                                 </section>
                             </section>
-                            {window.renderExpandibleElement(!item.description ? "No description available" : window.convertTextWithLinksInHTML(item.description), <p className="itemDesc"/>)}
+                            {window.renderExpandibleElement(!item.description ? "No description available" : window.convertTextWithLinksInHTML(item.description), <p className="itemDesc" />)}
                         </article>
                     </section>
                     <section className="collectionNav">
@@ -148,6 +150,7 @@ var Item = React.createClass({
                             {item.metadata && <li className={toggle === 'metadata' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>METADATA</a></li>}
                             <li className={toggle === 'farm' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>FARM</a></li>
                             <li className={toggle === 'arbitrage' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>ARBITRAGE</a></li>
+                            {(this.props.item.collection.extensionCode || this.props.item.collection.modelCode || this.props.item.collection.wrappedCode) && <li className={toggle === 'code' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle} data-toggle="code">CODE</a></li>}
                         </ul>
                     </section>
                     <section className="ItemStuff">
@@ -156,6 +159,20 @@ var Item = React.createClass({
                             </section>
                             {this.renderMetadata()}
                             {this.renderMetadata(true)}
+                        </section>}
+                        {toggle === 'code' && <section className="collectionPageItemsCode">
+                            {this.props.item.collection.extensionCode && <section>
+                                <h3>Extension</h3>
+                                <Editor readonly firstCode={this.props.item.collection.extensionCode} />
+                            </section>}
+                            {this.props.item.collection.modelCode && <section>
+                                <h3>Model</h3>
+                                <Editor readonly firstCode={this.props.item.collection.modelCode} />
+                            </section>}
+                            {this.props.item.collection.wrappedCode && <section>
+                                <h3>Wrapped ERC20</h3>
+                                <Editor readonly firstCode={this.props.item.collection.wrappedCode} />
+                            </section>}
                         </section>}
                         {toggle === 'farm' && <section className="ItemFarm">
                             Soon @UniFi

@@ -4,12 +4,18 @@ var IndexController = function (view) {
 
     context.tryCheckAddressBarParams = async function tryCheckAddressBarParams() {
         var collectionAddress = window.consumeAddressBarParam("collection");
-        if(!collectionAddress) {
+        var wrappedItemAddress = window.consumeAddressBarParam("wrappedItem");
+        if(!collectionAddress && !wrappedItemAddress) {
             return;
         }
+        var objectId = window.consumeAddressBarParam("item");
+        if(wrappedItemAddress) {
+            var wrappedItem = window.newContract(window.context.IERC20ItemWrapperABI, wrappedItemAddress);
+            objectId = await window.blockchainCall(wrappedItem.methods.objectId);
+            collectionAddress = await window.blockchainCall(wrappedItem.methods.mainWrapper);
+        }
         var props = {collection : await window.loadSingleCollection(collectionAddress)};
-        (props.objectId = window.consumeAddressBarParam("item")) && (props.item = await window.loadItemData(props));
-        delete props.objectId;
+        (props.objectId = objectId) && (props.item = await window.loadItemData(props));
         context.view.emit('section/change', `spa/${props.item ? 'item' : 'collection'}`, props);
     };
 
@@ -24,7 +30,7 @@ var IndexController = function (view) {
         } catch (e) {
         }
         try {
-            window.currentEthItemERC20Wrapper = window.newContract(window.context.IERC20WrapperABI, await window.blockchainCall(window.currentEthItemKnowledgeBase.methods.erc20Wrapper));
+            window.currentEthItemERC20Wrapper = window.newContract(window.context.W20ABI, await window.blockchainCall(window.currentEthItemKnowledgeBase.methods.erc20Wrapper));
         } catch (e) {
         }
         try {
@@ -54,7 +60,7 @@ var IndexController = function (view) {
         try {
             var erc20Wrappers = await window.blockchainCall(window.currentEthItemKnowledgeBase.methods.erc20Wrappers);
             var subCollections = [];
-            erc20Wrappers.forEach(it => subCollections.push(window.packCollection(window.web3.utils.toChecksumAddress(it), "IERC20WrapperABI")));
+            erc20Wrappers.forEach(it => subCollections.push(window.packCollection(window.web3.utils.toChecksumAddress(it), "W20ABI")));
             subCollectionsPromises.push(updateSubCollectionsPromise(subCollections));
         } catch (e) {
         }

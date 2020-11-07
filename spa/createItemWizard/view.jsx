@@ -10,6 +10,14 @@ var CreateItemWizard = React.createClass({
         delete state.props;
         return state;
     },
+    onFileOrFolder(e) {
+        window.preventItem(e);
+        var _this = this;
+        this.setState({fileOrFolder : e.currentTarget.value}, function() {
+            _this.fileOrFolder.directory = _this.state.fileOrFolder === 'folder';
+            _this.fileOrFolder.webkitdirectory = _this.state.fileOrFolder === 'folder';
+        });
+    },
     onChange(e) {
         window.preventItem(e);
         if (this.state && this.state.performing) {
@@ -106,11 +114,11 @@ var CreateItemWizard = React.createClass({
                 </section>
                 <section className="MetaImputThings">
                     <section className="createWhat">
-                        <select>
-                            <option>File</option>
-                            <option>Folder</option>
+                        <select id="fileType" onChange={this.onFileOrFolder}>
+                            <option value="file">File</option>
+                            <option value="folder">Folder</option>
                         </select>
-                        <input id="file" type="file"/>
+                        <input id={this.state && this.state.fileOrFolder === 'folder' ? 'folder' : 'file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'}/>
                     </section>
                 </section>
                 <span className="ExplBoom">The file or folder of the ITEM (if Any).</span>
