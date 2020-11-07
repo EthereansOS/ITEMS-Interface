@@ -13,7 +13,7 @@ contract EthItemFactory is IEthItemFactory, EthItemOrchestratorDependantElement 
     uint256[] private _mintFeePercentage;
     uint256[] private _burnFeePercentage;
     address private _ethItemERC20WrapperModelAddress;
-    address private _erc1155ModelAddress;
+    address private _nativeModelAddress;
     address private _erc1155WrapperModelAddress;
     address private _erc721WrapperModelAddress;
     address private _erc20WrapperModelAddress;
@@ -21,14 +21,14 @@ contract EthItemFactory is IEthItemFactory, EthItemOrchestratorDependantElement 
     constructor(
         address doubleProxy,
         address ethItemERC20WrapperModelAddress,
-        address erc1155ModelAddress,
+        address nativeModelAddress,
         address erc1155WrapperModelAddress,
         address erc721WrapperModelAddress,
         address erc20WrapperModelAddress,
         uint256 mintFeePercentageNumerator, uint256 mintFeePercentageDenominator,
         uint256 burnFeePercentageNumerator, uint256 burnFeePercentageDenominator) public EthItemOrchestratorDependantElement(doubleProxy) {
         _ethItemERC20WrapperModelAddress = ethItemERC20WrapperModelAddress;
-        _erc1155ModelAddress = erc1155ModelAddress;
+        _nativeModelAddress = nativeModelAddress;
         _erc1155WrapperModelAddress = erc1155WrapperModelAddress;
         _erc721WrapperModelAddress = erc721WrapperModelAddress;
         _erc20WrapperModelAddress = erc20WrapperModelAddress;
@@ -42,13 +42,13 @@ contract EthItemFactory is IEthItemFactory, EthItemOrchestratorDependantElement 
 
     function _registerSpecificInterfaces() internal virtual override {
         _registerInterface(this.setEthItemERC20WrapperModel.selector);
-        _registerInterface(this.setERC1155Model.selector);
+        _registerInterface(this.setNativeModel.selector);
         _registerInterface(this.setERC1155WrapperModel.selector);
         _registerInterface(this.setERC20WrapperModel.selector);
         _registerInterface(this.setERC721WrapperModel.selector);
         _registerInterface(this.setMintFeePercentage.selector);
         _registerInterface(this.setBurnFeePercentage.selector);
-        _registerInterface(this.createERC1155.selector);
+        _registerInterface(this.createNative.selector);
         _registerInterface(this.createWrappedERC1155.selector);
         _registerInterface(this.createWrappedERC20.selector);
         _registerInterface(this.createWrappedERC721.selector);
@@ -62,12 +62,12 @@ contract EthItemFactory is IEthItemFactory, EthItemOrchestratorDependantElement 
         _ethItemERC20WrapperModelAddress = ethItemERC20WrapperModelAddress;
     }
 
-    function erc1155Model() public override view returns (address erc1155ModelAddress, uint256 erc1155ModelVersion) {
-        return (_erc1155ModelAddress, IEthItemModelBase(_erc1155ModelAddress).modelVersion());
+    function nativeModel() public override view returns (address nativeModelAddress, uint256 nativeModelVersion) {
+        return (_nativeModelAddress, IEthItemModelBase(_nativeModelAddress).modelVersion());
     }
 
-    function setERC1155Model(address erc1155ModelAddress) public override byOrchestrator {
-        _erc1155ModelAddress = erc1155ModelAddress;
+    function setNativeModel(address nativeModelAddress) public override byOrchestrator {
+        _nativeModelAddress = nativeModelAddress;
     }
 
     function erc1155WrapperModel() public override view returns (address erc1155WrapperModelAddress, uint256 erc1155WrapperModelVersion) {
@@ -130,26 +130,26 @@ contract EthItemFactory is IEthItemFactory, EthItemOrchestratorDependantElement 
         dfoWalletAddress = IMVDProxy(IDoubleProxy(_doubleProxy).proxy()).getMVDWalletAddress();
     }
 
-    function createERC1155(bytes memory modelInitCallPayload) public override byOrchestrator returns (address newNFT1155Address, bytes memory modelInitCallResponse) {
+    function createNative(bytes memory modelInitCallPayload) public override byOrchestrator returns (address newNativeAddress, bytes memory modelInitCallResponse) {
         bool modelInitCallResult = false;
-        (modelInitCallResult, modelInitCallResponse) = (newNFT1155Address = _clone(_erc1155ModelAddress)).call(modelInitCallPayload);
+        (modelInitCallResult, modelInitCallResponse) = (newNativeAddress = _clone(_nativeModelAddress)).call(modelInitCallPayload);
         require(modelInitCallResult, "Model Init call failed");
-        IEthItemModelBase createdToken = IEthItemModelBase(newNFT1155Address);
+        IEthItemModelBase createdToken = IEthItemModelBase(newNativeAddress);
         (, uint256 itemModelVersion) = createdToken.erc20NFTWrapperModel();
         uint256 modelVersion = createdToken.modelVersion();
-        emit NewERC1155Created(createdToken.standardVersion(), itemModelVersion, modelVersion, newNFT1155Address);
-        emit NewERC1155Created(_erc1155ModelAddress, modelVersion, newNFT1155Address, msg.sender);
+        emit NewNativeCreated(createdToken.standardVersion(), itemModelVersion, modelVersion, newNativeAddress);
+        emit NewNativeCreated(_nativeModelAddress, modelVersion, newNativeAddress, msg.sender);
     }
 
-    function createWrappedERC1155(bytes memory modelInitCallPayload) public override byOrchestrator returns (address newNFT1155Address, bytes memory modelInitCallResponse) {
+    function createWrappedERC1155(bytes memory modelInitCallPayload) public override byOrchestrator returns (address newERC1155WrapperAddress, bytes memory modelInitCallResponse) {
         bool modelInitCallResult = false;
-        (modelInitCallResult, modelInitCallResponse) = (newNFT1155Address = _clone(_erc1155WrapperModelAddress)).call(modelInitCallPayload);
+        (modelInitCallResult, modelInitCallResponse) = (newERC1155WrapperAddress = _clone(_erc1155WrapperModelAddress)).call(modelInitCallPayload);
         require(modelInitCallResult, "Model Init call failed");
-        IEthItemModelBase createdToken = IEthItemModelBase(newNFT1155Address);
+        IEthItemModelBase createdToken = IEthItemModelBase(newERC1155WrapperAddress);
         (, uint256 itemModelVersion) = createdToken.erc20NFTWrapperModel();
         uint256 modelVersion = createdToken.modelVersion();
-        emit NewWrappedERC1155Created(createdToken.standardVersion(), itemModelVersion, modelVersion, newNFT1155Address);
-        emit NewWrappedERC1155Created(_erc1155WrapperModelAddress, modelVersion, newNFT1155Address, msg.sender);
+        emit NewWrappedERC1155Created(createdToken.standardVersion(), itemModelVersion, modelVersion, newERC1155WrapperAddress);
+        emit NewWrappedERC1155Created(_erc1155WrapperModelAddress, modelVersion, newERC1155WrapperAddress, msg.sender);
     }
 
     function createWrappedERC20(bytes memory modelInitCallPayload) public override byOrchestrator returns (address newERC20Address, bytes memory modelInitCallResponse) {

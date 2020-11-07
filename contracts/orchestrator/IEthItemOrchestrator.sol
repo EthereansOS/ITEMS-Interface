@@ -44,10 +44,10 @@ interface IEthItemOrchestrator is IERC721Receiver, IERC1155Receiver {
     function setEthItemERC20WrapperModel(address ethItemERC20WrapperModelAddress) external;
 
     /**
-     * @dev SET - The address of the ERC1155 NFT-Based EthItem model.
+     * @dev SET - The address of the Native EthItem model.
      * It can be done only through a Proposal in the Linked DFO
      */
-    function setERC1155Model(address erc1155ModelAddress) external;
+    function setNativeModel(address nativeModelAddress) external;
 
     /**
      * @dev SET - The address of the ERC1155 NFT-Based EthItem model.
@@ -79,9 +79,9 @@ interface IEthItemOrchestrator is IERC721Receiver, IERC1155Receiver {
      */
     function setBurnFeePercentage(uint256 burnFeePercentageNumerator, uint256 burnFeePercentageDenominator) external;
 
-    function createERC1155(bytes calldata modelInitPayload, string calldata ens)
+    function createNative(bytes calldata modelInitPayload, string calldata ens)
         external
-        returns (address newNFT1155Address, bytes memory modelInitCallResponse);
+        returns (address newNativeAddress, bytes memory modelInitCallResponse);
 
     function createERC20Wrapper(bytes calldata modelInitPayload)
         external

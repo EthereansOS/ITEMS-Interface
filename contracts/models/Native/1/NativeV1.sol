@@ -2,10 +2,10 @@
 
 pragma solidity ^0.6.0;
 
-import "./IERC1155V1.sol";
+import "./INativeV1.sol";
 import "../../common/EthItemModelBase.sol";
 
-contract ERC1155V1 is IERC1155V1, EthItemModelBase {
+contract NativeV1 is INativeV1, EthItemModelBase {
 
     address internal _extensionAddress;
     string internal _uri;

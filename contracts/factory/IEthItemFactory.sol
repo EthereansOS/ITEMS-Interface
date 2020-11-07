@@ -22,16 +22,16 @@ interface IEthItemFactory is IEthItemOrchestratorDependantElement {
     function setEthItemERC20WrapperModel(address ethItemERC20WrapperModelAddress) external;
 
     /**
-     * @dev GET - The address of the Smart Contract whose code will serve as a model for all the ERC1155 NFT-Based EthItems.
+     * @dev GET - The address of the Smart Contract whose code will serve as a model for all the Native EthItems.
      * Every EthItem will have its own address, but the code will be cloned from this one.
      */
-    function erc1155Model() external view returns (address erc1155ModelAddress, uint256 erc1155ModelVersion);
+    function nativeModel() external view returns (address nativeModelAddress, uint256 nativeModelVersion);
 
     /**
-     * @dev SET - The address of the ERC1155 NFT-Based EthItem model.
+     * @dev SET - The address of the Native EthItem model.
      * It can be done only by the Factory controller
      */
-    function setERC1155Model(address erc1155ModelAddress) external;
+    function setNativeModel(address nativeModelAddress) external;
 
     /**
      * @dev GET - The address of the Smart Contract whose code will serve as a model for all the Wrapped ERC1155 EthItems.
@@ -103,20 +103,20 @@ interface IEthItemFactory is IEthItemOrchestratorDependantElement {
 
     /**
      * @dev Business Logic to create a brand-new EthItem.
-     * It raises the 'NewERC1155Created' event.
+     * It raises the 'NewNativeCreated' events.
      * @param modelInitCallPayload The ABI-encoded input parameters to be passed to the model to phisically create the NFT.
      * It changes according to the Model Version.
      * @param ethItemAddress The address of the new EthItem
      * @param ethItemInitResponse The ABI-encoded output response eventually received by the Model initialization procedure.
      */
-    function createERC1155(bytes calldata modelInitCallPayload) external returns (address ethItemAddress, bytes memory ethItemInitResponse);
+    function createNative(bytes calldata modelInitCallPayload) external returns (address ethItemAddress, bytes memory ethItemInitResponse);
 
-    event NewERC1155Created(uint256 indexed standardVersion, uint256 indexed wrappedItemModelVersion, uint256 indexed modelVersion, address tokenCreated);
-    event NewERC1155Created(address indexed model, uint256 indexed modelVersion, address indexed tokenCreated, address creator);
+    event NewNativeCreated(uint256 indexed standardVersion, uint256 indexed wrappedItemModelVersion, uint256 indexed modelVersion, address tokenCreated);
+    event NewNativeCreated(address indexed model, uint256 indexed modelVersion, address indexed tokenCreated, address creator);
 
     /**
      * @dev Business Logic to wrap already existing ERC1155 Tokens to obtain a new NFT-Based EthItem.
-     * It raises the 'NewWrappedERC1155Created' event.
+     * It raises the 'NewWrappedERC1155Created' events.
      * @param modelInitCallPayload The ABI-encoded input parameters to be passed to the model to phisically create the NFT.
      * It changes according to the Model Version.
      * @param ethItemAddress The address of the new EthItem
@@ -129,7 +129,7 @@ interface IEthItemFactory is IEthItemOrchestratorDependantElement {
 
     /**
      * @dev Business Logic to wrap already existing ERC20 Tokens to obtain a new NFT-Based EthItem.
-     * It raises the 'NewWrappedERC20Created' event.
+     * It raises the 'NewWrappedERC20Created' events.
      * @param modelInitCallPayload The ABI-encoded input parameters to be passed to the model to phisically create the NFT.
      * It changes according to the Model Version.
      * @param ethItemAddress The address of the new EthItem
@@ -142,7 +142,7 @@ interface IEthItemFactory is IEthItemOrchestratorDependantElement {
 
     /**
      * @dev Business Logic to wrap already existing ERC721 Tokens to obtain a new NFT-Based EthItem.
-     * It raises the 'NewWrappedERC721Created' event.
+     * It raises the 'NewWrappedERC721Created' events.
      * @param modelInitCallPayload The ABI-encoded input parameters to be passed to the model to phisically create the NFT.
      * It changes according to the Model Version.
      * @param ethItemAddress The address of the new EthItem

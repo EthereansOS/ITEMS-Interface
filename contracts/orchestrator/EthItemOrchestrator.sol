@@ -136,10 +136,10 @@ contract EthItemOrchestrator is IEthItemOrchestrator, ERC165 {
         }
     }
 
-    function setERC1155Model(address erc1155ModelAddress) public override byDFO {
+    function setNativeModel(address nativeModelAddress) public override byDFO {
         IEthItemFactory element = IEthItemFactory(factory());
-        if(element.supportsInterface(this.setERC1155Model.selector)) {
-            element.setERC1155Model(erc1155ModelAddress);
+        if(element.supportsInterface(this.setNativeModel.selector)) {
+            element.setNativeModel(nativeModelAddress);
         }
     }
 
@@ -286,12 +286,12 @@ contract EthItemOrchestrator is IEthItemOrchestrator, ERC165 {
         (ethItem,) = currentFactory.createWrappedERC721(modelInitPayload);
     }
 
-    function createERC1155(bytes memory modelInitCallPayload, string memory ens) public override
-        returns (address newNFT1155Address, bytes memory modelInitCallResponse) {
-        (newNFT1155Address, modelInitCallResponse) = IEthItemFactory(factory()).createERC1155(modelInitCallPayload);
-        IKnowledgeBase(knowledgeBase()).setEthItem(newNFT1155Address);
+    function createNative(bytes memory modelInitCallPayload, string memory ens) public override
+        returns (address newNativeAddress, bytes memory modelInitCallResponse) {
+        (newNativeAddress, modelInitCallResponse) = IEthItemFactory(factory()).createNative(modelInitCallPayload);
+        IKnowledgeBase(knowledgeBase()).setEthItem(newNativeAddress);
         if(_ensController != address(0)) {
-            IENSController(_ensController).attachENS(newNFT1155Address, ens);
+            IENSController(_ensController).attachENS(newNativeAddress, ens);
         }
     }
 

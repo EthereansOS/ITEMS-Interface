@@ -9,7 +9,7 @@ import "../../common/IEthItemModelBase.sol";
  * This is a pure extension of the EthItem Token Standard, which also introduces an optional extension that can introduce some external behavior to the EthItem.
  * Extension can also be a simple wallet
  */
-interface IERC1155V1 is IEthItemModelBase {
+interface INativeV1 is IEthItemModelBase {
 
     /**
      * @dev Contract initialization
