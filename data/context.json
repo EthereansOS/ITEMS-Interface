@@ -24,13 +24,13 @@
     "defaultItemData" : {
         "Native" : {
             "collection" : {
-                "image" : "assets/img/erc20-penguin.png",
+                "image" : "assets/img/native-collection.png",
                 "modelCode" : {
                     "1" : "ipfs://ipfs/QmWTas1y3RuAkApRh6HaHPM1SancvKiefmnfxNKcFMSRYw"
                 }
             },
             "item" : {
-                "image" : "https://wiki.p-insurgence.com/images/0/09/722.png",
+                "image" : "assets/img/native-item.png",
                 "code" : {
                     "1" : "ipfs://ipfs/QmWTas1y3RuAkApRh6HaHPM1SancvKiefmnfxNKcFMSRYw"
                 }
@@ -38,13 +38,13 @@
         },
         "W1155" : {
             "collection" : {
-                "image" : "https://cdn.shopify.com/s/files/1/1578/5251/products/4983164166590_x700.png?v=1585635232",
+                "image" : "assets/img/erc1155-collection.png",
                 "modelCode" : {
                     "1" : "ipfs://ipfs/QmbZ1HUgH1NFQvDUjRMrTp6r7j2Z6brLAPZzqQrLGLY6gE"
                 }
             },
             "item" : {
-                "image" : "https://wiki.p-insurgence.com/images/0/09/722.png",
+                "image" : "assets/img/erc1155-item.png",
                 "code" : {
                     "1" : "ipfs://ipfs/QmWTas1y3RuAkApRh6HaHPM1SancvKiefmnfxNKcFMSRYw"
                 }
@@ -52,13 +52,13 @@
         },
         "W721" : {
             "collection" : {
-                "image" : "https://cdn.shopify.com/s/files/1/1578/5251/products/4983164166590_x700.png?v=1585635232",
+                "image" : "assets/img/erc721-collection.png",
                 "modelCode" : {
                     "1" : "ipfs://ipfs/QmezxWeR5gcR1jbfdq59HacFyps7mRvcqsYNAeFUritdwB"
                 }
             },
             "item" : {
-                "image" : "https://wiki.p-insurgence.com/images/0/09/722.png",
+                "image" : "assets/img/erc721-item.png",
                 "code" : {
                     "1" : "ipfs://ipfs/QmWTas1y3RuAkApRh6HaHPM1SancvKiefmnfxNKcFMSRYw"
                 }
@@ -72,7 +72,7 @@
                 }
             },
             "item" : {
-                "image" : "https://wiki.p-insurgence.com/images/0/09/722.png",
+                "image" : "assets/img/erc20-item.png",
                 "code" : {
                     "1" : "ipfs://ipfs/QmWTas1y3RuAkApRh6HaHPM1SancvKiefmnfxNKcFMSRYw"
                 }

@@ -97,8 +97,8 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .collectionPage .collectionInfo .collectionLink {display: inline-block; width: 80%; margin-top: 10px;font-size: 14px; text-align: left; color: #131D39; font-weight: bold;}
 
 .collectionPageItems {background-color: #ffffff; width: 100%; display: inline-block; text-align: center;}
-.collectionPageItemsOrder {padding: 50px 100px 20px 100px; -moz-column-gap: 10px;-moz-column-width: 200px;;column-gap: 10px;column-width: 200px;-webkit-column-gap: 10px;-webkit-column-width: 200px; max-width: 1200px;display: inline-block;}
-.collectionPageItems .collectionSingleItem {width: 200px; vertical-align: middle; display: inline-block; margin: 15px auto;}
+.collectionPageItemsOrder {padding: 50px 100px 20px 100px; display: inline-block;}
+.collectionPageItems .collectionSingleItem {width: 200px; vertical-align: middle; display: inline-block; margin: 15px 20px;}
 .collectionPageItems .itemIcon {width: 200px; min-height: 100px; max-height: 500px;}
 .collectionPageItems .itemIcon img {width: 95%;min-height: 100px; max-height: 500px;}
 .collectionPageItems .ItemInfo {width: 95%; margin-top: 5px;}
@@ -271,6 +271,12 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .SoonFARM .FarmImg {width: 200px; margin: 100px auto; display: block;}
 .SoonFARM .FarmImg img {animation: rotation 3s infinite linear; display: inline-block;width: 200px; opacity: 0.5;}
 
+.AllDoneBro {width: 600px; display: inline-block; margin: 70px auto;}
+.AllDoneBro h2 {font-size: 30px;font-family:ITEMGig;font-weight: bolder;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 70%, #9048fd 90%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;}
+.AllDoneBro figure {margin: 30px auto; display: block;}
+.AllDoneBro > a {display: block;width: 250px;margin: 15px auto; cursor: pointer;}
+.AllDoneBro > p {display: block;width: 250px;margin: 15px auto; color: #6e6e6e;text-align: center; width: 600px;}
+.AllDoneBro > p > a {display: block;width: 600px;margin: 15px auto; color: #222222; cursor: pointer; font-weight: bold; text-align: center;}
 
 @media only screen and (max-device-width: 750px) {
    .Intro .Title, .Explainer, .ExplainerL, .ExplainerS, footer section {width: 90% !important; text-align: center;}
@@ -294,14 +300,6 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
    .Intro .Explainer article > img {width: 40%}
 }
 
-@media only screen and (min-width: 990px) {
-   .collectionPageItemsOrder {column-count: 3;-moz-column-count:3;-webkit-column-count:3;}
-   .walletCollectionItems {column-count: 3;-moz-column-count:3;-webkit-column-count:3;}
-}
-@media only screen and (min-width: 1100px) {
-   .collectionPageItemsOrder {column-count: 4;-moz-column-count:4;-webkit-column-count:4;}
-   .walletCollectionItems {column-count: 4;-moz-column-count:4;-webkit-column-count:4;}
-}
 .noScroll {overflow: hidden;}
 
 
