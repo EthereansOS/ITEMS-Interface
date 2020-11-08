@@ -1,15 +1,15 @@
  @font-face {
     font-family: ITEMregular;
-    src: "special/CLAN-MEDIUM.OTF";
+    src: url(special/NotoSans-Regular.otf);
  }
  @font-face {
     font-family: ITEMregular;
-    src: "special/CLAN-BOLD.OTF";
+    src: url(special/NotoSans-Bold.otf);
     font-weight: bold;
  }
  @font-face {
-    font-family: ITEMregular;
-    src: "special/CLAN-BLACK.OTF";
+    font-family: ITEMGig;
+    src: url(special/CLAN-BOLD.OTF);
     font-weight: bolder;
  }
 
@@ -21,36 +21,40 @@ p {display: inline-block;margin-block-start: 0px;margin-block-end: 0px;margin-in
 h1 {font-size: 30px;}
 figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margin-inline-end: 0px;}
 .Intro {width: 100%; height: 100%; display: inline-block; text-align: center; background-color: #ffffff;}
-.Intro .Title {width: 800px; text-align: center; display: block; margin: 10px auto 150px auto;}
-.Intro .Title h1 {font-weight: normal; font-size: 45px; margin: 10px auto; width: 90%; color: #6e6e6e;}
+.Intro .Title {width: 800px; text-align: center; display: block; margin: 10px auto 80px auto;}
+.Intro .Title h1 {font-weight: normal; font-size: 35px; margin: 10px auto; width: 90%; color: #6e6e6e;}
 .Intro .Title h6 {font-weight: normal; font-size: 16px; margin: 10px auto; width: 80%; color: #6e6e6e;}
-.Intro .Title img {width: 500px; height: 500px;margin: 5px auto 20px auto;}
-.Intro .Explainer {width: 800px; text-align: center; display: block; margin: 100px auto;}
-.Intro .Explainer article {width: 80%;}
-.Intro .Explainer h2 {font-weight: normal; font-size: 30px; margin: 10px auto; width: 30%; color: #6e6e6e; text-align: left; display: inline-block;vertical-align: middle;}
+.introInto {width: 100%; height: auto;margin: 0 auto 20px auto; max-width: 2000px;}
+.Intro .Explainer {width: 800px; text-align: center; display: block; margin: 55px auto;}
+.Intro .Explainer article {width: 70%;text-align: left;display: inline-block;}
+.Intro .Explainer h2 {font-weight: normal; font-size: 30px; margin: 10px auto; color: #6e6e6e; text-align: left; display: inline-block;vertical-align: middle;}
 .Intro .Explainer article > img {width: 30%;display: inline-block; vertical-align: middle; margin: 0 8%;}
 .Intro .Explainer p {font-weight: normal; font-size: 17px; margin: 20px auto; width: 70%; color: #6e6e6e; text-align: left; line-height: 1.3;}
 .Intro .ExplainerL {width: 950px; text-align: center; display: block; margin: 100px auto;}
 .Intro .ExplainerS {width: 400px; text-align: center; display: inline-block; vertical-align: top;}
 .Intro .ExplainerS article {width: 80%;}
-.Intro .ExplainerS h2 {font-weight: normal; font-size: 40px; margin: 10px auto; width: 70%; color: #6e6e6e; text-align: left; display: inline-block;vertical-align: middle;}
+.Intro .ExplainerS h2 {font-weight: normal; font-size: 35px; margin: 10px auto; width: 70%; color: #6e6e6e; text-align: left; display: inline-block;vertical-align: middle;}
 .Intro .ExplainerS p {font-weight: normal; font-size: 15px; margin: 10px auto; width: 70%; color: #6e6e6e; text-align: left; line-height: 1.2;}
-.Intro .ExplainerS aside a {font-size: 12px; font-weight: bold; display: inline-block; padding: 10px 20px; background: linear-gradient(to right, #9048fd 30%, #4bcbc9 90%); color: #f2eafc; width: 40%; margin: 10px auto;text-decoration: none; text-align: center;}
+.Intro .ExplainerS {width: 400px; text-align: center; display: inline-block; vertical-align: top;}
+.Intro .ExplainerS aside a {font-size: 12px; font-weight: bold; display: inline-block; padding: 10px 20px; background: linear-gradient(to right, #9048fd 30%, #4bcbc9 90%); color: #f2eafc; width: 40%; margin: 10px auto;text-decoration: none; text-align: center; border-radius: 8px;}
+
 .ExplainerS aside {width: 70%; text-align: left; display: block; margin: 0 auto;}
-.Intro footer {width: 100%; border-top: 1px solid #6e6e6e; margin-top: 50px; }
+.Intro footer {width: 100%; border-top: 1px solid #6e6e6e; margin-top: 150px; }
 .Intro footer section {width: 800px; text-align: center; display: block; margin: 50px auto;}
 .Intro footer section p {font-size: 13px; color: #9c9c9c; width: 50%;}
 .Intro footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; display: inline-block; margin: 10px; font-weight: bold;}
-.Brandized {font-weight: bolder;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 60%, #9048fd 80%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;animation: shine 3s linear infinite;}
+.Brandized {font-family:ITEMGig;font-weight: bolder;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 60%, #9048fd 80%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;animation: shine 3s linear infinite;}
 @keyframes shine {to {background-position: 200% center;}}
-.BrandizedS {font-weight: bolder;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 70%, #9048fd 90%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;}
-.BrandizedSS {font-weight: bolder;text-align: center;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 70%, #9048fd 90%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;}
-.BrandizedSSx {color: #a4d1f8; font-weight: bolder;}
-.BrandizedSSx:hover, .logo:hover .BrandizedSSx, .BrandizedSS:hover, .logo:hover .BrandizedSS {font-weight: bolder;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 60%, #9048fd 80%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;animation: shine 3s linear infinite;}
-.BrandizedSSS:hover {font-weight: bolder;text-align: center;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 60%, #9048fd 80%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;animation: shine 3s linear infinite;}
-.Intro .Explainer a {font-size: 12px; font-weight: bold; display: inline-block; padding: 10px 20px; background: linear-gradient(to right, #9048fd 30%, #4bcbc9 90%); color: #f2eafc; margin: 10px 30px;text-decoration: none; width: 160px;}
+.BrandizedS {font-family:ITEMGig;font-weight: bolder;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 70%, #9048fd 90%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;}
+.BrandizedSS {font-family:ITEMGig;font-weight: bolder;text-align: center;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 70%, #9048fd 90%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;}
+.BrandizedSSx {font-family:ITEMGig;color: #131D39; font-weight: bolder;}
+.BrandizedSSxY {font-family:ITEMGig;font-weight: bolder;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 70%, #9048fd 90%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;}
+.BrandizedSSx:hover, .logo:hover .BrandizedSSx, .BrandizedSS:hover, .logo:hover .BrandizedSS {font-family:ITEMGig;font-weight: bolder;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 60%, #9048fd 80%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;animation: shine 3s linear infinite;}
+.BrandizedSSS:hover {font-family:ITEMGig;font-weight: bolder;text-align: center;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 60%, #9048fd 80%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;animation: shine 3s linear infinite;}
+.Intro .Explainer a {border-radius:8px;font-size: 12px; font-weight: bold; display: inline-block; padding: 10px 20px; background: linear-gradient(to right, #9048fd 30%, #4bcbc9 90%); color: #f2eafc; margin: 10px 30px;text-decoration: none; width: 160px;}
 .Pager {width: 100% !important; margin: 60px 0 0 0 !important;}
 .collections {width: 100%; display: inline-block;}
+.Giffona {width: 200px; display: inline-block; height: 200px;}
 .collectionsList {padding: 20px 2% 20px 2%;display: inline-block; text-align: center;}
 .collectionsList > a {width: 300px; margin: 40px 0; display: inline-block;}
 .collection {width: 300px; margin: 40px;display: inline-block;}
@@ -58,39 +62,39 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .collection .collectionIcon img {width: 100%;}
 .collection .collectionIcon h6 {position: absolute; bottom: 0; right: 30px; background-image: linear-gradient(90deg, #00C0FF 0%, #FFCF00 49%, #FC4F4F 80%, #00C0FF 100%);color: #ffffff !important; text-shadow: #c0c0c0 1px 1px; text-decoration: none; cursor: auto;box-shadow: none;border: 1px solid transparent;outline: none;opacity: 1;padding: 10px 30px;border-radius: 12px;font-weight: 500;text-decoration: none; display: inline-block;animation:slidebg 10s linear infinite; font-weight: bolder; padding: 2px; font-size: 11px; border-radius: 5px;}
 .collection .collectionInfo {width: 190px; display: inline-block; vertical-align: top; margin-left: 10px;}
-.collection .collectionTitle {width: 95%; display: block; text-align: left; font-size: 20px; color: #a4d1f8;-ms-word-break: break-all;word-break: break-all;word-break: break-word;-webkit-hyphens: auto;-moz-hyphens: auto;hyphens: auto;}
+.collection .collectionTitle {width: 95%; display: block; text-align: left; font-size: 20px; color: #131D39;-ms-word-break: break-all;word-break: break-all;word-break: break-word;-webkit-hyphens: auto;-moz-hyphens: auto;hyphens: auto;}
 .collection .collectionTitle span {font-size: 13px;}
 .collection .collectionDesc {width: 95%; display: block; text-align: left; font-size: 11px; color: #9c9c9c; margin-top: 5px;-ms-word-break: break-all;word-break: break-all;word-break: break-word;-webkit-hyphens: auto;-moz-hyphens: auto;hyphens: auto;}
 .collection .collectionItems {width: 95%; display: block; text-align: left; font-size: 18px;}
+.Explainer > img {width: 50px;}
 
-
-.menuMenu {width: 100%; position: fixed; top: 0; left: 0; height: 60px; border-bottom: 2px solid #a4d1f8;background-color: #ffffff;z-index: 1000;}
+.menuMenu {width: 100%; position: fixed; top: 0; left: 0; height: 60px; background-color: #ffffff;z-index: 1000; border-bottom: 1px solid;border-image-slice: 1; border-image-source: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 70%, #9048fd 90%);}
 .menuMenu .logo {display: inline-block; margin-left: 1%; text-decoration: none; cursor: pointer;}
-.menuMenu .logo .logoimg {width: 35px; height: 35px; display: inline-block; vertical-align: middle; margin-top: 14px; background-image: url('special/logoS.png'); background-repeat: no-repeat; background-position: 0 -38;}
+.menuMenu .logo .logoimg {width: 35px; height: 35px; display: inline-block; vertical-align: middle; margin-top: 14px; background-image: url('special/logoS.png'); background-repeat: no-repeat; background-position: 0 -0px;}
 .menuMenu .logo:hover .logoimg, .menuMenu .logo .logoimg:hover {background-position: 0 0px;}
 .menuMenu .logo span {font-size: 20px; display: inline-block; vertical-align: middle; margin: 15px 0 0 5px;}
 .menuSelections {display: inline-block; margin: 15px 0 0 50px; vertical-align: middle}
 .menuSelection {display: inline-block; margin: 5px 10px;}
 .menuSelection .selected {font-weight: bolder;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 70%, #9048fd 90%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;}
-.menuSelection a {font-size: 13px; line-height: 1; text-decoration: none; color: #a4d1f8; font-weight: bolder;}
+.menuSelection a {font-size: 13px; line-height: 1; text-decoration: none; color: #131D39; font-weight: bolder;}
 .search {width: 250px; display: inline-block; margin-top: 13px; vertical-align: middle; margin-left: 50px;}
-.search input {width: 75%; height: 25px; border: 2px solid #a4d1f8; border-radius: 5px;}
-.search a {padding: 6px 5px 2px 5px; display: inline-block; background-color: #a4d1f8; color: #ffffff; line-height: 1;border-radius: 5px; margin-top: 0px; margin-left: 3px; vertical-align: middle; text-decoration: none;}
+.search input {width: 75%; height: 25px; border: 2px solid #131D39; border-radius: 5px;}
+.search a {padding: 6px 5px 2px 5px; display: inline-block; background-color: #131D39; color: #ffffff; line-height: 1;border-radius: 5px; margin-top: 0px; margin-left: 3px; vertical-align: middle; text-decoration: none;}
 .connectWallet {float: right; margin-right: 1%; vertical-align: middle;margin-top: 22px;text-decoration: none;}
 .connectWallet img {width: 20px;vertical-align: bottom;margin-right: 7px;}
-.connectWallet span {font-size: 18px; text-decoration: none; color: #a4d1f8;}
+.connectWallet span {font-size: 18px; text-decoration: none; color: #131D39;}
 
-.collectionPage {width: 100%; min-width: 100%; display: block; text-align: center;background-color: #f1f8ff;}
+.collectionPage {width: 100%; min-width: 100%; display: block; text-align: center;background-color: ffffff;}
 .collectionPage .collectionPageInfo {width: 990px; display: inline-block; margin: 30px 0;}
-.collectionPage .collectionPageInfo .collectionIcon {width: 240px; height: 240px; background-color: #f1f8ff;}
+.collectionPage .collectionPageInfo .collectionIcon {width: 240px; height: 240px; background-color: ffffff;}
 .collectionPage .collectionPageInfo .collectionIcon h6 {position: absolute; bottom: 0; right: 0;}
 .collectionPage .collectionPageInfo .collectionIcon img {width: 90%; padding: 5%;}
 .collectionPage .collectionPageInfo .collectionInfo {width: 500px; margin: 0 0 0 50px;}
-.collectionPage .collectionInfo .collectionTitle {font-size: 30px; color: #a4d1f8;}
+.collectionPage .collectionInfo .collectionTitle {font-size: 30px; color: #131D39;}
 .collectionPage .collectionInfo .collectionTitle span {font-size: 14px;}
 .collectionPage .collectionInfo .collectionDesc {font-size: 13px; min-height: 145px; color: #6e6e6e; line-height: 1.5;}
 .collectionPage .collectionInfo .collectionItems {display: inline-block; width: 20%; margin-top: 10px; font-size: 14px;}
-.collectionPage .collectionInfo .collectionLink {display: inline-block; width: 80%; margin-top: 10px;font-size: 14px; text-align: left; color: #a4d1f8; font-weight: bold;}
+.collectionPage .collectionInfo .collectionLink {display: inline-block; width: 80%; margin-top: 10px;font-size: 14px; text-align: left; color: #131D39; font-weight: bold;}
 
 .collectionPageItems {background-color: #ffffff; width: 100%; display: inline-block; text-align: center;}
 .collectionPageItemsOrder {padding: 50px 100px 20px 100px; -moz-column-gap: 10px;-moz-column-width: 200px;;column-gap: 10px;column-width: 200px;-webkit-column-gap: 10px;-webkit-column-width: 200px; max-width: 1200px;display: inline-block;}
@@ -98,22 +102,22 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .collectionPageItems .itemIcon {width: 200px; min-height: 100px; max-height: 500px;}
 .collectionPageItems .itemIcon img {width: 95%;min-height: 100px; max-height: 500px;}
 .collectionPageItems .ItemInfo {width: 95%; margin-top: 5px;}
-.collectionPageItems .ItemInfo .ItemTitle {color: #a4d1f8;}
-.collectionPageItems .ItemInfo .ItemPrice {text-decoration: none; margin: 2px 1% 0px 1%; display: inline-block; color: #ffffff; font-size: 11px; font-weight: bold; background-color: #a4d1f8; text-align: center; padding: 3px 7px; border-radius: 8px;}
+.collectionPageItems .ItemInfo .ItemTitle {color: #131D39;}
+.collectionPageItems .ItemInfo .ItemPrice {text-decoration: none; margin: 2px 1% 0px 1%; display: inline-block; color: #ffffff; font-size: 11px; font-weight: bold; background: linear-gradient(to right, #9048fd 20%,  #4bcbc9 100%); text-align: center; padding: 3px 7px; border-radius: 8px;}
 .collectionPageItems .ItemInfo .ItemSupply {width: 100%; margin: 2px 0.2%; display: inline-block; color: #6e6e6e; font-size: 13px;}
 .collectionPageItems .ItemInfo .ItemCollectionLink {width: 100%; margin: 2px 0.2%; display: inline-block; color: #6e6e6e; font-size: 13px;}
 
-.returntocollection {width: 100%; padding: 20px 0; background-color: #f1f8ff; text-align: center; border-bottom: 1px dotted #a4d1f8;}
+.returntocollection {width: 100%; padding: 20px 0; background-color: ffffff; text-align: center;}
 .returntocollection a {font-size: 16px; color: #6e6e6e; text-decoration: none;}
-.returntocollection a img {display: inline-block; width: 30px; height: 30px; vertical-align: middle; border: 1px solid #a4d1f8; border-radius: 50%;}
+.returntocollection a img {display: inline-block; width: 30px; height: 30px; vertical-align: middle;}
 .itemPage {width: 100%; display: inline-block; text-align: center;}
-.itemPage .itemPageInfo {width: 100%; display: inline-block; padding: 30px 0; text-align: center;background-color: #f1f8ff;}
+.itemPage .itemPageInfo {width: 100%; display: inline-block; padding: 30px 0; text-align: center;background-color: ffffff;}
 .itemPage .itemIcon {width: 220px; display: inline-block;}
 .itemPage .itemIcon img {width: 95%;}
 .itemPage .itemInfo {width: 700px; display: block; margin: 25px auto; text-align: left;}
 .itemFundamentals {width: 260px; display: inline-block; vertical-align: middle;}
 .itemInfo .itemDesc {width: 400px;text-align: left; margin-left: 30px; color: #6e6e6e; font-size: 14px; vertical-align: middle; line-height: 1.3;-ms-word-break: break-all;word-break: break-all;word-break: break-word;-webkit-hyphens: auto;-moz-hyphens: auto;hyphens: auto;}
-.itemPage .ItemTitle {font-size: 30px; color: #a4d1f8;text-align: left;-ms-word-break: break-all;word-break: break-all;word-break: break-word;-webkit-hyphens: auto;-moz-hyphens: auto;hyphens: auto;}
+.itemPage .ItemTitle {font-size: 30px; color: #131D39;text-align: left;-ms-word-break: break-all;word-break: break-all;word-break: break-word;-webkit-hyphens: auto;-moz-hyphens: auto;hyphens: auto;}
 .itemPage .ItemTitle span {font-size: 14px;}
 .itemFundamentalsThing {width: 100%; text-align: left;}
 .itemFundamentalsThing .itemaddress {display: inline-block; margin: 5px 10px 5px 0;}
@@ -121,59 +125,59 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .itemFundamentals .ItemCollectionLink {width: 100%; text-align: left; font-size: 12px;margin: 0px 0px 5px 0; display: inline-block;color: #6e6e6e; word-break: break-all;}
 .itemFundamentalsThing .ItemSupply, .itemFundamentalsThing .ItemBalance {display: inline-block; font-size: 13px;color: #6e6e6e;margin: 0px 5px 5px 0;}
 .itemSide {width: 100%; text-align: left;}
-.itemSide .ItemPrice {text-decoration: none; margin: 5px 1% 10px 0px; display: inline-block; color: #ffffff; font-size: 11px; font-weight: bold; background-color: #a4d1f8; text-align: center; padding: 3px 7px; border-radius: 8px;}
+.itemSide .ItemPrice {text-decoration: none; margin: 5px 1% 10px 0px; display: inline-block; color: #ffffff; font-size: 11px; font-weight: bold; background: linear-gradient(to right, #9048fd 20%,  #4bcbc9 100%); text-align: center; padding: 3px 7px; border-radius: 8px;}
 
 .SettingsForOwn {width: 100%; text-align: left;}
-.SettingsForOwn input {width: 30%; background-color: #fafdff; border: 2px solid #a4d1f8; border-radius: 6px; height: 30px; color: #a4d1f8;}
-.SettingsForOwn a {padding: 6px 8px; font-weight: bold; background-color: #a4d1f8; display: inline-block; margin: 10px 0 0 5px; border-radius: 6px; font-size: 13px; color: #ffffff; text-decoration: none;}
+.SettingsForOwn input {width: 30%; background-color: #fafdff; border: 2px solid #131D39; border-radius: 6px; height: 30px; color: #131D39;}
+.SettingsForOwn a {padding: 6px 8px; font-weight: bold; background-color: #131D39; display: inline-block; margin: 10px 0 0 5px; border-radius: 6px; font-size: 13px; color: #ffffff; text-decoration: none;}
 .SettingsForOwn .MaximumBro {font-size: 9px; font-weight: bolder;padding: 3px 5px; margin: 10px 5px 0 0;}
 
-.collectionNav {width: 100%; background-color: #f1f8ff; height: 30px;text-align: center; border-bottom: 2px solid #a4d1f8;}
+.collectionNav {width: 100%; background-color: ffffff; height: 30px;text-align: center;}
 .collectionNav ul {width: 900px; text-align: center;height: 30px; display: inline-block;}
 .collectionNav ul li {width: 150px; display: inline-block; background-color: transparent;text-align: center;height: 30px;}
-.collectionNav ul li a {width: 100%; text-align: center; color: #a4d1f8; text-decoration: none; padding: 5px 0;display: block; font-size: 16px; font-weight: bolder;}
-.collectionNav ul .selected, .collectionNav ul li:hover {color: #a4d1f8; background-color: #ffffff;}
-.collectionNav ul .selected a, .collectionNav ul li:hover a, .collectionNav ul li a:hover {color: #a4d1f8;}
+.collectionNav ul li a {width: 100%; text-align: center; color: #131D39; text-decoration: none; padding: 5px 0;display: block; font-size: 16px; font-weight: bolder;}
+.collectionNav ul .selected, .collectionNav ul li:hover {color: #131D39; background-color: #ffffff;border-bottom: 2px solid;border-image-slice: 1; border-image-source: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 70%, #9048fd 90%);}
+.collectionNav ul .selected a, .collectionNav ul li:hover a, .collectionNav ul li a:hover {color: #131D39;border-bottom: 2px solid;border-image-slice: 1; border-image-source: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 70%, #9048fd 90%);}
 
 .wrapPage {width: 100%; display: block; text-align: center; margin-top: 100px;min-width: 100%;}
-.wrapBox {width: 350px; background-color: #f1f8ff; border-radius: 20px;display: inline-block; padding: 30px 70px;    margin-top: 100px;}
+.wrapBox {width: 350px; background-color: ffffff; border-radius: 20px;display: inline-block; padding: 30px 70px;    margin-top: 100px;}
 .WrapWhat {width: 90%; display: inline-block; text-align: center;}
-.WrapWhat p {font-size: 18px; font-weight: bold; text-align: center; color: #a4d1f8; margin-bottom: 20px;}
-.WrapWhat input, .WrapWhatLoaded input {width: 90%; background-color: #fafdff; border: 2px solid #a4d1f8; border-radius: 6px; height: 30px; color: #a4d1f8;}
-.WrapWhat .LoadToITEM {padding: 5px 8px; font-weight: bold; background-color: #a4d1f8; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; color: #ffffff; text-decoration: none;}
-.WrapWhatLoaded .tokenSelectedToWrap {font-size: 18px;font-weight: bold; text-align: center; color: #a4d1f8; margin-bottom: 0px; margin-top: 18px;}
+.WrapWhat p {font-size: 18px; font-weight: bold; text-align: center; color: #131D39; margin-bottom: 20px;}
+.WrapWhat input, .WrapWhatLoaded input {width: 90%; background-color: #fafdff; border: 2px solid #131D39; border-radius: 6px; height: 30px; color: #131D39;}
+.WrapWhat .LoadToITEM {padding: 5px 8px; font-weight: bold; background-color: #131D39; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; color: #ffffff; text-decoration: none;}
+.WrapWhatLoaded .tokenSelectedToWrap {font-size: 18px;font-weight: bold; text-align: center; color: #131D39; margin-bottom: 0px; margin-top: 18px;}
 .WrapWhatLoaded .tokenSelectedToWrapBalance {font-size: 13px; color: #6e6e6e; margin-bottom: 15px; display: inline-block;}
 .tokenSelectedToWrapDecide {width: 100%; text-align: center; margin-bottom: 10px;}
 .WrapWhatLoaded .BalancetoWrapSelector {width: 60%;display: inline-block; vertical-align: middle;}
-.WrapWhatLoaded .tokenSelectedToWrapBalanceALL {padding: 8px 6px; border-radius: 6px; font-size: 9px; font-weight: bold; display: inline-block; background-color: #a4d1f8; vertical-align: middle; color: #ffffff; margin-right: 5px;}
-.BeforeToWrapToITEM {text-decoration: none; padding: 8px 12px; font-weight: bold; background-color: #a4d1f8; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; margin-right: 10px; color: #ffffff;}
-.WrapToITEM {text-decoration: none; padding: 8px 12px; font-weight: bold; background-color: #a4d1f8; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; margin-right: 10px;background: linear-gradient(to right, #9048fd 30%, #4bcbc9 90%); color: #ffffff;}
+.WrapWhatLoaded .tokenSelectedToWrapBalanceALL {padding: 8px 6px; border-radius: 6px; font-size: 9px; font-weight: bold; display: inline-block; background-color: #131D39; vertical-align: middle; color: #ffffff; margin-right: 5px;}
+.BeforeToWrapToITEM {text-decoration: none; padding: 8px 12px; font-weight: bold; background-color: #131D39; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; margin-right: 10px; color: #ffffff;}
+.WrapToITEM {text-decoration: none; padding: 8px 12px; font-weight: bold; background-color: #131D39; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; margin-right: 10px;background: linear-gradient(to right, #9048fd 30%, #4bcbc9 90%); color: #ffffff;}
 .WrapWhatLoaded .disabled {background-color: #e4e4e4 !important; color: #6e6e6e !important;background: #e4e4e4 !important; text-decoration: none;}
-.WrapWhat select {margin: 10px 0;border: 1px solid #a4d1f8; background-color: #a4d1f8;border-radius: 5px; font-weight: bold; color: #ffffff;}
+.WrapWhat select {margin: 10px 0;border: 1px solid #131D39; background-color: #131D39;border-radius: 5px; font-weight: bold; color: #ffffff;}
 .createPage {width: 100%; display: block; text-align: center; margin-top: 100px;min-width: 100%;}
-.createStart {width: 230px; background-color: #f1f8ff; border-radius: 20px;display: inline-block; padding: 30px 70px;    margin-top: 100px;}
-.StartCreate {padding: 10px; text-decoration: none; background-color: #a4d1f8; font-weight: bold; display: inline-block; margin: 20px 0 10px 0; color: #ffffff; border-radius: 8px;}
-.createCollection, .createITEM {width: 600px; background-color: #f1f8ff; border-radius: 20px;display: inline-block; padding: 30px 70px; margin: 100px auto;}
-.createCollection h2, .createITEM h2 {font-size: 18px; font-weight: bold; text-align: center; color: #a4d1f8; margin-bottom: 20px;}
+.createStart {width: 230px; background-color: ffffff; border-radius: 20px;display: inline-block; padding: 30px 70px;    margin-top: 100px;}
+.StartCreate {padding: 10px; text-decoration: none; background-color: #131D39; font-weight: bold; display: inline-block; margin: 20px 0 10px 0; color: #ffffff; border-radius: 8px;}
+.createCollection, .createITEM {width: 600px; background-color: ffffff; border-radius: 20px;display: inline-block; padding: 30px 70px; margin: 100px auto;}
+.createCollection h2, .createITEM h2 {font-size: 18px; font-weight: bold; text-align: center; color: #131D39; margin-bottom: 20px;}
 .FormCreateThing {min-height: 30px;padding: 5px 0; display: block; width: 350px; margin: 2px auto;}
-.FormCreateThing input[type=text] {width: 60%; background-color: #fafdff; border: 2px solid #a4d1f8; border-radius: 6px; height: 30px; color: #a4d1f8; display: inline-block; vertical-align: middle;}
+.FormCreateThing input[type=text] {width: 60%; background-color: #fafdff; border: 2px solid #131D39; border-radius: 6px; height: 30px; color: #131D39; display: inline-block; vertical-align: middle;}
 .inENS {width: 37% !important;}
-.inENSitem {display: inline-block; vertical-align: middle; color: #a4d1f8; font-size: 18px; font-weight: bolder;}
+.inENSitem {display: inline-block; vertical-align: middle; color: #131D39; font-size: 18px; font-weight: bolder;}
 .FormCreateThing p {width: 35%; vertical-align: middle;display: inline-block; text-align: left; color: #6e6e6e;}
 .FormCreateThing label {display:block; width: 100%; margin: 10px;}
-.SuperActionBTN {text-decoration: none; padding: 8px 12px; font-weight: bold; background-color: #a4d1f8; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; margin-right: 10px; color: #ffffff;}
-.FormCreateThing select {margin: 10px 0;border: 1px solid #a4d1f8; background-color: #a4d1f8;border-radius: 5px; font-weight: bold; color: #ffffff; padding: 5px 0;}
+.SuperActionBTN {text-decoration: none; padding: 8px 12px; font-weight: bold; background-color: #131D39; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; margin-right: 10px; color: #ffffff;}
+.FormCreateThing select {margin: 10px 0;border: 1px solid #131D39; background-color: #131D39;border-radius: 5px; font-weight: bold; color: #ffffff; padding: 5px 0;}
 .createDescriptonX {font-size: 14px; text-align: left; display: inline-block; color: #6e6e6e;}
-.createDescriptonX a {color: #a4d1f8;}
+.createDescriptonX a {color: #131D39;}
 .ExplBoom {font-size: 14px; text-align: left; display: inline-block; color: #6e6e6e; margin: 10px auto;}
-.createCollection select, .createITEM select {margin: 10px 0 25px 0;padding:5px;border: 1px solid #a4d1f8; background-color: #a4d1f8;border-radius: 5px; font-weight: bold; color: #ffffff;}
+.createCollection select, .createITEM select {margin: 10px 0 25px 0;padding:5px;border: 1px solid #131D39; background-color: #131D39;border-radius: 5px; font-weight: bold; color: #ffffff;}
 .createWhat {width: 90%; display: inline-block; text-align: center;}
-.createWhat p {font-size: 18px; font-weight: bold; text-align: center; color: #a4d1f8; margin-bottom: 20px;}
-.createWhat input, .createWhat textarea {width: 90%;background-color: #fafdff; border: 2px solid #a4d1f8; border-radius: 6px; height: 30px; color: #a4d1f8;}
+.createWhat p {font-size: 18px; font-weight: bold; text-align: center; color: #131D39; margin-bottom: 20px;}
+.createWhat input, .createWhat textarea {width: 90%;background-color: #fafdff; border: 2px solid #131D39; border-radius: 6px; height: 30px; color: #131D39;}
 .createWhat textarea {height: 80px;}
 .spacialImputs {display: block; width: 100%; margin-top: 20px;}
-.spacialImputs input {width: 40%;background-color: transparent; border: none;  color: #a4d1f8;}
-.spacialImputs p {font-size: 15px; font-weight: bold; text-align: left; color: #a4d1f8; margin-bottom: 20px; width: 55%; margin-right: 4%;}
+.spacialImputs input {width: 40%;background-color: transparent; border: none;  color: #131D39;}
+.spacialImputs p {font-size: 15px; font-weight: bold; text-align: left; color: #131D39; margin-bottom: 20px; width: 55%; margin-right: 4%;}
 .MetaDataThings {width: 350px; display: block; margin: 5px auto;}
 .MetaDataThings .ExplBoom {width: 90%; font-size: 12px;}
 .spacialImputs .createWhat {margin: 10px 0;}
@@ -184,16 +188,16 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .NewProposaleditor {height: 450px;}
 .editor {height: 540px !important;}
 .NewProposaleditor {height: 450px !important; text-align: left;}
-.BTNweirdo {text-decoration: none; padding: 8px 12px; font-weight: bold; background-color: #a4d1f8; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; margin-right: 10px; color: #ffffff;border: none;}
+.BTNweirdo {text-decoration: none; padding: 8px 12px; font-weight: bold; background-color: #131D39; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; margin-right: 10px; color: #ffffff;border: none;}
 .MetaImputThings {margin: 20px auto;}
 
 .ItemData {max-width: 1200px; display: block; margin: 30px auto 100px auto; text-align:center; -moz-column-gap: 10px;-moz-column-width: 300px;;column-gap: 10px;column-width: 300px;-webkit-column-gap: 10px;-webkit-column-width: 300px; max-width: 1200px;}
-.swowThis {padding: 5px; font-size: 11px; font-weight: bold; color: #ffffff; text-decoration: none; background-color: #a4d1f8; border-radius: 5px; display: inline-block; margin: 10px auto;}
-.subMetaValueList {display: inline-block; text-align: center;width: 300px; background-color: #e2f0fd; padding: 20px 10px; margin: 10px; border-radius: 10px;}
+.swowThis {padding: 3px 9px; font-size: 11px; font-weight: bold; color: #ffffff; text-decoration: none; background-color: #8447F1;  border-radius: 5px; display: inline-block; margin: 10px auto;}
+.subMetaValueList {display: inline-block; text-align: center;width: 300px; background-color: #F6FBFF; padding: 20px 10px; margin: 10px; border-radius: 10px;}
 .subMetaValueList .subMetaValueList {width: 80%; background-color: transparent; border-top: 1px solid #9c9c9c; border-radius: 0%;}
 .ItemStuffOpen {text-align: center;}
-.subMetaValueOpen {font-weight: bold; font-size: 18px; color: #a4d1f8; margin: 10px auto;}
-.subMetaValueLink {background-color: #a4d1f8; text-decoration: none; color: #ffffff; padding: 5px 2.5%; display: inline-block; border-radius: 5px; margin-top: 5px; width: 95%; font-size: 14px;}
+.subMetaValueOpen {font-weight: bold; font-size: 18px; color: #131D39; margin: 10px auto;}
+.subMetaValueLink {color: #131D39;border: 1px solid #131D39; text-decoration: none;line-height: 1; background-color: #ffffff; text-decoration: none; padding: 8px 2.5%; display: inline-block; border-radius: 5px; margin-top: 5px; width: 95%; font-size: 14px;}
 .subMetaValue {font-size: 15px; color: #6e6e6e; width: 95%;padding: 5px 2.5%;}
 .subMetaValueString {font-size: 15px; text-align: left;color: #6e6e6e; width: 90%;}
 .CollectionLoaded {width: 100%;}
@@ -207,7 +211,7 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .walletCollection {width: 100%; display: inline-block;}
 .walletCollectionOpener {width: 100%; text-align: center; padding: 10px;}
 .walletCollectionOpener a {text-decoration: none;}
-.walletCollectionOpenerName {font-size: 20px; color: #a4d1f8; text-align: left; width: 100%; text-decoration: none;}
+.walletCollectionOpenerName {font-size: 20px; color: #131D39; text-align: left; width: 100%; text-decoration: none;}
 .walletCollectionItems {width: 90%; display: inline-block; text-align: center;padding: 20px 0px 20px 0px; -moz-column-gap: 10px;-moz-column-width: 90%;column-gap: 10px;column-width: 90%;-webkit-column-gap: 10px;-webkit-column-width: 90%; max-width: 90%;display: inline-block;}
 .walletCollectionItem {width: 120px; margin: 20px; display: inline-block; position: relative;}
 .walletCollectionItem h6 {display: none;}
@@ -240,6 +244,31 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .LoaderFull {width: 100%; height: 100%; position: fixed; top: 0; left: 0; overflow: hidden; text-align: center;}
 .LoaderFull .LoadImg {width: 500px; height:500px;margin-top: 25%; display: inline-block;}
 .LoaderFull .LoadImg img {display: inline-block; width: 100%;}
+
+.Documentation, .DocHTML {background-color: #171717 !important;}
+.AllDoc {width: 100%; display: block;}
+.AllDoc nav {width: 100%; display: block; position: fixed; top: 0; left: 0; height: 60px; background-color: #1f1f1f; border-bottom: 1px solid #000000;}
+.AllDoc .DocIndex {width: 20%; position:  fixed; top: 61px; left: 0; height: 100%; display: inline-block; overflow: scroll; background-color: #1f1f1f; border-right: 1px solid #000000;}
+.DocIndex .DocIndexIMP {width: 90%; margin-left: 5%; margin-top: 20px; color: #ffffff; font-weight: bolder; display: block; padding: 10px 0; font-size: 18px; line-height: 1.4;}
+.DocIndex .DocIndexIMP2 {width: 80%; margin-left: 15%; color: #9c9c9c; font-weight: bold; display: block; padding: 10px 0; font-size: 15px; line-height: 1.3;}
+.DocumentationIcon {font-size: 25px; margin: 15px 0 0 2%; color: #ffffff; display: inline-block; text-decoration: none; color: #87ceeb;}
+.DocumentationIcon .BDocBrand {font-weight: normal !important;}
+.AllDoc .InsideDoc {width: 70%; margin-left: 25%; padding-top: 100px; max-width: 900px;}
+.InsideDoc .DocSection {width: 95%; display: block; margin: 15px auto;}
+.DocSection h1 {font-size: 25px; font-weight: bolder; color: #ffffff; margin: 10px 0;}
+.DocSection h6 {font-size: 15px; font-weight: normal; color: #9c9c9c; margin: 10px 0;}
+.DocSectionContents {border-top: 1px solid #000000; border-bottom: 1px solid #000000; margin: 5px auto; padding: 10px 20px;}
+.DocSectionContents a {display: block; width: 100%; color: #9c9c9c; font-weight: bold; font-size: 15px; margin: 10px 0;}
+.DocSectionSingleContent {border-bottom: 1px solid #000000; margin: 5px auto; padding: 10px 20px;}
+.DocSectionSingleContent h2 {font-size: 22px; font-weight: bolder; color: #cecece; margin: 10px 0;}
+.DocSectionSingleContent p {font-size: 13px;font-weight: normal; color: #9c9c9c; margin: 7px 0;line-height: 1.4;}
+.DocSectionSingleContent img {padding: 5%;max-width: 90%;display: block; margin: 10px 0;}
+
+.SoonFARM {width: 100%; padding: 80px 0; text-align: center;}
+.SoonFARM h3 {width: 450px; font-weight: normal; display: inline-block; color: #6e6e6e;}
+.SoonFARM h3 a {color: #87ceeb; font-weight: bold;}
+.SoonFARM .FarmImg {width: 200px; margin: 100px auto; display: block;}
+.SoonFARM .FarmImg img {animation: rotation 3s infinite linear; display: inline-block;width: 200px; opacity: 0.5;}
 
 
 @media only screen and (max-device-width: 750px) {
@@ -275,6 +304,39 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .noScroll {overflow: hidden;}
 
 
+pre.prettyprint { display: block; background-color: #171717;overflow: scroll;}
+pre .nocode { background-color: none; color: #000 }
+pre .str { color: #ffa0a0 }
+pre .kwd { color: #f0e68c; font-weight: bold }
+pre .com { color: #87ceeb }
+pre .typ { color: #98fb98 }
+pre .lit { color: #cd5c5c }
+pre .pun { color: #fff }
+pre .pln { color: #fff }
+pre .tag { color: #f0e68c; font-weight: bold }
+pre .atn { color: #bdb76b; font-weight: bold }
+pre .atv { color: #ffa0a0 }
+pre .dec { color: #98fb98 }
+ol.linenums { margin-top: 0; margin-bottom: 0; color: #AEAEAE }
+li.L0,li.L1,li.L2,li.L3,li.L5,li.L6,li.L7,li.L8 { list-style-type: none }
+li.L1,li.L3,li.L5,li.L7,li.L9 { }
+
+@media print {
+  pre.prettyprint { background-color: none }
+  pre .str, code .str { color: #060 }
+  pre .kwd, code .kwd { color: #006; font-weight: bold }
+  pre .com, code .com { color: #600; font-style: italic }
+  pre .typ, code .typ { color: #404; font-weight: bold }
+  pre .lit, code .lit { color: #044 }
+  pre .pun, code .pun { color: #440 }
+  pre .pln, code .pln { color: #000 }
+  pre .tag, code .tag { color: #006; font-weight: bold }
+  pre .atn, code .atn { color: #404 }
+  pre .atv, code .atv { color: #060 }
+}
+
+pre.prettyprint {
+   border: 1px solid #000000 !important;}
 
 
 

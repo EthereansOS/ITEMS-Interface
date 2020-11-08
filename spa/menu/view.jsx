@@ -25,7 +25,7 @@ var Menu = React.createClass({
         var _this = this;
         return (
             <section className="menuMenu">
-                <a className="logo"><section className="logoimg"></section><span className="BrandizedSSx"> ETHITEM</span></a>
+                <a className="logo"><section className="logoimg"></section><span className="BrandizedSSxY"> ETHITEM</span></a>
                 <section className="menuSelections">
                     {this.state && this.state.menu && this.state.menu.map((it, i) =>
                         <section className="menuSelection" key={it.module}>

@@ -1,0 +1,81 @@
+<html class="DocHTML" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>ethItems</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+
+    <link type="text/css" rel="stylesheet" href="assets/css/style.css" />
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+    <script src="assets/scripts/DocScript.js" type="text/javascript"></script>
+</head>
+<body class="Documentation">
+    <section class="AllDoc">
+        <nav>
+            <a class="DocumentationIcon">&#129489;&#8205;&#128187; <span class="BDocBrand BrandizedSS">ETHITEM NERDS</span></a>
+        </nav>
+        <aside class="DocIndex">
+            <a class="DocIndexIMP">Understanding ITEMs</a>
+            <a class="DocIndexIMP2">How ITEM Standard works</a>
+            <a class="DocIndexIMP2">Wrapped ITEMs vs Native ITEMs</a>
+            <a class="DocIndexIMP">Build ITEMs</a>
+        </aside>
+        <section class="InsideDoc">
+            <article class="DocSection">
+                <header>
+                    <h1>Understanding ITEMs</h1>
+                    <h6>Building on top of the ITEM standard is a cool new way to make dapps more decentralized, interoperable and avoid a lot of technical issues.</h6>
+                </header>
+                <aside class="DocSectionContents">
+                    <a>How ITEM Standard works</a>
+                    <a>Wrapped ITEMs vs Native ITEMs</a>
+                    <a>Unique vs fungible ITEMs</a>
+                    <a>Permit Transactions (ERC-20 EIP-712 Integration)</a>
+                </aside>
+                <article class="DocSectionSingleContent">
+                    <h2>How ITEM Standard works</h2>
+                    <p>Mint can be done by the Extension (supporting arbitrary logic) in the case of a Native Collection. In the case of a Wrapped Collection, the mint operation has a default immutable behavior defined by the EthItme standard. Burning can always be done by the items’ owners using the Interface Offered by the Collection (cannot be done via the standard ERC20 contracts).</p>
+                    <p>Mint can be done by the Extension (supporting arbitrary logic) in the case of a Native Collection. In the case of a Wrapped Collection, the mint operation has a default immutable behavior defined by the EthItme standard. Burning can always be done by the items’ owners using the Interface Offered by the Collection (cannot be done via the standard ERC20 contracts).</p>
+                    <p>Mint can be done by the Extension (supporting arbitrary logic) in the case of a Native Collection. In the case of a Wrapped Collection, the mint operation has a default immutable behavior defined by the EthItme standard. Burning can always be done by the items’ owners using the Interface Offered by the Collection (cannot be done via the standard ERC20 contracts).</p>
+                    <img src="https://i.github-camo.com/49795e7aa84c3510ca7a56c903d1c3ecb42e896d/68747470733a2f2f636c6f75642e67697468756275736572636f6e74656e742e636f6d2f6173736574732f3337383032332f31303031333038362f32346361643233652d363134392d313165352d393065362d3636333030393231303231382e706e67">
+                    <pre class="prettyprint"> 
+var Web3 = require('web3');
+
+//Initialize your connection with a Ethereum node
+var web3 = new Web3(configuration.web3URLConnectionString);
+
+//Retrieve the last version of the EthItem Orchestrator Smart Contract
+var ethItemOrchestrator = new web3.eth.Contract(configuration.ethItemOrchestratorABI, configuration.ethItemOrchestratorAddress);
+
+//Prepare a var to collect all the EthItems
+var allCollections = [];
+
+//Phase 1 - Retrieve all the Wrapped ERC20 Collections directly calling the Orchestrator
+//ERC20 Wrapped Collection is a Singleton, so there will always be just one active per time and its address is well-known, but the Orchestrator, of course, also collects all the previous, inactive, versions (the last one is the currently active one).
+var ethItemERC20WrapperAddresses = await ethItemOrchestrator.methods.erc20WrapperAddresses().call();
+
+for(var collectionAddress of ethItemERC20WrapperAddresses) {
+    //Normalize the address for eventual search by address purposes
+    collectionAddress = web3.utils.toChecksumAddress(collectionAddress);
+
+    //Collection category to distinguish all collection types, "W20" means that this Collection is a Wrapper of ERC20 Tokens
+    var collectionCategory = "W20";
+
+    var collectionABI = configuration.W20ABI;
+
+    //The needed basic info to operate are of course the Collection address, category and Smart Contract. They can be of course enriched
+    allCollections.push({
+        address : collectionAddress,
+        category : collectionCategory,
+        contract : new web3.eth.Contract(collectionABI, collectionAddress)
+    });
+}
+                    </pre>
+                </article>
+            </article>
+        </section>
+    </section>
+</body>

@@ -48,8 +48,15 @@ var Collection = React.createClass({
                     </section>
                 </section>}
                 {this.state && this.state.toggle === 'farm' && <section className="collectionPageItemsFarm">
-                    Soon @ UniFi
-                </section>}
+                    <section>
+                        <section className="SoonFARM">
+                                <figure className="FarmImg">
+                                    <img src="assets/img/farmer.png"></img>
+                                </figure>
+                                <h3>Farm will available soon powered by <a target="_blank" href="https://github.com/b-u-i-d-l/unifi">UniFi V2</a> General Purposes Contracts</h3>
+                            </section>
+                        </section>
+                    </section>}
                 {this.state && this.state.toggle === 'code' && <section className="collectionPageItemsCode">
                     {this.props.collection.extensionCode && <section>
                         <h3>Extension</h3>
