@@ -5,7 +5,7 @@ var Menu = React.createClass({
         }
     },
     onSection(section) {
-        this.setState({selected : this.state.menu.indexOf(this.state.menu.filter(it => it.module === section)[0])});
+        this.setState({selected : this.state.menu.indexOf(this.state.menu.filter(it => it.module === section || it.otherModules && it.otherModules.filter(otherModule => otherModule === section).length > 0)[0])});
     },
     componentDidMount() {
         this.controller.loadData();

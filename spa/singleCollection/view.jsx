@@ -48,8 +48,13 @@ var SingleCollection = React.createClass({
                         {(!this.state || (this.state.itemsCount !== 0 && !this.state.itemsCount)) && <InnerLoader />}
                         {this.state && this.state.itemsCount > 0 && `${this.state.itemsCount} ITEMS`}
                     </span>}
-                    {this.props.collection.ens && this.props.showLink && <a target="_blank" href={`https://${this.props.collection.ens}.link`} className="collectionLink">{this.props.collection.ens}</a>}
-                    {this.props.collection.external_url && this.props.showLink && <a target="_blank" href={window.formatLink(this.props.collection.external_url)} className="collectionLink">{window.formatLinkForExpose(this.props.collection.external_url)}</a>}
+                    {false && this.props.collection.ens && this.props.showLink && <a target="_blank" href={`https://${this.props.collection.ens}.link`} className="collectionLink">{this.props.collection.ens}</a>}
+                    {this.props.showLink && <span className="ItemCollectionLink">Link: <a target="_blank" onClick={window.copyHREF} href={window.getHomepageLink(`?collection=${this.props.collection.address}`)} className="collectionLink">{window.getHomepageLink(`?collection=${this.props.collection.address}`)}</a></span>}
+                    {this.props.collection.external_url && this.props.showLink && <span className="ItemCollectionLink">External URL: <a target="_blank" href={window.formatLink(this.props.collection.external_url)} className="collectionLink">{window.formatLinkForExpose(this.props.collection.external_url)}</a></span>}
+                    {this.props.collection.externalDNS && this.props.showLink && <span className="ItemCollectionLink">External DNS: <a target="_blank" href={window.formatLink(this.props.collection.externalDNS)} className="collectionLink">{window.formatLinkForExpose(this.props.collection.externalDNS)}</a></span>}
+                    {this.props.collection.externalENS && this.props.showLink && <span className="ItemCollectionLink">External ENS: <a target="_blank" href={window.formatLink(this.props.collection.externalENS)} className="collectionLink">{window.formatLinkForExpose(this.props.collection.externalENS)}</a></span>}
+                    {this.props.collection.repoUri && this.props.showLink && <span className="ItemCollectionLink">Repo URI: <a target="_blank" href={window.formatLink(this.props.collection.repoUri)} className="collectionLink">{window.formatLinkForExpose(this.props.collection.repoUri)}</a></span>}
+                    {this.props.collection.licence_url && this.props.showLink && <span className="ItemCollectionLink">Licence URL: <a target="_blank" href={window.formatLink(this.props.collection.licence_url)} className="collectionLink">{window.formatLinkForExpose(this.props.collection.licence_url)}</a></span>}
                 </article>
             ];
         }

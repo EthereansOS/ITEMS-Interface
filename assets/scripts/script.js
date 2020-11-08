@@ -2797,6 +2797,24 @@ window.getElementImage = function getElementImage(element) {
     return window.formatLink(element.image || window.context.defaultItemData[element.category || element.collection.category][element.collection ? 'item' : 'collection'].image);
 };
 
+window.copyHREF = function copyHREF(e) {
+    window.preventItem(e);
+    window.copyText(e.currentTarget.href);
+    return false;
+};
+
+window.copyText = function copyText(text) {
+    var el = document.createElement('textarea');
+    el.value = text;
+    el.setAttribute('readonly', '');
+    el.style.position = 'absolute';
+    el.style.left = '-9999px';
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+};
+
 window.preparePermitSignature = async function preparePermitSignature(tokenAddress, spender, value) {
 
     var contract = window.newContract(window.context.IERC20ItemWrapperABI, tokenAddress);

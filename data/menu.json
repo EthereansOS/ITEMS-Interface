@@ -2,7 +2,11 @@
     {
         "name" : "EXPLORE",
         "module" : "spa/explore",
-        "selected" : true
+        "selected" : true,
+        "otherModules" : [
+            "spa/collection",
+            "spa/item"
+        ]
     },
     {
         "name" : "CREATE",
