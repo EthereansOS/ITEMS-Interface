@@ -151,7 +151,7 @@ var CreateCollectionWizardController = function (view) {
             events = Object.values(events);
         }
         var factoryAddress = window.web3.utils.toChecksumAddress(await window.blockchainCall(window.ethItemOrchestrator.methods.factory));
-        var topic = window.web3.utils.sha3(Object.entries(window.context.ethItemFactoryEvents).filter(it => it[1] === "IERC1155ABI").map(it => it[0])[0]);
+        var topic = window.web3.utils.sha3(Object.entries(window.context.ethItemFactoryEvents).filter(it => it[1] === "NativeABI").map(it => it[0])[0]);
         var collectionAddress;
         for(var event of events) {
             if(window.web3.utils.toChecksumAddress(event.address) !== factoryAddress) {
