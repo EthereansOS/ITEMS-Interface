@@ -24,7 +24,7 @@
     "defaultItemData" : {
         "Native" : {
             "collection" : {
-                "image" : "https://cdn.shopify.com/s/files/1/1578/5251/products/4983164166590_x700.png?v=1585635232",
+                "image" : "assets/img/erc20-penguin.png",
                 "modelCode" : {
                     "1" : "ipfs://ipfs/QmWTas1y3RuAkApRh6HaHPM1SancvKiefmnfxNKcFMSRYw"
                 }
@@ -66,7 +66,7 @@
         },
         "W20" : {
             "collection" : {
-                "image" : "https://cdn.shopify.com/s/files/1/1578/5251/products/4983164166590_x700.png?v=1585635232",
+                "image" : "assets/img/erc20-penguin.png",
                 "modelCode" : {
                     "1" : "ipfs://ipfs/QmTUSevGbSZcCWiyUg5ureLLxkrTA2JH87PW9r8BdBEGyz"
                 }

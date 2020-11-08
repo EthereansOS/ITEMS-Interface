@@ -227,7 +227,7 @@ var CreateCollectionWizard = React.createClass({
                     </section>}
             </section>
             <section className="FormCreateThing">
-                <a className="SuperActionBTN" href="javascript:;" onClick={this.back}>BACK</a>
+                <a className="SuperActionBTN SuperActionBTNB" href="javascript:;" onClick={this.back}>BACK</a>
                 <a className="SuperActionBTN" href="javascript:;" onClick={this.next}>NEXT</a>
             </section>
         </section>);
@@ -245,7 +245,7 @@ var CreateCollectionWizard = React.createClass({
                 <span className="ExplBoom">Selecting this option, all of the Items in this Collection will have 18 decimals in both implementations (Racomended only if you need decimals in the NFT implementation too due to some special functions like in-game consumable items)</span>
             </section>
             <section className="FormCreateThing">
-                <a className="SuperActionBTN" href="javascript:;" onClick={this.back}>BACK</a>
+                <a className="SuperActionBTN SuperActionBTNB" href="javascript:;" onClick={this.back}>BACK</a>
                 <a className="SuperActionBTN" href="javascript:;" onClick={this.next}>NEXT</a>
             </section>
         </section>);
@@ -267,7 +267,7 @@ var CreateCollectionWizard = React.createClass({
                 <span className="ExplBoom">The metadata file is a Json standard file containing all of the info and links to the file of the ITEM. <a>here</a> You can find a step by step guide to build your json file correctly.</span>
             </section>}
             <section className="FormCreateThing">
-                <a className="SuperActionBTN" href="javascript:;" onClick={this.back}>BACK</a>
+                <a className="SuperActionBTN SuperActionBTNB" href="javascript:;" onClick={this.back}>BACK</a>
                 <a className="SuperActionBTN" href="javascript:;" onClick={this.next}>NEXT</a>
             </section>
         </section>);
@@ -289,7 +289,7 @@ var CreateCollectionWizard = React.createClass({
                 </section>
             </section>}
             <section className="FormCreateThing">
-                <a className={"SuperActionBTN" + (this.state && this.state.performing ? " disabled" : "")} href="javascript:;" onClick={this.back}>BACK</a>
+                <a className={"SuperActionBTN SuperActionBTNB" + (this.state && this.state.performing ? " disabled" : "")} href="javascript:;" onClick={this.back}>BACK</a>
                 {this.state && !this.state.performing && !this.state.extensionAddress && <a href="javascript:;" data-action="deploySmartContract" className="SuperActionBTN" onClick={window.perform}>DEPLOY SMART CONTRACT</a>}
                 {this.state && !this.state.performing && this.state.extensionAddress && <a href="javascript:;" data-action="deploy" className="SuperActionBTN" onClick={window.perform}>CREATE COLLECTION</a>}
                 {this.state && this.state.performing && <InnerLoader />}
