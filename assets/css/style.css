@@ -60,13 +60,14 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .collection {width: 300px; margin: 40px;display: inline-block;}
 .collection .collectionIcon {width: 100px; height: 100px; display: inline-block; vertical-align: top; overflow: hidden; position: relative; /* border: solid; border-image-source: linear-gradient(to left, #743ad5, #d53a9d);border-image-slice: 1;border-width: 3px; */}
 .collection .collectionIcon img {width: 100%;}
-.collection .collectionIcon h6 {position: absolute; bottom: 0; right: 30px; background-image: linear-gradient(90deg, #00C0FF 0%, #FFCF00 49%, #FC4F4F 80%, #00C0FF 100%);color: #ffffff !important; text-shadow: #c0c0c0 1px 1px; text-decoration: none; cursor: auto;box-shadow: none;border: 1px solid transparent;outline: none;opacity: 1;padding: 10px 30px;border-radius: 12px;font-weight: 500;text-decoration: none; display: inline-block;animation:slidebg 10s linear infinite; font-weight: bolder; padding: 2px; font-size: 11px; border-radius: 5px;}
+.collection .collectionIcon h6 {position: absolute; bottom: 0; right: 0px; background-image: linear-gradient(90deg, #00C0FF 0%, #FFCF00 49%, #FC4F4F 80%, #00C0FF 100%);color: #ffffff !important; text-shadow: #c0c0c0 1px 1px; text-decoration: none; cursor: auto;box-shadow: none;border: 1px solid transparent;outline: none;opacity: 1;padding: 10px 30px;font-weight: 500;text-decoration: none; display: inline-block;animation:slidebg 10s linear infinite; font-weight: bolder; padding: 2px; font-size: 11px;}
 .collection .collectionInfo {width: 190px; display: inline-block; vertical-align: top; margin-left: 10px;}
 .collection .collectionTitle {width: 95%; display: block; text-align: left; font-size: 20px; color: #131D39;-ms-word-break: break-all;word-break: break-all;word-break: break-word;-webkit-hyphens: auto;-moz-hyphens: auto;hyphens: auto;}
 .collection .collectionTitle span {font-size: 13px;}
 .collection .collectionDesc {width: 95%; display: block; text-align: left; font-size: 11px; color: #9c9c9c; margin-top: 5px;-ms-word-break: break-all;word-break: break-all;word-break: break-word;-webkit-hyphens: auto;-moz-hyphens: auto;hyphens: auto;}
 .collection .collectionItems {width: 95%; display: block; text-align: left; font-size: 18px;}
 .Explainer > img {width: 50px;}
+
 
 .menuMenu {width: 100%; position: fixed; top: 0; left: 0; height: 60px; background-color: #ffffff;z-index: 1000; border-bottom: 1px solid;border-image-slice: 1; border-image-source: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 70%, #9048fd 90%);}
 .menuMenu .logo {display: inline-block; margin-left: 1%; text-decoration: none; cursor: pointer;}
@@ -157,7 +158,7 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .createPage {width: 100%; display: block; text-align: center; margin-top: 100px;min-width: 100%;}
 .createStart {width: 230px; background-color: ffffff; border-radius: 20px;display: inline-block; padding: 30px 70px;    margin-top: 100px;}
 .StartCreate {padding: 10px; text-decoration: none; background-color: #0180EC; font-weight: bold; display: inline-block; margin: 20px 0 10px 0; color: #ffffff; border-radius: 8px;}
-.createCollection, .createITEM {width: 600px; background-color: ffffff; border-radius: 20px;display: inline-block; padding: 30px 70px; margin: 100px auto;}
+.createCollection, .createITEM {width: 600px; background-color: #F6FBFF; border-radius: 20px;display: inline-block; padding: 30px 70px; margin: 100px auto;}
 .createCollection h2, .createITEM h2 {font-size: 18px; font-weight: bold; text-align: center; color: #131D39; margin-bottom: 20px;}
 .FormCreateThing {min-height: 30px;padding: 5px 0; display: block; width: 350px; margin: 2px auto;}
 .FormCreateThing input[type=text] {width: 60%; background-color: #fafdff; border: 2px solid #131D39; border-radius: 6px; height: 30px; color: #131D39; display: inline-block; vertical-align: middle;}
@@ -246,6 +247,15 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .LoaderFull .LoadImg {width: 500px; height:500px;margin-top: 25%; display: inline-block;}
 .LoaderFull .LoadImg img {display: inline-block; width: 100%;}
 
+.collection .collectionInfoSide {width: 500px; display: inline-block; vertical-align: top; text-align: left; margin: 5px auto;}
+.collection .collectionInfoSide p {display: inline-block; margin: 0 10px 0 10px;}
+.collection .collectionInfoSide .ItemCollectionLink {display: inline-block; margin: 0 10px 0 10px;}
+.collection .collectionInfoSide .ItemCollectionLink a {width: 100%;}
+.collection .collectionInfoSide .collectionItems {display: inline-block; margin: 0 10px 0 10px; width: auto;}
+.collection .collectionInfoSideLinks {width: 500px; display: inline-block; vertical-align: top; text-align: left;margin: 5px auto;}
+.collection .collectionInfoSideLinks .ItemCollectionLink {display: inline-block; margin: 0 10px 0 10px; width: auto;}
+.collection .collectionInfoSideLinks .collectionLink {padding: 5px 9px; text-decoration: none; background-color: #0180EC; font-weight: bold;  color: #ffffff; border-radius: 8px;width: auto; font-size: 12px;}
+
 .Documentation, .DocHTML {background-color: #171717 !important;}
 .AllDoc {width: 100%; display: block;}
 .AllDoc nav {width: 100%; display: block; position: fixed; top: 0; left: 0; height: 60px; background-color: #1f1f1f; border-bottom: 1px solid #000000;}
@@ -290,8 +300,22 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
    .Intro .Title h6 {text-align: left;}
    .Intro .Explainer article > img {width: 80%}
 }
-
-
+@media only screen and (min-width: 700px) {	
+   .collectionPageItemsOrder {column-count: 2;-moz-column-count:2;-webkit-column-count:2;}	
+   .walletCollectionItems {column-count: 2;-moz-column-count:2;-webkit-column-count:2;}	
+}	
+@media only screen and (min-width: 930px) {	
+   .collectionPageItemsOrder {column-count: 3;-moz-column-count:3;-webkit-column-count:3;}	
+   .walletCollectionItems {column-count: 3;-moz-column-count:3;-webkit-column-count:3;}	
+}	
+@media only screen and (min-width: 1100px) {	
+   .collectionPageItemsOrder {column-count: 4;-moz-column-count:4;-webkit-column-count:4;}	
+   .walletCollectionItems {column-count: 4;-moz-column-count:4;-webkit-column-count:4;}	
+}
+@media only screen and (min-width: 1500px) {	
+   .collectionPageItemsOrder {column-count: 5;-moz-column-count:5;-webkit-column-count:5;}	
+   .walletCollectionItems {column-count: 5;-moz-column-count:5;-webkit-column-count:5;}	
+}
 
 
 @media only screen and (min-device-width: 751px) and (max-device-width: 1024px) {
