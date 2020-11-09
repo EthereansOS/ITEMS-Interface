@@ -123,7 +123,7 @@ var Item = React.createClass({
                                 </section>
                                 <section className="itemFundamentalsThing">
                                     {item.dynamicData && item.dynamicData.isEditable && item.collection.extensionAddress && item.collection.extensionAddress !== window.voidEthereumAddress && <span>Managed by {item.collection.extensionIsContract ? "Contract" : "Wallet"}: <a target="_blank" href={`${window.getNetworkElement('etherscanURL')}address/${item.collection.extensionAddress}`}>{item.collection.extensionAddress}</a></span>}
-                                    {((item.sourceAddress !== 'blank' && item.sourceAddress !== window.voidEthereumAddress) || item.collection.sourceAddress !== 'blank') && <span>Source address: <a target="_blank" href={`${window.getNetworkElement('etherscanURL')}address/${item.sourceAddress !== 'blank' ? item.sourceAddress : item.collection.sourceAddress}`}>{item.sourceAddress !== 'blank' ? item.sourceAddress : item.collection.sourceAddress}</a></span>}
+                                    {((item.sourceAddress !== 'blank' && item.sourceAddress !== window.voidEthereumAddress) || item.collection.sourceAddress !== 'blank') && <span>Wrapped from: <a target="_blank" href={`${window.getNetworkElement('etherscanURL')}address/${item.sourceAddress !== 'blank' ? item.sourceAddress : item.collection.sourceAddress}`}>{item.sourceAddress !== 'blank' ? item.sourceAddress : item.collection.sourceAddress}</a></span>}
                                     <section className="itemSide">
                                     <span className="ItemSupply">Supply: {window.fromDecimals(item.dynamicData.totalSupply, item.decimals)} </span>
                                     {window.walletAddress && item.dynamicData && item.dynamicData.balanceOf && item.dynamicData.balanceOf !== '0' && <span className="ItemBalance">| You own: {window.fromDecimals(item.dynamicData.balanceOf, item.decimals, true)}</span>}
@@ -173,11 +173,11 @@ var Item = React.createClass({
                                 <Editor readonly firstCode={this.props.item.collection.extensionCode} />
                             </section>}
                             {this.props.item.collection.modelCode && <section>
-                                <h3>Model</h3>
+                                <h3>ITEM Model</h3>
                                 <Editor readonly firstCode={this.props.item.collection.modelCode} />
                             </section>}
                             {this.props.item.collection.wrappedCode && <section>
-                                <h3>Wrapped ERC20</h3>
+                                <h3>ITEM ERC20 Implementation</h3>
                                 <Editor readonly firstCode={this.props.item.collection.wrappedCode} />
                             </section>}
                         </section>}

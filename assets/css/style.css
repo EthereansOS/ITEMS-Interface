@@ -130,7 +130,7 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 
 .SettingsForOwn {width: 100%; text-align: left;}
 .SettingsForOwn input {width: 30%; background-color: #fafdff; border: 2px solid #131D39; border-radius: 6px; height: 30px; color: #131D39;}
-.SettingsForOwn a {padding: 6px 8px; font-weight: bold; background-color: #131D39; display: inline-block; margin: 10px 0 0 5px; border-radius: 6px; font-size: 13px; color: #ffffff; text-decoration: none;}
+.SettingsForOwn a {padding: 6px 8px; font-weight: bold; background-color: #8FD1F9; display: inline-block; margin: 10px 0 0 5px; border-radius: 6px; font-size: 13px; color: #ffffff; text-decoration: none;}
 .SettingsForOwn .MaximumBro {font-size: 9px; font-weight: bolder;padding: 3px 5px; margin: 10px 5px 0 0;}
 
 .collectionNav {width: 100%; background-color: ffffff; height: 30px;text-align: center;}
@@ -145,16 +145,16 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .WrapWhat {width: 90%; display: inline-block; text-align: center;}
 .WrapWhat p {font-size: 18px; font-weight: bold; text-align: center; color: #131D39; margin-bottom: 20px;}
 .WrapWhat input, .WrapWhatLoaded input {width: 90%; background-color: #fafdff; border: 2px solid #131D39; border-radius: 6px; height: 30px; color: #131D39;}
-.WrapWhat .LoadToITEM {padding: 5px 8px; font-weight: bold; background-color: #131D39; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; color: #ffffff; text-decoration: none;}
+.WrapWhat .LoadToITEM {padding: 5px 8px; font-weight: bold; background-color: #0180EC; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; color: #ffffff; text-decoration: none;}
 .WrapWhatLoaded .tokenSelectedToWrap {font-size: 18px;font-weight: bold; text-align: center; color: #131D39; margin-bottom: 0px; margin-top: 18px;}
 .WrapWhatLoaded .tokenSelectedToWrapBalance {font-size: 13px; color: #6e6e6e; margin-bottom: 15px; display: inline-block;}
 .tokenSelectedToWrapDecide {width: 100%; text-align: center; margin-bottom: 10px;}
 .WrapWhatLoaded .BalancetoWrapSelector {width: 60%;display: inline-block; vertical-align: middle;}
-.WrapWhatLoaded .tokenSelectedToWrapBalanceALL {padding: 8px 6px; border-radius: 6px; font-size: 9px; font-weight: bold; display: inline-block; background-color: #131D39; vertical-align: middle; color: #ffffff; margin-right: 5px;}
-.BeforeToWrapToITEM {text-decoration: none; padding: 8px 12px; font-weight: bold; background-color: #131D39; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; margin-right: 10px; color: #ffffff;}
+.WrapWhatLoaded .tokenSelectedToWrapBalanceALL {padding: 8px 6px; border-radius: 6px; font-size: 9px; font-weight: bold; display: inline-block; background-color: #8FD1F9; vertical-align: middle; color: #ffffff; margin-right: 5px;}
+.BeforeToWrapToITEM {text-decoration: none; padding: 8px 12px; font-weight: bold; background-color: #0180EC; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; margin-right: 10px; color: #ffffff;}
 .WrapToITEM {text-decoration: none; padding: 8px 12px; font-weight: bold; background-color: #131D39; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; margin-right: 10px;background: linear-gradient(to right, #9048fd 30%, #4bcbc9 90%); color: #ffffff;}
 .WrapWhatLoaded .disabled {background-color: #e4e4e4 !important; color: #6e6e6e !important;background: #e4e4e4 !important; text-decoration: none;}
-.WrapWhat select {margin: 10px 0;border: 1px solid #131D39; background-color: #131D39;border-radius: 5px; font-weight: bold; color: #ffffff;}
+.WrapWhat select {margin: 10px 0;border: 1px solid #0180EC; background-color: #0180EC;border-radius: 5px; font-weight: bold; color: #ffffff;}
 .createPage {width: 100%; display: block; text-align: center; margin-top: 100px;min-width: 100%;}
 .createStart {width: 230px; background-color: ffffff; border-radius: 20px;display: inline-block; padding: 30px 70px;    margin-top: 100px;}
 .StartCreate {padding: 10px; text-decoration: none; background-color: #0180EC; font-weight: bold; display: inline-block; margin: 20px 0 10px 0; color: #ffffff; border-radius: 8px;}
@@ -177,6 +177,9 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .createWhat p {font-size: 18px; font-weight: bold; text-align: center; color: #131D39; margin-bottom: 20px;}
 .createWhat input, .createWhat textarea {width: 90%;background-color: #fafdff; border: 2px solid #131D39; border-radius: 6px; height: 30px; color: #131D39;}
 .createWhat textarea {height: 80px;}
+.createWhat .FF {width: 40%;margin-right: 45px;margin-top: 20px;}
+
+.FormCreateThing .risksDisc {width: 100% !important;font-size: 11px!important;}
 .spacialImputs {display: block; width: 100%; margin-top: 20px;}
 .spacialImputs input {width: 40%;background-color: transparent; border: none;  color: #131D39;}
 .spacialImputs p {font-size: 15px; font-weight: bold; text-align: left; color: #131D39; margin-bottom: 20px; width: 55%; margin-right: 4%;}

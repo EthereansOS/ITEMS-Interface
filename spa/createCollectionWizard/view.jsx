@@ -294,6 +294,7 @@ var CreateCollectionWizard = React.createClass({
                 {this.state && !this.state.performing && this.state.extensionAddress && <a href="javascript:;" data-action="deploy" className="SuperActionBTN" onClick={window.perform}>CREATE COLLECTION</a>}
                 {this.state && this.state.performing && <InnerLoader />}
                 {this.state && this.state.loadingMessage && <span>{this.state.loadingMessage}</span>}
+                <p className="risksDisc">ETHITEM is a general purposes protocol to build ITEMs on top of Ethereun, anyone can do it! By deploying you're taking the full responsability for your creation, do it at your own risk.</p>
             </section>
         </section>);
     },

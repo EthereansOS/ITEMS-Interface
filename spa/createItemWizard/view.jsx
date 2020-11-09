@@ -114,7 +114,8 @@ var CreateItemWizard = React.createClass({
                 </section>
                 <section className="MetaImputThings">
                     <section className="createWhat">
-                        <select id="fileType" onChange={this.onFileOrFolder}>
+                        <p>File or Folder</p>
+                        <select className="FF" id="fileType" onChange={this.onFileOrFolder}>
                             <option value="file">File</option>
                             <option value="folder">Folder</option>
                         </select>
@@ -171,7 +172,7 @@ var CreateItemWizard = React.createClass({
                     </label>
                 </section>
                 <section className="FormCreateThing">
-                    <a className="SuperActionBTN" href="javascript:;" onClick={this.back}>BACK</a>
+                    <a className="SuperActionBTN SuperActionBTNB" href="javascript:;" onClick={this.back}>BACK</a>
                     <a className="SuperActionBTN" href="javascript:;" onClick={this.next}>NEXT</a>
                 </section>
             </section>
@@ -195,7 +196,7 @@ var CreateItemWizard = React.createClass({
                     <span className="ExplBoom">The metadata file is a Json standard file containing all of the info and links to the file of the ITEM. <a>here</a> You can find a step by step guide to build your json file correctly.</span>
                 </section>}
                 <section className="FormCreateThing">
-                    <a className={"SuperActionBTN" + (this.state && this.state.performing ? " disabled" : "")} href="javascript:;" onClick={this.back}>BACK</a>
+                    <a className={"SuperActionBTN SuperActionBTNB" + (this.state && this.state.performing ? " disabled" : "")} href="javascript:;" onClick={this.back}>BACK</a>
                     {(!this.state || this.state.performing !== 'deploy') && <a href="javascript:;" data-action="deploy" className="SuperActionBTN" onClick={window.perform}>DEPLOY</a>}
                     {this.state && this.state.performing === 'deploy' && <InnerLoader />}
                     {this.state && this.state.loadingMessage && <span>{this.state.loadingMessage}</span>}
