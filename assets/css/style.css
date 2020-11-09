@@ -124,6 +124,7 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .itemFundamentalsThing .itemaddress {display: inline-block; margin: 5px 10px 5px 0;}
 .itemFundamentalsThing .itemaddress a {font-size: 13px; color: #6e6e6e;}
 .itemFundamentals .ItemCollectionLink {width: 100%; text-align: left; font-size: 12px;margin: 0px 0px 5px 0; display: inline-block;color: #6e6e6e; word-break: break-all;}
+.itemFundamentals .ItemCollectionLinkS {font-size: 14px;margin: 5px 0px 5px 0; display: inline-block;}
 .itemFundamentalsThing .ItemSupply, .itemFundamentalsThing .ItemBalance {display: inline-block; font-size: 13px;color: #6e6e6e;margin: 0px 5px 5px 0;}
 .itemSide {width: 100%; text-align: left;}
 .itemSide .ItemPrice {text-decoration: none; margin: 5px 1% 10px 0px; display: inline-block; color: #ffffff; font-size: 11px; font-weight: bold; background: linear-gradient(to right, #9048fd 20%,  #4bcbc9 100%); text-align: center; padding: 3px 7px; border-radius: 8px;}
@@ -141,7 +142,7 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .collectionNav ul .selected a, .collectionNav ul li:hover a, .collectionNav ul li a:hover {color: #131D39;border-bottom: 2px solid;border-image-slice: 1; border-image-source: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 70%, #9048fd 90%);}
 
 .wrapPage {width: 100%; display: block; text-align: center; margin-top: 100px;min-width: 100%;}
-.wrapBox {width: 350px; background-color: ffffff; border-radius: 20px;display: inline-block; padding: 30px 70px;    margin-top: 100px;}
+.wrapBox {width: 350px; background-color: #F6FBFF; border-radius: 20px;display: inline-block; padding: 30px 70px;    margin-top: 100px;}
 .WrapWhat {width: 90%; display: inline-block; text-align: center;}
 .WrapWhat p {font-size: 18px; font-weight: bold; text-align: center; color: #131D39; margin-bottom: 20px;}
 .WrapWhat input, .WrapWhatLoaded input {width: 90%; background-color: #fafdff; border: 2px solid #131D39; border-radius: 6px; height: 30px; color: #131D39;}
