@@ -19,9 +19,9 @@ contract ERC20WrapperV1 is IERC20WrapperV1, EthItemModelBase {
         string memory symbol
     ) public virtual override(IEthItemModelBase, EthItemModelBase) {
         super.init(name, symbol);
-        (address ethItemERC20WrapperModelAddress,) = erc20NFTWrapperModel();
-        _isMine[_dest[ETHEREUM_OBJECT_ID] = _clone(ethItemERC20WrapperModelAddress)] = true;
-        IERC20NFTWrapper(_dest[ETHEREUM_OBJECT_ID]).init(ETHEREUM_OBJECT_ID, "EthereumItem", "IETH", _decimalsMap[ETHEREUM_OBJECT_ID] = _decimals);
+        (address interoperableInterfaceModelAddress,) = interoperableInterfaceModel();
+        _isMine[_dest[ETHEREUM_OBJECT_ID] = _clone(interoperableInterfaceModelAddress)] = true;
+        IEthItemInteroperableInterface(_dest[ETHEREUM_OBJECT_ID]).init(ETHEREUM_OBJECT_ID, "EthereumItem", "IETH", _decimalsMap[ETHEREUM_OBJECT_ID] = _decimals);
         emit NewItem(ETHEREUM_OBJECT_ID, _dest[ETHEREUM_OBJECT_ID]);
         emit Mint(ETHEREUM_OBJECT_ID, _dest[ETHEREUM_OBJECT_ID], 0);
     }
@@ -47,14 +47,14 @@ contract ERC20WrapperV1 is IERC20WrapperV1, EthItemModelBase {
     {
         wrapperAddress = _dest[objectId = _objects[erc20TokenAddress]];
         if (wrapperAddress == address(0)) {
-            (address ethItemERC20WrapperModelAddress,) = erc20NFTWrapperModel();
-            objectId = uint256(wrapperAddress = _clone(ethItemERC20WrapperModelAddress));
+            (address interoperableInterfaceModelAddress,) = interoperableInterfaceModel();
+            objectId = uint256(wrapperAddress = _clone(interoperableInterfaceModelAddress));
             _isMine[_dest[objectId] = wrapperAddress] = true;
             _sources[objectId] = erc20TokenAddress;
             _objects[erc20TokenAddress] = objectId;
             (string memory name, string memory symbol, uint256 dec) = _getMintData(erc20TokenAddress);
             _decimalsMap[objectId] = dec;
-            IERC20NFTWrapper(wrapperAddress).init(objectId, name, symbol, _decimals);
+            IEthItemInteroperableInterface(wrapperAddress).init(objectId, name, symbol, _decimals);
             emit NewItem(objectId, wrapperAddress);
         }
         _safeTransferFrom(IERC20Data(erc20TokenAddress), msg.sender, address(this), amount);
@@ -63,7 +63,7 @@ contract ERC20WrapperV1 is IERC20WrapperV1, EthItemModelBase {
 
     function _mintItems(uint256 objectId, address wrapperAddress, uint256 amount) internal virtual {
         uint256 itemAmountDecimals = amount * _itemDecimals(objectId);
-        asERC20(objectId).mint(msg.sender, itemAmountDecimals);
+        asInteroperable(objectId).mint(msg.sender, itemAmountDecimals);
         uint256 itemAmount = itemAmountDecimals - _sendMintFeeToDFO(msg.sender, objectId, itemAmountDecimals);
         if(itemAmount > 0) {
             emit Mint(objectId, wrapperAddress, itemAmount);
@@ -74,7 +74,7 @@ contract ERC20WrapperV1 is IERC20WrapperV1, EthItemModelBase {
     function burn(
         uint256 objectId,
         uint256 amount
-    ) public virtual override(IEthItem) {
+    ) public virtual override(IEthItemMainInterface) {
         _burn(objectId, amount);
         emit TransferSingle(msg.sender, msg.sender, address(0), objectId, amount);
     }
@@ -82,7 +82,7 @@ contract ERC20WrapperV1 is IERC20WrapperV1, EthItemModelBase {
     function burnBatch(
         uint256[] memory objectIds,
         uint256[] memory amounts
-    ) public virtual override(IEthItem) {
+    ) public virtual override(IEthItemMainInterface) {
         for (uint256 i = 0; i < objectIds.length; i++) {
             _burn(objectIds[i], amounts[i]);
         }
@@ -179,14 +179,14 @@ contract ERC20WrapperV1 is IERC20WrapperV1, EthItemModelBase {
         override
         returns (uint256)
     {
-        return asERC20(objectId).decimals();
+        return asInteroperable(objectId).decimals();
     }
 
-    function toERC20WrapperAmount(uint256, uint256 ethItemAmount) public override virtual view returns (uint256 erc20WrapperAmount) {
-        erc20WrapperAmount = ethItemAmount;
+    function toInteroperableInterfaceAmount(uint256, uint256 mainInterfaceAmount) public override virtual view returns (uint256 interoperableInterfaceAmount) {
+        interoperableInterfaceAmount = mainInterfaceAmount;
     }
 
-    function toEthItemAmount(uint256, uint256 erc20WrapperAmount) public override(IEthItem, EthItemModelBase) virtual view returns (uint256 ethItemAmount) {
-        ethItemAmount = erc20WrapperAmount;
+    function toMainInterfaceAmount(uint256, uint256 interoperableInterfaceAmount) public override(IEthItemMainInterface, EthItemModelBase) virtual view returns (uint256 mainInterfaceAmount) {
+        mainInterfaceAmount = interoperableInterfaceAmount;
     }
 }

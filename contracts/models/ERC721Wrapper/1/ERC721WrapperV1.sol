@@ -16,7 +16,7 @@ contract ERC721WrapperV1 is IERC721WrapperV1, EthItemModelBase {
         address source,
         string memory name,
         string memory symbol
-    ) public virtual override(IEthItem, EthItemModelBase) {
+    ) public virtual override(IEthItemMainInterface, EthItemModelBase) {
         require(source != address(0), "Source cannot be void");
         _source = source;
         super.init(name, symbol);
@@ -81,16 +81,16 @@ contract ERC721WrapperV1 is IERC721WrapperV1, EthItemModelBase {
     ) internal virtual override returns (uint256 objectId, address wrapperAddress) {
         wrapperAddress = _dest[objectId = objectIdInput];
         if (wrapperAddress == address(0)) {
-            (address ethItemERC20WrapperModelAddress,) = erc20NFTWrapperModel();
-            _isMine[_dest[objectId] = wrapperAddress = _clone(ethItemERC20WrapperModelAddress)] = true;
+            (address interoperableInterfaceModelAddress,) = interoperableInterfaceModel();
+            _isMine[_dest[objectId] = wrapperAddress = _clone(interoperableInterfaceModelAddress)] = true;
             string memory name = _idAsName ? _toString(objectId) : _name;
-            IERC20NFTWrapper(wrapperAddress).init(objectId, name, _symbol, _decimals);
+            IEthItemInteroperableInterface(wrapperAddress).init(objectId, name, _symbol, _decimals);
             emit NewItem(objectId, wrapperAddress);
         }
-        uint256 toMint = (10**_decimals) - asERC20(objectId).totalSupply();
-        asERC20(objectId).mint(from, toMint);
+        uint256 toMint = (10**_decimals) - asInteroperable(objectId).totalSupply();
+        asInteroperable(objectId).mint(from, toMint);
         uint256 mintFeeToDFO = _sendMintFeeToDFO(from, objectId, toMint);
-        uint256 nftAmount = toEthItemAmount(objectId, toMint - mintFeeToDFO);
+        uint256 nftAmount = toMainInterfaceAmount(objectId, toMint - mintFeeToDFO);
         if(nftAmount > 0) {
             emit Mint(objectId, wrapperAddress, nftAmount);
             emit TransferSingle(address(this), address(0), from, objectId, nftAmount);

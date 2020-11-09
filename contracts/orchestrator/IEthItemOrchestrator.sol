@@ -41,7 +41,7 @@ interface IEthItemOrchestrator is IERC721Receiver, IERC1155Receiver {
      * @dev SET - The address of the Smart Contract whose code will serve as a model for all the EthItemERC20Wrappers (please see the eth-item-token-standard for further information).
      * It can be done only through a Proposal in the Linked DFO
      */
-    function setEthItemERC20WrapperModel(address ethItemERC20WrapperModelAddress) external;
+    function setEthItemInteroperableInterfaceModel(address ethItemInteroperableInterfaceModelAddress) external;
 
     /**
      * @dev SET - The address of the Native EthItem model.

@@ -13,13 +13,13 @@ interface IEthItemFactory is IEthItemOrchestratorDependantElement {
     /**
      * @dev GET - The address of the Smart Contract whose code will serve as a model for all the EthItemERC20Wrappers (please see the eth-item-token-standard for further information).
      */
-    function ethItemERC20WrapperModel() external view returns (address ethItemERC20WrapperModelAddress, uint256 ethItemERC20WrapperModelVersion);
+    function ethItemInteroperableInterfaceModel() external view returns (address ethItemInteroperableInterfaceModelAddress, uint256 ethItemInteroperableInterfaceModelVersion);
 
     /**
      * @dev SET - The address of the Smart Contract whose code will serve as a model for all the EthItemERC20Wrappers (please see the eth-item-token-standard for further information).
      * It can be done only by the Factory controller
      */
-    function setEthItemERC20WrapperModel(address ethItemERC20WrapperModelAddress) external;
+    function setEthItemInteroperableInterfaceModel(address ethItemInteroperableInterfaceModelAddress) external;
 
     /**
      * @dev GET - The address of the Smart Contract whose code will serve as a model for all the Native EthItems.

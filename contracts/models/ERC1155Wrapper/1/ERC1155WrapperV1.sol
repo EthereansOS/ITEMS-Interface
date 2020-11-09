@@ -47,7 +47,7 @@ contract ERC1155WrapperV1 is IERC1155WrapperV1, EthItemModelBase {
         return
             !_supportsSpecificDecimals
                 ? 1
-                : asERC20(objectId).decimals();
+                : asInteroperable(objectId).decimals();
     }
 
     function uri(uint256 objectId)
@@ -118,12 +118,12 @@ contract ERC1155WrapperV1 is IERC1155WrapperV1, EthItemModelBase {
         emit TransferBatch(msg.sender, msg.sender, address(0), objectIds, amounts);
     }
 
-    function toERC20WrapperAmount(uint256 objectId, uint256 ethItemAmount) public view virtual override returns (uint256 erc20WrapperAmount) {
-        erc20WrapperAmount = _supportsSpecificDecimals ? ethItemAmount : super.toERC20WrapperAmount(objectId, ethItemAmount);
+    function toInteroperableInterfaceAmount(uint256 objectId, uint256 mainInterfaceAmount) public override virtual view returns (uint256 interoperableInterfaceAmount) {
+        interoperableInterfaceAmount = _supportsSpecificDecimals ? mainInterfaceAmount : super.toInteroperableInterfaceAmount(objectId, mainInterfaceAmount);
     }
 
-    function toEthItemAmount(uint256 objectId, uint256 erc20WrapperAmount) public view virtual override(IEthItem, EthItemModelBase) returns (uint256 ethItemAmount) {
-        ethItemAmount = _supportsSpecificDecimals ? erc20WrapperAmount : super.toEthItemAmount(objectId, erc20WrapperAmount);
+    function toMainInterfaceAmount(uint256 objectId, uint256 interoperableInterfaceAmount) public override(IEthItemMainInterface, EthItemModelBase) virtual view returns (uint256 mainInterfaceAmount) {
+        mainInterfaceAmount = _supportsSpecificDecimals ? interoperableInterfaceAmount : super.toMainInterfaceAmount(objectId, interoperableInterfaceAmount);
     }
 
     function _mint(
@@ -133,28 +133,28 @@ contract ERC1155WrapperV1 is IERC1155WrapperV1, EthItemModelBase {
     ) internal virtual returns (uint256 objectId, address wrapperAddress) {
         wrapperAddress = _dest[objectId = objectIdInput];
         if (wrapperAddress == address(0)) {
-            (address ethItemERC20WrapperModelAddress,) = erc20NFTWrapperModel();
-            _isMine[_dest[objectId] = wrapperAddress = _clone(ethItemERC20WrapperModelAddress)] = true;
+            (address interoperableInterfaceModelAddress,) = interoperableInterfaceModel();
+            _isMine[_dest[objectId] = wrapperAddress = _clone(interoperableInterfaceModelAddress)] = true;
             (string memory name, string memory symbol, uint256 dec) = _getMintData(objectId);
             name = _idAsName ? _toString(objectId) : name;
             _decimalsMap[objectId] = dec;
-            IERC20NFTWrapper(wrapperAddress).init(objectId, name, symbol, _decimals);
+            IEthItemInteroperableInterface(wrapperAddress).init(objectId, name, symbol, _decimals);
             emit NewItem(objectId, wrapperAddress);
         }
         uint256 itemDecimalsUnity = 10**_decimals;
 
         uint256 itemAmountDecimals = amount * (_supportsSpecificDecimals ? _itemDecimals(objectId) : itemDecimalsUnity);
 
-        uint256 totalSupply = asERC20(objectId).totalSupply();
+        uint256 totalSupply = asInteroperable(objectId).totalSupply();
         uint256 toMint = itemDecimalsUnity > totalSupply ? itemDecimalsUnity - totalSupply : itemDecimalsUnity;
         if(itemAmountDecimals > itemDecimalsUnity) {
             uint256 first = itemDecimalsUnity > totalSupply ? itemDecimalsUnity - totalSupply : 0;
             uint256 entireAmount = first > 0 ? itemAmountDecimals - itemDecimalsUnity : itemAmountDecimals;
             toMint = first + entireAmount;
         }
-        asERC20(objectId).mint(from, toMint);
+        asInteroperable(objectId).mint(from, toMint);
         uint256 mintFeeToDFO = _sendMintFeeToDFO(from, objectId, toMint);
-        uint256 nftAmount = toEthItemAmount(objectId, toMint - mintFeeToDFO);
+        uint256 nftAmount = toMainInterfaceAmount(objectId, toMint - mintFeeToDFO);
         if(nftAmount > 0) {
             emit Mint(objectId, wrapperAddress, nftAmount);
             emit TransferSingle(address(this), address(0), from, objectId, nftAmount);

@@ -6,13 +6,13 @@ import "./IEthItemFactory.sol";
 import "../models/common/IEthItemModelBase.sol";
 
 import "../orchestrator/EthItemOrchestratorDependantElement.sol";
-import "eth-item-token-standard/IERC20NFTWrapper.sol";
+import "eth-item-token-standard/IEthItemInteroperableInterface.sol";
 
 contract EthItemFactory is IEthItemFactory, EthItemOrchestratorDependantElement {
 
     uint256[] private _mintFeePercentage;
     uint256[] private _burnFeePercentage;
-    address private _ethItemERC20WrapperModelAddress;
+    address private _ethItemInteroperableInterfaceModelAddress;
     address private _nativeModelAddress;
     address private _erc1155WrapperModelAddress;
     address private _erc721WrapperModelAddress;
@@ -20,14 +20,14 @@ contract EthItemFactory is IEthItemFactory, EthItemOrchestratorDependantElement 
 
     constructor(
         address doubleProxy,
-        address ethItemERC20WrapperModelAddress,
+        address ethItemInteroperableInterfaceModelAddress,
         address nativeModelAddress,
         address erc1155WrapperModelAddress,
         address erc721WrapperModelAddress,
         address erc20WrapperModelAddress,
         uint256 mintFeePercentageNumerator, uint256 mintFeePercentageDenominator,
         uint256 burnFeePercentageNumerator, uint256 burnFeePercentageDenominator) public EthItemOrchestratorDependantElement(doubleProxy) {
-        _ethItemERC20WrapperModelAddress = ethItemERC20WrapperModelAddress;
+        _ethItemInteroperableInterfaceModelAddress = ethItemInteroperableInterfaceModelAddress;
         _nativeModelAddress = nativeModelAddress;
         _erc1155WrapperModelAddress = erc1155WrapperModelAddress;
         _erc721WrapperModelAddress = erc721WrapperModelAddress;
@@ -41,7 +41,7 @@ contract EthItemFactory is IEthItemFactory, EthItemOrchestratorDependantElement 
     }
 
     function _registerSpecificInterfaces() internal virtual override {
-        _registerInterface(this.setEthItemERC20WrapperModel.selector);
+        _registerInterface(this.setEthItemInteroperableInterfaceModel.selector);
         _registerInterface(this.setNativeModel.selector);
         _registerInterface(this.setERC1155WrapperModel.selector);
         _registerInterface(this.setERC20WrapperModel.selector);
@@ -54,12 +54,12 @@ contract EthItemFactory is IEthItemFactory, EthItemOrchestratorDependantElement 
         _registerInterface(this.createWrappedERC721.selector);
     }
 
-    function ethItemERC20WrapperModel() public override view returns (address ethItemERC20WrapperModelAddress, uint256 ethItemERC20WrapperModelVersion) {
-        return (_ethItemERC20WrapperModelAddress, IERC20NFTWrapper(_ethItemERC20WrapperModelAddress).itemModelVersion());
+    function ethItemInteroperableInterfaceModel() public override view returns (address ethItemInteroperableInterfaceModelAddress, uint256 ethItemInteroperableInterfaceModelVersion) {
+        return (_ethItemInteroperableInterfaceModelAddress, IEthItemInteroperableInterface(_ethItemInteroperableInterfaceModelAddress).interoperableInterfaceVersion());
     }
 
-    function setEthItemERC20WrapperModel(address ethItemERC20WrapperModelAddress) public override byOrchestrator {
-        _ethItemERC20WrapperModelAddress = ethItemERC20WrapperModelAddress;
+    function setEthItemInteroperableInterfaceModel(address ethItemInteroperableInterfaceModelAddress) public override byOrchestrator {
+        _ethItemInteroperableInterfaceModelAddress = ethItemInteroperableInterfaceModelAddress;
     }
 
     function nativeModel() public override view returns (address nativeModelAddress, uint256 nativeModelVersion) {
@@ -135,9 +135,9 @@ contract EthItemFactory is IEthItemFactory, EthItemOrchestratorDependantElement 
         (modelInitCallResult, modelInitCallResponse) = (newNativeAddress = _clone(_nativeModelAddress)).call(modelInitCallPayload);
         require(modelInitCallResult, "Model Init call failed");
         IEthItemModelBase createdToken = IEthItemModelBase(newNativeAddress);
-        (, uint256 itemModelVersion) = createdToken.erc20NFTWrapperModel();
+        (, uint256 itemModelVersion) = createdToken.interoperableInterfaceModel();
         uint256 modelVersion = createdToken.modelVersion();
-        emit NewNativeCreated(createdToken.standardVersion(), itemModelVersion, modelVersion, newNativeAddress);
+        emit NewNativeCreated(createdToken.mainInterfaceVersion(), itemModelVersion, modelVersion, newNativeAddress);
         emit NewNativeCreated(_nativeModelAddress, modelVersion, newNativeAddress, msg.sender);
     }
 
@@ -146,9 +146,9 @@ contract EthItemFactory is IEthItemFactory, EthItemOrchestratorDependantElement 
         (modelInitCallResult, modelInitCallResponse) = (newERC1155WrapperAddress = _clone(_erc1155WrapperModelAddress)).call(modelInitCallPayload);
         require(modelInitCallResult, "Model Init call failed");
         IEthItemModelBase createdToken = IEthItemModelBase(newERC1155WrapperAddress);
-        (, uint256 itemModelVersion) = createdToken.erc20NFTWrapperModel();
+        (, uint256 itemModelVersion) = createdToken.interoperableInterfaceModel();
         uint256 modelVersion = createdToken.modelVersion();
-        emit NewWrappedERC1155Created(createdToken.standardVersion(), itemModelVersion, modelVersion, newERC1155WrapperAddress);
+        emit NewWrappedERC1155Created(createdToken.mainInterfaceVersion(), itemModelVersion, modelVersion, newERC1155WrapperAddress);
         emit NewWrappedERC1155Created(_erc1155WrapperModelAddress, modelVersion, newERC1155WrapperAddress, msg.sender);
     }
 
@@ -157,9 +157,9 @@ contract EthItemFactory is IEthItemFactory, EthItemOrchestratorDependantElement 
         (modelInitCallResult, modelInitCallResponse) = (newERC20Address = _clone(_erc20WrapperModelAddress)).call(modelInitCallPayload);
         require(modelInitCallResult, "Model Init call failed");
         IEthItemModelBase createdToken = IEthItemModelBase(newERC20Address);
-        (, uint256 itemModelVersion) = createdToken.erc20NFTWrapperModel();
+        (, uint256 itemModelVersion) = createdToken.interoperableInterfaceModel();
         uint256 modelVersion = createdToken.modelVersion();
-        emit NewWrappedERC20Created(createdToken.standardVersion(), itemModelVersion, modelVersion, newERC20Address);
+        emit NewWrappedERC20Created(createdToken.mainInterfaceVersion(), itemModelVersion, modelVersion, newERC20Address);
         emit NewWrappedERC20Created(_erc20WrapperModelAddress, modelVersion, newERC20Address, msg.sender);
     }
 
@@ -168,9 +168,9 @@ contract EthItemFactory is IEthItemFactory, EthItemOrchestratorDependantElement 
         (modelInitCallResult, modelInitCallResponse) = (newERC721Address = _clone(_erc721WrapperModelAddress)).call(modelInitCallPayload);
         require(modelInitCallResult, "Model Init call failed");
         IEthItemModelBase createdToken = IEthItemModelBase(newERC721Address);
-        (, uint256 itemModelVersion) = createdToken.erc20NFTWrapperModel();
+        (, uint256 itemModelVersion) = createdToken.interoperableInterfaceModel();
         uint256 modelVersion = createdToken.modelVersion();
-        emit NewWrappedERC721Created(createdToken.standardVersion(), itemModelVersion, modelVersion, newERC721Address);
+        emit NewWrappedERC721Created(createdToken.mainInterfaceVersion(), itemModelVersion, modelVersion, newERC721Address);
         emit NewWrappedERC721Created(_erc721WrapperModelAddress, modelVersion, newERC721Address, msg.sender);
     }
 

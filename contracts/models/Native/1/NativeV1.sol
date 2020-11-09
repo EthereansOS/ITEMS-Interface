@@ -83,7 +83,7 @@ contract NativeV1 is INativeV1, EthItemModelBase {
         return
             !_supportsSpecificDecimals
                 ? 1
-                : asERC20(objectId).decimals();
+                : asInteroperable(objectId).decimals();
     }
 
     function mint(uint256 amount, string memory tokenName, string memory tokenSymbol, string memory objectUri, bool editable)
@@ -99,8 +99,8 @@ contract NativeV1 is INativeV1, EthItemModelBase {
         );
         string memory name = keccak256(bytes(tokenName)) != keccak256("") ? tokenName : _name;
         string memory symbol = keccak256(bytes(tokenSymbol)) != keccak256("") ? tokenSymbol : _symbol;
-        (address ethItemERC20WrapperModelAddress,) = erc20NFTWrapperModel();
-        IERC20NFTWrapper wrapper = IERC20NFTWrapper(wrapperAddress = _clone(ethItemERC20WrapperModelAddress));
+        (address ethItemERC20WrapperModelAddress,) = interoperableInterfaceModel();
+        IEthItemInteroperableInterface wrapper = IEthItemInteroperableInterface(wrapperAddress = _clone(ethItemERC20WrapperModelAddress));
         _isMine[_dest[objectId = uint256(wrapperAddress)] = wrapperAddress] = true;
         _objectUris[objectId] = objectUri;
         _editable[objectId] = editable;
@@ -125,12 +125,12 @@ contract NativeV1 is INativeV1, EthItemModelBase {
     }
 
     function _mint(uint256 objectId, uint256 amount) internal virtual {
-        IERC20NFTWrapper wrapper = asERC20(objectId);
+        IEthItemInteroperableInterface wrapper = asInteroperable(objectId);
         uint256 amountInDecimals = amount * (_supportsSpecificDecimals ? 1 : (10**_decimals));
         wrapper.mint(msg.sender, amountInDecimals);
         emit Mint(objectId, address(wrapper), amount);
         uint256 sentForMint = _sendMintFeeToDFO(msg.sender, objectId, amountInDecimals);
-        emit TransferSingle(address(this), address(0), msg.sender, objectId, toEthItemAmount(objectId, amountInDecimals - sentForMint));
+        emit TransferSingle(address(this), address(0), msg.sender, objectId, toMainInterfaceAmount(objectId, amountInDecimals - sentForMint));
     }
 
     function makeReadOnly(uint256 objectId) public virtual override {
@@ -176,11 +176,11 @@ contract NativeV1 is INativeV1, EthItemModelBase {
         _extensionAddress = address(0);
     }
 
-    function toERC20WrapperAmount(uint256 objectId, uint256 ethItemAmount) public view virtual override returns (uint256 erc20WrapperAmount) {
-        erc20WrapperAmount = _supportsSpecificDecimals ? ethItemAmount : super.toERC20WrapperAmount(objectId, ethItemAmount);
+    function toInteroperableInterfaceAmount(uint256 objectId, uint256 mainInterfaceAmount) public override virtual view returns (uint256 interoperableInterfaceAmount) {
+        interoperableInterfaceAmount = _supportsSpecificDecimals ? mainInterfaceAmount : super.toInteroperableInterfaceAmount(objectId, mainInterfaceAmount);
     }
 
-    function toEthItemAmount(uint256 objectId, uint256 erc20WrapperAmount) public view virtual override(IEthItem, EthItemModelBase) returns (uint256 ethItemAmount) {
-        ethItemAmount = _supportsSpecificDecimals ? erc20WrapperAmount : super.toEthItemAmount(objectId, erc20WrapperAmount);
+    function toMainInterfaceAmount(uint256 objectId, uint256 interoperableInterfaceAmount) public override(IEthItemMainInterface, EthItemModelBase) virtual view returns (uint256 mainInterfaceAmount) {
+        mainInterfaceAmount = _supportsSpecificDecimals ? interoperableInterfaceAmount : super.toMainInterfaceAmount(objectId, interoperableInterfaceAmount);
     }
 }

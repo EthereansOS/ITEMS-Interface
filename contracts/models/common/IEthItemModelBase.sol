@@ -2,12 +2,12 @@
 
 pragma solidity ^0.6.0;
 
-import "eth-item-token-standard/IEthItem.sol";
+import "eth-item-token-standard/IEthItemMainInterface.sol";
 
 /**
  * @dev This interface contains the commonn data provided by all the EthItem models
  */
-interface IEthItemModelBase is IEthItem {
+interface IEthItemModelBase is IEthItemMainInterface {
 
     /**
      * @dev Contract Initialization, the caller of this method should be a Contract containing the logic to provide the EthItemERC20WrapperModel to be used to create ERC20-based objectIds

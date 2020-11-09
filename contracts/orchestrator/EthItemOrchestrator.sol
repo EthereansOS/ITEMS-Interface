@@ -8,7 +8,7 @@ import "../knowledgeBase/IKnowledgeBase.sol";
 import "../ens-controller/IENSController.sol";
 import "@openzeppelin/contracts/introspection/ERC165.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-import "eth-item-token-standard/IEthItem.sol";
+import "eth-item-token-standard/IEthItemMainInterface.sol";
 
 contract EthItemOrchestrator is IEthItemOrchestrator, ERC165 {
 
@@ -129,10 +129,10 @@ contract EthItemOrchestrator is IEthItemOrchestrator, ERC165 {
         _knowledgeBases.push(newKnowledgeBase);
     }
 
-    function setEthItemERC20WrapperModel(address ethItemERC20WrapperModelAddress) public override byDFO {
+    function setEthItemInteroperableInterfaceModel(address ethItemInteroperableInterfaceModelAddress) public override byDFO {
         IEthItemFactory element = IEthItemFactory(factory());
-        if(element.supportsInterface(this.setEthItemERC20WrapperModel.selector)) {
-            element.setEthItemERC20WrapperModel(ethItemERC20WrapperModelAddress);
+        if(element.supportsInterface(this.setEthItemInteroperableInterfaceModel.selector)) {
+            element.setEthItemInteroperableInterfaceModel(ethItemInteroperableInterfaceModelAddress);
         }
     }
 
@@ -172,8 +172,8 @@ contract EthItemOrchestrator is IEthItemOrchestrator, ERC165 {
         bytes memory
     ) public virtual override returns (bytes4) {
         address ethItem = _getOrCreateERC1155Wrapper(msg.sender, objectId);
-        IEthItem(msg.sender).safeTransferFrom(address(this), ethItem, objectId, amount, "");
-        IERC20 item = IEthItem(ethItem).asERC20(objectId);
+        IEthItemMainInterface(msg.sender).safeTransferFrom(address(this), ethItem, objectId, amount, "");
+        IERC20 item = IEthItemMainInterface(ethItem).asInteroperable(objectId);
         item.transfer(owner, item.balanceOf(address(this)));
         return this.onERC1155Received.selector;
     }
@@ -186,9 +186,9 @@ contract EthItemOrchestrator is IEthItemOrchestrator, ERC165 {
         bytes memory
     ) public virtual override returns (bytes4) {
         address ethItem = _getOrCreateERC1155Wrapper(msg.sender, objectIds[0]);
-        IEthItem(msg.sender).safeBatchTransferFrom(address(this), ethItem, objectIds, amounts, "");
+        IEthItemMainInterface(msg.sender).safeBatchTransferFrom(address(this), ethItem, objectIds, amounts, "");
         for(uint256 i = 0; i < objectIds.length; i++) {
-            IERC20 item = IEthItem(ethItem).asERC20(objectIds[i]);
+            IERC20 item = IEthItemMainInterface(ethItem).asInteroperable(objectIds[i]);
             item.transfer(owner, item.balanceOf(address(this)));
         }
         return this.onERC1155BatchReceived.selector;
@@ -213,7 +213,7 @@ contract EthItemOrchestrator is IEthItemOrchestrator, ERC165 {
     }
 
     function _extractNameAndSymbol(address source) private view returns(string memory name, string memory symbol) {
-        IEthItem nft = IEthItem(source);
+        IEthItemMainInterface nft = IEthItemMainInterface(source);
         try nft.name() returns(string memory n) {
             name = n;
         } catch {
@@ -231,7 +231,7 @@ contract EthItemOrchestrator is IEthItemOrchestrator, ERC165 {
     }
 
     function _extractSpecificData(address source, uint256 objectId) public view returns(bool supportsSpecificName, bool supportsSpecificSymbol, bool supportsSpecificDecimals) {
-        IEthItem nft = IEthItem(source);
+        IEthItemMainInterface nft = IEthItemMainInterface(source);
         try nft.name(objectId) returns(string memory value) {
             supportsSpecificName = keccak256(bytes(value)) != keccak256("");
         } catch {
@@ -266,7 +266,7 @@ contract EthItemOrchestrator is IEthItemOrchestrator, ERC165 {
             currentKnowledgeBase.setWrapped(msg.sender, ethItem);
         }
         IERC721(msg.sender).safeTransferFrom(address(this), ethItem, objectId, "");
-        IERC20 item = IEthItem(ethItem).asERC20(objectId);
+        IERC20 item = IEthItemMainInterface(ethItem).asInteroperable(objectId);
         item.transfer(owner, item.balanceOf(address(this)));
         return this.onERC721Received.selector;
     }
