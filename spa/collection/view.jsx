@@ -58,14 +58,16 @@ var Collection = React.createClass({
                         </section>
                     </section>}
                 {this.state && this.state.toggle === 'code' && <section className="collectionPageItemsCode">
-                    {this.props.collection.extensionCode && <section>
-                        <h3>Extension</h3>
-                        <Editor readonly firstCode={this.props.collection.extensionCode} />
-                    </section>}
-                    {this.props.collection.modelCode && <section>
-                        <h3>Model</h3>
-                        <Editor readonly firstCode={this.props.collection.modelCode} />
-                    </section>}
+                    <section>
+                        {this.props.collection.extensionCode && <section className="CodePART">
+                            <h3>Extension</h3>
+                            <Editor readonly firstCode={this.props.collection.extensionCode} />
+                        </section>}
+                        {this.props.collection.modelCode && <section className="CodePART">
+                            <h3>Model</h3>
+                            <Editor readonly firstCode={this.props.collection.modelCode} />
+                        </section>}
+                    </section>
                 </section>}
             </section>
         </section>);

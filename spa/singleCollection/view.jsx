@@ -49,7 +49,7 @@ var SingleCollection = React.createClass({
                     </span>}
                     {!this.props.miniature && <p>Version: <b>{`${this.props.collection.category}_${this.props.collection.standardVersion}.${this.props.collection.erc20WrappedItemVersion}.${this.props.collection.modelVersion}`}</b></p>}
                     {/*!this.props.miniature && this.props.collection.problems && this.props.collection.problems.length > 0 && this.renderCollectionProblems(this.props.collection.problems)*/}
-                    {this.props.showLink && <span className="ItemCollectionLink"><a target="_blank" onClick={window.copyHREF} href={window.getHomepageLink(`?collection=${this.props.collection.address}`)} className="collectionLink">Copy Link</a></span>}
+                    {this.props.showLink && <span className="ItemCollectionLink"><a target="_blank" onClick={window.copyHREF} href={window.getHomepageLink(`?collection=${this.props.collection.address}`)} className="collectionLink superlink">Copy Link</a></span>}
                     </section>
                     <section className="collectionInfoSideLinks">
                         {this.props.collection.externalDNS && this.props.showLink && <span className="ItemCollectionLink"><a target="_blank" href={window.formatLink(this.props.collection.externalDNS)} className="collectionLink">External DNS</a></span>}

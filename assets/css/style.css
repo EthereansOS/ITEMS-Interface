@@ -97,7 +97,7 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .collectionPage .collectionInfo .collectionItems {display: inline-block; width: 20%; margin-top: 10px; font-size: 14px;}
 .collectionPage .collectionInfo .collectionLink {display: inline-block; width: 80%; margin-top: 10px;font-size: 14px; text-align: left; color: #131D39; font-weight: bold;}
 
-.collectionPageItems {background-color: #ffffff; width: 100%; display: inline-block; text-align: center;}
+.collectionPageItems {margin-top: 4px;background-color: #ffffff; width: 100%; display: inline-block; text-align: center;}
 .collectionPageItemsOrder {padding: 50px 100px 20px 100px; display: inline-block;}
 .collectionPageItems .collectionSingleItem {width: 200px; vertical-align: middle; display: inline-block; margin: 15px 20px;}
 .collectionPageItems .itemIcon {width: 200px; min-height: 100px; max-height: 500px;}
@@ -209,6 +209,7 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .CollectionLoaded {width: 100%;}
 .CollectionLoaded p {font-size: 15px; color: #59b0fb; font-weight: bold;}
 .CollectionLoaded p span {font-size: 11px; color: #59b0fb;}
+.CodePART {width: 600px; display: inline-block;}
 
 .sideThing {width: 66%;background-color: #ffffff;height: 100%;display: inline-block;z-index: 1000000;position: absolute;top: 0;right: 0;overflow: scroll;}
 .sideALLThing {width: 100%; height: 100%; overflow: hidden; position: fixed; left: 0; right: 0; top: 0;}
@@ -287,6 +288,9 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .SoonFARM .FarmImg {width: 200px; margin: 100px auto; display: block;}
 .SoonFARM .FarmImg img {animation: rotation 3s infinite linear; display: inline-block;width: 200px; opacity: 0.5;}
 
+.superlink:active {animation: rotation 0.01s;}
+.superlink:focus:after {content: " 👍";}
+
 .AllDoneBro {width: 600px; display: inline-block; margin: 70px auto;}
 .AllDoneBro h2 {font-size: 30px;font-family:ITEMGig;font-weight: bolder;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 70%, #9048fd 90%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;}
 .AllDoneBro figure {margin: 30px auto; display: block;}
@@ -315,8 +319,17 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 @media only screen and (min-width: 1100px) {	
    .collectionPageItemsOrder, .ItemData, .walletCollectionItems {column-count: 4;-moz-column-count:4;-webkit-column-count:4;}	
 }
-@media only screen and (min-width: 1500px) {	
+@media only screen and (min-width: 1600px) {	
    .collectionPageItemsOrder, .ItemData, .walletCollectionItems {column-count: 5;-moz-column-count:5;-webkit-column-count:5;}	
+}
+@media only screen and (min-width: 1900px) {	
+   .collectionPageItemsOrder, .ItemData, .walletCollectionItems {column-count: 6;-moz-column-count:6;-webkit-column-count:6;}	
+}
+@media only screen and (min-width: 2800px) {	
+   .collectionPageItemsOrder, .ItemData, .walletCollectionItems {column-count: 7;-moz-column-count:7;-webkit-column-count:7;}	
+}
+@media only screen and (min-width: 3400px) {	
+   .collectionPageItemsOrder, .ItemData, .walletCollectionItems {column-count: 8;-moz-column-count:8;-webkit-column-count:8;}	
 }
 
 

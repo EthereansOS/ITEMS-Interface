@@ -115,7 +115,7 @@ var Item = React.createClass({
                                     <h5 className="itemaddress"><a target="_blank" href={`${window.getNetworkElement("etherscanURL")}token/${item.address}`}>ERC20 Address</a></h5>
                                 </section>
                                 <section className="collectionInfoSide">
-                                    <span className="ItemCollectionLink"><a target="_blank" onClick={window.copyHREF} href={window.getHomepageLink(`?wrappedItem=${this.props.item.address}`)} className="collectionLink collectionLinkS BrandizedS">Copy Link</a></span>
+                                    <span className="ItemCollectionLink"><a target="_blank" onClick={window.copyHREF} href={window.getHomepageLink(`?wrappedItem=${this.props.item.address}`)} className="collectionLink collectionLinkS BrandizedS superlink">Copy Link</a></span>
                                 </section>
                                 <section className="collectionInfoSideLinks">
                                     {this.props.collection.licence_url && this.props.showLink && <span className="ItemCollectionLink"><a target="_blank" onClick={window.copyHREF} href={window.formatLink(this.props.collection.licence_url)} className="collectionLink">{window.formatLinkForExpose(this.props.collection.licence_url)}</a></span>}

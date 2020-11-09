@@ -155,7 +155,7 @@ var CreateItemWizard = React.createClass({
             <section className="FormCreate">
                 <section className="FormCreateThing">
                     <p>Name</p>
-                    <input type="text" ref={ref => (this.itemName = ref) && (ref.value = this.state.itemName || this.state.selectedToken.name)} />
+                    <input type="text" ref={ref => (this.itemName = ref)} />
                 </section>
                 <section className="FormCreateThing">
                     <p>Symbol</p>
