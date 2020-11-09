@@ -17,6 +17,7 @@ var IndexController = function (view) {
         var props = {collection : await window.loadSingleCollection(collectionAddress)};
         (props.objectId = objectId) && (props.item = await window.loadItemData(props));
         context.view.emit('section/change', `spa/${props.item ? 'item' : 'collection'}`, props);
+        return true;
     };
 
     context.loadData = async function loadData() {
@@ -37,7 +38,7 @@ var IndexController = function (view) {
             window.ENSController = window.newContract(window.context.ENSABI, window.context.ENSControllerAddres);
         } catch (e) {
         }
-        context.tryCheckAddressBarParams();
+        await context.tryCheckAddressBarParams();
         await context.loadCollections(true);
     };
 

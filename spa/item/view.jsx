@@ -4,6 +4,9 @@ var Item = React.createClass({
         "spa/innerLoader.jsx",
         "spa/loader.jsx"
     ],
+    requiredModules : [
+        'spa/editor'
+    ],
     getDefaultSubscriptions() {
         return {
             "collections/refresh": () => window.loadItemData(undefined, undefined, this),
