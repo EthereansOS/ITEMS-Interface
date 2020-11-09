@@ -199,7 +199,7 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 
 .ItemData {max-width: 1200px; display: block; margin: 30px auto 100px auto; text-align:center; -moz-column-gap: 10px;-moz-column-width: 300px;;column-gap: 10px;column-width: 300px;-webkit-column-gap: 10px;-webkit-column-width: 300px; max-width: 1200px;}
 .swowThis {padding: 3px 9px; font-size: 11px; font-weight: bold; color: #ffffff; text-decoration: none; background-color: #8447F1;  border-radius: 5px; display: inline-block; margin: 10px auto;}
-.subMetaValueList {display: inline-block; text-align: center;width: 300px; background-color: #F6FBFF; padding: 20px 10px; margin: 10px; border-radius: 10px;}
+.subMetaValueList {display: inline-block; text-align: center;width: 280px; background-color: #F6FBFF; padding: 20px 10px; margin: 10px; border-radius: 10px;}
 .subMetaValueList .subMetaValueList {width: 80%; background-color: transparent; border-top: 1px solid #9c9c9c; border-radius: 0%;}
 .ItemStuffOpen {text-align: center;}
 .subMetaValueOpen {font-weight: bold; font-size: 18px; color: #131D39; margin: 10px auto;}
@@ -307,20 +307,16 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
    .Intro .Explainer article > img {width: 80%}
 }
 @media only screen and (min-width: 700px) {	
-   .collectionPageItemsOrder {column-count: 2;-moz-column-count:2;-webkit-column-count:2;}	
-   .walletCollectionItems {column-count: 2;-moz-column-count:2;-webkit-column-count:2;}	
+   .collectionPageItemsOrder, .ItemData, .walletCollectionItems {column-count: 2;-moz-column-count:2;-webkit-column-count:2;}	
 }	
 @media only screen and (min-width: 930px) {	
-   .collectionPageItemsOrder {column-count: 3;-moz-column-count:3;-webkit-column-count:3;}	
-   .walletCollectionItems {column-count: 3;-moz-column-count:3;-webkit-column-count:3;}	
+   .collectionPageItemsOrder, .ItemData, .walletCollectionItems {column-count: 3;-moz-column-count:3;-webkit-column-count:3;}		
 }	
 @media only screen and (min-width: 1100px) {	
-   .collectionPageItemsOrder {column-count: 4;-moz-column-count:4;-webkit-column-count:4;}	
-   .walletCollectionItems {column-count: 4;-moz-column-count:4;-webkit-column-count:4;}	
+   .collectionPageItemsOrder, .ItemData, .walletCollectionItems {column-count: 4;-moz-column-count:4;-webkit-column-count:4;}	
 }
 @media only screen and (min-width: 1500px) {	
-   .collectionPageItemsOrder {column-count: 5;-moz-column-count:5;-webkit-column-count:5;}	
-   .walletCollectionItems {column-count: 5;-moz-column-count:5;-webkit-column-count:5;}	
+   .collectionPageItemsOrder, .ItemData, .walletCollectionItems {column-count: 5;-moz-column-count:5;-webkit-column-count:5;}	
 }
 
 
