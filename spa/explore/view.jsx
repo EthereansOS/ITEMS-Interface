@@ -7,7 +7,8 @@ var Explore = React.createClass({
     requiredScripts: [
         'spa/loader.jsx',
         'spa/innerLoader.jsx',
-        "spa/lazyImageLoader.jsx"
+        "spa/lazyImageLoader.jsx",
+        'spa/fullLoader.jsx'
     ],
     requiredModules: [
         'spa/singleCollection'
@@ -27,8 +28,10 @@ var Explore = React.createClass({
     render() {
         var _this = this;
         var state = window.getState(this);
+        if(state.loadingCollections) {
+            return (<FullLoader/>);
+        }
         return (<section className="Pager">
-            {!state.searchedCollection && state.loadingCollections && <Loader />}
             <section className="collections">
                 <section className="collectionsList">
                     {state.searchedCollection && <SingleCollection collection={state.searchedCollection} collectionKey={state.searchedCollection.key} onClick={_this.onClick} miniature/>}

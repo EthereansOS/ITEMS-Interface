@@ -51,8 +51,7 @@ var Index = React.createClass({
             <section>
                 <Menu onSelection={this.sectionChange} />
             </section>
-            {props.loadingCollections && <FullLoader/>}
-            {props.section && !props.loadingCollections && <section>
+            {props.section && <section>
                 {React.createElement(window[props.section], props)}
             </section>}
             {React.createElement(Wallet, props)}
