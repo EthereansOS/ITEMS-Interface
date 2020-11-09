@@ -332,6 +332,14 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
    .collectionPageItemsOrder, .ItemData, .walletCollectionItems {column-count: 8;-moz-column-count:8;-webkit-column-count:8;}	
 }
 
+.smallMenuTrig {display: none;}
+.smallMenu {display: none;}
+
+@media only screen and (max-device-width: 750px) {
+   .menuMenu > .search {display: none;}
+   .menuMenu > .menuSelections {display: none;}
+   .smallMenu { width: 200px; position: fixed; top: 50px; left: 10px;}
+}
 
 @media only screen and (min-device-width: 751px) and (max-device-width: 1024px) {
    .Intro .Title, .Explainer, .ExplainerL, .ExplainerS, footer section {width: 90% !important; text-align: center;}

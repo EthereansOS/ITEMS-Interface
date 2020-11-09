@@ -36,6 +36,20 @@ var Menu = React.createClass({
                     <input ref={ref => this.searchInput = ref} type="search" data-action="onCollectionAddress" onChange={window.onTextChange} onKeyUp={window.onTextChange}/>
                     <a href="javascript:;" onClick={this.onCollectionAddress}>&#x021B5;</a>
                 </section>
+                <a href="javascript:;" onClick={this.toggle} className="smallMenuTrig">MENU</a>
+                <section style={{"display" : this.props.show ? "inline-block" : this.state && this.state.menu ? "inline-block" : "none"}} className="smallMenu">
+                    
+                    <section className="search">
+                        <input ref={ref => this.searchInput = ref} type="search" data-action="onCollectionAddress" onChange={window.onTextChange} onKeyUp={window.onTextChange}/>
+                        <a href="javascript:;" onClick={this.onCollectionAddress}>&#x021B5;</a>
+                    </section>
+                    <section className="menuSelections">
+                        {this.state && this.state.menu && this.state.menu.map((it, i) =>
+                            <section className="menuSelection" key={it.module}>
+                                <a href="javascript:;" data-index={i} className={"menuSelection BrandizedSSx" + ((i + "") === (this.state.selected + "") ? " Selected" : "")} onClick={_this.onSelection}>{it.name}</a>
+                            </section>)}
+                    </section>
+                </section>
                 {!window.walletAddress && <a className="connectWallet Brandized" href="javascript:;" onClick={window.ethereum.enable}>CONNECT</a>}
                 {window.walletAddress && <a className="connectWallet" href="javascript:;" onClick={() => this.emit('wallet/toggle')}><img src={window.makeBlockie(window.walletAddress)} /><span>{window.shortenWord(window.walletAddress, 5, true)} &#8592;</span></a>}
             </section>);
