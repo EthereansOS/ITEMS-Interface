@@ -169,15 +169,15 @@ var Item = React.createClass({
                             {this.renderMetadata(true)}
                         </section>}
                         {toggle === 'code' && <section className="collectionPageItemsCode">
-                            {this.props.item.collection.extensionCode && <section>
+                            {this.props.item.collection.extensionCode && <section className="CodePART">
                                 <h3>Extension</h3>
                                 <Editor readonly firstCode={this.props.item.collection.extensionCode} />
                             </section>}
-                            {this.props.item.collection.modelCode && <section>
+                            {this.props.item.collection.modelCode && <section className="CodePART">
                                 <h3>ITEM Model</h3>
                                 <Editor readonly firstCode={this.props.item.collection.modelCode} />
                             </section>}
-                            {this.props.item.collection.wrappedCode && <section>
+                            {this.props.item.collection.wrappedCode && <section className="CodePART">
                                 <h3>ITEM ERC20 Implementation</h3>
                                 <Editor readonly firstCode={this.props.item.collection.wrappedCode} />
                             </section>}
