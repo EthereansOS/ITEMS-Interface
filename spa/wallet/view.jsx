@@ -63,7 +63,7 @@ var Wallet = React.createClass({
                             <section className="walletCollectionOpener">
                                 <a href="javascript:;" data-key={collection.key} onClick={this.toggle}>
                                     <h5 className="walletCollectionOpenerName">{collection.name}</h5>
-                                    {/*collection.isOwner && */<h6>I am the owner</h6>}
+                                    {/*collection.isOwner && */<h6 className="walletHost">Host</h6>}
                                 </a>
                             </section>
                             {this.state && this.state.toggle === collection.key && <section className="walletCollectionItems">

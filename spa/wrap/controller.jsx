@@ -130,7 +130,7 @@ var WrapController = function (view) {
     context.performItemizeETH = async function performItemizeETH(selectedToken) {
         var value = context.toDecimals(selectedToken.tokenAmount);
         if(parseInt(value) > parseInt(selectedToken.balanceOf)) {
-            throw "You have insufficient amount to wrap";
+            throw "Insufficient amount of tokens to wrap";
         }
         await window.blockchainCall(value, window.currentEthItemERC20Wrapper.methods.mintETH);
         selectedToken.tokenId = await blockchainCall(window.currentEthItemERC20Wrapper.methods.ETHEREUM_OBJECT_ID);
@@ -140,7 +140,7 @@ var WrapController = function (view) {
     context.performItemizeERC20 = async function performItemizeERC20(selectedToken) {
         var value = context.toDecimals(selectedToken.tokenAmount);
         if(parseInt(value) > parseInt(selectedToken.balanceOf)) {
-            throw "You have insufficient amount to wrap";
+            throw "Insufficient amount of tokens to wrap";
         }
         await window.blockchainCall(window.currentEthItemERC20Wrapper.methods['mint(address,uint256)'], selectedToken.address, value);
         selectedToken.tokenId = await blockchainCall(window.currentEthItemERC20Wrapper.methods.object, selectedToken.address);
@@ -153,7 +153,7 @@ var WrapController = function (view) {
         }
         var value = context.toDecimals(selectedToken.tokenAmount);
         if(parseInt(value) > parseInt(selectedToken.balanceOf)) {
-            throw "You have insufficient amount to wrap";
+            throw "Insufficient amount of tokens to wrap";
         }
         var recipient = window.ethItemOrchestrator.options.address;
         try {
@@ -174,7 +174,7 @@ var WrapController = function (view) {
         var owner = window.web3.utils.toChecksumAddress(await window.blockchainCall(selectedToken.erc721Contract.methods.ownerOf, selectedToken.tokenId));
         var approved = window.web3.utils.toChecksumAddress(await window.blockchainCall(selectedToken.erc721Contract.methods.getApproved, selectedToken.tokenId));
         if(owner !== window.walletAddress && approved !== window.walletAddress) {
-            throw "You don't have the permission to transfer this ERC721 NFT";
+            throw "You don't have the permissions to transfer this ERC721 NFT";
         }
         var recipient = window.ethItemOrchestrator.options.address;
         try {

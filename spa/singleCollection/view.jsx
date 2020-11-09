@@ -35,7 +35,7 @@ var SingleCollection = React.createClass({
             children = [
                 <figure className="collectionIcon">
                     {<LazyImageLoader src={window.getElementImage(this.props.collection)}/>}
-                    {this.props.collection.isOwner && <h6>Owner</h6>}
+                    {this.props.collection.isOwner && <h6>Host</h6>}
                 </figure>,
                 <article className="collectionInfo">
                     {!this.props.miniature && <h3 className="collectionTitle">{this.props.collection.name} <span>({this.props.collection.symbol})</span></h3>}

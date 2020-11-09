@@ -77,7 +77,7 @@ var CreateItemWizardController = function (view) {
         }
         var metadata = await context.view.getMetadataValues();
         if(!await window.checkMetadataValuesForItem(metadata)) {
-            throw "Invalid metadata values";
+            throw "Looks like you have insered some ivalid inputs as Metadata";
         }
         context.view.setState({
             metadata

@@ -209,10 +209,10 @@ var CreateCollectionWizard = React.createClass({
         var state = this.getState();
         var extension = state.extension;
         return (<section className="createCollection">
-            <h2>Who is the owner?</h2>
+            <h2>Who is the host?</h2>
             <section className="FormCreate">
                 <section className="FormCreateThing">
-                    <span className="createDescriptonX">The owner of the collection is who have the ability to mint ITEMS, it can be anyone, an address or you can extend it with custom rules via deploying an extension conctract. <a href="">More info</a></span>
+                    <span className="createDescriptonX">The host of the collection is who have the ability to mint ITEMS, it can be anyone, an address or you can extend it with custom rules via deploying an extension conctract. <a href="">More info</a></span>
                 </section>
                 <section className="FormCreateThing">
                     <select className="" onChange={this.onExtension}>
