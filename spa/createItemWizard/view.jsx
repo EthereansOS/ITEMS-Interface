@@ -1,6 +1,7 @@
 var CreateItemWizard = React.createClass({
     requiredScripts: [
-        'spa/innerLoader.jsx'
+        'spa/innerLoader.jsx',
+        'spa/fullLoader.jsx'
     ],
     getState() {
         var state = {};
@@ -180,6 +181,9 @@ var CreateItemWizard = React.createClass({
     },
     renderStep2() {
         var state = this.getState();
+        if(state.loadingMessage === this.controller.deployingItemMessage) {
+            return (<FullLoader/>);
+        }
         var metadataType = state.metadataType;
         return (<section className="createITEM">
             <section className="FormCreate">

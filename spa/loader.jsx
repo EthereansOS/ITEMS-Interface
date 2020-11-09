@@ -1,5 +1,7 @@
 var Loader = React.createClass({
     render() {
-        return (<span>Loading...</span>);
+        return (<figure className="LoadImg">
+            <img src="assets/img/loadMonolith.png"/>
+        </figure>);
     }
 });

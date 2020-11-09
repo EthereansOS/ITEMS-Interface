@@ -12,16 +12,6 @@ var SingleCollection = React.createClass({
     componentDidMount() {
         this.controller.loadData(this);
     },
-    getCustomLoader() {
-        return (<section className={"singleCollection" + (this.props.className || "collection")}>
-            <figure className="collectionIcon">
-                <img src="assets/img/loadMonolith.png"/>
-            </figure>
-            <article className="collectionInfo">
-                <h3 className="collectionTitle">{'\u00a0'}<span>{'\u00a0'}</span></h3>
-            </article>
-        </section>);
-    },
     renderCollectionProblems(problems) {
         return (<p>
             <h4>Some error where found in this collection:</h4>
@@ -29,12 +19,11 @@ var SingleCollection = React.createClass({
         </p>);
     },
     render() {
-        var color = this.props.collection.background_color;
         var children = [<Loader />];
-        if (this.props.collection.loaded) {
+        if (this.props.collection) {
             children = [
                 <figure className="collectionIcon">
-                    {<LazyImageLoader src={window.getElementImage(this.props.collection)}/>}
+                    <LazyImageLoader src={window.getElementImage(this.props.collection)}/>
                     {this.props.collection.isOwner && <h6>Host</h6>}
                 </figure>,
                 <article className="collectionInfo">

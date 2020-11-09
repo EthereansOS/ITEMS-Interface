@@ -2,6 +2,8 @@ var CreateCollectionWizardController = function (view) {
     var context = this;
     context.view = view;
 
+    context.deployingCollectionMessage = "2/2 Deploy Collection";
+
     context.checkStep0 = async function checkStep0() {
         await window.waitForLateInput();
         var collectionName = context.view.collectionName.value;
@@ -143,7 +145,7 @@ var CreateCollectionWizardController = function (view) {
         var values = [state.collectionName, state.collectionSymbol, state.hasDecimals, metadataLink, extensionAddress || window.voidEthereumAddress, context.view.extensionAddressPayload && context.view.extensionAddressPayload.value || "0x"];
         var payload = window.web3.utils.sha3(`init(${params.join(",")})`);
         payload = payload.substring(0, 10) + window.web3.eth.abi.encodeParameters(params, values).substring(2);
-        context.view.setState({loadingMessage : "2/2 Deploy Collection"});
+        context.view.setState({loadingMessage : context.deployingCollectionMessage});
         var transaction = await window.blockchainCall(window.ethItemOrchestrator.methods.createERC1155, payload, state.collectionENS);
         context.view.emit('collections/refresh');
         var events = transaction.events;

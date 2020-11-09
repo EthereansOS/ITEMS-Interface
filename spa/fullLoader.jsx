@@ -3,7 +3,7 @@ var FullLoader = React.createClass({
         return(
         <section className="LoaderFull">
             <figure className="LoadImg">
-                <img img src="assets/img/loadMonolith.png"></img>
+                <img src="assets/img/loadMonolith.png"/>
             </figure>
         </section>);
     }

@@ -21,13 +21,16 @@ var Wallet = React.createClass({
         var collection = collections.filter(it => it.key === toggle)[0];
         var _this = this;
         var sectionChange = function() {
+            if(!collection) {
+                return;
+            }
             _this.emit('section/change', 'spa/collection', {
                 collection,
                 collectionAddress : collection.address,
                 collections
             });
         }
-        this.setState({toggle : collection.hasBalance ? toggle : null}, collection.hasBalance ? undefined : sectionChange);
+        this.setState({toggle : collection && collection.hasBalance ? toggle : null}, collection && collection.hasBalance ? undefined : sectionChange);
     },
     onClick(e) {
         window.preventItem(e);

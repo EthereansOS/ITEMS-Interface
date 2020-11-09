@@ -3,6 +3,7 @@ var CreateItemWizardController = function (view) {
     context.view = view;
 
     context.newERC1155CreatedEvent = "NewERC1155Created(address,uint256,address,address)";
+    context.deployingItemMessage = "Deploying Item";
 
     context.onTokenAddressChange = async function(address) {
         try {
@@ -93,7 +94,7 @@ var CreateItemWizardController = function (view) {
         }
         context.view.setState({loadingMessage : "Uploading metadata"});
         var metadataLink = state.metadataLink || await window.uploadMetadata(state.metadata);
-        context.view.setState({loadingMessage : "Deploying Item"});
+        context.view.setState({loadingMessage : context.deployingItemMessage});
         var transaction = await window.blockchainCall(state.selectedToken.contract.methods.mint, valueDecimals, state.itemName, state.itemSymbol, metadataLink, state.itemMintable);
         context.view.emit('collections/refresh');
         var events = transaction.events;

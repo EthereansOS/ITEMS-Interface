@@ -1,7 +1,8 @@
 var Item = React.createClass({
     requiredScripts: [
         "spa/lazyImageLoader.jsx",
-        "spa/innerLoader.jsx"
+        "spa/innerLoader.jsx",
+        "spa/loader.jsx"
     ],
     getDefaultSubscriptions() {
         return {
@@ -105,7 +106,7 @@ var Item = React.createClass({
                 <section className="itemPage">
                     <section className="itemPageInfo">
                         <figure className="itemIcon">
-                            <LazyImageLoader src={window.getElementImage(item)} />
+                            <LazyImageLoader src={window.getElementImage(item)}/>
                         </figure>
                         <article className="itemInfo">
                             <section className="itemFundamentals">
@@ -118,8 +119,8 @@ var Item = React.createClass({
                                     <span className="ItemCollectionLink"><a target="_blank" onClick={window.copyHREF} href={window.getHomepageLink(`?wrappedItem=${this.props.item.address}`)} className="collectionLink collectionLinkS BrandizedS superlink">Copy Link</a></span>
                                 </section>
                                 <section className="collectionInfoSideLinks">
-                                    {this.props.collection.licence_url && this.props.showLink && <span className="ItemCollectionLink"><a target="_blank" onClick={window.copyHREF} href={window.formatLink(this.props.collection.licence_url)} className="collectionLink">{window.formatLinkForExpose(this.props.collection.licence_url)}</a></span>}
-                                    {this.props.item.licence_url && this.props.showLink && <span className="ItemCollectionLink">Item Licence URL: <a target="_blank" onClick={window.copyHREF} href={window.formatLink(this.props.item.licence_url)} className="collectionLink">{window.formatLinkForExpose(this.props.item.licence_url)}</a></span>}
+                                    {this.props.collection.licence_url && <span className="ItemCollectionLink"><a target="_blank" href={window.formatLink(this.props.collection.licence_url)} className="collectionLink">Collection Licence</a></span>}
+                                    {this.props.item.licence_url && <span className="ItemCollectionLink"><a target="_blank" href={window.formatLink(this.props.item.licence_url)} className="collectionLink">Item Licence</a></span>}
                                 </section>
                                 <section className="itemFundamentalsThing">
                                     {item.dynamicData && item.dynamicData.isEditable && item.collection.extensionAddress && item.collection.extensionAddress !== window.voidEthereumAddress && <span className="HostInfo">Host {item.collection.extensionIsContract ? "Contract" : "Wallet"}: <a target="_blank" href={`${window.getNetworkElement('etherscanURL')}address/${item.collection.extensionAddress}`}>{window.shortenWord(item.collection.extensionAddress, 6)}</a></span>}

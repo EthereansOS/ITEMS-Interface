@@ -30,7 +30,7 @@ var SuccessPage = React.createClass({
                 <figure>
                     <LazyImageLoader src={window.formatLink(state.image)}/>
                 </figure>
-                <p>Spread the word using this link <a href={window.formatLink(state.external_url)} target="_blank">{state.external_url}</a></p>
+                <p>Spread the word using this link <a onClick={window.copyHREF} href={window.getHomepageLink(`?collection=${this.props.collection.address}`)} target="_blank">{window.getHomepageLink(`?collection=${this.props.collection.address}`)}</a></p>
                 <h2>And now?</h2>
                 <a className="Enter" href="javascript:;" onClick={this.createItem}>Create the first Item</a>
                 <p><a href="javascript:;" onClick={this.goToCollection}>Go to the Collection page</a></p>
@@ -41,7 +41,7 @@ var SuccessPage = React.createClass({
                 <figure>
                     <LazyImageLoader src={window.formatLink(state.image)}/>
                 </figure>
-                <p>Spread the word using this link <a href={window.formatLink(state.external_url)} target="_blank">{state.external_url}</a></p>
+                <p>Spread the word using this link <a onClick={window.copyHREF} href={window.getHomepageLink(`?wrappedItem=${this.props.item.address}`)} target="_blank">{window.getHomepageLink(`?wrappedItem=${this.props.item.address}`)}</a></p>
                 <h2>And now?</h2>
                 <a className="Enter" href="javascript:;" onClick={this.createItem}>Create another Item</a>
                 <p><a href="javascript:;" onClick={this.goToItem}>Go to the ITEM page</a></p>

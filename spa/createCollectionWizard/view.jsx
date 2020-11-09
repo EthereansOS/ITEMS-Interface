@@ -1,6 +1,7 @@
 var CreateCollectionWizard = React.createClass({
     requiredScripts: [
-        'spa/innerLoader.jsx'
+        'spa/innerLoader.jsx',
+        'spa/fullLoader.jsx'
     ],
     requiredModules: [
         'spa/editor'
@@ -274,6 +275,9 @@ var CreateCollectionWizard = React.createClass({
     },
     renderStep4() {
         var state = this.getState();
+        if(state.loadingMessage ===  this.controller.deployingCollectionMessage) {
+            return (<FullLoader/>);
+        }
         var extension = state.extension;
         return (<section className="createCollection">
             {extension === "contract" && <h2>Etension Contract</h2>}

@@ -2292,7 +2292,7 @@ window.updateItemDynamicData = async function updateItemDynamicData(item, view) 
         item.collection.hasBalance = item.collection.hasBalance || parseInt(item.dynamicData.balanceOf) > 0;
     } catch (e) {}
     try {
-        item.dynamicData.canMint = item.collection.isOwner && (item.dynamicData.isEditable = await window.blockchainCall(item.collection.contract.methods.isEditable, item.objectId));
+        item.dynamicData.canMint =  (item.dynamicData.isEditable = await window.blockchainCall(item.collection.contract.methods.isEditable, item.objectId)) && item.collection.isOwner;
     } catch (e) {}
     view && view.setState({ item });
 };
@@ -2456,9 +2456,15 @@ window.normalizeMetadata = async function normalizeMetadata(metadata) {
         }
     }
     if (metadata.folder && metadata.folder instanceof Array) {
-        metadata.folder = metadata.folder[0];
+        metadata.folder = metadata.folder[metadata.folder.length - 1];
         if (metadata.folder && metadata.folder.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
             metadata.folder = "https://ipfs.io/ipfs/" + metadata.folder.split("ipfs://ipfs/")[1];
+        }
+    }
+    if (metadata.licence_url && metadata.licence_url instanceof Array) {
+        metadata.licence_url = metadata.licence_url[0];
+        if (metadata.licence_url && metadata.licence_url.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
+            metadata.licence_url = "https://ipfs.io/ipfs/" + metadata.licence_url.split("ipfs://ipfs/")[1];
         }
     }
     delete metadata.fileType;
@@ -2794,6 +2800,9 @@ window.checkURL = function checkURL(url) {
 };
 
 window.getElementImage = function getElementImage(element) {
+    if(!element || !element.metadataLink) {
+        return "assets/img/loadMonolith.png";
+    }
     return window.formatLink(element.image || window.context.defaultItemData[element.category || element.collection.category][element.collection ? 'item' : 'collection'].image);
 };
 

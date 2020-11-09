@@ -35,7 +35,7 @@ var CollectionSingleItem = React.createClass({
         return (<section className="collectionPageItem">
             <a href={this.props.readOnly ? undefined : "javascript:;"} onClick={this.props.readOnly ? undefined : this.onClick}>
                 <figure className="ItemIcon">
-                    {item && <LazyImageLoader src={window.getElementImage(item)}/>}
+                    <LazyImageLoader src={window.getElementImage(item)}/>
                 </figure>
             </a>
             {item && <article className="ItemInfo">
