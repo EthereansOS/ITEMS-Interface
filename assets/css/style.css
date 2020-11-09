@@ -252,7 +252,7 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .LoaderFull .LoadImg img {display: inline-block; width: 100%;}
 
 .collection .collectionInfoSide {width: 500px; display: inline-block; vertical-align: top; text-align: left; margin: 5px auto;}
-.collection .collectionInfoSide p {display: inline-block; margin: 0 10px 0 10px;}
+.collection .collectionInfoSide p {display: inline-block; margin: 0 10px 0 10px;font-size: 12px;}
 .collection .collectionInfoSide .ItemCollectionLink {display: inline-block; margin: 0 10px 0 10px;}
 .collection .collectionInfoSide .ItemCollectionLink a {width: 100%;}
 .collection .collectionInfoSide .collectionItems {display: inline-block; margin: 0 10px 0 10px; width: auto;}
