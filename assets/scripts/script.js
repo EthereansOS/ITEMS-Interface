@@ -1912,8 +1912,14 @@ window.uploadToIPFS = async function uploadToIPFS(files) {
     }
     var hashes = [];
     window.api = window.api || new IpfsHttpClient(window.context.ipfsHost);
-    for await (var upload of window.api.add(list)) {
-        hashes.push(window.context.ipfsUrlTemplates[0] + upload.path);
+    var i = 0;
+    for await (var upload of window.api.add(list, { pin : true, wrapWithDirectory: list.length > 1 })) {
+        console.log(upload);
+        var hash = upload.path || upload.cid.string;
+        if(list.length === 1 || i === list.length) {
+            hashes.push(window.context.ipfsUrlTemplates[0] + hash);
+        }
+        i++;
     }
     return single ? hashes[0] : hashes;
 };
@@ -2137,7 +2143,7 @@ window.sleep = function sleep(millis) {
 };
 
 window.tryRetrieveMetadata = async function tryRetrieveMetadata(item) {
-    if (item.metadataLink) {// || (item.category && window.context.collectionsWithMetadata.indexOf(item.category) === -1)) {
+    if (item.metadataLink) { // || (item.category && window.context.collectionsWithMetadata.indexOf(item.category) === -1)) {
         return;
     }
     var clearMetadata = true;
@@ -2218,7 +2224,7 @@ window.loadCollectionItems = async function loadCollectionItems(collectionAddres
         var objectId;
         try {
             objectId = web3.eth.abi.decodeParameter("uint256", log.topics[1]);
-        } catch(e) {
+        } catch (e) {
             objectId = web3.eth.abi.decodeParameters(["uint256", "address", "uint256"], log.data)[0];
         }
         collectionObjectIds[objectId] = true;
@@ -2246,18 +2252,17 @@ window.loadItemData = async function loadItemData(item, collection, view) {
     item.contract = collection.contract;
     try {
         item.address = item.address || window.web3.utils.toChecksumAddress(await window.blockchainCall(item.contract.methods.asInteroperable, item.objectId));
-    } catch(e) {
+    } catch (e) {
         item.address = window.web3.utils.toChecksumAddress(await window.blockchainCall(window.newContract(window.context.OldNativeABI, item.contract.options.address).methods.asERC20, item.objectId));
     }
     item.token = item.token || window.newContract(window.context.IEthItemInteroperableInterfaceABI, item.address);
     item.name = item.name || await window.blockchainCall(item.contract.methods.name, item.objectId);
     item.symbol = item.symbol || await window.blockchainCall(item.contract.methods.symbol, item.objectId);
-    if(!item.sourceAddress) {
+    if (!item.sourceAddress) {
         item.sourceAddress = "blank";
         try {
             item.sourceAddress = await window.blockchainCall(item.collection.contract.methods.source, item.objectId);
-        } catch(e) {
-        }
+        } catch (e) {}
     }
     var metadataPromise = window.tryRetrieveMetadata(item);
     if (view) {
@@ -2265,9 +2270,9 @@ window.loadItemData = async function loadItemData(item, collection, view) {
     } else {
         await metadataPromise;
     }
-    if(item.collection.category === 'W20' && !item.trustWalletURI) {
+    if (item.collection.category === 'W20' && !item.trustWalletURI) {
         item.trustWalletURI = window.context.trustwalletImgURLTemplate.format(item.sourceAddress);
-        window.AJAXRequest(item.trustWalletURI = window.context.trustwalletImgURLTemplate.format(item.sourceAddress)).then(() => (item.image = item.trustWalletURI) && view && view.setState({item}));
+        window.AJAXRequest(item.trustWalletURI = window.context.trustwalletImgURLTemplate.format(item.sourceAddress)).then(() => (item.image = item.trustWalletURI) && view && view.setState({ item }));
     }
     item.decimals = item.decimals || await window.blockchainCall(item.token.methods.decimals);
     item.collectionDecimals = item.collectionDecimals || await window.blockchainCall(item.collection.contract.methods.decimals, item.objectId);
@@ -2296,7 +2301,7 @@ window.updateItemDynamicData = async function updateItemDynamicData(item, view) 
         item.collection.hasBalance = item.collection.hasBalance || parseInt(item.dynamicData.balanceOf) > 0;
     } catch (e) {}
     try {
-        item.dynamicData.canMint =  (item.dynamicData.isEditable = await window.blockchainCall(item.collection.contract.methods.isEditable, item.objectId)) && item.collection.isOwner;
+        item.dynamicData.canMint = (item.dynamicData.isEditable = await window.blockchainCall(item.collection.contract.methods.isEditable, item.objectId)) && item.collection.isOwner;
     } catch (e) {}
     view && view.setState({ item });
 };
@@ -2571,12 +2576,11 @@ window.packCollection = function packCollection(address, category) {
 window.refreshSingleCollection = async function refreshSingleCollection(collection, view) {
     collection.name = collection.name || await window.blockchainCall(collection.contract.methods.name);
     collection.symbol = collection.symbol || await window.blockchainCall(collection.contract.methods.symbol);
-    if(!collection.sourceAddress) {
+    if (!collection.sourceAddress) {
         collection.sourceAddress = "blank";
         try {
             collection.sourceAddress = await window.blockchainCall(collection.contract.methods.source);
-        } catch(e) {
-        }
+        } catch (e) {}
     }
     try {
         collection.modelVersion = collection.modelVersion || await window.blockchainCall(collection.contract.methods.modelVersion);
@@ -2592,12 +2596,12 @@ window.refreshSingleCollection = async function refreshSingleCollection(collecti
     } catch (e) {}
     try {
         collection.standardVersion = collection.standardVersion || (await window.blockchainCall(collection.contract.methods.standardVersion));
-    } catch(e) {
+    } catch (e) {
         collection.standardVersion = 1;
     }
     try {
         collection.erc20WrappedItemVersion = collection.erc20WrappedItemVersion || (await window.blockchainCall(collection.contract.methods.erc20NFTWrapperModel))[1];
-    } catch(e) {
+    } catch (e) {
         collection.erc20WrappedItemVersion = 1;
     }
     delete collection.problems;
@@ -2804,7 +2808,7 @@ window.checkURL = function checkURL(url) {
 };
 
 window.getElementImage = function getElementImage(element) {
-    if(!element || !element.metadataLink) {
+    if (!element || !element.metadataLink) {
         return "assets/img/loadMonolith.png";
     }
     return window.formatLink(element.image || window.context.defaultItemData[element.category || element.collection.category][element.collection ? 'item' : 'collection'].image);
