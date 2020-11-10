@@ -2244,8 +2244,12 @@ window.loadItemData = async function loadItemData(item, collection, view) {
     item.collection = collection;
     item.key = item.objectId;
     item.contract = collection.contract;
-    item.address = item.address || window.web3.utils.toChecksumAddress(await window.blockchainCall(item.contract.methods.asERC20, item.objectId));
-    item.token = item.token || window.newContract(window.context.IERC20ABI, item.address);
+    try {
+        item.address = item.address || window.web3.utils.toChecksumAddress(await window.blockchainCall(item.contract.methods.asInteroperable, item.objectId));
+    } catch(e) {
+        item.address = window.web3.utils.toChecksumAddress(await window.blockchainCall(window.newContract(window.context.OldNativeABI, item.contract.options.address).methods.asERC20, item.objectId));
+    }
+    item.token = item.token || window.newContract(window.context.IEthItemInteroperableInterfaceABI, item.address);
     item.name = item.name || await window.blockchainCall(item.contract.methods.name, item.objectId);
     item.symbol = item.symbol || await window.blockchainCall(item.contract.methods.symbol, item.objectId);
     if(!item.sourceAddress) {
@@ -2826,7 +2830,7 @@ window.copyText = function copyText(text) {
 
 window.preparePermitSignature = async function preparePermitSignature(tokenAddress, spender, value) {
 
-    var contract = window.newContract(window.context.IERC20ItemWrapperABI, tokenAddress);
+    var contract = window.newContract(window.context.IEthItemInteroperableInterfaceABI, tokenAddress);
 
     var nonce = await window.blockchainCall(contract.methods.permitNonce, window.walletAddress);
 

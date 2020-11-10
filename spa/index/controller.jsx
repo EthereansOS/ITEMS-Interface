@@ -10,9 +10,13 @@ var IndexController = function (view) {
         }
         var objectId = window.consumeAddressBarParam("item");
         if(wrappedItemAddress) {
-            var wrappedItem = window.newContract(window.context.IERC20ItemWrapperABI, wrappedItemAddress);
+            var wrappedItem = window.newContract(window.context.IEthItemInteroperableInterfaceABI, wrappedItemAddress);
             objectId = await window.blockchainCall(wrappedItem.methods.objectId);
-            collectionAddress = await window.blockchainCall(wrappedItem.methods.mainWrapper);
+            try {
+                collectionAddress = await window.blockchainCall(wrappedItem.methods.mainInterface);
+            } catch(e) {
+                collectionAddress = window.web3.utils.toChecksumAddress(await window.blockchainCall(window.newContract(window.context.IERC20ItemWrapperABI, wrappedItemAddress).methods.mainWrapper));
+            }
         }
         var props = {collection : await window.loadSingleCollection(collectionAddress)};
         (props.objectId = objectId) && (props.item = await window.loadItemData(props));

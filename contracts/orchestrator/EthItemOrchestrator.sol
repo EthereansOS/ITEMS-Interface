@@ -230,7 +230,7 @@ contract EthItemOrchestrator is IEthItemOrchestrator, ERC165 {
         }
     }
 
-    function _extractSpecificData(address source, uint256 objectId) public view returns(bool supportsSpecificName, bool supportsSpecificSymbol, bool supportsSpecificDecimals) {
+    function _extractSpecificData(address source, uint256 objectId) private view returns(bool supportsSpecificName, bool supportsSpecificSymbol, bool supportsSpecificDecimals) {
         IEthItemMainInterface nft = IEthItemMainInterface(source);
         try nft.name(objectId) returns(string memory value) {
             supportsSpecificName = keccak256(bytes(value)) != keccak256("");

@@ -102,16 +102,20 @@ var CreateItemWizardController = function (view) {
             events = Object.values(events);
         }
         var collectionAddress = window.web3.utils.toChecksumAddress(state.selectedToken.contract.options.address);
-        var topic = window.web3.utils.sha3("Mint(uint256,address,uint256)");
+        var topics = [window.web3.utils.sha3("NewItem(uint256,address)"), window.web3.utils.sha3("Mint(uint256,address,uint256)")]
         var objectId;
         for(var event of events) {
             if(window.web3.utils.toChecksumAddress(event.address) !== collectionAddress) {
                 continue;
             }
-            if(event.raw.topics[0] !== topic) {
+            if(topics.indexOf(event.raw.topics[0]) === -1) {
                 continue;
             }
-            objectId = web3.eth.abi.decodeParameters(["uint256", "address", "uint256"], event.raw.data)[0];
+            try {
+                objectId = web3.eth.abi.decodeParameter("uint256", event.raw.topics[1]);
+            } catch(e) {
+                objectId = web3.eth.abi.decodeParameters(["uint256", "address", "uint256"], event.raw.data)[0];
+            }
             break;
         }
         var item = await window.loadItemData({
