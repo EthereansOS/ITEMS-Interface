@@ -4,18 +4,19 @@ var IndexController = function (view) {
 
     context.tryCheckAddressBarParams = async function tryCheckAddressBarParams() {
         var collectionAddress = window.consumeAddressBarParam("collection");
-        var wrappedItemAddress = window.consumeAddressBarParam("wrappedItem");
-        if(!collectionAddress && !wrappedItemAddress) {
+        var interoperableAddress = window.consumeAddressBarParam("interoperable");
+        if(!collectionAddress && !interoperableAddress) {
             return;
         }
+        context.view.setState({ loadingCollections: true });
         var objectId = window.consumeAddressBarParam("item");
-        if(wrappedItemAddress) {
-            var wrappedItem = window.newContract(window.context.IEthItemInteroperableInterfaceABI, wrappedItemAddress);
-            objectId = await window.blockchainCall(wrappedItem.methods.objectId);
+        if(interoperableAddress) {
+            var interoperable = window.newContract(window.context.IEthItemInteroperableInterfaceABI, interoperableAddress);
+            objectId = await window.blockchainCall(interoperable.methods.objectId);
             try {
-                collectionAddress = await window.blockchainCall(wrappedItem.methods.mainInterface);
+                collectionAddress = await window.blockchainCall(interoperable.methods.mainInterface);
             } catch(e) {
-                collectionAddress = window.web3.utils.toChecksumAddress(await window.blockchainCall(window.newContract(window.context.IERC20ItemWrapperABI, wrappedItemAddress).methods.mainWrapper));
+                collectionAddress = window.web3.utils.toChecksumAddress(await window.blockchainCall(window.newContract(window.context.IERC20ItemWrapperABI, interoperableAddress).methods.mainWrapper));
             }
         }
         var props = {collection : await window.loadSingleCollection(collectionAddress)};
@@ -56,19 +57,12 @@ var IndexController = function (view) {
         var collections = [];
         var blocks = await window.loadBlockSearchTranches();
         var updateSubCollectionsPromise = function updateSubCollectionsPromise(subCollections) {
-            return new Promise(function (ok) {
+            return new Promise(function (ok, ko) {
                 collections.push(...subCollections);
-                context.view.setState({ collections }, () => context.refreshCollectionData(subCollections).then(ok));
+                context.view.setState({ collections }, () => context.refreshCollectionData(subCollections).then(ok).catch(ko));
             });
         }
         var subCollectionsPromises = [];
-        try {
-            var erc20Wrappers = await window.blockchainCall(window.currentEthItemKnowledgeBase.methods.erc20Wrappers);
-            var subCollections = [];
-            erc20Wrappers.forEach(it => subCollections.push(window.packCollection(window.web3.utils.toChecksumAddress(it), "W20ABI")));
-            subCollectionsPromises.push(updateSubCollectionsPromise(subCollections));
-        } catch (e) {
-        }
         for (var block of blocks) {
             var subCollections = [];
             var logs = await window.getLogs({
@@ -78,9 +72,10 @@ var IndexController = function (view) {
                 toBlock: block[1]
             });
             for (var log of logs) {
+                var modelAddress = window.web3.eth.abi.decodeParameter("address", log.topics[1]);
                 var collectionAddress = window.web3.utils.toChecksumAddress(window.web3.eth.abi.decodeParameter("address", log.topics[log.topics.length - 1]));
                 var category = map[log.topics[0]];
-                subCollections.push(window.packCollection(collectionAddress, category));
+                subCollections.push(window.packCollection(collectionAddress, category, modelAddress));
             }
             subCollectionsPromises.push(updateSubCollectionsPromise(subCollections));
         }

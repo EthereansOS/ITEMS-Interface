@@ -83,7 +83,8 @@
         "NewNativeCreated(address,uint256,address,address)" : "NativeABI",
         "NewERC1155Created(address,uint256,address,address)" : "NativeABI",
         "NewWrappedERC1155Created(address,uint256,address,address)" : "W1155ABI",
-        "NewWrappedERC721Created(address,uint256,address,address)" : "W721ABI"
+        "NewWrappedERC721Created(address,uint256,address,address)" : "W721ABI",
+        "NewWrappedERC20Created(address,uint256,address,address)" : "W20ABI"
     },
     "supportedWrappedTokens" : [
         "ETH",

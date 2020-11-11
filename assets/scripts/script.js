@@ -29,7 +29,7 @@ window.tryLoadSection = function tryLoadSection() {
             }
         });
     }
-    if (window.addressBarParams.collection || window.addressBarParams.wrappedItem) {
+    if (window.addressBarParams.collection || window.addressBarParams.interoperable) {
         return window.connectFromHomepage({
             dataset: {
                 section: 'explore'
@@ -2534,12 +2534,6 @@ window.onTextChange = function onTextChange(e) {
 
 window.loadSingleCollection = async function loadSingleCollection(collectionAddress) {
     collectionAddress = window.web3.utils.toChecksumAddress(collectionAddress);
-    try {
-        var erc20Wrappers = (await window.blockchainCall(window.currentEthItemKnowledgeBase.methods.erc20Wrappers)).map(it => window.web3.utils.toChecksumAddress(it));
-        if (erc20Wrappers.indexOf(collectionAddress) !== -1) {
-            return await window.refreshSingleCollection(window.packCollection(collectionAddress, "W20ABI"));
-        }
-    } catch (e) {}
     var map = {};
     Object.entries(window.context.ethItemFactoryEvents).forEach(it => map[window.web3.utils.sha3(it[0])] = it[1]);
     var topics = [
@@ -2552,12 +2546,15 @@ window.loadSingleCollection = async function loadSingleCollection(collectionAddr
         address,
         topics
     }, true);
-    for (var log of logs) {
-        return await window.refreshSingleCollection(window.packCollection(collectionAddress, map[log.topics[0]]));
+    try {
+        var modelAddress = window.web3.eth.abi.decodeParameter("address", logs[0].topics[1]);
+        return await window.refreshSingleCollection(window.packCollection(collectionAddress, map[logs[0].topics[0]], modelAddress));
+    } catch(e) {
+        return null;
     }
 };
 
-window.packCollection = function packCollection(address, category) {
+window.packCollection = function packCollection(address, category, modelAddress) {
     window.globalCollections = window.globalCollections || [];
     var abi = window.context[category];
     var contract = window.newContract(abi, address);
@@ -2567,6 +2564,7 @@ window.packCollection = function packCollection(address, category) {
     !collection && window.globalCollections.push(collection = {
         key,
         address,
+        modelAddress,
         category,
         contract
     });
@@ -2595,14 +2593,25 @@ window.refreshSingleCollection = async function refreshSingleCollection(collecti
         collection.extensionIsContract = (await window.web3.eth.getCode(collection.extensionAddress)) !== '0x';
     } catch (e) {}
     try {
-        collection.standardVersion = collection.standardVersion || (await window.blockchainCall(collection.contract.methods.standardVersion));
+        collection.standardVersion = collection.standardVersion || (await window.blockchainCall(collection.contract.methods.mainInterfaceVersion));
     } catch (e) {
         collection.standardVersion = 1;
     }
     try {
-        collection.erc20WrappedItemVersion = collection.erc20WrappedItemVersion || (await window.blockchainCall(collection.contract.methods.erc20NFTWrapperModel))[1];
+        collection.interoperableInterfaceModel = collection.interoperableInterfaceModel || (await window.blockchainCall(collection.contract.methods.interoperableInterfaceModel));
+        collection.interoperableInterfaceModelAddress = collection.interoperableInterfaceModelAddress || collection.interoperableInterfaceModel[0];
+        collection.interoperableInterfaceModelVersion = collection.interoperableInterfaceModelVersion || collection.interoperableInterfaceModel[1];
+        collection.erc20WrappedItemVersion = collection.interoperableInterfaceModelVersion;
     } catch (e) {
-        collection.erc20WrappedItemVersion = 1;
+        try {
+            collection.interoperableInterfaceModel = (await window.blockchainCall((window.newContract(window.context.OldNativeABI, collection.address)).methods.erc20NFTWrapperModel));
+            collection.interoperableInterfaceModelAddress = collection.interoperableInterfaceModelAddress || collection.interoperableInterfaceModel[0];
+            collection.interoperableInterfaceModelVersion = collection.interoperableInterfaceModelVersion || collection.interoperableInterfaceModel[1];
+        } catch(e) {
+            collection.interoperableInterfaceModelAddress = collection.interoperableInterfaceModelAddress || collection.address;
+            collection.interoperableInterfaceModelVersion = collection.interoperableInterfaceModelVersion || 1;
+        }
+        collection.erc20WrappedItemVersion = collection.interoperableInterfaceModelVersion;
     }
     delete collection.problems;
     var retrieveMetadataPromise = window.tryRetrieveMetadata(collection, collection.category);
