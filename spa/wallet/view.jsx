@@ -3,23 +3,23 @@ var Wallet = React.createClass({
         'spa/loader.jsx',
         'spa/lazyImageLoader.jsx'
     ],
-    getList(balanceFirst) {
+    getList(ownedFirst) {
         return [
-            ...(balanceFirst ? this.getBalanceList() : this.getOwnerList()),
-            ...(balanceFirst ? this.getOwnerList() : this.getBalanceList())
+            ...(ownedFirst ? this.getOwnedList() : this.getHostList()),
+            ...(ownedFirst ? this.getHostList() : this.getOwnedList())
         ]
     },
-    getBalanceList() {
+    getHostList() {
         var state = window.getState(this);
         var collections = state.collections;
         collections = collections.filter(it => it.hasBalance || it.isOwner);
-        return collections.filter(it => !it.isOwner);
+        return collections.filter(it => it.isOwner && !it.hasBalance);
     },
-    getOwnerList() {
+    getOwnedList() {
         var state = window.getState(this);
         var collections = state.collections;
         collections = collections.filter(it => it.hasBalance || it.isOwner);
-        return collections.filter(it => it.isOwner);
+        return collections.filter(it => it.hasBalance);
     },
     toggle(e) {
         window.preventItem(e);
@@ -70,9 +70,28 @@ var Wallet = React.createClass({
             <section className="sideALLThing">
                 <a className="BoBoBoaThings" href="javascript:;" onClick={() => this.emit('wallet/toggle', false)}></a>
                 <section className="sideThing">
-                    {!state.loaded && <Loader />}
                     <section className="Thewallet">
-                        {state.collections && this.getList().map(collection => <section key={collection.key} className="walletCollection">
+                        <h2>Host</h2>
+                        {state.collections && this.getHostList().map(collection => <section key={collection.key} className="walletCollection">
+                            <section className="walletCollectionOpener">
+                                <a href="javascript:;" data-key={collection.key} onClick={this.toggle}>
+                                    <h5 className="walletCollectionOpenerName">{collection.name}</h5>
+                                    {/*collection.isOwner && */<h6 className="walletHost">Host</h6>}
+                                </a>
+                            </section>
+                            {this.state && this.state.toggle === collection.key && <section className="walletCollectionItems">
+                                {collection.items && Object.values(collection.items).filter(it => it.dynamicData && it.dynamicData.balanceOf && it.dynamicData.balanceOf !== '0').map(item => <section key={item.key} className="walletCollectionItem">
+                                    <a href="javascript:;" onClick={this.onClick} data-collection={collection.key} data-item={item.key}>
+                                        <figure className="collectionIcon" style={{ "background-color": item.backgroundImage }}>
+                                            <LazyImageLoader src={window.getElementImage(item)}/>
+                                            {item.dynamicData && <span className="walletCollectionItemQuantity">{window.formatMoney(item.dynamicData.balanceOfPlain, 1)}</span>}
+                                        </figure>
+                                    </a>
+                                </section>)}
+                            </section>}
+                        </section>)}
+                        <h2>Owned</h2>
+                        {state.collections && this.getOwnedList().map(collection => <section key={collection.key} className="walletCollection">
                             <section className="walletCollectionOpener">
                                 <a href="javascript:;" data-key={collection.key} onClick={this.toggle}>
                                     <h5 className="walletCollectionOpenerName">{collection.name}</h5>
