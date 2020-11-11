@@ -13,13 +13,13 @@ var Wallet = React.createClass({
         var state = window.getState(this);
         var collections = state.collections;
         collections = collections.filter(it => it.hasBalance || it.isOwner);
-        return collections.filter(it => it.isOwner && !it.hasBalance);
+        return collections.filter(it => it.isOwner);
     },
     getOwnedList() {
         var state = window.getState(this);
         var collections = state.collections;
         collections = collections.filter(it => it.hasBalance || it.isOwner);
-        return collections.filter(it => it.hasBalance);
+        return collections.filter(it => it.hasBalance && !it.isOwner);
     },
     toggle(e) {
         window.preventItem(e);
@@ -27,22 +27,26 @@ var Wallet = React.createClass({
         var oldToggle = state.toggle;
         var toggle = e.currentTarget.dataset.key;
         toggle = toggle === oldToggle ? null : toggle;
-        var collections = state.collections;
-        var collection = collections.filter(it => it.key === toggle)[0];
-        var _this = this;
-        var sectionChange = function() {
-            if(!collection) {
-                return;
+        if(toggle) {
+            var collection = state.collections.filter(it => it.key === toggle)[0];
+            if(!collection.hasBalance) {
+                toggle = null;
             }
-            _this.emit('section/change', 'spa/collection', {
-                collection,
-                collectionAddress : collection.address,
-                collections
-            });
         }
-        this.setState({toggle : collection && collection.hasBalance ? toggle : null}, collection && collection.hasBalance ? undefined : sectionChange);
+        this.setState({ toggle });
     },
-    onClick(e) {
+    goToCollection(e) {
+        window.preventItem(e);
+        var state = window.getState(this);
+        var collection = state.collections.filter(it => it.key === e.currentTarget.dataset.key)[0];
+        this.emit('wallet/toggle', false);
+        this.emit('section/change', 'spa/collection', {
+            collection,
+            collectionAddress : collection.address,
+            collections : state.collections
+        });
+    },
+    goToItem(e) {
         window.preventItem(e);
         var state = window.getState(this);
         var collection = state.collections.filter(it => it.key === e.currentTarget.dataset.collection)[0];
@@ -74,16 +78,15 @@ var Wallet = React.createClass({
                         <h2>Host</h2>
                         {state.collections && this.getHostList().map(collection => <section key={collection.key} className="walletCollection">
                             <section className="walletCollectionOpener">
-                                <a href="javascript:;" data-key={collection.key} onClick={this.toggle}>
-                                    <h5 className="walletCollectionOpenerName">{collection.name}</h5>
-                                    {/*collection.isOwner && */<h6 className="walletHost">Host</h6>}
-                                </a>
+                                <h5 className="walletCollectionOpenerName"><a href="javascript:;" data-key={collection.key} onClick={this.toggle}>{collection.name}</a></h5>
+                                <a href="javascript:;" data-key={collection.key} onClick={this.goToCollection}>Visit</a>
+                                <a target="_blank" href={window.context.openSeaCollectionLinkTemplate.format(collection.openSeaName)}>OpenSea</a>
                             </section>
                             {this.state && this.state.toggle === collection.key && <section className="walletCollectionItems">
                                 {collection.items && Object.values(collection.items).filter(it => it.dynamicData && it.dynamicData.balanceOf && it.dynamicData.balanceOf !== '0').map(item => <section key={item.key} className="walletCollectionItem">
-                                    <a href="javascript:;" onClick={this.onClick} data-collection={collection.key} data-item={item.key}>
+                                    <a href="javascript:;" onClick={this.goToItem} data-collection={collection.key} data-item={item.key}>
                                         <figure className="collectionIcon" style={{ "background-color": item.backgroundImage }}>
-                                            <LazyImageLoader src={window.getElementImage(item)}/>
+                                            <LazyImageLoader src={window.getElementImage(item)} />
                                             {item.dynamicData && <span className="walletCollectionItemQuantity">{window.formatMoney(item.dynamicData.balanceOfPlain, 1)}</span>}
                                         </figure>
                                     </a>
@@ -93,16 +96,15 @@ var Wallet = React.createClass({
                         <h2>Owned</h2>
                         {state.collections && this.getOwnedList().map(collection => <section key={collection.key} className="walletCollection">
                             <section className="walletCollectionOpener">
-                                <a href="javascript:;" data-key={collection.key} onClick={this.toggle}>
-                                    <h5 className="walletCollectionOpenerName">{collection.name}</h5>
-                                    {/*collection.isOwner && */<h6 className="walletHost">Host</h6>}
-                                </a>
+                                <h5 className="walletCollectionOpenerName"><a href="javascript:;" data-key={collection.key} onClick={this.toggle}>{collection.name}</a></h5>
+                                <a href="javascript:;" data-key={collection.key} onClick={this.goToCollection}>Visit</a>
+                                <a target="_blank" href={window.context.openSeaCollectionLinkTemplate.format(collection.openSeaName)}>OpenSea</a>
                             </section>
                             {this.state && this.state.toggle === collection.key && <section className="walletCollectionItems">
                                 {collection.items && Object.values(collection.items).filter(it => it.dynamicData && it.dynamicData.balanceOf && it.dynamicData.balanceOf !== '0').map(item => <section key={item.key} className="walletCollectionItem">
-                                    <a href="javascript:;" onClick={this.onClick} data-collection={collection.key} data-item={item.key}>
+                                    <a href="javascript:;" onClick={this.goToItem} data-collection={collection.key} data-item={item.key}>
                                         <figure className="collectionIcon" style={{ "background-color": item.backgroundImage }}>
-                                            <LazyImageLoader src={window.getElementImage(item)}/>
+                                            <LazyImageLoader src={window.getElementImage(item)} />
                                             {item.dynamicData && <span className="walletCollectionItemQuantity">{window.formatMoney(item.dynamicData.balanceOfPlain, 1)}</span>}
                                         </figure>
                                     </a>

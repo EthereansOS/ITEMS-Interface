@@ -94,7 +94,7 @@ var Item = React.createClass({
         this.unwrapInput.value = this.props.item.dynamicData.balanceOfCollectionSidePlain.split(',').join();
     },
     componentDidMount() {
-        window.setHomepageLink(`?wrappedItem=${this.props.item.address}`);
+        window.setHomepageLink(`?interoperable=${this.props.item.address}`);
         var _this = this;
         window.retrieveWrappedCode(this.props.item).then(() => _this.forceUpdate());
     },

@@ -25,6 +25,12 @@ var Explore = React.createClass({
     componentDidMount() {
         window.setHomepageLink(`?section=explore`);
     },
+    getCollections() {
+        var state = window.getState(this);
+        var collections = state.collections.filter(it => it.category === 'W20');
+        collections.push(...state.collections.filter(it => it.category !== 'w20'));
+        return collections;
+    },
     render() {
         var _this = this;
         var state = window.getState(this);
@@ -35,7 +41,7 @@ var Explore = React.createClass({
             <section className="collections">
                 <section className="collectionsList">
                     {state.searchedCollection && <SingleCollection collection={state.searchedCollection} collectionKey={state.searchedCollection.key} onClick={_this.onClick} miniature/>}
-                    {!state.searchedCollection && state.collections && state.collections.map(it => <SingleCollection collection={it} collectionKey={it.key} key={it.key} onClick={_this.onClick} miniature/>)}
+                    {!state.searchedCollection && state.collections && this.getCollections().map(it => <SingleCollection collection={it} collectionKey={it.key} key={it.key} onClick={_this.onClick} miniature/>)}
                 </section>
             </section>
         </section>);
