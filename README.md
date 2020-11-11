@@ -4,7 +4,7 @@
 
 ### Repo in progress | Full release oct 28
 
-<a href="https://b-u-i-d-l.github.io/ethItem-docs/">Documentation</a>
+<a href="https://ethitem.com/doc.html">Documentation</a>
 
 ## The Ecosystem of ITEMS on top of ETHEREUM
 
