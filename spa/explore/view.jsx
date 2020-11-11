@@ -28,7 +28,7 @@ var Explore = React.createClass({
     getCollections() {
         var state = window.getState(this);
         var collections = state.collections.filter(it => it.category === 'W20');
-        collections.push(...state.collections.filter(it => it.category !== 'w20'));
+        collections.push(...state.collections.filter(it => it.category !== 'W20'));
         return collections;
     },
     render() {
