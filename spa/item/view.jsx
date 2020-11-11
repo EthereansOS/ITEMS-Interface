@@ -160,7 +160,6 @@ var Item = React.createClass({
                         <ul>
                             {item.metadata && <li className={toggle === 'metadata' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>METADATA</a></li>}
                             <li className={toggle === 'farm' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>FARM</a></li>
-                            <li className={toggle === 'arbitrage' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>ARBITRAGE</a></li>
                             {(this.props.item.collection.extensionCode || this.props.item.collection.modelCode || this.props.item.collection.wrappedCode) && <li className={toggle === 'code' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle} data-toggle="code">CODE</a></li>}
                         </ul>
                     </section>
@@ -173,15 +172,15 @@ var Item = React.createClass({
                         </section>}
                         {toggle === 'code' && <section className="collectionPageItemsCode">
                             {this.props.item.collection.extensionCode && <section className="CodePART">
-                                <h3>Extension</h3>
+                                <h3>Extension <a target="_blank" href={window.getNetworkElement("etherscanURL") + "address/" + this.props.collection.address}> (Etherscan)</a></h3>
                                 <Editor readonly firstCode={this.props.item.collection.extensionCode} />
                             </section>}
                             {this.props.item.collection.modelCode && <section className="CodePART">
-                                <h3>ITEM Model</h3>
+                                <h3>Main Interface <a target="_blank" href={window.getNetworkElement("etherscanURL") + "address/" + this.props.collection.address}> (Etherscan)</a></h3>
                                 <Editor readonly firstCode={this.props.item.collection.modelCode} />
                             </section>}
                             {this.props.item.collection.wrappedCode && <section className="CodePART">
-                                <h3>ITEM ERC20 Implementation</h3>
+                                <h3>Interoperable Interface <a target="_blank" href={window.getNetworkElement("etherscanURL") + "address/" + this.props.collection.address}> (Etherscan)</a></h3>
                                 <Editor readonly firstCode={this.props.item.collection.wrappedCode} />
                             </section>}
                         </section>}
