@@ -15,8 +15,6 @@ function Boot() {
         }
     }
     ReactModuleLoader.load({
-        modules: ['spa/' + pathName],
-        scripts : ['spa/fullLoader.jsx'],
         callback : function() {
             React.globalLoader = function() {
                 return React.createElement(FullLoader);
