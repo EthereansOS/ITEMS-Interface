@@ -3,13 +3,23 @@ var Wallet = React.createClass({
         'spa/loader.jsx',
         'spa/lazyImageLoader.jsx'
     ],
-    getList() {
+    getList(balanceFirst) {
+        return [
+            ...(balanceFirst ? this.getBalanceList() : this.getOwnerList()),
+            ...(balanceFirst ? this.getOwnerList() : this.getBalanceList())
+        ]
+    },
+    getBalanceList() {
         var state = window.getState(this);
         var collections = state.collections;
         collections = collections.filter(it => it.hasBalance || it.isOwner);
-        var orderedList = collections.filter(it => !it.isOwner);
-        orderedList.push(...collections.filter(it => it.isOwner));
-        return orderedList;
+        return collections.filter(it => !it.isOwner);
+    },
+    getOwnerList() {
+        var state = window.getState(this);
+        var collections = state.collections;
+        collections = collections.filter(it => it.hasBalance || it.isOwner);
+        return collections.filter(it => it.isOwner);
     },
     toggle(e) {
         window.preventItem(e);
