@@ -49,6 +49,10 @@ var Index = React.createClass({
         }
         return (<section>
             <section>
+            <section className="NoMobileForNow">
+                <p><b>Mobile Version is not supported jet :(</b></p>
+                <p>Use your pc or come back in the next days, we'll deliver it asap!</p>
+            </section>
                 <Menu onSelection={this.sectionChange} />
             </section>
             {props.section && <section>

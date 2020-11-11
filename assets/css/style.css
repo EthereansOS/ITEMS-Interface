@@ -270,12 +270,12 @@ footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; d
 .Documentation, .DocHTML {background-color: #171717 !important;}
 .AllDoc {width: 100%; display: block;}
 .AllDoc nav {width: 100%; display: block; position: fixed; top: 0; left: 0; height: 60px; background-color: #1f1f1f; border-bottom: 1px solid #000000;}
-.AllDoc .DocIndex {width: 20%; position:  fixed; top: 61px; left: 0; height: 100%; display: inline-block; overflow: scroll; background-color: #1f1f1f; border-right: 1px solid #000000;}
+.AllDoc .DocIndex {width: 20%; position:  fixed; top: 61px; left: 0; height: 85%; display: inline-block; overflow: scroll; background-color: #1f1f1f; border-right: 1px solid #000000;padding-bottom: 15%;}
 .DocIndex .DocIndexIMP {width: 90%; margin-left: 5%; margin-top: 20px; color: #ffffff; font-weight: bolder; display: block; padding: 10px 0; font-size: 18px; line-height: 1.4;}
 .DocIndex .DocIndexIMP2 {width: 80%; margin-left: 15%; color: #9c9c9c; font-weight: bold; display: block; padding: 10px 0; font-size: 15px; line-height: 1.3;}
 .DocumentationIcon {font-size: 25px; margin: 15px 0 0 2%; color: #ffffff; display: inline-block; text-decoration: none; color: #87ceeb;}
 .DocumentationIcon .BDocBrand {font-weight: normal !important;}
-.AllDoc .InsideDoc {width: 70%; margin-left: 25%; padding-top: 100px; max-width: 900px;}
+.AllDoc .InsideDoc {width: 70%; margin-left: 25%; margin-top: 120px; max-width: 900px;}
 .InsideDoc .DocSection {width: 95%; display: block; margin: 15px auto;}
 .DocSection h1 {font-size: 25px; font-weight: bolder; color: #ffffff; margin: 10px 0;}
 .DocSection h6 {font-size: 15px; font-weight: normal; color: #9c9c9c; margin: 10px 0;}
@@ -338,8 +338,12 @@ footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; d
 
 .smallMenuTrig {display: none;}
 .smallMenu {display: none;}
+.NoMobileForNow {display: none;}
 
 @media only screen and (max-device-width: 750px) {
+   .NoMobileForNow { display: inline-block; position: fixed; z-index: 9999999999999999999; background-color: #131D39; width: 100%; height: 100%; top: 0; left: 0; overflow: hidden; text-align: center;}
+   .NoMobileForNow p {color: #ffffff; margin: 30px 0; width: 60%;}
+   .NoMobileForNow p b {font-size: 30px;}
    .menuMenu > .search {display: none;}
    .menuMenu > .menuSelections {display: none;}
    .smallMenu { width: 200px; position: fixed; top: 50px; left: 10px;}
@@ -349,6 +353,7 @@ footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; d
    .Intro .Title, .Explainer, .ExplainerL, .ExplainerS, footer section {width: 90% !important; text-align: center;}
    .Intro .Title img {width: 90%; height: auto;}
    .Intro .Explainer article > img {width: 40%}
+   .NoMobileForNow {display: none;}
 }
 
 .noScroll {overflow: hidden;}
