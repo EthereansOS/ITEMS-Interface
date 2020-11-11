@@ -30,8 +30,8 @@ var Menu = React.createClass({
                     {this.state && this.state.menu && this.state.menu.map((it, i) =>
                         <section className="menuSelection" key={it.module}>
                             <a href="javascript:;" data-index={i} className={"menuSelection BrandizedSSx" + ((i + "") === (this.state.selected + "") ? " Selected" : "")} onClick={_this.onSelection}>{it.name}</a>
-                            <a target="_blank" href="/doc.html" className="menuSelection BrandizedSSx"></a>
                         </section>)}
+                        <section className="menuSelection"><a target="_blank" href="/doc.html" className="menuSelection BrandizedSSx">Documentation</a></section>
                 </section>
                 <section className="search">
                     <input ref={ref => this.searchInput = ref} type="search" data-action="onCollectionAddress" onChange={window.onTextChange} onKeyUp={window.onTextChange}/>
