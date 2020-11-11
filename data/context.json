@@ -7,7 +7,7 @@
     "etherscanURLRopsten": "https://ropsten.etherscan.io/",
     "coingeckoEthereumPriceURL": "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=ethereum",
     "coingeckoEthereumPriceRequestInterval": 600000,
-    "ethItemOrchestratorAddress" : "0x8c53f63cb0e98fa28864202952ac08c81c4625ca",
+    "ethItemOrchestratorAddress" : "0x12329b2F9e52C5D3422D6E6C026AA9D5b00CC075",
     "ethItemOrchestratorAddressRopsten" : "0xf785abac1b79ccb53052799d6b84d6299d47a05a",
     "uniswapV2RouterAddress": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
     "ensDomainName" : "itempesta.eth",
