@@ -197,7 +197,7 @@ var CreateItemWizard = React.createClass({
                 {metadataType === 'custom' && <section className="FormCreateThing">
                     <p>Metadata Link</p>
                     <input type="text" ref={ref => (this.metadataLinkInput = ref) && (this.state && this.state.metadataLink && (ref.value = (this.state && this.state.metadataLink)))} />
-                    <span className="ExplBoom">The metadata file is a Json standard file containing all of the info and links to the file of the ITEM. <a>here</a> You can find a step by step guide to build your json file correctly.</span>
+                    <span className="ExplBoom">The metadata file is a Json standard file containing all of the info and links to the file of the ITEM. <a href="/doc.html#6" target="_blank">here</a> You can find a step by step guide to build your json file correctly. | Link must be expressed in ipfs://ipfs/0000000000..</span>
                 </section>}
                 <section className="FormCreateThing">
                     <a className={"SuperActionBTN SuperActionBTNB" + (this.state && this.state.performing ? " disabled" : "")} href="javascript:;" onClick={this.back}>BACK</a>
