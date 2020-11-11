@@ -55,6 +55,23 @@ var Index = React.createClass({
                 {React.createElement(window[props.section], props)}
             </section>}
             {React.createElement(Wallet, props)}
+            <footer>
+            <section>
+                <a target="_blank" href="https://github.com/b-u-i-d-l/ethItem">Github</a>
+                <a target="_blank" href="https://github.com/b-u-i-d-l/ethItem-docs">Documentation</a>
+                <a target="_blank" href="https://dapp.dfohub.com/?addr=0x7cB2Aa86fC0F3dA708783168BFd25B80F045d183">ETHITEM Governance</a>
+                <a target="_blank">ARTE token Farm</a>
+                <a href="https://dfohub.com">DFOhub</a>
+                <a href="javascript:;" data-section="explore" onclick="window.connectFromHomepage(this)" target="_blank">Explore Items</a>
+                <a href="javascript:;" data-section="wrap" onclick="window.connectFromHomepage(this)" target="_blank">Wrap to Items</a>
+                <a href="javascript:;" data-section="create" onclick="window.connectFromHomepage(this)" target="_blank">Create Items</a>
+                <a href="javascript:;" data-section="farm" onclick="window.connectFromHomepage(this)" target="_blank">Farm Items</a>
+                <a target="_blank" href="https://whereismydragon.com" className="Brandized">Where is my dragon?</a>
+            </section>
+            <section>
+                <p>ETHITEM is a new protocol on top of Ethereum, it's an R&D project made by the dfohub team. Use it at your own risk!</p>
+            </section>
+        </footer>
         </section>);
     }
 });

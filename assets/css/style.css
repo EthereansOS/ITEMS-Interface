@@ -39,10 +39,10 @@ figure {margin-block-start: 0;margin-block-end: 0;margin-inline-start: 0px;margi
 .Intro .ExplainerS aside a {font-size: 12px; font-weight: bold; display: inline-block; padding: 10px 20px; background: linear-gradient(to right, #9048fd 30%, #4bcbc9 90%); color: #f2eafc; width: 40%; margin: 10px auto;text-decoration: none; text-align: center; border-radius: 8px;}
 
 .ExplainerS aside {width: 70%; text-align: left; display: block; margin: 0 auto;}
-.Intro footer {width: 100%; border-top: 1px solid #6e6e6e; margin-top: 150px; }
-.Intro footer section {width: 800px; text-align: center; display: block; margin: 50px auto;}
-.Intro footer section p {font-size: 13px; color: #9c9c9c; width: 50%;}
-.Intro footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; display: inline-block; margin: 10px; font-weight: bold;}
+footer {width: 100%; border-top: 1px solid #6e6e6e; margin-top: 150px; }
+footer section {width: 800px; text-align: center; display: block; margin: 50px auto;}
+footer section p {font-size: 13px; color: #9c9c9c; width: 50%;}
+footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; display: inline-block; margin: 10px; font-weight: bold;}
 .Brandized {font-family:ITEMGig;font-weight: bolder;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 60%, #9048fd 80%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;animation: shine 3s linear infinite;}
 @keyframes shine {to {background-position: 200% center;}}
 .BrandizedS {font-family:ITEMGig;font-weight: bolder;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 70%, #9048fd 90%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;}
