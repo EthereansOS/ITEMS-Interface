@@ -7,8 +7,8 @@ var Wallet = React.createClass({
         var state = window.getState(this);
         var collections = state.collections;
         collections = collections.filter(it => it.hasBalance || it.isOwner);
-        var orderedList = collections.filter(it => it.isOwner);
-        orderedList.push(...collections.filter(it => !it.isOwner));
+        var orderedList = collections.filter(it => !it.isOwner);
+        orderedList.push(...collections.filter(it => it.isOwner));
         return orderedList;
     },
     toggle(e) {
