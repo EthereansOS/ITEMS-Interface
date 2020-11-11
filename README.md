@@ -1,4 +1,4 @@
-# ethItem
+# ETHITEM
 
 <img scr="https://raw.githubusercontent.com/b-u-i-d-l/ethItem/master/assets/img/awesome.gif">
 
