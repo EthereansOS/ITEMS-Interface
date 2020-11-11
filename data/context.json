@@ -66,13 +66,13 @@
         },
         "W20" : {
             "collection" : {
-                "image" : "assets/img/20-penguin.png",
+                "image" : "assets/img/erc20-penguin.png",
                 "modelCode" : {
                     "1" : "ipfs://ipfs/QmTUSevGbSZcCWiyUg5ureLLxkrTA2JH87PW9r8BdBEGyz"
                 }
             },
             "item" : {
-                "image" : "assets/img/20-item.png",
+                "image" : "assets/img/erc20-item.png",
                 "code" : {
                     "1" : "ipfs://ipfs/QmWTas1y3RuAkApRh6HaHPM1SancvKiefmnfxNKcFMSRYw"
                 }
