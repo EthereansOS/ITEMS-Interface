@@ -2143,19 +2143,20 @@ window.sleep = function sleep(millis) {
 };
 
 window.tryRetrieveMetadata = async function tryRetrieveMetadata(item) {
-    if (item.metadataLink) { // || (item.category && window.context.collectionsWithMetadata.indexOf(item.category) === -1)) {
+    if (item.metadataLink) {
         return;
     }
     var clearMetadata = true;
     try {
         item.metadataLink = item.objectId ? await window.blockchainCall(item.contract.methods.uri, item.objectId) : await window.blockchainCall(item.contract.methods.uri);
         if (item.metadataLink !== "") {
+            item.image = window.formatLink(item.metadataLink);
             item.metadata = await window.AJAXRequest(window.formatLink(item.metadataLink));
             if (typeof item.metadata !== "string") {
                 Object.entries(item.metadata).forEach(it => item[it[0]] = it[1]);
                 item.name = item.item_name || item.name;
-                clearMetadata = false;
             }
+            clearMetadata = false;
         }
     } catch (e) {}
     clearMetadata && delete item.metadata;
@@ -2614,7 +2615,7 @@ window.refreshSingleCollection = async function refreshSingleCollection(collecti
         collection.erc20WrappedItemVersion = collection.interoperableInterfaceModelVersion;
     }
     delete collection.problems;
-    var retrieveMetadataPromise = window.tryRetrieveMetadata(collection, collection.category);
+    var retrieveMetadataPromise = window.tryRetrieveMetadata(collection);
     if (!view) {
         await retrieveMetadataPromise;
     } else {
