@@ -51,6 +51,11 @@ var WrapController = function (view) {
         if(!selectedToken) {
             return;
         }
+        try {
+            selectedToken.decimals = selectedToken.decimals || await window.blockchainCall(selectedToken.contract.methods.decimals, selectedToken.tokenId);
+        } catch(e) {
+
+        }
         selectedToken.balanceOf = '0';
         selectedToken.approved = true;
         if(selectedToken.type === 'ERC20') {

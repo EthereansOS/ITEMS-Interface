@@ -154,6 +154,7 @@ var Item = React.createClass({
                                 </section>
                             </section>
                             {window.renderExpandibleElement(!item.description ? "No description available" : window.convertTextWithLinksInHTML(item.description), <p className="itemDesc" />)}
+                            {item.metadataMessage && <p className="itemDesc" ref={ref => ref && (ref.innerHTML = item.metadataMessage)}/>}
                         </article>
                     </section>
                     <section className="collectionNav">

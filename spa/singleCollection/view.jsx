@@ -31,6 +31,7 @@ var SingleCollection = React.createClass({
                     {this.props.miniature && <h3 className="collectionTitle">{window.shortenWord(this.props.collection.name, 25)} <span>({window.shortenWord(this.props.collection.symbol, 6)})</span></h3>}
                     {!this.props.miniature && window.renderExpandibleElement(!this.props.collection.description ? "No description available" : window.convertTextWithLinksInHTML(this.props.collection.description), <p className="collectionDesc" />)}
                     {this.props.miniature && <p className="collectionDesc">{!this.props.collection.description ? "No description available" : window.shortenWord(this.props.collection.description, 100)}</p>}
+                    {!this.props.miniature && this.props.collection.metadataMessage && <p className="collectionDesc" ref={ref => ref && (ref.innerHTML = this.props.collection.metadataMessage)}/>}
                     <section className="collectionInfoSide">
                     {this.props.showItemsCount && <span className="collectionItems BrandizedS">
                         {(!this.state || (this.state.itemsCount !== 0 && !this.state.itemsCount)) && <InnerLoader />}

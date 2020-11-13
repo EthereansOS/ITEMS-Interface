@@ -2151,10 +2151,17 @@ window.tryRetrieveMetadata = async function tryRetrieveMetadata(item) {
         item.metadataLink = item.objectId ? await window.blockchainCall(item.contract.methods.uri, item.objectId) : await window.blockchainCall(item.contract.methods.uri);
         if (item.metadataLink !== "") {
             item.image = window.formatLink(item.metadataLink);
-            item.metadata = await window.AJAXRequest(window.formatLink(item.metadataLink));
-            if (typeof item.metadata !== "string") {
-                Object.entries(item.metadata).forEach(it => item[it[0]] = it[1]);
-                item.name = item.item_name || item.name;
+            try {
+                item.metadata = await window.AJAXRequest(window.formatLink(item.metadataLink));
+                if (typeof item.metadata !== "string") {
+                    Object.entries(item.metadata).forEach(it => item[it[0]] = it[1]);
+                    item.name = item.item_name || item.name;
+                }
+            } catch(e) {
+                delete item.image;
+                item.image = window.getElementImage(item);
+                item.metadataMessage = `Could not retrieve metadata, maybe due to CORS restriction policies for the link (<a href="${item.metadataLink}" target="_blank">${item.metadataLink}</a>), check it on <a href="${item.collection ? window.context.openSeaItemLinkTemplate.format(item.collection.address, item.objectId) : window.context.openSeaCollectionLinkTemplate.format(item.address)}" target="_blank">Opensea</a>`
+                console.error(item.metadataMessage);
             }
             clearMetadata = false;
         }
