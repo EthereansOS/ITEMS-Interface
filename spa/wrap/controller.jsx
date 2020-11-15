@@ -116,7 +116,7 @@ var WrapController = function (view) {
         if(!selectedToken) {
             return;
         }
-        await window.blockchainCall(selectedToken.erc20Contract.methods.approve, window.currentEthItemERC20Wrapper.options.address, window.numberToString(0xfffffffffffffffffffffffff));
+        await window.blockchainCall(selectedToken.erc20Contract.methods.approve, window.currentEthItemERC20Wrapper.options.address, await window.blockchainCall(selectedToken.erc20Contract.methods.totalSupply));
     };
 
     context.performItemize = async function performItemize() {
