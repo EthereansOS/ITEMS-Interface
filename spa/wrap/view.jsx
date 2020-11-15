@@ -80,6 +80,7 @@ var Wrap = React.createClass({
                     </section>
                     <section className="WrapWhatLoaded">
                         {state.selectedToken && (state.selectedToken.name || state.selectedToken.symbol) && <h6 className="tokenSelectedToWrap">{window.shortenWord(state.selectedToken.name, 10)} {state.selectedToken.symbol && state.selectedToken.name ? ` (${window.shortenWord(state.selectedToken.symbol, 10)})` : window.shortenWord(state.selectedToken.symbol, 10)}</h6>}
+                        {state.selectedToken && state.selectedToken.message && <p><b>Please pay attention: </b>{state.selectedToken.message}</p>}
                         {state.selectedToken && selectedTokenType !== 'ERC20' && selectedTokenType !== 'ETH' && <section className="tokenSelectedToWrapDecide">
                             <input className="BalancetoWrapSelector" placeholder="Token ID" type="text" data-action="onTokenIdChange" onKeyUp={this.onChange} onChange={this.onChange}/>
                         </section>}

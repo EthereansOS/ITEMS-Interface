@@ -96,6 +96,22 @@
         "png" : "image/png",
         "gif" : "image/gif"
     },
+    "specialMessages" : {
+        "wrap" : {
+            "ERC20" : [
+                {
+                    "address" : "0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2",
+                    "token" : "MKR",
+                    "message" : "This token has non-standard name and symbol type return (bytes32 instead of string), so it cannot be wrapped with the current Starter version"
+                },
+                {
+                    "address" : "0xeb269732ab75a6fd61ea60b06fe994cd32a83549",
+                    "token" : "USDx",
+                    "message" : "This token has non-standard name and symbol type return (bytes32 instead of string), so it cannot be wrapped with the current Starter version"
+                }
+            ]
+        }
+    },
     "imageMaxWidth" : 350,
     "imageMaxWeightInMB" : 5,
     "inputTimeout" : 500,

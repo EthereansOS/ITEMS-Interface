@@ -25,11 +25,17 @@ var WrapController = function (view) {
             address,
             contract : window.newContract(window.context.IERC1155ABI, address),
             erc20Contract : window.newContract(window.context.IERC20ABI, address),
-            erc721Contract : window.newContract(window.context.IERC721ABI, address)
+            erc721Contract : window.newContract(window.context.IERC721ABI, address),
+            message : ""
         };
         try {
             selectedToken.name = await window.blockchainCall(selectedToken.contract.methods.name);
         } catch(e) {
+            try {
+                selectedToken.message = window.context.specialMessages.wrap[type].filter(it => window.web3.utils.toChecksumAddress(it.address) === address)[0].message;
+            } catch(e) {
+                console.error(e);
+            }
         }
         try {
             selectedToken.symbol = await window.blockchainCall(selectedToken.contract.methods.symbol);
