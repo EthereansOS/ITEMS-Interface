@@ -1174,7 +1174,7 @@ interface IERC20 {
                 </article>
                 <article class="DocSectionSingleContent">
                     <h2 id="44">Linking a Collection to Its Extension</h2>
-                    <p>During the creation wizard, you will be given the choice to send an optional payload. The payload is an encoded ABI “x” useful for triggering a lazy initialization of the Extension.</p>
+                    <p>During the creation wizard, you will be given the choice to send an optional payload, the payload is an encoded ABI string useful to trigger a lazy initialization of the Extension.</p>
                     <p>Looking at the “init()” method of the previous example, in the Collection Creation Wizard we will pass the payload “0xe1c7392a” (the first 4 bytes of the keccak256 version of the “init()” string). Doing so makes the Collection call the Extension using this payload.</p>
                     <p>As you can see in the “init()” function body, the msg.sender of the call is the brand-new Collection itself, which will now be linked to its extension. If you are the host of a Collection you can mint new Items by calling:</p>
                     <pre class="prettyprint">
