@@ -426,8 +426,9 @@ var myFavoriteERC20Token = new web3.eth.Contract(configuration.ERC20ABI, configu
 //Get the amount to wrap, expressed in decimals.
 var myFavoriteERC20AmountToWrap = configuration.myFavoriteERC20AmountToWrap;
 
-//Call the Orchestrator to retrieve the last ERC20Wrapper ITEM
-var collectionAddress = await ethItemOrchestrator.methods.erc20WrapperAddress().call();
+//Call the Orchestrator and then the KnowledgeBase to retrieve the last ERC20Wrapper ITEM
+var knowledgeBase = new web3.eth.Contract(configuration.EthItemKnowledgeBaseABI , await ethItemOrchestrator.knowledgeBase().call());
+var collectionAddress = await knowledgeBase.methods.erc20Wrapper().call();
 
 //Normalize the address for eventual search by address purposes
 collectionAddress = web3.utils.toChecksumAddress(collectionAddress);
@@ -883,8 +884,9 @@ var myFavoriteWrappedERC20TokenInteroperationalInterface = new web3.eth.Contract
 //Let's now retrieve the corresponding Object Id
 var objectId = myFavoriteWrappedERC20TokenInteroperationalInterface.methods.objectId().call();
 
-//Call the Orchestrator to retrieve the last ERC20Wrapper EthItem
-var collectionAddress = await ethItemOrchestrator.methods.erc20WrapperAddress().call();
+//Call the Orchestrator and then the KnowledgeBase to retrieve the last ERC20Wrapper ITEM
+var knowledgeBase = new web3.eth.Contract(configuration.EthItemKnowledgeBaseABI , await ethItemOrchestrator.knowledgeBase().call());
+var collectionAddress = await knowledgeBase.methods.erc20Wrapper().call();
 
 //Normalize the address for eventual search by address purposes
 collectionAddress = web3.utils.toChecksumAddress(collectionAddress);
