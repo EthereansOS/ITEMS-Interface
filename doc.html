@@ -177,7 +177,9 @@ var allCollections = [];
                     </pre>
                     <p>Phase 1) Retrieve all Wrapped ERC20 Collections directly by calling the Orchestrator. Each ERC20 Wrapped Collection is a Singleton, so there will always be just one active at a time, and its address is well-known. But the Orchestrator, of course, also collects all previous inactive versions (the last one is the currently active one).</p>
                     <pre class="prettyprint"> 
-var ethItemERC20WrapperAddresses = await ethItemOrchestrator.methods.erc20WrapperAddresses().call();
+//Call the Orchestrator and then the KnowledgeBase to retrieve all the ERC20Wrappers
+var knowledgeBase = new web3.eth.Contract(configuration.EthItemKnowledgeBaseABI , await ethItemOrchestrator.knowledgeBase().call());
+var ethItemERC20WrapperAddresses = await knowledgeBase.methods.erc20Wrappers().call();
 
 for(var collectionAddress of ethItemERC20WrapperAddresses) {
 //Normalize the address for eventual search by address purposes
