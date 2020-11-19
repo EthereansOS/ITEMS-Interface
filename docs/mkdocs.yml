@@ -1,0 +1,23 @@
+site_name: arte-1155
+docs_dir: md-build
+site_dir: gh-pages
+permalink: True
+nav:
+    - Home: README.md
+    - API:
+          - Factory:
+                - IEthItemFactory: factory/IEthItemFactory.md
+          - Models:
+                - 1:
+                      - IERC1155V1: models/1/IERC1155V1.md
+                      - IERC1155WrapperV1: models/1/IERC1155WrapperV1.md
+                      - IERC20WrapperV1: models/1/IERC20WrapperV1.md
+                      - IERC721WrapperV1: models/1/IERC721WrapperV1.md
+                      - IEthItemModelBased: models/1/IEthItemModelBased.md
+theme:
+    name: readthedocs
+    highlightjs: true
+    hljs_languages:
+        - yaml
+        - typescript
+        - javascript

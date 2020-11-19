@@ -1,0 +1,17 @@
+{
+    "name": "ethItem",
+    "version": "1.0.0",
+    "description": "An improved ERC1155 token with ERC20 trading capabilities",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/b-u-i-d-l/ethItem.git"
+    },
+    "main": "build.js",
+    "scripts": {},
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/b-u-i-d-l/eth-item-token-standard/issues"
+    },
+    "homepage": "https://github.com/b-u-i-d-l/eth-item-token-standard#readme",
+    "dependencies": {}
+}
