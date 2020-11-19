@@ -152,7 +152,7 @@ var CreateItemWizard = React.createClass({
     },
     renderStep1() {
         return (<section className="createITEM">
-            <h2>Let's start from the basics</h2>
+            <h2>Let’s Start With the Basics</h2>
             <section className="FormCreate">
                 <section className="FormCreateThing">
                     <p>Name</p>

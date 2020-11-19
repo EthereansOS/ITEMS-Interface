@@ -113,14 +113,14 @@ var CreateCollectionWizard = React.createClass({
                     <p>Description<b>*</b></p>
                     <textarea id="description" data-mandatory="true" />
                 </label>
-                <span className="ExplBoom">The description of this new awesome collection</span>
+                <span className="ExplBoom">A description of the collection</span>
             </section>
             <section className="MetaImputThings">
                 <label className="createWhat">
-                    <p>Discussion link</p>
+                    <p>Discussion Link</p>
                     <input id="discussionUri" type="text" />
                 </label>
-                <span className="ExplBoom">A link to a forum, chat o community where people can interact about this project</span>
+                <span className="ExplBoom">A link to a social hub and/or discussion channel for the collection (if any)</span>
             </section>
             {/*<section className="MetaImputThings">
                 <label className="createWhat">
@@ -131,36 +131,36 @@ var CreateCollectionWizard = React.createClass({
             </section>*/}
             <section className="MetaImputThings">
                 <label className="createWhat">
-                    <p>DNS link</p>
+                    <p>DNS Link</p>
                     <input id="externalDNS" type="text" />
                 </label>
-                <span className="ExplBoom">A link to the official website of this project</span>
+                <span className="ExplBoom">A link to the official website of this project (if any)</span>
             </section>
             <section className="MetaImputThings">
                 <label className="createWhat">
-                    <p>ENS link</p>
+                    <p>ENS Link</p>
                     <input id="externalENS" type="text" />
                 </label>
-                <span className="ExplBoom">An ENS link to the official website of this project</span>
+                <span className="ExplBoom">An ENS link to the official website of this project (if any)</span>
             </section>
             <section className="MetaImputThings">
                 <label className="createWhat">
-                    <p>Repo link</p>
+                    <p>Repo Link</p>
                     <input id="repoUri" type="text" />
                 </label>
-                <span className="ExplBoom">A link to the official repo of this project</span>
+                <span className="ExplBoom">A link to the official repo of this project (if any)</span>
             </section>
             <section className="spacialImputs">
                 <section className="MetaImputThings">
                     <label className="createWhat">
-                        <p>Cover Regular<b>*</b></p>
+                        <p>Cover (Regular)<b>*</b></p>
                         <input id="image" data-mandatory="true" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
                     </label>
-                    <span className="ExplBoom">The cover image must be .png or .gif, with a size limit of 5 MB and max. width of 350px, due to users experience in IPFS download speed limitations</span>
+                    <span className="ExplBoom">The cover img must be .png or .gif, be at least 5mb in length and have a max width of 350px. This is to keep the user experience in line with IPFS download speed limitations</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
-                        <p>Cover High Quality</p>
+                        <p>Cover (High Quality)</p>
                         <input id="image_data" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
                     </label>
                     <span className="ExplBoom">No limitations for the HQ version of the image</span>
@@ -170,14 +170,14 @@ var CreateCollectionWizard = React.createClass({
                         <p>Background Color<b>*</b></p>
                         <input id="background_color" data-mandatory="true" type="color" />
                     </label>
-                    <span className="ExplBoom">The background color used in most of the dapps behind your cover if not fixed with their standard image sizes</span>
+                    <span className="ExplBoom">The background color behind your cover used in most dApps, if not fixed with their standard image sizes</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Licence File</p>
                         <input id="licence_url" type="file" accept=".pdf,.html,.md,.txt"/>
                     </label>
-                    <span className="ExplBoom">A file that represent the legal licence of all of ITEMs in the collection (if Any). Accepted file: .pdf, .html, .md, .txt</span>
+                    <span className="ExplBoom">A file that represents the legal licence of all of ITEMs in the collection (if any). Accepted file types: .pdf, .html, .md, .txt</span>
                 </section>
             </section>
         </section>);
@@ -185,7 +185,7 @@ var CreateCollectionWizard = React.createClass({
     renderStep0() {
         var state = this.getState();
         return (<section className="createCollection">
-            <h2>Let's start from the basics</h2>
+            <h2>Let’s Start With the Basics</h2>
             <section className="FormCreate">
                 <section className="FormCreateThing">
                     <p>Name</p>
@@ -210,10 +210,10 @@ var CreateCollectionWizard = React.createClass({
         var state = this.getState();
         var extension = state.extension;
         return (<section className="createCollection">
-            <h2>Who is the host?</h2>
+            <h2>Who Is the Host?</h2>
             <section className="FormCreate">
                 <section className="FormCreateThing">
-                    <span className="createDescriptonX">The host of the collection is who have the ability to mint ITEMS, it can be anyone, an address or you can extend it with custom rules via deploying an extension conctract. <a href="">More info</a></span>
+                    <span className="createDescriptonX">The host of the collection has the ability to mint ITEMs and update the Metadata info. It can be a wallet, or a smart contract with custom rules, which you can deploy during this setup.<a href="https://ethitem.com/doc.html#4" target="_blank">More info</a></span>
                 </section>
                 <section className="FormCreateThing">
                     <select className="" onChange={this.onExtension}>
@@ -243,7 +243,7 @@ var CreateCollectionWizard = React.createClass({
                     <p>Decimals</p>
                     <input type="checkbox" ref={ref => (this.hasDecimals = ref) && (ref.checked = state.hasDecimals)} />
                 </label>
-                <span className="ExplBoom">By selecting this option, all of the Items in this Collection will have 18 decimals in both implementations (Recommended only if you need decimals in the NFT implementation too. For example to realize special functions like in-game consumable items)</span>
+                <span className="ExplBoom">If you select this option, all of the ITEMs in this Collection will have 18 decimals in both implementations. Only recommended if you need decimals in the NFT implementation to accommodate special functions, like in-game consumable items.</span>
             </section>
             <section className="FormCreateThing">
                 <a className="SuperActionBTN SuperActionBTNB" href="javascript:;" onClick={this.back}>BACK</a>
@@ -265,7 +265,7 @@ var CreateCollectionWizard = React.createClass({
             {metadataType === 'custom' && <section className="FormCreateThing">
                 <p>Metadata Link</p>
                 <input type="text" ref={ref => (this.metadataLinkInput = ref) && (ref.value = (this.state && this.state.metadataLink) || "")} />
-                <span className="ExplBoom">The metadata file is a JSON standard file containing all of the info and links to the file of the ITEM. <a href="/doc.html#6" target="_blank">Here</a> You can find a step by step guide to build your json file correctly. | Link must be expressed in ipfs://ipfs/0000000000..</span>
+                <span className="ExplBoom">The metadata file is a JSON standard file containing all of the info and links to the file of the ITEM. <a href="/doc.html#6" target="_blank">Here</a> you can find a step-by-step guide on how to build your JSON file correctly. | Link must be expressed in ipfs://ipfs/0000000000..</span>
             </section>}
             <section className="FormCreateThing">
                 <a className="SuperActionBTN SuperActionBTNB" href="javascript:;" onClick={this.back}>BACK</a>

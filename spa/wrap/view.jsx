@@ -70,7 +70,7 @@ var Wrap = React.createClass({
             <section className="wrapPage">
                 <section className="wrapBox">
                     <section className="WrapWhat">
-                        <p>Wrap Tokens to ITEMs</p>
+                        <p>Wrap Tokens as Items</p>
                         <br></br>
                         <select onChange={this.onTokenTypeChange}>
                             {window.context.supportedWrappedTokens.map(it => <option key={it} selected={selectedTokenType === it} value={it}>{it}</option>)}

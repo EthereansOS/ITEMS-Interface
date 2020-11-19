@@ -49,10 +49,6 @@ var Index = React.createClass({
         }
         return (<section>
             <section>
-            <section className="NoMobileForNow">
-                <p><b>Mobile Version is not supported jet :(</b></p>
-                <p>Use your pc or come back in the next days, we'll deliver it asap!</p>
-            </section>
                 <Menu onSelection={this.sectionChange} />
             </section>
             {props.section && <section>
@@ -64,17 +60,18 @@ var Index = React.createClass({
                 <a target="_blank" href="https://github.com/b-u-i-d-l/ethItem">Github</a>
                 <a target="_blank" href="/doc.html">Documentation</a>
                 <a target="_blank" href="https://dapp.dfohub.com/?addr=0x7cB2Aa86fC0F3dA708783168BFd25B80F045d183">ETHITEM Governance</a>
-                <a target="_blank">ARTE token Farm</a>
+                <a target="_blank" href="https://dapp.dfohub.com/?staking=0x0998f18cB04A2121a92F902fa1961F04606DeC91">ARTE Farm</a>
                 <a href="https://dfohub.com">DFOhub</a>
                 <a href="javascript:;" data-section="explore" onclick="window.connectFromHomepage(this)" target="_blank">Explore Items</a>
-                <a href="javascript:;" data-section="wrap" onclick="window.connectFromHomepage(this)" target="_blank">Wrap to Items</a>
-                <a href="javascript:;" data-section="create" onclick="window.connectFromHomepage(this)" target="_blank">Create Items</a>
+                <a href="javascript:;" data-section="wrap" onclick="window.connectFromHomepage(this)" target="_blank">Wrap as ITEMs</a>
+                <a href="javascript:;" data-section="create" onclick="window.connectFromHomepage(this)" target="_blank">Create Native Items</a>
                 <a href="javascript:;" data-section="farm" onclick="window.connectFromHomepage(this)" target="_blank">Farm Items</a>
-                <a target="_blank" href="https://whereismydragon.com" className="Brandized">Where is my dragon?</a>
+                <a target="_blank" href="https://whereismydragon.com" className="Brandized">Where Is My Dragon?</a>
             </section>
             <section>
-                <p>ETHITEM is a new protocol on top of Ethereum, it's an R&D project made by the dfohub team. Use it at your own risk!</p>
+                <p>ETHITEM is a new R&D protocol on top of Ethereum, brought to you by the DFOhub team. Use it at your own risk!</p>
             </section>
+            <img className="FooterImg" src="assets/img/footer.png"></img>
         </footer>
         </section>);
     }

@@ -74,13 +74,35 @@ var Wallet = React.createClass({
             <section className="sideALLThing">
                 <a className="BoBoBoaThings" href="javascript:;" onClick={() => this.emit('wallet/toggle', false)}></a>
                 <section className="sideThing">
+                    <section className="mobileMenuWall OnlyMobileForNow">
+                    <section className="menuSelections">
+                        <section className="menuSelection">
+                            <a target="_blank" href="https://ethitem.com/?section=explore" className="menuSelection BrandizedSSx">Explore</a>
+                        </section>
+                        <section className="menuSelection">
+                            <a target="_blank" href="https://ethitem.com/?section=create" className="menuSelection BrandizedSSx">Create</a>
+                        </section>
+                        <section className="menuSelection">
+                            <a target="_blank" href="https://ethitem.com/?section=wrap" className="menuSelection BrandizedSSx">Wrap</a>
+                        </section>
+                        <section className="menuSelection">
+                            <a target="_blank" href="https://ethitem.com/?section=wrap" className="menuSelection BrandizedSSx">Transfer</a>
+                        </section>
+                        <section className="menuSelection">
+                            <a target="_blank" href="https://ethitem.com/?section=farm" className="menuSelection BrandizedSSx">Farm</a>
+                        </section>
+                        <section className="menuSelection">
+                            <a target="_blank" href="/doc.html" className="menuSelection BrandizedSSx">NERD</a>
+                        </section>
+                    </section>
+                    </section>
                     <section className="Thewallet">
-                        <h2>Host</h2>
+                        <h2>Hosted</h2>
                         {state.collections && this.getHostList().map(collection => <section key={collection.key} className="walletCollection">
                             <section className="walletCollectionOpener">
-                                <h5 className="walletCollectionOpenerName"><a href="javascript:;" data-key={collection.key} onClick={this.toggle}>{collection.name}</a></h5>
-                                <a href="javascript:;" data-key={collection.key} onClick={this.goToCollection}>Visit</a>
-                                <a target="_blank" href={window.context.openSeaCollectionLinkTemplate.format(collection.openSeaName)}>OpenSea</a>
+                                <h5 className="walletCollectionOpenerName"><a href="javascript:;" data-key={collection.key} onClick={this.toggle}><span className="OPENSYMBOL">&#x276E;</span> {collection.name}</a></h5>
+                                <a className="WOPENERBTN" href="javascript:;" data-key={collection.key} onClick={this.goToCollection}>Visit</a>
+                                <a className="WOPENERBTN" target="_blank" href={window.context.openSeaCollectionLinkTemplate.format(collection.openSeaName)}>OpenSea</a>
                             </section>
                             {this.state && this.state.toggle === collection.key && <section className="walletCollectionItems">
                                 {collection.items && Object.values(collection.items).filter(it => it.dynamicData && it.dynamicData.balanceOf && it.dynamicData.balanceOf !== '0').map(item => <section key={item.key} className="walletCollectionItem">
@@ -96,9 +118,9 @@ var Wallet = React.createClass({
                         <h2>Owned</h2>
                         {state.collections && this.getOwnedList().map(collection => <section key={collection.key} className="walletCollection">
                             <section className="walletCollectionOpener">
-                                <h5 className="walletCollectionOpenerName"><a href="javascript:;" data-key={collection.key} onClick={this.toggle}>{collection.name}</a></h5>
-                                <a href="javascript:;" data-key={collection.key} onClick={this.goToCollection}>Visit</a>
-                                <a target="_blank" href={window.context.openSeaCollectionLinkTemplate.format(collection.openSeaName)}>OpenSea</a>
+                                <h5 className="walletCollectionOpenerName"><a href="javascript:;" data-key={collection.key} onClick={this.toggle}><span className="OPENSYMBOL">&#x276E;</span> {collection.name}</a></h5>
+                                <a className="WOPENERBTN" href="javascript:;" data-key={collection.key} onClick={this.goToCollection}>Visit</a>
+                                <a className="WOPENERBTN" target="_blank" href={window.context.openSeaCollectionLinkTemplate.format(collection.openSeaName)}>OpenSea</a>
                             </section>
                             {this.state && this.state.toggle === collection.key && <section className="walletCollectionItems">
                                 {collection.items && Object.values(collection.items).filter(it => it.dynamicData && it.dynamicData.balanceOf && it.dynamicData.balanceOf !== '0').map(item => <section key={item.key} className="walletCollectionItem">

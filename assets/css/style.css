@@ -120,7 +120,7 @@ footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; d
 .itemInfo .itemDesc {width: 400px;text-align: left; margin-left: 30px; color: #6e6e6e; font-size: 14px; vertical-align: middle; line-height: 1.3;-ms-word-break: break-all;word-break: break-all;word-break: break-word;-webkit-hyphens: auto;-moz-hyphens: auto;hyphens: auto;}
 .itemPage .ItemTitle {font-size: 30px; color: #131D39;text-align: left;-ms-word-break: break-all;word-break: break-all;word-break: break-word;-webkit-hyphens: auto;-moz-hyphens: auto;hyphens: auto;}
 .itemPage .ItemTitle span {font-size: 14px;}
-.itemFundamentalsThing {width: 100%; text-align: left;}
+.itemFundamentalsThing {width: 100%; text-align: left;-ms-word-break: break-all;word-break: break-all;word-break: break-word;-webkit-hyphens: auto;-moz-hyphens: auto;hyphens: auto;}
 .itemFundamentalsThing .itemaddress {display: inline-block; margin: 5px 10px 5px 0;}
 .itemFundamentalsThing .itemaddress a {font-size: 13px; color: #6e6e6e;}
 .itemFundamentals .ItemCollectionLink {width: 100%; text-align: left; font-size: 12px;margin: 0px 0px 5px 0; display: inline-block;color: #6e6e6e; word-break: break-all;}
@@ -157,7 +157,7 @@ footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; d
 .WrapWhatLoaded .disabled {background-color: #e4e4e4 !important; color: #6e6e6e !important;background: #e4e4e4 !important; text-decoration: none;}
 .WrapWhat select {margin: 10px 0;border: 1px solid #0180EC; background-color: #0180EC;border-radius: 5px; font-weight: bold; color: #ffffff;}
 .createPage {width: 100%; display: block; text-align: center; margin-top: 100px;min-width: 100%;}
-.createStart {width: 230px; background-color: ffffff; border-radius: 20px;display: inline-block; padding: 30px 70px;    margin-top: 100px;}
+.createStart {width: 230px; background-color: #F6FBFF; border-radius: 20px;display: inline-block; padding: 30px 70px;    margin-top: 100px;}
 .StartCreate {padding: 10px; text-decoration: none; background-color: #0180EC; font-weight: bold; display: inline-block; margin: 20px 0 10px 0; color: #ffffff; border-radius: 8px;}
 .createCollection, .createITEM {width: 600px; background-color: #F6FBFF; border-radius: 20px;display: inline-block; padding: 30px 70px; margin: 100px auto;}
 .createCollection h2, .createITEM h2 {font-size: 18px; font-weight: bold; text-align: center; color: #131D39; margin-bottom: 20px;}
@@ -221,9 +221,12 @@ footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; d
 .walletCollectionOpener {width: 100%; text-align: center; padding: 10px;}
 .walletCollectionOpener a {text-decoration: none;}
 .walletCollectionOpenerName {font-size: 20px; color: #131D39; text-align: left; width: 100%; text-decoration: none;}
+.walletCollectionOpenerName a {font-size: 18px; color: #131D39;}
 .walletCollectionItems {width: 90%; display: inline-block; text-align: center;padding: 20px 0px 20px 0px; -moz-column-gap: 10px;-moz-column-width: 90%;column-gap: 10px;column-width: 90%;-webkit-column-gap: 10px;-webkit-column-width: 90%; max-width: 90%;display: inline-block;}
 .walletCollectionItem {width: 120px; margin: 20px; display: inline-block; position: relative;}
 .walletCollectionItem h6 {display: none;}
+.WOPENERBTN {margin: 10px; background-color: #0180EC; font-size: 12px; padding: 5px 10px; border-radius: 8px; color: #ffffff; font-weight: bold;}
+.walletCollectionOpener a:active .OPENSYMBOL {transform: rotate(-180deg); -ms-transform: rotate(-180deg);-webkit-transform: rotate(-180deg);-o-transform: rotate(-180deg);transform-origin: 0 0;}
 .walletCollectionItem img {width: 120px;}
 .walletCollectionItemQuantity {position: absolute; bottom: -10px; right: -10px; color: #59b0fb; background-color: #feeaffba; border-radius: 10px; padding: 5px; font-weight: bolder;}
 .collectionPage .Enter {text-decoration: none; padding: 8px 12px; font-weight: bold; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; margin-right: 10px;color: #ffffff;display: block;width: 100px;margin: 20px auto; cursor: pointer;}
@@ -283,7 +286,7 @@ footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; d
 .DocSectionContents a {display: block; width: 100%; color: #9c9c9c; font-weight: bold; font-size: 15px; margin: 10px 0;}
 .DocSectionSingleContent {border-bottom: 1px solid #000000; margin: 5px auto; padding: 10px 20px;}
 .DocSectionSingleContent h2 {font-size: 22px; font-weight: bolder; color: #cecece; margin: 10px 0;}
-.DocSectionSingleContent p {font-size: 13px;font-weight: normal; color: #9c9c9c; margin: 7px 0;line-height: 1.4;}
+.DocSectionSingleContent p {font-size: 13px;font-weight: normal; color: #9c9c9c; margin: 7px 0;line-height: 1.4;-ms-word-break: break-all;word-break: break-all;word-break: break-word;-webkit-hyphens: auto;-moz-hyphens: auto;hyphens: auto;}
 .DocSectionSingleContent img {padding: 5%;max-width: 90%;display: block; margin: 10px 0;}
 
 .SoonFARM {width: 100%; padding: 80px 0; text-align: center;}
@@ -291,6 +294,7 @@ footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; d
 .SoonFARM h3 a {color: #87ceeb; font-weight: bold;}
 .SoonFARM .FarmImg {width: 200px; margin: 100px auto; display: block;}
 .SoonFARM .FarmImg img {animation: rotation 3s infinite linear; display: inline-block;width: 200px; opacity: 0.5;}
+.FooterImg {width: 100%;}
 
 .superlink:active {animation: rotation 0.01s;}
 .superlink:focus:after {content: " 👍";}
@@ -338,22 +342,108 @@ footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; d
 
 .smallMenuTrig {display: none;}
 .smallMenu {display: none;}
-.NoMobileForNow {display: none;}
+.OnlyMobileForNow {display: none;}
 
 @media only screen and (max-device-width: 750px) {
-   .NoMobileForNow { display: inline-block; position: fixed; z-index: 9999999999999999999; background-color: #131D39; width: 100%; height: 100%; top: 0; left: 0; overflow: hidden; text-align: center;}
-   .NoMobileForNow p {color: #ffffff; margin: 30px 0; width: 60%;}
-   .NoMobileForNow p b {font-size: 30px;}
+   .NoMobileForNow { display: none !important;}
+   .OnlyMobileForNow {display: inline-block;}
    .menuMenu > .search {display: none;}
    .menuMenu > .menuSelections {display: none;}
    .smallMenu { width: 200px; position: fixed; top: 50px; left: 10px;}
+   footer {margin-top: 20px;}
+   .collection {margin: 40px 0;}
+   .collectionPage .collectionPageInfo {width: 95%;}
+   .collectionPage .collectionPageInfo .collectionIcon {width: 50%; height: auto;}
+   .collectionPage .collectionPageInfo .collectionInfo {width: 90%; margin: 10px 0 0 0;}
+   .collectionPage .collectionInfo .collectionTitle {font-size: 23px;}
+   .collectionPage .collectionInfo .collectionDesc {min-height: 10px;}
+   .collection .collectionInfoSide, .collection .collectionInfoSideLinks {width: 100%; text-align: center;}
+   .collection .collectionInfoSide .collectionItems {font-size: 12px;}
+   .collection .collectionInfoSide p {font-size: 11px;}
+   .collectionPage .collectionInfo .collectionLink {font-size: 12px;}
+   .collectionNav ul {width: 90%;}
+   .collectionNav ul li {width: 25%;}
+   .collectionPageItemsOrder {padding: 20px 0;width: 90%;}
+   .collectionPageItems .collectionSingleItem {width: 80%;margin: 30px 0px;}
+   .collectionPageItems .itemIcon {width: 100%;}
+   .collectionPageItems .ItemInfo {width: 100%;}
+   .SoonFARM h3 {width: 80%;font-size: 16px;}
+   .SoonFARM {padding: 40px 0;}
+   .SoonFARM .FarmImg {width: 140px;margin: 20px auto;}
+   .SoonFARM .FarmImg img {width: 90px;}
+   .returntocollection {width: 90%;padding: 15px 0;margin: 0 auto;}
+   .returntocollection a {font-size: 13px;line-height: 1;}
+   .itemPage {width: 95%;margin: 0 auto;display: block;}
+   .itemPage .itemPageInfo {padding: 20px 0;}
+   .itemPage .itemIcon {width: 180px;}
+   .itemPage .itemInfo {width: 95%;}
+   .itemFundamentals {width: 95%;}
+   .itemPage .ItemTitle {font-size: 20px; text-align: center;}
+   .itemFundamentalsThing {width: 100%;text-align: center;}
+   .itemFundamentalsThing .itemaddress a {font-size: 11px;}
+   .itemFundamentals .ItemCollectionLink {width: 100%;text-align: center;font-size: 12px;margin: 10px 0px 10px 0;}
+   .itemSide {text-align: center;}
+   .itemInfo .itemDesc {width: 95%;text-align: left;margin: 10px auto;display: block;color: #6e6e6e;font-size: 11px;}
+   .collectionNav ul li a {font-size: 13px;}
+   .subMetaValueString {font-size: 11px;}
+   .CodePART {width: 95%;display: block;padding: 10px 0;}
+   .editor {height: 340px !important;}
+   .NewProposaleditor {height: 340px !important;text-align: left;}
+   .wrapBox {width: 85%;padding: 30px 2.5%;margin-top: 15px;}
+   .SettingsForOwn {width: 90%;text-align: center;margin: 10px auto;}
+   .AllDoneBro {width: 90%; margin: 30px auto;}
+   .AllDoneBro h2 {font-size: 20px;margin: 20px auto;}
+   .AllDoneBro > a {width: 70%;margin: 40px auto;}
+   .AllDoneBro > p {width: 90%;}
+   .AllDoneBro > p > a {width: 90%;}
+   .createPage {width: 95%;}
+   .createCollection, .createITEM {width: 85%;padding: 30px 2.5%;margin: 10px auto;}
+   .FormCreateThing {width: 95%;}
+   .createDescriptonX {font-size: 12px;}
+   .ExplBoom {font-size: 12px;}
+   .MetaDataThings {width: 95%;}
+   .FormCreateThing .editor {height: 460px !important;}
+   .sideThing {width: 80%;}
+   .Thewallet {margin: 20px auto 20px auto;}
+   .walletCollectionOpenerName {margin: 5px 0 20px 0;}
+   .AllDoc .DocIndex {width: 30%;}
+   .AllDoc .InsideDoc {width: 67%;margin-left: 31%;}
+   .DocIndex .DocIndexIMP {font-size: 12px;}
+   .DocIndex .DocIndexIMP2 {font-size: 10px;}
+   .sideThing .menuSelections {width: 100%; margin: 0; margin-top: 70px; text-align: center;}
+   .sideThing .menuSelection {width: 40%; text-align: center; display: inline-block;}
+   .sideThing .menuSelection a {font-size: 15px;}
+   .walletCollectionOpener {width: 95%;}
+   .createStart {width: 85%;padding: 30px 2.5%;margin-top: 10px;}
+   .collectionPage .collectionPageInfo .collectionInfo {width: 300px;margin: 0px 0 0 30px;}
+   .LoaderFull {width: 100%; height: 100%; position: fixed; top: 0; left: 0; overflow: hidden; text-align: center; background-color: #ffffff; z-index: 10000000000;}
+   .LoaderFull .LoadImg {width: 200px; height:200px;margin-top: 45%; display: inline-block;}
 }
 
 @media only screen and (min-device-width: 751px) and (max-device-width: 1024px) {
    .Intro .Title, .Explainer, .ExplainerL, .ExplainerS, footer section {width: 90% !important; text-align: center;}
    .Intro .Title img {width: 90%; height: auto;}
    .Intro .Explainer article > img {width: 40%}
-   .NoMobileForNow {display: none;}
+   .menuSelections {margin: 15px 0 0 10px;}
+   .menuSelection {margin: 5px 5px;}
+   .search {width: 150px; margin-left: 20px;}
+   .walletCollectionOpenerName {margin-bottom: 20px;}
+   .collection {margin: 25px;}
+   .collectionPage .collectionPageInfo {width: 90%;}
+   .collectionPage .collectionPageInfo .collectionInfo {width: 300px;margin: 0 0 0 30px;}
+   .collectionPageItemsOrder {padding: 50px 0px 20px 0px;width: 90%;}
+   footer {margin-top: 50px;}
+   .collectionNav ul {width: 90%;}
+   .collectionNav {width: 90%;margin: 0 auto;}
+   .LoaderFull {width: 100%; height: 100%; position: fixed; top: 0; left: 0; overflow: hidden; text-align: center; background-color: #ffffff; z-index: 10000000000;}
+   .LoaderFull .LoadImg {width: 300px; height:300px;margin-top: 45%; display: inline-block;}
+   .collection .collectionInfoSide {width: 100%;}
+   .collection .collectionInfoSideLinks {width: 100%;}
+   .CodePART {width: 95%; margin: 0 auto;}
+   .itemPage .itemInfo {width: 90%;display: block;margin: 25px auto;text-align: center;}
+   .createCollection, .createITEM {padding: 30px 20px;}
+   .collection {width: 270px;}
+   .collection .collectionIcon {width: 70px;height: 70px;}
 }
 
 .noScroll {overflow: hidden;}
@@ -395,8 +485,7 @@ pre.prettyprint {
 
 
 
-
-
+/*TO TEST*/
 
 
 
