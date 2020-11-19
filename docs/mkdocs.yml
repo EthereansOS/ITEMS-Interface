@@ -1,19 +1,26 @@
-site_name: arte-1155
+site_name: ETHITEM
 docs_dir: md-build
 site_dir: gh-pages
 permalink: True
 nav:
     - Home: README.md
     - API:
+          - ENS-Controller:
+                - IENSController: ens-controller/IENSController.md
           - Factory:
                 - IEthItemFactory: factory/IEthItemFactory.md
+          - Knowledge Base:
+                - IKnowledgeBase: knowledgeBase/IKnowledgeBase.md
           - Models:
                 - 1:
-                      - IERC1155V1: models/1/IERC1155V1.md
+                      - INativeV1: models/1/INativeV1.md
                       - IERC1155WrapperV1: models/1/IERC1155WrapperV1.md
                       - IERC20WrapperV1: models/1/IERC20WrapperV1.md
                       - IERC721WrapperV1: models/1/IERC721WrapperV1.md
                       - IEthItemModelBased: models/1/IEthItemModelBased.md
+          - Orchestrator:
+                - IEthItemOrchestrator: orchestrator/IEthItemOrchestrator.md
+                - IEthItemOrchestratorDependendantElement: orchestrator/IEthItemOrchestratorDependendantElement.md
 theme:
     name: readthedocs
     highlightjs: true

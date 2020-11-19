@@ -5,7 +5,6 @@ pragma solidity ^0.6.0;
 import "@openzeppelin/contracts/introspection/IERC165.sol";
 
 interface IEthItemOrchestratorDependantElement is IERC165 {
-
     /**
      * @dev GET - The DoubleProxy of the DFO linked to this Contract
      */
@@ -18,5 +17,11 @@ interface IEthItemOrchestratorDependantElement is IERC165 {
      */
     function setDoubleProxy(address newDoubleProxy) external;
 
-    function isAuthorizedOrchestrator(address operator) external view returns(bool);
+    /**
+     * @dev Check that an address is an authorized Orchestrator. Returns a boolean.
+     */
+    function isAuthorizedOrchestrator(address operator)
+        external
+        view
+        returns (bool);
 }
