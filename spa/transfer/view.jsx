@@ -1,12 +1,17 @@
 var Transfer = React.createClass({
     requiredScripts: [
         'spa/innerLoader.jsx',
+        'spa/loader.jsx',
         'spa/transfer/transferInput.jsx'
     ],
     getDefaultSubscriptions() {
         return {
-            "ethereum/ping" : this.controller.refreshData
+            "collections/refreshed" : () => this.forceUpdate(),
         }
+    },
+    getOwnedList() {
+        var state = window.getState(this);
+        return (state && state.collections && state.collections.filter(it => it.hasBalance)) || undefined;
     },
     onBatch(e) {
         var _this = this;
@@ -17,6 +22,22 @@ var Transfer = React.createClass({
                 _this.setState({objectIds});
             }
         });
+    },
+    selectCollection(e) {
+        window.preventItem(e);
+        this.controller.onCollectionAddressChange(this.collectionAddressInput.value = e.currentTarget.dataset.address);
+    },
+    addItem(e) {
+        window.preventItem(e);
+        var lastObjectId = this.state.objectIds[this.state.objectIds.length - 1];
+        if(lastObjectId.instance.objectIdInput.value !== '') {
+            this.setState({batch : true});
+            lastObjectId = this.addObjectIdField();
+        }
+        var objectId = e.currentTarget.dataset.objectid;
+        setTimeout(function() {
+            lastObjectId.instance.objectIdInput.value = objectId;
+        }, 300);
     },
     reloadCollection(e) {
         window.preventItem(e);
@@ -50,6 +71,7 @@ var Transfer = React.createClass({
         objectIds.length && (state.removeMe = () => _this.setState({objectIds : (_this.state && _this.state.objectIds && _this.state.objectIds.filter(it => it !== element)) || []}));
         objectIds.push(element = React.createElement(TransferInput, state));
         _this.setState({objectIds});
+        return element;
     },
     actionEnd() {
     },
@@ -59,8 +81,28 @@ var Transfer = React.createClass({
     },
     render() {
         var state = this.state || {};
+        var list = this.getOwnedList();
         return (<section className="Pager">
             <section className="wrapPage">
+                <section className="wrapBox">
+                    {(!list || list.length === 0) && <Loader/>}
+                    {list && list.length > 0 && <ul>
+                        {list.map(it => <li key={it.address}>
+                            <a href="javascript:;" data-address={it.address} onClick={this.selectCollection}>
+                                <h6 className="tokenSelectedToWrap">{window.shortenWord(it.name, 10)} {it.symbol && it.name ? ` (${window.shortenWord(it.symbol, 10)})` : window.shortenWord(it.symbol, 10)}</h6>
+                            </a>
+                        </li>)}
+                    </ul>}
+                </section>
+                {state.selectedCollection && <section className="wrapBox">
+                    <ul>
+                        {Object.values(state.selectedCollection.items).filter(it => it.dynamicData && it.dynamicData.balanceOf && it.dynamicData.balanceOf !== '0').map(it => <li key={it.objectId}>
+                            <a href="javascript:;" data-objectId={it.objectId} onClick={this.addItem}>
+                                <h6 className="tokenSelectedToWrap">{window.shortenWord(it.name, 10)} {it.symbol && it.name ? ` (${window.shortenWord(it.symbol, 10)})` : window.shortenWord(it.symbol, 10)}</h6>
+                            </a>
+                        </li>)}
+                    </ul>
+                </section>}
                 <section className="wrapBox">
                     <section className="WrapWhat">
                         <p>Transfer Items</p>

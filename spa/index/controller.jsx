@@ -80,7 +80,8 @@ var IndexController = function (view) {
             subCollectionsPromises.push(updateSubCollectionsPromise(subCollections));
         }
         await Promise.all(subCollectionsPromises);
-        context.view.setState({ loadingCollections: null })
+        context.view.setState({ loadingCollections: null });
+        context.view.emit('collections/refreshed');
     };
 
     context.refreshCollectionData = async function refreshCollectionData(collections) {

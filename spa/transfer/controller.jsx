@@ -3,36 +3,38 @@ var TransferController = function (view) {
     context.view = view;
 
     context.onCollectionAddressChange = async function onCollectionAddressChange(address) {
+        context.view.setState({selectedCollection : null, objectIds : null});
         try {
             address = window.web3.utils.toChecksumAddress(address);
         } catch(e) {
             address = undefined;
         }
         if(!window.isEthereumAddress(address)) {
-            return context.view.setState({selectedCollection : null, objectIds : null});
+            return;
         }
-        var selectedCollection = context.view.props.collections.filter(it => it.address === address)[0];
+        var selectedCollection = context.view.props.collections && context.view.props.collections.filter(it => it.address === address)[0];
         selectedCollection = selectedCollection || await window.loadSingleCollection(address, true);
-        try {
-            var promises = [];
-            selectedCollection.items = selectedCollection.items || {};
-            var collectionObjectIds = await window.loadCollectionItems(selectedCollection.address);
-            for (var objectId of collectionObjectIds) {
-                promises.push(window.loadItemData(selectedCollection.items[objectId] = selectedCollection.items[objectId] || {
-                    objectId,
-                    collection : selectedCollection
-                }, selectedCollection));
-            }
-            await Promise.all(promises);
-        } catch (e) {
-        }
-        context.view.setState({selectedCollection, objectIds : null}, () => {
-            context.refreshData();
-            context.view.addObjectIdField();
-        });
+        context.view.setState({selectedCollection, objectIds : null}, context.view.addObjectIdField);
     };
 
     context.refreshData = async function refreshData() {
+        try {
+            var promises = [];
+            for (var collection of view.props.collections) {
+                await window.refreshSingleCollection(collection);
+                collection.items = collection.items || {};
+                var collectionObjectIds = await window.loadCollectionItems(collection.address);
+                for (var objectId of collectionObjectIds) {
+                    promises.push(window.loadItemData(collection.items[objectId] = collection.items[objectId] || {
+                        objectId,
+                        collection
+                    }, collection, context.view));
+                }
+            }
+            await Promise.all(promises);
+            context.view.setState({ loaded: true });
+        } catch (e) {
+        }
     };
 
     context.performTransfer = async function performTransfer() {
@@ -66,7 +68,8 @@ var TransferController = function (view) {
             var objectId = item.objectId;
             totalAmounts[objectId] = totalAmounts[objectId] || '0';
             var value = transferInputInstance.objectValueInput.value;
-            var valueDecimals = window.toDecimals(value, item.decimals);
+            var decimals = await window.blockchainCall(selectedCollection.contract.methods.decimals, objectId);
+            var valueDecimals = window.toDecimals(value, decimals);
             if(valueDecimals === '0') {
                 transferInputInstance.errorField.innerHTML = 'Amount must be greater than 0';
                 error = true;
