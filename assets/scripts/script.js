@@ -2133,7 +2133,7 @@ window.preventItem = function preventItem(e) {
     }
     e.preventDefault && e.preventDefault(true);
     e.stopPropagation && e.stopPropagation(true);
-    return e;
+    return e || true;
 };
 
 window.sleep = function sleep(millis) {
@@ -2540,7 +2540,7 @@ window.onTextChange = function onTextChange(e) {
     view[timeVar] = setTimeout(() => callback(value), window.context.inputTimeout);
 };
 
-window.loadSingleCollection = async function loadSingleCollection(collectionAddress) {
+window.loadSingleCollection = async function loadSingleCollection(collectionAddress, full) {
     collectionAddress = window.web3.utils.toChecksumAddress(collectionAddress);
     var map = {};
     Object.entries(window.context.ethItemFactoryEvents).forEach(it => map[window.web3.utils.sha3(it[0])] = it[1]);
@@ -2556,7 +2556,23 @@ window.loadSingleCollection = async function loadSingleCollection(collectionAddr
     }, true);
     try {
         var modelAddress = window.web3.eth.abi.decodeParameter("address", logs[0].topics[1]);
-        return await window.refreshSingleCollection(window.packCollection(collectionAddress, map[logs[0].topics[0]], modelAddress));
+        var collection = await window.refreshSingleCollection(window.packCollection(collectionAddress, map[logs[0].topics[0]], modelAddress));
+        if(full) {
+            try {
+                var promises = [];
+                collection.items = collection.items || {};
+                var collectionObjectIds = await window.loadCollectionItems(collection.address);
+                for (var objectId of collectionObjectIds) {
+                    promises.push(window.loadItemData(collection.items[objectId] = collection.items[objectId] || {
+                        objectId,
+                        collection
+                    }, collection));
+                }
+                await Promise.all(promises);
+            } catch (e) {
+            }
+        }
+        return collection;
     } catch(e) {
         return null;
     }

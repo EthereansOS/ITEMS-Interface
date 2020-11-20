@@ -6,7 +6,7 @@ var WrapController = function (view) {
         return selectedToken || (context.view.state && context.view.state.selectedToken);
     };
 
-    context.onTokenAddressChange = async function(type, address) {
+    context.onTokenAddressChange = async function onCollectionAddressChange(type, address) {
         try {
             address = window.web3.utils.toChecksumAddress(address);
         } catch(e) {
