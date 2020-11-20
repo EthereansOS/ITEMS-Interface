@@ -17,6 +17,10 @@
         "module" : "spa/wrap"
     },
     {
+        "name" : "TRANSFER",
+        "module" : "spa/transfer"
+    },
+    {
         "name" : "FARM",
         "module" : "spa/farm"
     }

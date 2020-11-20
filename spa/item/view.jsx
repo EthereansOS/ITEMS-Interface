@@ -142,7 +142,15 @@ var Item = React.createClass({
                                             {(!this.state || this.state.performing !== 'mint') && <a className={"" + (this.state && this.state.performing ? ' disabled' : '')} href="javascript:;" data-action="mint" onClick={window.perform}>Mint</a>}
                                             {this.state && this.state.performing === 'mint' && <InnerLoader />}
                                         </section>}
+                                        {this.props.item.collection.category !== 'Native' && <section className="SettingsForOwn">
+                                        </section>}
                                         {this.props.item.collection.category !== 'Native' && this.props.item.dynamicData && parseFloat(this.props.item.dynamicData.balanceOfCollectionSidePlain) > 0 && <section className="SettingsForOwn">
+                                            <label>
+                                                <a className="MaximumBro" href="javascript:;" onClick={this.max}>Max</a>
+                                                <input type="text" placeholder="0.00" spellcheck="false" autocomplete="off" autocorrect="off" inputmode="decimal" pattern="^[0-9][.,]?[0-9]$" ref={ref => this.unwrapInput = ref} />
+                                                <span className="WrapfromPageBal">Balance: </span>
+                                            </label>
+                                            {(!this.state || this.state.performing !== "unwrap") && <a className={"" + (this.state && this.state.performing ? ' disabled' : '')} href="javascript:;" data-action="unwrap" onClick={window.perform}>Wrap</a>}
                                             <label>
                                                 <a className="MaximumBro" href="javascript:;" onClick={this.max}>Max</a>
                                                 <input type="text" placeholder="0.00" spellcheck="false" autocomplete="off" autocorrect="off" inputmode="decimal" pattern="^[0-9][.,]?[0-9]$" ref={ref => this.unwrapInput = ref} />

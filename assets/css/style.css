@@ -69,15 +69,15 @@ footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; d
 .Explainer > img {width: 50px;}
 
 
-.menuMenu {width: 100%; position: fixed; top: 0; left: 0; height: 60px; background-color: #ffffff;z-index: 1000; border-bottom: 1px solid;border-image-slice: 1; border-image-source: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 70%, #9048fd 90%);}
+.menuMenu {width: 100%;min-width: 990px; position: fixed; top: 0; left: 0; height: 60px; background-color: #ffffff;z-index: 1000; border-bottom: 1px solid;border-image-slice: 1; border-image-source: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 70%, #9048fd 90%);}
 .menuMenu .logo {display: inline-block; margin-left: 1%; text-decoration: none; cursor: pointer;}
 .menuMenu .logo .logoimg {width: 35px; height: 35px; display: inline-block; vertical-align: middle; margin-top: 14px; background-image: url('special/logoS.png'); background-repeat: no-repeat; background-position: 0 -0px;}
 .menuMenu .logo:hover .logoimg, .menuMenu .logo .logoimg:hover {background-position: 0 0px;}
 .menuMenu .logo span {font-size: 20px; display: inline-block; vertical-align: middle; margin: 15px 0 0 5px;}
-.menuSelections {display: inline-block; margin: 15px 0 0 50px; vertical-align: middle}
-.menuSelection {display: inline-block; margin: 5px 10px;}
+.menuSelections {display: inline-block; margin: 15px 0 0 20px; vertical-align: middle}
+.menuSelection {display: inline-block; margin: 5px 5px;}
 .menuSelection .selected {font-weight: bolder;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 70%, #9048fd 90%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;}
-.menuSelection a {font-size: 13px; line-height: 1; text-decoration: none; color: #131D39; font-weight: bolder;}
+.menuSelection a {font-size: 11px; line-height: 1; text-decoration: none; color: #131D39; font-weight: bolder;}
 .search {width: 250px; display: inline-block; margin-top: 13px; vertical-align: middle; margin-left: 50px;}
 .search input {width: 75%; height: 25px; border: 2px solid #131D39; border-radius: 5px;}
 .search a {padding: 6px 5px 2px 5px; display: inline-block; background-color: #131D39; color: #ffffff; line-height: 1;border-radius: 5px; margin-top: 0px; margin-left: 3px; vertical-align: middle; text-decoration: none;}
@@ -347,6 +347,7 @@ footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; d
 @media only screen and (max-device-width: 750px) {
    .NoMobileForNow { display: none !important;}
    .OnlyMobileForNow {display: inline-block;}
+   .menuMenu {min-width: 0px; }
    .menuMenu > .search {display: none;}
    .menuMenu > .menuSelections {display: none;}
    .smallMenu { width: 200px; position: fixed; top: 50px; left: 10px;}
@@ -444,6 +445,7 @@ footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; d
    .createCollection, .createITEM {padding: 30px 20px;}
    .collection {width: 270px;}
    .collection .collectionIcon {width: 70px;height: 70px;}
+   .menuMenu {min-width: 0px; }
 }
 
 .noScroll {overflow: hidden;}
