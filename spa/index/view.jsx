@@ -26,8 +26,7 @@ var Index = React.createClass({
         this.setState({ wallet });
     },
     componentDidMount() {
-        var _this = this;
-        this.controller.loadData().then(() => _this.emit('wallet/update'));
+        this.controller.loadData();
     },
     sectionChange(module, props) {
         var _this = this;

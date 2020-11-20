@@ -60,8 +60,7 @@ var Wallet = React.createClass({
     },
     getDefaultSubscriptions() {
         return {
-            "collections/refresh": () => this.controller.loadData(),
-            "wallet/update": () => this.controller.loadData(),
+            "collections/refreshed": () => this.controller.loadData(),
             "ethereum/ping": () => this.controller.loadData()
         }
     },

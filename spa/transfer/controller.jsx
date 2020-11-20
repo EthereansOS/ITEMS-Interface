@@ -17,26 +17,6 @@ var TransferController = function (view) {
         context.view.setState({selectedCollection, objectIds : null}, context.view.addObjectIdField);
     };
 
-    context.refreshData = async function refreshData() {
-        try {
-            var promises = [];
-            for (var collection of view.props.collections) {
-                await window.refreshSingleCollection(collection);
-                collection.items = collection.items || {};
-                var collectionObjectIds = await window.loadCollectionItems(collection.address);
-                for (var objectId of collectionObjectIds) {
-                    promises.push(window.loadItemData(collection.items[objectId] = collection.items[objectId] || {
-                        objectId,
-                        collection
-                    }, collection, context.view));
-                }
-            }
-            await Promise.all(promises);
-            context.view.setState({ loaded: true });
-        } catch (e) {
-        }
-    };
-
     context.performTransfer = async function performTransfer() {
         var state = window.getState(context.view);
         var selectedCollection = state.selectedCollection;
