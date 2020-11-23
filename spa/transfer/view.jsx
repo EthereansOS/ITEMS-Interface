@@ -36,7 +36,7 @@ var Transfer = React.createClass({
         }
         var objectId = e.currentTarget.dataset.objectid;
         setTimeout(function() {
-            lastObjectId.instance.objectIdInput.value = objectId;
+            lastObjectId.instance.onItemChange(lastObjectId.instance.objectIdInput.value = objectId);
         }, 300);
     },
     reloadCollection(e) {
@@ -46,19 +46,6 @@ var Transfer = React.createClass({
     onCollectionAddressChange(value) {
         var _this = this;
         _this.setState({selectedCollection : null}, () => _this.controller.onCollectionAddressChange(value));
-    },
-    onTokenIdChange(value) {
-        if (!this.state || !this.state.selectedCollection) {
-            return;
-        }
-        this.state.selectedCollection.tokenId = value;
-        this.controller.refreshBalanceOf();
-    },
-    onTokenAmountChange(value) {
-        if (!this.state || !this.state.selectedCollection) {
-            return;
-        }
-        this.state.selectedCollection.tokenAmount = value;
     },
     addObjectIdField(e) {
         window.preventItem(e);
@@ -76,7 +63,8 @@ var Transfer = React.createClass({
     actionEnd() {
     },
     componentDidMount() {
-        this.props.collectionAddress && this.controller.onCollectionAddressChange(this.collectionAddressInput.value = this.props.collectionAddress);
+        var _this = this;
+        this.props.collectionAddress && this.controller.onCollectionAddressChange(this.collectionAddressInput.value = this.props.collectionAddress).then(() => _this.state.objectIds[0].instance.onItemChange(_this.state.objectIds[0].instance.objectIdInput.value = _this.props.objectId || ''));
         window.setHomepageLink(`?section=transfer`);
     },
     render() {

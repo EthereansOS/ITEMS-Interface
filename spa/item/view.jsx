@@ -4,7 +4,7 @@ var Item = React.createClass({
         "spa/innerLoader.jsx",
         "spa/loader.jsx"
     ],
-    requiredModules : [
+    requiredModules: [
         'spa/editor'
     ],
     getDefaultSubscriptions() {
@@ -98,6 +98,21 @@ var Item = React.createClass({
         var _this = this;
         window.retrieveWrappedCode(this.props.item).then(() => _this.forceUpdate());
     },
+    wrap(e) {
+        window.preventItem(e);
+        this.emit('section/change', 'spa/wrap', {
+            selectedTokenType : this.props.item.collection.category.split('W').join('ERC'),
+            tokenAddressInput : this.props.item.sourceAddress && this.props.item.sourceAddress !== 'blank' ? this.props.item.sourceAddress : this.props.collection.sourceAddress,
+            tokenId : this.props.item.objectId
+        });
+    },
+    transfer(e) {
+        window.preventItem(e);
+        this.emit('section/change', 'spa/transfer', {
+            collectionAddress : this.props.item.collection.address,
+            objectId : this.props.item.objectId
+        });
+    },
     render() {
         var item = (this.state && this.state.item) || this.props.item;
         var toggle = !this.state ? item.metadata ? 'metadata' : 'farm' : this.state.toggle;
@@ -109,7 +124,7 @@ var Item = React.createClass({
                 <section className="itemPage">
                     <section className="itemPageInfo">
                         <figure className="itemIcon">
-                            <LazyImageLoader src={window.getElementImage(item)}/>
+                            <LazyImageLoader src={window.getElementImage(item)} />
                         </figure>
                         <article className="itemInfo">
                             <section className="itemFundamentals">
@@ -129,9 +144,9 @@ var Item = React.createClass({
                                     {item.dynamicData && item.dynamicData.isEditable && item.collection.extensionAddress && item.collection.extensionAddress !== window.voidEthereumAddress && <span className="HostInfo">Host {item.collection.extensionIsContract ? "Contract" : "Wallet"}: <a target="_blank" href={`${window.getNetworkElement('etherscanURL')}address/${item.collection.extensionAddress}`}>{window.shortenWord(item.collection.extensionAddress, 6)}</a></span>}
                                     {((item.sourceAddress !== 'blank' && item.sourceAddress !== window.voidEthereumAddress) || item.collection.sourceAddress !== 'blank') && <span className="HostInfo">Wrapped from: <a target="_blank" href={`${window.getNetworkElement('etherscanURL')}address/${item.sourceAddress !== 'blank' ? item.sourceAddress : item.collection.sourceAddress}`}>{item.sourceAddress !== 'blank' ? item.sourceAddress : window.shortenWord(item.collection.sourceAddress, 6)}</a></span>}
                                     <section className="itemSide">
-                                    <span className="ItemSupply">Supply: {window.fromDecimals(item.dynamicData.totalSupply, item.decimals)} </span>
-                                    {window.walletAddress && item.dynamicData && item.dynamicData.balanceOf && item.dynamicData.balanceOf !== '0' && <span className="ItemBalance">| You own: {window.formatMoney(window.fromDecimals(item.dynamicData.balanceOf, item.decimals, true), 2)}</span>}
-                                    <br></br>
+                                        <span className="ItemSupply">Supply: {window.fromDecimals(item.dynamicData.totalSupply, item.decimals)}</span>
+                                        {window.walletAddress && item.dynamicData && item.dynamicData.balanceOf && item.dynamicData.balanceOf !== '0' && <span className="ItemBalance">| You own: {window.formatMoney(window.fromDecimals(item.dynamicData.balanceOf, item.decimals, true), 2)}</span>}
+                                        <br/>
                                         <a className="ItemPrice" target="_blank" href={window.context.uniswapSpawUrlTemplate.format(item.address)}>&#129412; $ {item.dynamicData.tokenPriceInDollarsOnUniswap ? window.formatMoney(item.dynamicData.tokenPriceInDollarsOnUniswap, 1) : "--"}</a>
                                         <a className="ItemPrice" target="_blank" href={window.context.uniswapInfoUrlTemplate.format(item.address)}>&#128039; Info</a>
                                         <a className="ItemPrice" target="_blank" href={window.context.openSeaItemLinkTemplate.format(this.props.collection.address, item.objectId)}>&#9973; $ {item.dynamicData.tokenPriceInDollarsOnOpenSea ? window.formatMoney(item.dynamicData.tokenPriceInDollarsOnOpenSea, 1) : "--"}</a>
@@ -142,8 +157,10 @@ var Item = React.createClass({
                                             {(!this.state || this.state.performing !== 'mint') && <a className={"" + (this.state && this.state.performing ? ' disabled' : '')} href="javascript:;" data-action="mint" onClick={window.perform}>Mint</a>}
                                             {this.state && this.state.performing === 'mint' && <InnerLoader />}
                                         </section>}
-                                        {this.props.item.collection.category !== 'Native' && <section className="SettingsForOwn">
-                                        </section>}
+                                        <section>
+                                            {this.props.item.collection.category !== 'Native' && <a href="javascript:;" className="WrapButton" onClick={this.wrap}>Wrap More</a>}
+                                            {this.props.item.dynamicData && this.props.item.dynamicData.balanceOf && this.props.item.dynamicData.balanceOf !== '0' && <a href="javascript:;" className="WrapButton" onClick={this.transfer}>Transfer</a>}
+                                        </section>
                                         {this.props.item.collection.category !== 'Native' && this.props.item.dynamicData && parseFloat(this.props.item.dynamicData.balanceOfCollectionSidePlain) > 0 && <section className="SettingsForOwn">
                                             <label>
                                                 <a className="MaximumBro" href="javascript:;" onClick={this.max}>Max</a>
@@ -162,7 +179,7 @@ var Item = React.createClass({
                                 </section>
                             </section>
                             {window.renderExpandibleElement(!item.description ? "No description available" : window.convertTextWithLinksInHTML(item.description), <p className="itemDesc" />)}
-                            {item.metadataMessage && <p className="itemDesc" ref={ref => ref && (ref.innerHTML = item.metadataMessage)}/>}
+                            {item.metadataMessage && <p className="itemDesc" ref={ref => ref && (ref.innerHTML = item.metadataMessage)} />}
                         </article>
                     </section>
                     <section className="collectionNav">
