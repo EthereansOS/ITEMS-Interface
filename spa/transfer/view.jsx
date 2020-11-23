@@ -65,19 +65,23 @@ var Transfer = React.createClass({
                     <section className="WrapWhat">
                         <p>Transfer Items</p>
                         <br/>
-                        <input ref={ref => this.collectionAddressInput = ref} className="addressWrapSelector" type="text" placeholder="Token address" data-action="onCollectionAddressChange" onKeyUp={window.onTextChange} onChange={window.onTextChange}/>
+                        <input ref={ref => this.collectionAddressInput = ref} className="addressWrapSelector" type="text" placeholder="Collection address" data-action="onCollectionAddressChange" onKeyUp={window.onTextChange} onChange={window.onTextChange}/>
                         <a className="LoadToITEM" href="javascript:;" onClick={this.reloadCollection}>Load</a>
                     </section>
                     {state.selectedCollection && <section className="WrapWhatLoaded">
-                        {(state.selectedCollection.name || state.selectedCollection.symbol) && <h6 className="tokenSelectedToWrap">{window.shortenWord(state.selectedCollection.name, 10)} {state.selectedCollection.symbol && state.selectedCollection.name ? ` (${window.shortenWord(state.selectedCollection.symbol, 10)})` : window.shortenWord(state.selectedCollection.symbol, 10)}</h6>}
-                        <input type="text" placeholder="Receiver address" ref={ref => this.receiverInput = ref}/>
+                        {(state.selectedCollection.name || state.selectedCollection.symbol) && <h6 className="tokenSelectedToWrap">{window.shortenWord(state.selectedCollection.name, 18)} {state.selectedCollection.symbol && state.selectedCollection.name ? ` (${window.shortenWord(state.selectedCollection.symbol, 10)})` : window.shortenWord(state.selectedCollection.symbol, 10)}</h6>}
+                        <section className="tokenSelectedToWrapDecide">
+                        <input type="text" className="SendtoWho" placeholder="Receiver address" ref={ref => this.receiverInput = ref}/>
                         {state.objectIds && state.objectIds.length > 0 && state.objectIds}
-                        <label>
-                            Batch
+                        </section>
+                        <label className="isBatch">
                             <input type="checkbox" onChange={this.onBatch} ref={ref => ref && (ref.checked = state.batch)}/>
+                            <h5>Batch Transfer</h5>
                         </label>
-                        {state.batch && <a className="tokenSelectedToWrapBalanceALL" href="javascript:;" onClick={this.addObjectIdField}><h2>+</h2></a>}
-                        <input type="text" placeholder="Payload" ref={ref => this.payloadInput = ref}/>
+                        {state.batch && <a className="tokenSelectedToWrapBalanceALL tokenSelectedToWrapBalanceADD" href="javascript:;" onClick={this.addObjectIdField}>+</a>}
+                        <section className="WrapWhatLoaded">
+                            <input type="text" className="SendtoWho" placeholder="Payload" ref={ref => this.payloadInput = ref}/>
+                        </section>
                         {state.performing !== 'transfer' && <a className={"WrapToITEM" + (!state.selectedCollection ? " disabled" : "")} data-action="transfer" onClick={window.perform} href="javascript:;">TRANSFER</a>}
                         {state.performing === 'transfer' && <InnerLoader/>}
                     </section>}

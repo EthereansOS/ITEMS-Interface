@@ -151,7 +151,7 @@ footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; d
 .WrapWhatLoaded .tokenSelectedToWrapBalance {font-size: 13px; color: #6e6e6e; margin-bottom: 15px; display: inline-block;}
 .tokenSelectedToWrapDecide {width: 100%; text-align: center; margin-bottom: 10px;}
 .WrapWhatLoaded .BalancetoWrapSelector {width: 60%;display: inline-block; vertical-align: middle;}
-.WrapWhatLoaded .tokenSelectedToWrapBalanceALL {padding: 8px 6px; border-radius: 6px; font-size: 9px; font-weight: bold; display: inline-block; background-color: #8FD1F9; vertical-align: middle; color: #ffffff; margin-right: 5px;}
+.WrapWhatLoaded .tokenSelectedToWrapBalanceALL {padding: 8px 6px; border-radius: 6px; font-size: 9px; font-weight: bold; display: inline-block; background-color: #8FD1F9; vertical-align: middle; color: #ffffff; margin-right: 5px; text-decoration: none;}
 .BeforeToWrapToITEM {text-decoration: none; padding: 8px 12px; font-weight: bold; background-color: #0180EC; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; margin-right: 10px; color: #ffffff;}
 .WrapToITEM {text-decoration: none; padding: 8px 12px; font-weight: bold; background-color: #131D39; display: inline-block; margin-top: 10px; border-radius: 6px; font-size: 13px; margin-right: 10px;background: linear-gradient(to right, #9048fd 30%, #4bcbc9 90%); color: #ffffff;}
 .WrapWhatLoaded .disabled {background-color: #e4e4e4 !important; color: #6e6e6e !important;background: #e4e4e4 !important; text-decoration: none;}
@@ -258,8 +258,13 @@ footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; d
 .LoaderFull .LoadImg img {display: inline-block; width: 100%;}
 
 
-
-.collection .collectionInfoSide {width: 500px; display: inline-block; vertical-align: top; text-align: left; margin: 5px auto;}
+.SendtoWho {width: 80% !important; margin: 20px 0;}
+.isBatch {margin: 20px auto; display: inline-block;width: 80%;}
+.isBatch h5 {width: 60%;display: inline-block;font-size: 14px; text-align: left;}
+.isBatch input {width: 30%;display: inline-block; text-align: right;vertical-align: middle; height: 18px;}
+.tokenSelectedToWrapBalanceADD {width: 40%; font-size: 20px !important; text-decoration: none;}
+.tokenSelectedToWrapBalanceREM {text-decoration: none !important;padding: 4px 7px!important;background-color: #000000!important;}
+.collection .collectionInfoSide {width: 500px; display: inline-block; vertical-align: top; text-align: right; margin: 5px auto;}
 .collection .collectionInfoSide p {display: inline-block; margin: 0 10px 0 10px;font-size: 12px;}
 .collection .collectionInfoSide .ItemCollectionLink {display: inline-block; margin: 0 10px 0 10px;}
 .collection .collectionInfoSide .ItemCollectionLink a {width: 100%;}
