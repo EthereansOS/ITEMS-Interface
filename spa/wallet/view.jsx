@@ -61,7 +61,8 @@ var Wallet = React.createClass({
     getDefaultSubscriptions() {
         return {
             "collections/refreshed": () => this.controller.loadData(),
-            "ethereum/ping": () => this.controller.loadData()
+            "ethereum/ping": () => this.controller.loadData(),
+            "wallet/update" : () => this.forceUpdate()
         }
     },
     render() {

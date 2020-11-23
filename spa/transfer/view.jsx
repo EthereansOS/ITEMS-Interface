@@ -6,10 +6,7 @@ var Transfer = React.createClass({
     ],
     getDefaultSubscriptions() {
         return {
-            "wallet/update" : () => {
-                console.log('wallet/update');
-                this.forceUpdate()
-            }
+            "wallet/update" : () => this.forceUpdate()
         }
     },
     getOwnedList() {

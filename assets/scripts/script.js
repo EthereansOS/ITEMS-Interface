@@ -2299,7 +2299,6 @@ window.updateItemDynamicData = async function updateItemDynamicData(item, view) 
     delete item.dynamicData.balanceOfPlain;
     window.walletAddress && (item.dynamicData.balanceOf = await window.blockchainCall(item.token.methods.balanceOf, window.walletAddress));
     window.walletAddress && (item.dynamicData.balanceOfCollectionSide = await window.blockchainCall(item.collection.contract.methods.balanceOf, window.walletAddress, item.objectId));
-    view && item.dynamicData.balanceOf && item.dynamicData.balanceOf !== '0' && view.emit('wallet/update');
     try {
         item.dynamicData.balanceOfPlain = window.fromDecimals(item.dynamicData.balanceOf, item.decimals, true);
     } catch (e) {}
@@ -2312,7 +2311,7 @@ window.updateItemDynamicData = async function updateItemDynamicData(item, view) 
     try {
         item.dynamicData.canMint = (item.dynamicData.isEditable = await window.blockchainCall(item.collection.contract.methods.isEditable, item.objectId)) && item.collection.isOwner;
     } catch (e) {}
-    view && view.setState({ item });
+    view && view.setState({ item }, () => item.dynamicData.balanceOf && item.dynamicData.balanceOf !== '0' && view.emit('wallet/update'));
 };
 
 window.normalizeName = function normalizeName(name) {
