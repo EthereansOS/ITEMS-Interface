@@ -5,13 +5,14 @@ var Wrap = React.createClass({
     ],
     getDefaultSubscriptions() {
         return {
-            "ethereum/ping": this.controller.refreshData,
-            "wallet/update": () => this.forceUpdate()
+            "ethereum/ping" : this.controller.refreshData,
+            "collections/refreshed" : () => this.forceUpdate()
         }
     },
     getOwnedList() {
         var state = window.getState(this);
-        return (state && state.collections && state.collections.filter(it => it.hasBalance)) || undefined;
+        var selectedTokenType = this.getSelectedTokenType().split('ERC').join('W');
+        return (state && state.collections && state.collections.filter(it => it.category === selectedTokenType)) || undefined;
     },
     getSelectedTokenType() {
         return (this.state && this.state.selectedTokenType) || window.context.supportedWrappedTokens[0];
@@ -25,7 +26,9 @@ var Wrap = React.createClass({
         var _this = this;
         this.setState({
             selectedTokenType: e.currentTarget.value,
+            selectedCollection : null
         }, function () {
+            _this.tokenIdInput && _this.onTokenIdChange(_this.tokenIdInput.value = '');
             _this.controller.onTokenAddressChange(_this.getSelectedTokenType(), _this.tokenAddressInput && _this.tokenAddressInput.value);
         });
     },
@@ -67,23 +70,63 @@ var Wrap = React.createClass({
     },
     componentDidMount() {
         var _this = this;
-        _this.setState({selectedTokenType : _this.props.selectedTokenType || _this.getSelectedTokenType()}, () => {
-            _this.controller.onTokenAddressChange(_this.state.selectedTokenType, _this.tokenAddressInput && (_this.tokenAddressInput.value = _this.props.tokenAddressInput || "")).then(() => {
-                if(!_this.tokenIdInput || !_this.props.tokenId) {
+        _this.setState({selectedTokenType : _this.props.selectedTokenType || _this.getSelectedTokenType(), selectedCollection : _this.props.collectionAddress ? _this.props.collections.filter(it => it.address === _this.props.collectionAddress)[0] : null}, () => {
+            _this.controller.onTokenAddressChange(_this.state.selectedTokenType, _this.tokenAddressInput && (_this.tokenAddressInput.value = _this.props.sourceAddress || "")).then(() => {
+                if(!_this.tokenIdInput || !_this.props.tokenId || (_this.state.selectedCollection && _this.state.selectedCollection.category === 'W721')) {
                     return;
                 }
-                _this.tokenIdInput = _this.props.tokenId;
-                _this.onTokenIdChange();
+                _this.onTokenIdChange(_this.tokenIdInput.value = _this.props.tokenId);
             });
         });
         window.setHomepageLink(`?section=wrap`);
+    },
+    selectCollection(e) {
+        window.preventItem(e);
+        var _this = this;
+        var selectedCollection = _this.props.collections.filter(it => it.address === e.currentTarget.dataset.address)[0];
+        _this.setState({selectedTokenType : selectedCollection.category.split("W").join('ERC'), selectedCollection}, () => {
+            selectedCollection.sourceAddress && selectedCollection.sourceAddress !== 'blank' && _this.controller.onTokenAddressChange(_this.getSelectedTokenType(), _this.tokenAddressInput && (_this.tokenAddressInput.value = selectedCollection.sourceAddress));
+        });
+    },
+    selectCollectionItem(e) {
+        window.preventItem(e);
+        var _this = this;
+        var selectedCollection = _this.state.selectedCollection;
+        var selectedItem = selectedCollection.items[e.currentTarget.dataset.objectid];
+        var address = selectedItem.sourceAddress && selectedItem.sourceAddress !== 'blank' ? selectedItem.sourceAddress : selectedCollection.sourceAddress;
+        _this.controller.onTokenAddressChange(_this.getSelectedTokenType(), _this.tokenAddressInput && (_this.tokenAddressInput.value = address)).then(() => {
+            if(!_this.tokenIdInput || !selectedItem.objectId) {
+                return;
+            }
+            _this.onTokenIdChange(_this.tokenIdInput.value = selectedItem.objectId);
+        });
     },
     render() {
         var selectedTokenType = this.getSelectedTokenType();
         var state = this.state || {};
         var list = this.getOwnedList();
+        var sourceAddressFilter = it => (it.sourceAddress && it.sourceAddress !== 'blank' && it.sourceAddress !== window.voidEthereumAddress) || (state.selectedCollection.sourceAddress && state.selectedCollection.sourceAddress !== 'blank' && state.selectedCollection.sourceAddress !== window.voidEthereumAddress);
         return (<section className="Pager">
             <section className="wrapPage">
+                {(!list || list.length > 0) && <section className="wrapBox">
+                    {!list && <Loader/>}
+                    {list && list.length > 0 && <ul>
+                        {list.map(it => <li key={it.address}>
+                            <a href="javascript:;" data-address={it.address} onClick={this.selectCollection}>
+                                <h6 className="tokenSelectedToWrap">{window.shortenWord(it.name, 10)} {it.symbol && it.name ? ` (${window.shortenWord(it.symbol, 10)})` : window.shortenWord(it.symbol, 10)}</h6>
+                            </a>
+                        </li>)}
+                    </ul>}
+                </section>}
+                {state.selectedCollection && state.selectedCollection.category !== 'W721' && <section className="wrapBox">
+                    <ul>
+                        {Object.values(state.selectedCollection.items).filter(sourceAddressFilter).map(it => <li key={it.objectId}>
+                            <a href="javascript:;" data-objectId={it.objectId} onClick={this.selectCollectionItem}>
+                                <h6 className="tokenSelectedToWrap">{window.shortenWord(it.sourceName, 10)} {it.sourceSymbol && it.sourceName ? ` (${window.shortenWord(it.sourceSymbol, 10)})` : window.shortenWord(it.sourceSymbol, 10)}</h6>
+                            </a>
+                        </li>)}
+                    </ul>
+                </section>}
                 <section className="wrapBox">
                     <section className="WrapWhat">
                         <p>Wrap Tokens as Items</p>

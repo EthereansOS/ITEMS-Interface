@@ -102,7 +102,8 @@ var Item = React.createClass({
         window.preventItem(e);
         this.emit('section/change', 'spa/wrap', {
             selectedTokenType : this.props.item.collection.category.split('W').join('ERC'),
-            tokenAddressInput : this.props.item.sourceAddress && this.props.item.sourceAddress !== 'blank' ? this.props.item.sourceAddress : this.props.collection.sourceAddress,
+            collectionAddress : this.props.item.collection.address,
+            sourceAddress : this.props.item.sourceAddress && this.props.item.sourceAddress !== 'blank' ? this.props.item.sourceAddress : this.props.collection.sourceAddress,
             tokenId : this.props.item.objectId
         });
     },

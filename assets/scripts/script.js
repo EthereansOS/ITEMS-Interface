@@ -2272,6 +2272,32 @@ window.loadItemData = async function loadItemData(item, collection, view) {
             item.sourceAddress = await window.blockchainCall(item.collection.contract.methods.source, item.objectId);
         } catch (e) {}
     }
+    try {
+        item.sourceName = item.sourceName || await window.blockchainCall(window.newContract(window.context.IERC1155ABI, item.collection.sourceAddress).methods.name, item.objectId);
+    } catch(e) {
+    }
+    try {
+        item.sourceSymbol = item.sourceSymbol || await window.blockchainCall(window.newContract(window.context.IERC1155ABI, item.collection.sourceAddress).methods.symbol, item.objectId);
+    } catch(e) {
+    }
+    try {
+        item.sourceName = item.sourceName || await window.blockchainCall(window.newContract(window.context.IERC20ABI, item.sourceAddress).methods.name);
+    } catch(e) {
+    }
+    try {
+        item.sourceSymbol = item.sourceSymbol || await window.blockchainCall(window.newContract(window.context.IERC20ABI, item.sourceAddress).methods.symbol);
+    } catch(e) {
+    }
+    try {
+        item.sourceName = item.sourceName || window.web3.utils.toChecksumAddress(item.sourceAddress && item.sourceAddress !== 'blank' ? item.sourceAddress : item.collection.sourceAddress);
+    } catch(e) {
+        item.sourceName = 'blank';
+    }
+    try {
+        item.sourceSymbol = item.sourceSymbol || window.web3.utils.toChecksumAddress(item.sourceAddress && item.sourceAddress !== 'blank' ? item.sourceAddress : item.collection.sourceAddress);
+    } catch(e) {
+        item.sourceSymbol = 'blank';
+    }
     var metadataPromise = window.tryRetrieveMetadata(item);
     if (view) {
         metadataPromise.then(() => view.setState({ item }));
