@@ -6,8 +6,12 @@ var Transfer = React.createClass({
     ],
     getDefaultSubscriptions() {
         return {
-            "wallet/update" : () => this.forceUpdate()
+            "wallet/update" : () => this.forceUpdate(),
+            "ethereum/ping" : this.resetUI
         }
+    },
+    resetUI() {
+        this.setState({selectedCollection : null});
     },
     getOwnedList() {
         var state = window.getState(this);
@@ -70,10 +74,16 @@ var Transfer = React.createClass({
     render() {
         var state = this.state || {};
         var list = this.getOwnedList();
+        var walletLoaded = false;
+        try {
+            walletLoaded = $('.wallet').findReactComponent().state.loaded;
+        } catch(e) {
+        }
         return (<section className="Pager">
             <section className="wrapPage">
                 <section className="wrapBox">
-                    {(!list || list.length === 0) && <Loader/>}
+                    {(!list || (list.length === 0 && !walletLoaded)) && <Loader/>}
+                    {list && list.length === 0 && walletLoaded && <h4>You don't own any ITEM</h4>}
                     {list && list.length > 0 && <ul>
                         {list.map(it => <li key={it.address}>
                             <a href="javascript:;" data-address={it.address} onClick={this.selectCollection}>

@@ -3,6 +3,7 @@ var WalletController = function (view) {
     context.view = view;
 
     context.loadData = async function loadData() {
+        context.view.setState({ loaded : false }, () => context.view.emit('wallet/update'));
         var address = context.view.props.collections.map(it => window.web3.utils.toChecksumAddress(it.address));
         var blocks = await window.loadBlockSearchTranches();
         var topics = [
@@ -36,6 +37,6 @@ var WalletController = function (view) {
             }
         }
         await Promise.all(promises);
-        context.view.setState({ loaded: true });
+        context.view.setState({ loaded : true }, () => context.view.emit('wallet/update'));
     };
 };

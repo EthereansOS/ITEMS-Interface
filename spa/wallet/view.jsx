@@ -3,6 +3,11 @@ var Wallet = React.createClass({
         'spa/loader.jsx',
         'spa/lazyImageLoader.jsx'
     ],
+    getInitialState() {
+        return {
+            loaded : false
+        }
+    },
     getList(ownedFirst) {
         return [
             ...(ownedFirst ? this.getOwnedList() : this.getHostList()),
@@ -70,6 +75,8 @@ var Wallet = React.createClass({
         if (!state.wallet) {
             return (<span style={{ "display": "none" }} />);
         }
+        var hostList = (state.collections && this.getHostList()) || [];
+        var ownedList = (state.collections && this.getOwnedList()) || [];
         return (
             <section className="sideALLThing">
                 <a className="BoBoBoaThings" href="javascript:;" onClick={() => this.emit('wallet/toggle', false)}></a>
@@ -98,7 +105,9 @@ var Wallet = React.createClass({
                     </section>
                     <section className="Thewallet">
                         <h2>Hosted</h2>
-                        {state.collections && this.getHostList().map(collection => <section key={collection.key} className="walletCollection">
+                        {!state.loaded && <Loader/>}
+                        {state.loaded && hostList.length === 0 && <h4>You didn't host any ITEM</h4>}
+                        {state.loaded && hostList.length > 0 && hostList.map(collection => <section key={collection.key} className="walletCollection">
                             <section className="walletCollectionOpener">
                                 <h5 className="walletCollectionOpenerName"><a href="javascript:;" data-key={collection.key} onClick={this.toggle}><span className="OPENSYMBOL">&#x276E;</span> {collection.name}</a></h5>
                                 <a className="WOPENERBTN" href="javascript:;" data-key={collection.key} onClick={this.goToCollection}>Visit</a>
@@ -116,7 +125,9 @@ var Wallet = React.createClass({
                             </section>}
                         </section>)}
                         <h2>Owned</h2>
-                        {state.collections && this.getOwnedList().map(collection => <section key={collection.key} className="walletCollection">
+                        {!state.loaded && <Loader/>}
+                        {state.loaded && ownedList.length === 0 && <h4>You don't own any ITEM</h4>}
+                        {state.loaded && ownedList.length > 0 && ownedList.map(collection => <section key={collection.key} className="walletCollection">
                             <section className="walletCollectionOpener">
                                 <h5 className="walletCollectionOpenerName"><a href="javascript:;" data-key={collection.key} onClick={this.toggle}><span className="OPENSYMBOL">&#x276E;</span> {collection.name}</a></h5>
                                 <a className="WOPENERBTN" href="javascript:;" data-key={collection.key} onClick={this.goToCollection}>Visit</a>

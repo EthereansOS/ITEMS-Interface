@@ -89,6 +89,10 @@ var IndexController = function (view) {
         if (!collections) {
             return;
         }
+        for (var collection of collections) {
+            collection.items && Object.values(collection.items).forEach(it => delete it.dynamicData);
+        }
+        context.view.setState({ collections: context.view.state.collections });
         var promises = [];
         for (var collection of collections) {
             promises.push(window.refreshSingleCollection(collection, context.view));

@@ -2310,9 +2310,9 @@ window.loadItemData = async function loadItemData(item, collection, view) {
     }
     item.decimals = item.decimals || await window.blockchainCall(item.token.methods.decimals);
     item.collectionDecimals = item.collectionDecimals || await window.blockchainCall(item.collection.contract.methods.decimals, item.objectId);
-    view && view.setState({ item }, () => window.updateItemDynamicData(item, view));
-    !view && await window.updateItemDynamicData(item);
-    return item;
+    view && view.setState({ item }/*, () => window.updateItemDynamicData(item, view)*/);
+    /*!view && */return await window.updateItemDynamicData(item, view);
+    //return item;
 };
 
 window.updateItemDynamicData = async function updateItemDynamicData(item, view) {
@@ -2338,6 +2338,7 @@ window.updateItemDynamicData = async function updateItemDynamicData(item, view) 
         item.dynamicData.canMint = (item.dynamicData.isEditable = await window.blockchainCall(item.collection.contract.methods.isEditable, item.objectId)) && item.collection.isOwner;
     } catch (e) {}
     view && view.setState({ item }, () => item.dynamicData.balanceOf && item.dynamicData.balanceOf !== '0' && view.emit('wallet/update'));
+    return item;
 };
 
 window.normalizeName = function normalizeName(name) {
