@@ -6,7 +6,8 @@ var Wrap = React.createClass({
     getDefaultSubscriptions() {
         return {
             "ethereum/ping": this.controller.refreshData,
-            "collections/refreshed": () => this.forceUpdate()
+            "collections/refreshed": () => this.forceUpdate(),
+            "wallet/update": () => this.forceUpdate()
         }
     },
     toggleMore(e) {
@@ -16,7 +17,7 @@ var Wrap = React.createClass({
     getOwnedList() {
         var state = window.getState(this);
         var selectedTokenType = this.getSelectedTokenType().split('ERC').join('W');
-        return (state && state.collections && state.collections.filter(it => it.category === selectedTokenType)) || undefined;
+        return (state && state.collections && state.collections.filter(it => it.category === selectedTokenType && it.hasBalance)) || undefined;
     },
     getSelectedTokenType() {
         return (this.state && this.state.selectedTokenType) || window.context.supportedWrappedTokens[0];
@@ -89,7 +90,7 @@ var Wrap = React.createClass({
         var _this = this;
         var selectedCollection = _this.props.collections.filter(it => it.address === e.currentTarget.dataset.address)[0];
         _this.setState({ selectedTokenType: selectedCollection.category.split("W").join('ERC'), selectedCollection, more: false }, () => {
-            _this.controller.loadCollectionData();
+            //_this.controller.loadCollectionData();
             selectedCollection.sourceAddress && selectedCollection.sourceAddress !== 'blank' && _this.controller.onTokenAddressChange(_this.getSelectedTokenType(), selectedCollection.sourceAddress);
             _this.tokenIdInput && _this.onTokenIdChange(_this.tokenIdInput.value = "");
         });
@@ -111,7 +112,12 @@ var Wrap = React.createClass({
         var selectedTokenType = this.getSelectedTokenType();
         var state = this.state || {};
         var list = this.getOwnedList();
-        var sourceAddressFilter = it => (it.sourceAddress && it.sourceAddress !== 'blank' && it.sourceAddress !== window.voidEthereumAddress) || (state.selectedCollection.sourceAddress && state.selectedCollection.sourceAddress !== 'blank' && state.selectedCollection.sourceAddress !== window.voidEthereumAddress);
+        var sourceAddressFilter = it => it.dynamicData && it.dynamicData.balanceOf && it.dynamicData.balanceOf !== '0' && ((it.sourceAddress && it.sourceAddress !== 'blank' && it.sourceAddress !== window.voidEthereumAddress) || (state.selectedCollection.sourceAddress && state.selectedCollection.sourceAddress !== 'blank' && state.selectedCollection.sourceAddress !== window.voidEthereumAddress));
+        var walletLoaded = false;
+        try {
+            walletLoaded = $('.wallet').findReactComponent().state.loaded;
+        } catch (e) {
+        }
         return (<section className="Pager">
             <section className="wrapPage">
                 <section className="wrapBox">
@@ -121,24 +127,25 @@ var Wrap = React.createClass({
                         <select onChange={this.onTokenTypeChange}>
                             {window.context.supportedWrappedTokens.map(it => <option key={it} selected={selectedTokenType === it} value={it}>{it}</option>)}
                         </select>
-                        {(!list || list.length > 0) && <section className="SelectorToGo">
-                        <h3>Choose from Collections list:</h3>
-                        {!list && <Loader />}
-                        {list && list.length > 0 && <ul>
-                            {list.map(it => <li key={it.address}>
-                                <a href="javascript:;" data-address={it.address} onClick={this.selectCollection}>{window.shortenWord(it.name, 25)} {it.symbol && it.name ? ` (${window.shortenWord(it.symbol, 10)})` : window.shortenWord(it.symbol, 10)}</a>
-                            </li>)}
-                        </ul>}
-                    </section>}
-                    {state.selectedCollection && state.selectedCollection.category !== 'W721' && <section className="SelectorToGoSub">
-                        <h3>Items:</h3>
-                        {(!state.selectedCollection.items || Object.keys(state.selectedCollection.items).length === 0) && <Loader />}
-                        {state.selectedCollection.items && Object.keys(state.selectedCollection.items).length > 0 && <ul>
-                            {Object.values(state.selectedCollection.items).filter(sourceAddressFilter).map(it => <li key={it.objectId}>
-                                <a href="javascript:;" data-objectId={it.objectId} onClick={this.selectCollectionItem}>{window.shortenWord(it.sourceName, 25)} {it.sourceSymbol && it.sourceName ? ` (${window.shortenWord(it.sourceSymbol, 10)})` : window.shortenWord(it.sourceSymbol, 10)}</a>
-                            </li>)}
-                        </ul>}
-                    </section>}
+                        {selectedTokenType !== 'ETH' && <section className="SelectorToGo">
+                            <h3>Choose from Collections list:</h3>
+                            {(!list || (list.length === 0 && !walletLoaded)) && <Loader />}
+                            {list && list.length === 0 && walletLoaded && <h4>You don't own any ITEM</h4>}
+                            {list && list.length > 0 && <ul>
+                                {list.map(it => <li key={it.address}>
+                                    <a href="javascript:;" data-address={it.address} onClick={this.selectCollection}>{window.shortenWord(it.name, 25)} {it.symbol && it.name ? ` (${window.shortenWord(it.symbol, 10)})` : window.shortenWord(it.symbol, 10)}</a>
+                                </li>)}
+                            </ul>}
+                        </section>}
+                        {state.selectedCollection && state.selectedCollection.category !== 'W721' && <section className="SelectorToGoSub">
+                            <h3>Items:</h3>
+                            {(!state.selectedCollection.items || Object.keys(state.selectedCollection.items).length === 0) && <Loader />}
+                            {state.selectedCollection.items && Object.keys(state.selectedCollection.items).length > 0 && <ul>
+                                {Object.values(state.selectedCollection.items).filter(sourceAddressFilter).map(it => <li key={it.objectId}>
+                                    <a href="javascript:;" data-objectId={it.objectId} onClick={this.selectCollectionItem}>{window.shortenWord(it.sourceName, 25)} {it.sourceSymbol && it.sourceName ? ` (${window.shortenWord(it.sourceSymbol, 10)})` : window.shortenWord(it.sourceSymbol, 10)}</a>
+                                </li>)}
+                            </ul>}
+                        </section>}
                         {selectedTokenType !== 'ETH' && <a href="javascript:;" className="MoreButtonG" onClick={this.toggleMore}>More</a>}
                         <br></br>
                         {state.more && selectedTokenType !== 'ETH' && <input ref={ref => (this.tokenAddressInput = ref) && (ref.value = (state.selectedToken && state.selectedToken.address) || '')} className="addressWrapSelector" type="text" placeholder="Token address" data-action="onTokenAddressChange" onKeyUp={this.onChange} onChange={this.onChange} />}
