@@ -115,35 +115,32 @@ var Wrap = React.createClass({
         return (<section className="Pager">
             <section className="wrapPage">
                 <section className="wrapBox">
-                    {(!list || list.length > 0) && <section>
-                        <h3>Collections</h3>
-                        {!list && <Loader />}
-                        {list && list.length > 0 && <ul>
-                            {list.map(it => <li key={it.address}>
-                                <a href="javascript:;" data-address={it.address} onClick={this.selectCollection}>
-                                    <h6 className="tokenSelectedToWrap">{window.shortenWord(it.name, 10)} {it.symbol && it.name ? ` (${window.shortenWord(it.symbol, 10)})` : window.shortenWord(it.symbol, 10)}</h6>
-                                </a>
-                            </li>)}
-                        </ul>}
-                    </section>}
-                    {state.selectedCollection && state.selectedCollection.category !== 'W721' && <section>
-                        <h3>Items</h3>
-                        {(!state.selectedCollection.items || Object.keys(state.selectedCollection.items).length === 0) && <Loader />}
-                        {state.selectedCollection.items && Object.keys(state.selectedCollection.items).length > 0 && <ul>
-                            {Object.values(state.selectedCollection.items).filter(sourceAddressFilter).map(it => <li key={it.objectId}>
-                                <a href="javascript:;" data-objectId={it.objectId} onClick={this.selectCollectionItem}>
-                                    <h6 className="tokenSelectedToWrap">{window.shortenWord(it.sourceName, 10)} {it.sourceSymbol && it.sourceName ? ` (${window.shortenWord(it.sourceSymbol, 10)})` : window.shortenWord(it.sourceSymbol, 10)}</h6>
-                                </a>
-                            </li>)}
-                        </ul>}
-                    </section>}
                     <section className="WrapWhat">
                         <p>Wrap Tokens as Items</p>
                         <br />
                         <select onChange={this.onTokenTypeChange}>
                             {window.context.supportedWrappedTokens.map(it => <option key={it} selected={selectedTokenType === it} value={it}>{it}</option>)}
                         </select>
-                        {selectedTokenType !== 'ETH' && <a href="javascript:;" className="MoreButton" onClick={this.toggleMore}>More</a>}
+                        {(!list || list.length > 0) && <section className="SelectorToGo">
+                        <h3>Choose from Collections list:</h3>
+                        {!list && <Loader />}
+                        {list && list.length > 0 && <ul>
+                            {list.map(it => <li key={it.address}>
+                                <a href="javascript:;" data-address={it.address} onClick={this.selectCollection}>{window.shortenWord(it.name, 25)} {it.symbol && it.name ? ` (${window.shortenWord(it.symbol, 10)})` : window.shortenWord(it.symbol, 10)}</a>
+                            </li>)}
+                        </ul>}
+                    </section>}
+                    {state.selectedCollection && state.selectedCollection.category !== 'W721' && <section className="SelectorToGoSub">
+                        <h3>Items:</h3>
+                        {(!state.selectedCollection.items || Object.keys(state.selectedCollection.items).length === 0) && <Loader />}
+                        {state.selectedCollection.items && Object.keys(state.selectedCollection.items).length > 0 && <ul>
+                            {Object.values(state.selectedCollection.items).filter(sourceAddressFilter).map(it => <li key={it.objectId}>
+                                <a href="javascript:;" data-objectId={it.objectId} onClick={this.selectCollectionItem}>{window.shortenWord(it.sourceName, 25)} {it.sourceSymbol && it.sourceName ? ` (${window.shortenWord(it.sourceSymbol, 10)})` : window.shortenWord(it.sourceSymbol, 10)}</a>
+                            </li>)}
+                        </ul>}
+                    </section>}
+                        {selectedTokenType !== 'ETH' && <a href="javascript:;" className="MoreButtonG" onClick={this.toggleMore}>More</a>}
+                        <br></br>
                         {state.more && selectedTokenType !== 'ETH' && <input ref={ref => (this.tokenAddressInput = ref) && (ref.value = (state.selectedToken && state.selectedToken.address) || '')} className="addressWrapSelector" type="text" placeholder="Token address" data-action="onTokenAddressChange" onKeyUp={this.onChange} onChange={this.onChange} />}
                         {state.more && selectedTokenType !== 'ETH' && <a className="LoadToITEM" href="javascript:;" onClick={this.reloadToken}>Load</a>}
                     </section>

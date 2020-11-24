@@ -67,7 +67,11 @@ footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; d
 .collection .collectionDesc {width: 95%; display: block; text-align: left; font-size: 11px; color: #9c9c9c; margin-top: 5px;-ms-word-break: break-all;word-break: break-all;word-break: break-word;-webkit-hyphens: auto;-moz-hyphens: auto;hyphens: auto;}
 .collection .collectionItems {width: 95%; display: block; text-align: left; font-size: 18px;}
 .Explainer > img {width: 50px;}
-
+.SelectorToGo {width: 90%; display: block; margin: 10px auto;}
+.SelectorToGo a {font-size: 13px; color: #ffffff; padding: 5px 8px; background-color: #59b0fb; margin: 10px auto; text-decoration: none; display: inline-block; border-radius: 8px;}
+.SelectorToGoSub {width: 80%; display: block; margin: 10px auto; border-top: 1px solid #171717;}
+.SelectorToGoSub a {font-size: 11px; color: #ffffff; padding: 5px 8px; background-color: #59b0fb; margin: 10px auto; text-decoration: none; display: inline-block; border-radius: 5px;}
+.MoreButtonG {font-size: 12px; color: #171717; font-weight: bold;}
 
 .menuMenu {width: 100%;min-width: 990px; position: fixed; top: 0; left: 0; height: 60px; background-color: #ffffff;z-index: 1000; border-bottom: 1px solid;border-image-slice: 1; border-image-source: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 70%, #9048fd 90%);}
 .menuMenu .logo {display: inline-block; margin-left: 1%; text-decoration: none; cursor: pointer;}
@@ -128,9 +132,10 @@ footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; d
 .itemFundamentalsThing .ItemSupply, .itemFundamentalsThing .ItemBalance {display: inline-block; font-size: 13px;color: #6e6e6e;margin: 0px 5px 5px 0;}
 .itemSide {width: 100%; text-align: left;}
 .itemSide .ItemPrice {text-decoration: none; margin: 5px 1% 10px 0px; display: inline-block; color: #ffffff; font-size: 11px; font-weight: bold; background: linear-gradient(to right, #9048fd 20%,  #4bcbc9 100%); text-align: center; padding: 3px 7px; border-radius: 8px;}
+.itemSidebySide {padding: 5px; border: 1px solid #59b0fb; border-radius: 10px;}
 
 .SettingsForOwn {width: 100%; text-align: left;}
-.SettingsForOwn input {width: 30%; background-color: #fafdff; border: 2px solid #131D39; border-radius: 6px; height: 30px; color: #131D39;}
+.SettingsForOwn input {width: 35%; background-color: #fafdff; border: 2px solid #131D39; border-radius: 6px; height: 30px; color: #131D39;}
 .SettingsForOwn a {padding: 6px 8px; font-weight: bold; background-color: #8FD1F9; display: inline-block; margin: 10px 0 0 5px; border-radius: 6px; font-size: 13px; color: #ffffff; text-decoration: none;}
 .SettingsForOwn .MaximumBro {font-size: 9px; font-weight: bolder;padding: 3px 5px; margin: 10px 5px 0 0;}
 
