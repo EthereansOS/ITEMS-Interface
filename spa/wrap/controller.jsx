@@ -8,6 +8,10 @@ var WrapController = function (view) {
 
     context.onTokenAddressChange = async function onCollectionAddressChange(type, address) {
         try {
+            address = address || context.view.tokenAddressInput.value;
+        } catch(e) {
+        }
+        try {
             address = window.web3.utils.toChecksumAddress(address);
         } catch(e) {
             address = undefined;
@@ -19,6 +23,10 @@ var WrapController = function (view) {
                 symbol : 'ETH',
                 decimals : 18
             }}, type !== 'ETH' ? undefined : context.refreshData);
+        }
+        try {
+            context.view.tokenAddressInput.value = address;
+        } catch(e) {
         }
         var selectedToken = {
             type,
@@ -34,7 +42,6 @@ var WrapController = function (view) {
             try {
                 selectedToken.message = window.context.specialMessages.wrap[type].filter(it => window.web3.utils.toChecksumAddress(it.address) === address)[0].message;
             } catch(e) {
-                console.error(e);
             }
         }
         try {
@@ -213,5 +220,20 @@ var WrapController = function (view) {
             name : collection.items[selectedToken.tokenId].name,
             tokenAmount : selectedToken.tokenAmount || 1
         }
+    };
+
+    context.loadCollectionData = async function loadCollectionData() {
+        var collectionObjectIds = await window.loadCollectionItems(context.view.state.selectedCollection.address);
+        var promises = [];
+        for(var objectId of collectionObjectIds) {
+            var collection = context.view.state.selectedCollection;
+            collection.items = collection.items || {};
+            promises.push(window.loadItemData(collection.items[objectId] = collection.items[objectId] || {
+                objectId,
+                collection
+            }, collection, context.view));
+        }
+        await Promise.all(promises);
+        context.view.setState({ loaded: true });
     };
 };

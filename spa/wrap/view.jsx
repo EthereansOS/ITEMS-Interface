@@ -5,9 +5,13 @@ var Wrap = React.createClass({
     ],
     getDefaultSubscriptions() {
         return {
-            "ethereum/ping" : this.controller.refreshData,
-            "collections/refreshed" : () => this.forceUpdate()
+            "ethereum/ping": this.controller.refreshData,
+            "collections/refreshed": () => this.forceUpdate()
         }
+    },
+    toggleMore(e) {
+        window.preventItem(e);
+        this.setState({ more: !window.getState(this).more });
     },
     getOwnedList() {
         var state = window.getState(this);
@@ -19,17 +23,17 @@ var Wrap = React.createClass({
     },
     reloadToken(e) {
         window.preventItem(e);
-        this.controller.onTokenAddressChange(this.getSelectedTokenType(), this.tokenAddressInput.value);
+        this.controller.onTokenAddressChange(this.getSelectedTokenType());
     },
     onTokenTypeChange(e) {
         window.preventItem(e);
         var _this = this;
         this.setState({
             selectedTokenType: e.currentTarget.value,
-            selectedCollection : null
+            selectedCollection: null
         }, function () {
             _this.tokenIdInput && _this.onTokenIdChange(_this.tokenIdInput.value = '');
-            _this.controller.onTokenAddressChange(_this.getSelectedTokenType(), _this.tokenAddressInput && _this.tokenAddressInput.value);
+            _this.controller.onTokenAddressChange(_this.getSelectedTokenType());
         });
     },
     onChange(e) {
@@ -70,9 +74,9 @@ var Wrap = React.createClass({
     },
     componentDidMount() {
         var _this = this;
-        _this.setState({selectedTokenType : _this.props.selectedTokenType || _this.getSelectedTokenType(), selectedCollection : _this.props.collectionAddress ? _this.props.collections.filter(it => it.address === _this.props.collectionAddress)[0] : null}, () => {
-            _this.controller.onTokenAddressChange(_this.state.selectedTokenType, _this.tokenAddressInput && (_this.tokenAddressInput.value = _this.props.sourceAddress || "")).then(() => {
-                if(!_this.tokenIdInput || !_this.props.tokenId || (_this.state.selectedCollection && _this.state.selectedCollection.category === 'W721')) {
+        _this.setState({ selectedTokenType: _this.props.selectedTokenType || _this.getSelectedTokenType(), selectedCollection: _this.props.collectionAddress ? _this.props.collections.filter(it => it.address === _this.props.collectionAddress)[0] : null }, () => {
+            _this.controller.onTokenAddressChange(_this.state.selectedTokenType, _this.props.sourceAddress).then(() => {
+                if (!_this.tokenIdInput || !_this.props.tokenId || (_this.state.selectedCollection && _this.state.selectedCollection.category === 'W721')) {
                     return;
                 }
                 _this.onTokenIdChange(_this.tokenIdInput.value = _this.props.tokenId);
@@ -84,8 +88,10 @@ var Wrap = React.createClass({
         window.preventItem(e);
         var _this = this;
         var selectedCollection = _this.props.collections.filter(it => it.address === e.currentTarget.dataset.address)[0];
-        _this.setState({selectedTokenType : selectedCollection.category.split("W").join('ERC'), selectedCollection}, () => {
-            selectedCollection.sourceAddress && selectedCollection.sourceAddress !== 'blank' && _this.controller.onTokenAddressChange(_this.getSelectedTokenType(), _this.tokenAddressInput && (_this.tokenAddressInput.value = selectedCollection.sourceAddress));
+        _this.setState({ selectedTokenType: selectedCollection.category.split("W").join('ERC'), selectedCollection, more: false }, () => {
+            _this.controller.loadCollectionData();
+            selectedCollection.sourceAddress && selectedCollection.sourceAddress !== 'blank' && _this.controller.onTokenAddressChange(_this.getSelectedTokenType(), selectedCollection.sourceAddress);
+            _this.tokenIdInput && _this.onTokenIdChange(_this.tokenIdInput.value = "");
         });
     },
     selectCollectionItem(e) {
@@ -94,8 +100,8 @@ var Wrap = React.createClass({
         var selectedCollection = _this.state.selectedCollection;
         var selectedItem = selectedCollection.items[e.currentTarget.dataset.objectid];
         var address = selectedItem.sourceAddress && selectedItem.sourceAddress !== 'blank' ? selectedItem.sourceAddress : selectedCollection.sourceAddress;
-        _this.controller.onTokenAddressChange(_this.getSelectedTokenType(), _this.tokenAddressInput && (_this.tokenAddressInput.value = address)).then(() => {
-            if(!_this.tokenIdInput || !selectedItem.objectId) {
+        _this.controller.onTokenAddressChange(_this.getSelectedTokenType(), address).then(() => {
+            if (!_this.tokenIdInput || !selectedItem.objectId) {
                 return;
             }
             _this.onTokenIdChange(_this.tokenIdInput.value = selectedItem.objectId);
@@ -108,34 +114,38 @@ var Wrap = React.createClass({
         var sourceAddressFilter = it => (it.sourceAddress && it.sourceAddress !== 'blank' && it.sourceAddress !== window.voidEthereumAddress) || (state.selectedCollection.sourceAddress && state.selectedCollection.sourceAddress !== 'blank' && state.selectedCollection.sourceAddress !== window.voidEthereumAddress);
         return (<section className="Pager">
             <section className="wrapPage">
-                {(!list || list.length > 0) && <section className="wrapBox">
-                    {!list && <Loader/>}
-                    {list && list.length > 0 && <ul>
-                        {list.map(it => <li key={it.address}>
-                            <a href="javascript:;" data-address={it.address} onClick={this.selectCollection}>
-                                <h6 className="tokenSelectedToWrap">{window.shortenWord(it.name, 10)} {it.symbol && it.name ? ` (${window.shortenWord(it.symbol, 10)})` : window.shortenWord(it.symbol, 10)}</h6>
-                            </a>
-                        </li>)}
-                    </ul>}
-                </section>}
-                {state.selectedCollection && state.selectedCollection.category !== 'W721' && <section className="wrapBox">
-                    <ul>
-                        {Object.values(state.selectedCollection.items).filter(sourceAddressFilter).map(it => <li key={it.objectId}>
-                            <a href="javascript:;" data-objectId={it.objectId} onClick={this.selectCollectionItem}>
-                                <h6 className="tokenSelectedToWrap">{window.shortenWord(it.sourceName, 10)} {it.sourceSymbol && it.sourceName ? ` (${window.shortenWord(it.sourceSymbol, 10)})` : window.shortenWord(it.sourceSymbol, 10)}</h6>
-                            </a>
-                        </li>)}
-                    </ul>
-                </section>}
                 <section className="wrapBox">
+                    {(!list || list.length > 0) && <section>
+                        <h3>Collections</h3>
+                        {!list && <Loader />}
+                        {list && list.length > 0 && <ul>
+                            {list.map(it => <li key={it.address}>
+                                <a href="javascript:;" data-address={it.address} onClick={this.selectCollection}>
+                                    <h6 className="tokenSelectedToWrap">{window.shortenWord(it.name, 10)} {it.symbol && it.name ? ` (${window.shortenWord(it.symbol, 10)})` : window.shortenWord(it.symbol, 10)}</h6>
+                                </a>
+                            </li>)}
+                        </ul>}
+                    </section>}
+                    {state.selectedCollection && state.selectedCollection.category !== 'W721' && <section>
+                        <h3>Items</h3>
+                        {(!state.selectedCollection.items || Object.keys(state.selectedCollection.items).length === 0) && <Loader />}
+                        {state.selectedCollection.items && Object.keys(state.selectedCollection.items).length > 0 && <ul>
+                            {Object.values(state.selectedCollection.items).filter(sourceAddressFilter).map(it => <li key={it.objectId}>
+                                <a href="javascript:;" data-objectId={it.objectId} onClick={this.selectCollectionItem}>
+                                    <h6 className="tokenSelectedToWrap">{window.shortenWord(it.sourceName, 10)} {it.sourceSymbol && it.sourceName ? ` (${window.shortenWord(it.sourceSymbol, 10)})` : window.shortenWord(it.sourceSymbol, 10)}</h6>
+                                </a>
+                            </li>)}
+                        </ul>}
+                    </section>}
                     <section className="WrapWhat">
                         <p>Wrap Tokens as Items</p>
-                        <br></br>
+                        <br />
                         <select onChange={this.onTokenTypeChange}>
                             {window.context.supportedWrappedTokens.map(it => <option key={it} selected={selectedTokenType === it} value={it}>{it}</option>)}
                         </select>
-                        {selectedTokenType !== 'ETH' && <input ref={ref => this.tokenAddressInput = ref} className="addressWrapSelector" type="text" placeholder="Token address" data-action="onTokenAddressChange" onKeyUp={this.onChange} onChange={this.onChange} />}
-                        {selectedTokenType !== 'ETH' && <a className="LoadToITEM" href="javascript:;" onClick={this.reloadToken}>Load</a>}
+                        {selectedTokenType !== 'ETH' && <a href="javascript:;" className="MoreButton" onClick={this.toggleMore}>More</a>}
+                        {state.more && selectedTokenType !== 'ETH' && <input ref={ref => (this.tokenAddressInput = ref) && (ref.value = (state.selectedToken && state.selectedToken.address) || '')} className="addressWrapSelector" type="text" placeholder="Token address" data-action="onTokenAddressChange" onKeyUp={this.onChange} onChange={this.onChange} />}
+                        {state.more && selectedTokenType !== 'ETH' && <a className="LoadToITEM" href="javascript:;" onClick={this.reloadToken}>Load</a>}
                     </section>
                     <section className="WrapWhatLoaded">
                         {state.selectedToken && (state.selectedToken.name || state.selectedToken.symbol) && <h6 className="tokenSelectedToWrap">{window.shortenWord(state.selectedToken.name, 10)} {state.selectedToken.symbol && state.selectedToken.name ? ` (${window.shortenWord(state.selectedToken.symbol, 10)})` : window.shortenWord(state.selectedToken.symbol, 10)}</h6>}
