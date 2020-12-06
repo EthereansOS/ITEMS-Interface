@@ -2156,6 +2156,7 @@ window.tryRetrieveMetadata = async function tryRetrieveMetadata(item) {
                 if (typeof item.metadata !== "string") {
                     Object.entries(item.metadata).forEach(it => item[it[0]] = it[1]);
                     item.name = item.item_name || item.name;
+                    item.description = item.description.split('\n\n').join(' ');
                 }
             } catch(e) {
                 delete item.image;
