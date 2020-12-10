@@ -79,7 +79,10 @@ var CreateItemWizard = React.createClass({
         this.setState({ step: currentStep });
     },
     getMetadataValues() {
-        return window.getData(this.metadataPage);
+        var metadata = window.getData(this.metadataPage);
+        metadata.name = this.state.itemName;
+        metadata.symbol = this.state.itemSymbol;
+        return metadata;
     },
     renderMetadata() {
         var state = this.getState();

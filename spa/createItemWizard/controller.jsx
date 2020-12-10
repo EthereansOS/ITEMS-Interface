@@ -69,7 +69,7 @@ var CreateItemWizardController = function (view) {
         if (state.metadataType === 'custom') {
             await window.waitForLateInput();
             var metadataLink = context.view.metadataLinkInput.value;
-            if (!metadataLink || !await window.checkMetadataLink(metadataLink)) {
+            if (!metadataLink || !await window.checkMetadataLink(metadataLink, true)) {
                 throw "Not a valid metadata link!";
             }
             return context.view.setState({
