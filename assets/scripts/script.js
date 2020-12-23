@@ -2406,7 +2406,7 @@ window.checkMetadataLink = async function checkMetadataLink(metadataLink, item) 
     } catch (e) {
         throw "Error loading metadata";
     }
-    return await window[`checkMetadataValuesFor${item ? "Item" : "Collection"}`](metadata);
+    return true;//await window[`checkMetadataValuesFor${item ? "Item" : "Collection"}`](metadata);
 };
 
 window.checkMetadataValuesForCollection = async function checkMetadataValuesForCollection(metadata) {
