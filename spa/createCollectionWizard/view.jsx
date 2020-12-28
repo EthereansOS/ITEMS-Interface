@@ -156,7 +156,7 @@ var CreateCollectionWizard = React.createClass({
                         <p>Cover (Regular)<b>*</b></p>
                         <input id="image" data-mandatory="true" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
                     </label>
-                    <span className="ExplBoom">The cover img must be .png or .gif, be at least 5mb in length and have a max width of 350px. This is to keep the user experience in line with IPFS download speed limitations</span>
+                    <span className="ExplBoom">The cover image must be .png or .gif, with a size limit of 5 MB and max. width of 350px, due to users experience in IPFS download speed limitations</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
@@ -243,7 +243,7 @@ var CreateCollectionWizard = React.createClass({
                     <p>Decimals</p>
                     <input type="checkbox" ref={ref => (this.hasDecimals = ref) && (ref.checked = state.hasDecimals)} />
                 </label>
-                <span className="ExplBoom">If you select this option, all of the ITEMs in this Collection will have 18 decimals in both implementations. Only recommended if you need decimals in the NFT implementation to accommodate special functions, like in-game consumable items.</span>
+                <span className="ExplBoom">By selecting this option, all of the Items in this Collection will have 18 decimals in both implementations (Recommended only if you need decimals in the NFT implementation too. For example to realize special functions like in-game consumable items)</span>
             </section>
             <section className="FormCreateThing">
                 <a className="SuperActionBTN SuperActionBTNB" href="javascript:;" onClick={this.back}>BACK</a>
@@ -265,7 +265,7 @@ var CreateCollectionWizard = React.createClass({
             {metadataType === 'custom' && <section className="FormCreateThing">
                 <p>Metadata Link</p>
                 <input type="text" ref={ref => (this.metadataLinkInput = ref) && (ref.value = (this.state && this.state.metadataLink) || "")} />
-                <span className="ExplBoom">The metadata file is a JSON standard file containing all of the info and links to the file of the ITEM. <a href="/doc.html#6" target="_blank">Here</a> you can find a step-by-step guide on how to build your JSON file correctly. | Link must be expressed in ipfs://ipfs/0000000000..</span>
+                <span className="ExplBoom">The metadata file is a JSON standard file containing all of the info and links to the file of the ITEM. <a href="/doc.html#6" target="_blank">Here</a> You can find a step by step guide to build your json file correctly. | Link must be expressed in ipfs://ipfs/0000000000..</span>
             </section>}
             <section className="FormCreateThing">
                 <a className="SuperActionBTN SuperActionBTNB" href="javascript:;" onClick={this.back}>BACK</a>
