@@ -9,3 +9,9 @@
 /**/artifacts
 /**/eth-item-token-standard-old
 /**/bin
+/**/build
+/**/lib
+/**/out
+/**/flat
+/**/.env
+/**/*.env
