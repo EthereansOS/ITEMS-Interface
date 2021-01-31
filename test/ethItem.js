@@ -189,9 +189,10 @@ describe("EthItem", () => {
                 await erc20Wrapper.methods["mint(address,uint256)"](token.options.address, amount).send(blockchainConnection.getSendingOptions());
                 var objectId = await erc20Wrapper.methods.object(token.options.address).call();
                 console.log(await erc20Wrapper.methods.name(objectId).call(), await erc20Wrapper.methods.symbol(objectId).call());
+                assert.strictEqual(utilities.fromDecimals(await erc20Wrapper.methods.balanceOf(accounts[0], objectId).call(), 18), amountPlain.toString());
             } catch (e) {
-                assert.notStrictEqual(e.message.indexOf('revert'), -1);
                 assert.strictEqual(token.options.address, context.mkrTokenAddress);
+                assert.notStrictEqual(e.message.indexOf('revert'), -1);
             }
         }
     }

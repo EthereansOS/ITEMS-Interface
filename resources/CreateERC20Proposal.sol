@@ -1,3 +1,13 @@
+/* Discussion:
+ * //github.com/b-u-i-d-l/ETHITEM
+ */
+/* Description:
+ * ETHItem - New Orchestrator and new ERC20Wrapper
+ * 
+ * ETHItem Orchestrator and Factory now support multi-model creation. You can choose the model you want to create/wrap your items.
+ * 
+ * New ERC20Wrapper can now support more non-standard ERC20 Tokens thanks to the improvements to the Name and Symbol calls.
+ */
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.12;
 
