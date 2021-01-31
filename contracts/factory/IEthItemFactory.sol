@@ -10,6 +10,8 @@ import "../orchestrator/IEthItemOrchestratorDependantElement.sol";
  */
 interface IEthItemFactory is IEthItemOrchestratorDependantElement {
 
+    function isModel(address modelAddress) external returns(bool);
+
     /**
      * @dev GET - The address of the Smart Contract whose code will serve as a model for all the EthItemERC20Wrappers (please see the eth-item-token-standard for further information).
      */
@@ -32,6 +34,9 @@ interface IEthItemFactory is IEthItemOrchestratorDependantElement {
      * It can be done only by the Factory controller
      */
     function setNativeModel(address nativeModelAddress) external;
+    function addNativeModel(address nativeModelAddress) external;
+
+    event NativeModel(address indexed);
 
     /**
      * @dev GET - The address of the Smart Contract whose code will serve as a model for all the Wrapped ERC1155 EthItems.
@@ -44,6 +49,9 @@ interface IEthItemFactory is IEthItemOrchestratorDependantElement {
      * It can be done only by the Factory controller
      */
     function setERC1155WrapperModel(address erc1155WrapperModelAddress) external;
+    function addERC1155WrapperModel(address erc1155WrapperModelAddress) external;
+
+    event ERC1155WrapperModel(address indexed);
 
     /**
      * @dev GET - The address of the Smart Contract whose code will serve as a model for all the Wrapped ERC20 EthItems.
@@ -55,6 +63,9 @@ interface IEthItemFactory is IEthItemOrchestratorDependantElement {
      * It can be done only by the Factory controller
      */
     function setERC20WrapperModel(address erc20WrapperModelAddress) external;
+    function addERC20WrapperModel(address erc20WrapperModelAddress) external;
+
+    event ERC20WrapperModel(address indexed);
 
     /**
      * @dev GET - The address of the Smart Contract whose code will serve as a model for all the Wrapped ERC721 EthItems.
@@ -66,6 +77,9 @@ interface IEthItemFactory is IEthItemOrchestratorDependantElement {
      * It can be done only by the Factory controller
      */
     function setERC721WrapperModel(address erc721WrapperModelAddress) external;
+    function addERC721WrapperModel(address erc721WrapperModelAddress) external;
+
+    event ERC721WrapperModel(address indexed);
 
     /**
      * @dev GET - The elements (numerator and denominator) useful to calculate the percentage fee to be transfered to the DFO for every new Minted EthItem
@@ -109,7 +123,7 @@ interface IEthItemFactory is IEthItemOrchestratorDependantElement {
      * @param ethItemAddress The address of the new EthItem
      * @param ethItemInitResponse The ABI-encoded output response eventually received by the Model initialization procedure.
      */
-    function createNative(bytes calldata modelInitCallPayload) external returns (address ethItemAddress, bytes memory ethItemInitResponse);
+    function createNative(address modelAddress, bytes calldata modelInitCallPayload) external returns (address ethItemAddress, bytes memory ethItemInitResponse);
 
     event NewNativeCreated(uint256 indexed standardVersion, uint256 indexed wrappedItemModelVersion, uint256 indexed modelVersion, address tokenCreated);
     event NewNativeCreated(address indexed model, uint256 indexed modelVersion, address indexed tokenCreated, address creator);
@@ -122,7 +136,7 @@ interface IEthItemFactory is IEthItemOrchestratorDependantElement {
      * @param ethItemAddress The address of the new EthItem
      * @param ethItemInitResponse The ABI-encoded output response eventually received by the Model initialization procedure.
      */
-    function createWrappedERC1155(bytes calldata modelInitCallPayload) external returns (address ethItemAddress, bytes memory ethItemInitResponse);
+    function createWrappedERC1155(address modelAddress, bytes calldata modelInitCallPayload) external returns (address ethItemAddress, bytes memory ethItemInitResponse);
 
     event NewWrappedERC1155Created(uint256 indexed standardVersion, uint256 indexed wrappedItemModelVersion, uint256 indexed modelVersion, address tokenCreated);
     event NewWrappedERC1155Created(address indexed model, uint256 indexed modelVersion, address indexed tokenCreated, address creator);
@@ -148,7 +162,7 @@ interface IEthItemFactory is IEthItemOrchestratorDependantElement {
      * @param ethItemAddress The address of the new EthItem
      * @param ethItemInitResponse The ABI-encoded output response eventually received by the Model initialization procedure.
      */
-    function createWrappedERC721(bytes calldata modelInitCallPayload) external returns (address ethItemAddress, bytes memory ethItemInitResponse);
+    function createWrappedERC721(address modelAddress, bytes calldata modelInitCallPayload) external returns (address ethItemAddress, bytes memory ethItemInitResponse);
 
     event NewWrappedERC721Created(uint256 indexed standardVersion, uint256 indexed wrappedItemModelVersion, uint256 indexed modelVersion, address tokenCreated);
     event NewWrappedERC721Created(address indexed model, uint256 indexed modelVersion, address indexed tokenCreated, address creator);

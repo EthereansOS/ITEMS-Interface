@@ -57,8 +57,9 @@ contract ERC20WrapperV1 is IERC20WrapperV1, EthItemModelBase {
             IEthItemInteroperableInterface(wrapperAddress).init(objectId, name, symbol, _decimals);
             emit NewItem(objectId, wrapperAddress);
         }
+        uint256 balanceBefore = IERC20Data(erc20TokenAddress).balanceOf(address(this));
         _safeTransferFrom(IERC20Data(erc20TokenAddress), msg.sender, address(this), amount);
-        _mintItems(objectId, wrapperAddress, amount);
+        _mintItems(objectId, wrapperAddress, IERC20Data(erc20TokenAddress).balanceOf(address(this)) - balanceBefore);
     }
 
     function _mintItems(uint256 objectId, address wrapperAddress, uint256 amount) internal virtual {
@@ -113,16 +114,8 @@ contract ERC20WrapperV1 is IERC20WrapperV1, EthItemModelBase {
         )
     {
         IERC20Data erc20Token = IERC20Data(erc20TokenAddress);
-        name = _safeName(erc20Token);
-        if(keccak256(bytes(name)) == keccak256("")) {
-            name = _toString(erc20TokenAddress);
-        }
-        name = string(abi.encodePacked(name, "Item"));
-        symbol = _safeSymbol(erc20Token);
-        if(keccak256(bytes(symbol)) == keccak256("")) {
-            symbol = _toString(erc20TokenAddress);
-        }
-        symbol = string(abi.encodePacked("I", symbol));
+        name = string(abi.encodePacked(_stringValue(erc20Token, "name()", "NAME()"), " item"));
+        symbol = string(abi.encodePacked("i", _stringValue(erc20Token, "symbol()", "SYMBOL()")));
         dec = _safeDecimals(erc20Token);
         if(dec == 0) {
             dec = _decimals;
@@ -133,24 +126,27 @@ contract ERC20WrapperV1 is IERC20WrapperV1, EthItemModelBase {
         return (10**(_decimals - _decimalsMap[objectId]));
     }
 
-    function _safeTransfer(IERC20Data erc20Token, address to, uint value) internal {
-        (bool success, bytes memory data) = address(erc20Token).call(abi.encodeWithSelector(erc20Token.transfer.selector, to, value));
-        require(success && (data.length == 0 || abi.decode(data, (bool))), 'TRANSFER_FAILED');
+    function _safeTransfer(IERC20Data erc20Token, address to, uint256 value) internal {
+        bytes memory returnData = _call(address(erc20Token), abi.encodeWithSelector(erc20Token.transfer.selector, to, value));
+        require(returnData.length == 0 || abi.decode(returnData, (bool)), 'TRANSFER_FAILED');
     }
 
-    function _safeTransferFrom(IERC20Data erc20Token, address from, address to, uint value) internal {
-        (bool success, bytes memory data) = address(erc20Token).call(abi.encodeWithSelector(erc20Token.transferFrom.selector, from, to, value));
-        require(success && (data.length == 0 || abi.decode(data, (bool))), 'TRANSFERFROM_FAILED');
+    function _safeTransferFrom(IERC20Data erc20Token, address from, address to, uint256 value) private {
+        bytes memory returnData = _call(address(erc20Token), abi.encodeWithSelector(erc20Token.transferFrom.selector, from, to, value));
+        require(returnData.length == 0 || abi.decode(returnData, (bool)), 'TRANSFERFROM_FAILED');
     }
 
-    function _safeName(IERC20Data erc20Token) internal view returns(string memory name) {
-        (, bytes memory data) = address(erc20Token).staticcall(abi.encodeWithSelector(erc20Token.name.selector));
-        name = data.length == 0 ? "" : abi.decode(data, (string));
-    }
-
-    function _safeSymbol(IERC20Data erc20Token) internal view returns(string memory symbol) {
-        (, bytes memory data) = address(erc20Token).staticcall(abi.encodeWithSelector(erc20Token.symbol.selector));
-        symbol = data.length == 0 ? "" : abi.decode(data, (string));
+    function _call(address location, bytes memory payload) private returns(bytes memory returnData) {
+        assembly {
+            let result := call(gas(), location, 0, add(payload, 0x20), mload(payload), 0, 0)
+            let size := returndatasize()
+            returnData := mload(0x40)
+            mstore(returnData, size)
+            let returnDataPayloadStart := add(returnData, 0x20)
+            returndatacopy(returnDataPayloadStart, 0, size)
+            mstore(0x40, add(returnDataPayloadStart, size))
+            switch result case 0 {revert(returnDataPayloadStart, size)}
+        }
     }
 
     function _safeDecimals(IERC20Data erc20Token) internal view returns(uint256 dec) {
@@ -158,21 +154,53 @@ contract ERC20WrapperV1 is IERC20WrapperV1, EthItemModelBase {
         dec = data.length == 0 ? 0 : abi.decode(data, (uint256));
     }
 
-    function _toString(address _addr) internal pure returns(string memory) {
-        bytes32 value = bytes32(uint256(_addr));
-        bytes memory alphabet = "0123456789abcdef";
-
-        bytes memory str = new bytes(42);
-        str[0] = '0';
-        str[1] = 'x';
-        for (uint i = 0; i < 20; i++) {
-            str[2+i*2] = alphabet[uint(uint8(value[i + 12] >> 4))];
-            str[3+i*2] = alphabet[uint(uint8(value[i + 12] & 0x0f))];
+    function _stringValue(IERC20Data erc20Token, string memory firstTry, string memory secondTry) internal view returns(string memory) {
+        (bool success, bytes memory data) = address(erc20Token).staticcall{ gas: 20000 }(abi.encodeWithSignature(firstTry));
+        if (!success) {
+            (success, data) = address(erc20Token).staticcall{ gas: 20000 }(abi.encodeWithSignature(secondTry));
         }
+
+        if (success && data.length >= 96) {
+            (uint256 offset, uint256 len) = abi.decode(data, (uint256, uint256));
+            if (offset == 0x20 && len > 0 && len <= 256) {
+                return string(abi.decode(data, (bytes)));
+            }
+        }
+
+        if (success && data.length == 32) {
+            uint len = 0;
+            while (len < data.length && data[len] >= 0x20 && data[len] <= 0x7E) {
+                len++;
+            }
+
+            if (len > 0) {
+                bytes memory result = new bytes(len);
+                for (uint i = 0; i < len; i++) {
+                    result[i] = data[i];
+                }
+                return string(result);
+            }
+        }
+
+        return _toHex(abi.encodePacked(address(erc20Token)));
+    }
+
+    function _toHex(bytes memory data) private pure returns(string memory) {
+        bytes memory str = new bytes(2 + data.length * 2);
+        str[0] = "0";
+        str[1] = "x";
+        uint j = 2;
+        for (uint i = 0; i < data.length; i++) {
+            uint a = uint8(data[i]) >> 4;
+            uint b = uint8(data[i]) & 0x0f;
+            str[j++] = byte(uint8(a + 48 + (a/10)*39));
+            str[j++] = byte(uint8(b + 48 + (b/10)*39));
+        }
+
         return string(str);
     }
 
-        function decimals(uint256 objectId)
+    function decimals(uint256 objectId)
         public
         view
         virtual

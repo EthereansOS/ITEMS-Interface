@@ -48,24 +48,28 @@ interface IEthItemOrchestrator is IERC721Receiver, IERC1155Receiver {
      * It can be done only through a Proposal in the Linked DFO
      */
     function setNativeModel(address nativeModelAddress) external;
+    function addNativeModel(address nativeModelAddress) external;
 
     /**
      * @dev SET - The address of the ERC1155 NFT-Based EthItem model.
      * It can be done only through a Proposal in the Linked DFO
      */
     function setERC1155WrapperModel(address erc1155WrapperModelAddress) external;
+    function addERC1155WrapperModel(address erc1155WrapperModelAddress) external;
 
     /**
      * @dev SET - The address of the Smart Contract whose code will serve as a model for all the Wrapped ERC20 EthItems.
      * It can be done only through a Proposal in the Linked DFO
      */
     function setERC20WrapperModel(address erc20WrapperModelAddress) external;
+    function addERC20WrapperModel(address erc20WrapperModelAddress) external;
 
     /**
      * @dev SET - The address of the Smart Contract whose code will serve as a model for all the Wrapped ERC721 EthItems.
      * It can be done only through a Proposal in the Linked DFO
      */
     function setERC721WrapperModel(address erc721WrapperModelAddress) external;
+    function addERC721WrapperModel(address erc721WrapperModelAddress) external;
 
     /**
      * @dev SET - The element useful to calculate the Percentage fee
@@ -78,6 +82,10 @@ interface IEthItemOrchestrator is IERC721Receiver, IERC1155Receiver {
      * It can be done only through a Proposal in the Linked DFO
      */
     function setBurnFeePercentage(uint256 burnFeePercentageNumerator, uint256 burnFeePercentageDenominator) external;
+
+    function createNative(address modelAddress, bytes calldata modelInitPayload, string calldata ens)
+        external
+        returns (address newNativeAddress, bytes memory modelInitCallResponse);
 
     function createNative(bytes calldata modelInitPayload, string calldata ens)
         external

@@ -9,6 +9,7 @@ import "../ens-controller/IENSController.sol";
 import "@openzeppelin/contracts/introspection/ERC165.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "eth-item-token-standard/IEthItemMainInterface.sol";
+import "../models/common/IEthItemModelBase.sol";
 
 contract EthItemOrchestrator is IEthItemOrchestrator, ERC165 {
 
@@ -143,10 +144,24 @@ contract EthItemOrchestrator is IEthItemOrchestrator, ERC165 {
         }
     }
 
+    function addNativeModel(address nativeModelAddress) public override byDFO {
+        IEthItemFactory element = IEthItemFactory(factory());
+        if(element.supportsInterface(this.addNativeModel.selector)) {
+            element.addNativeModel(nativeModelAddress);
+        }
+    }
+
     function setERC1155WrapperModel(address erc1155WrapperModelAddress) public override byDFO {
         IEthItemFactory element = IEthItemFactory(factory());
         if(element.supportsInterface(this.setERC1155WrapperModel.selector)) {
             element.setERC1155WrapperModel(erc1155WrapperModelAddress);
+        }
+    }
+
+    function addERC1155WrapperModel(address erc1155WrapperModelAddress) public override byDFO {
+        IEthItemFactory element = IEthItemFactory(factory());
+        if(element.supportsInterface(this.addERC1155WrapperModel.selector)) {
+            element.addERC1155WrapperModel(erc1155WrapperModelAddress);
         }
     }
 
@@ -157,10 +172,24 @@ contract EthItemOrchestrator is IEthItemOrchestrator, ERC165 {
         }
     }
 
+    function addERC20WrapperModel(address erc20WrapperModelAddress) public override byDFO {
+        IEthItemFactory element = IEthItemFactory(factory());
+        if(element.supportsInterface(this.addERC20WrapperModel.selector)) {
+            element.addERC20WrapperModel(erc20WrapperModelAddress);
+        }
+    }
+
     function setERC721WrapperModel(address erc721WrapperModelAddress) public override byDFO {
         IEthItemFactory element = IEthItemFactory(factory());
         if(element.supportsInterface(this.setERC721WrapperModel.selector)) {
             element.setERC721WrapperModel(erc721WrapperModelAddress);
+        }
+    }
+
+    function addERC721WrapperModel(address erc721WrapperModelAddress) public override byDFO {
+        IEthItemFactory element = IEthItemFactory(factory());
+        if(element.supportsInterface(this.addERC721WrapperModel.selector)) {
+            element.addERC721WrapperModel(erc721WrapperModelAddress);
         }
     }
 
@@ -169,9 +198,9 @@ contract EthItemOrchestrator is IEthItemOrchestrator, ERC165 {
         address owner,
         uint256 objectId,
         uint256 amount,
-        bytes memory
+        bytes memory payload
     ) public virtual override returns (bytes4) {
-        address ethItem = _getOrCreateERC1155Wrapper(msg.sender, objectId);
+        address ethItem = _getOrCreateERC1155Wrapper(msg.sender, objectId, payload);
         IEthItemMainInterface(msg.sender).safeTransferFrom(address(this), ethItem, objectId, amount, "");
         IERC20 item = IEthItemMainInterface(ethItem).asInteroperable(objectId);
         item.transfer(owner, item.balanceOf(address(this)));
@@ -183,9 +212,9 @@ contract EthItemOrchestrator is IEthItemOrchestrator, ERC165 {
         address owner,
         uint256[] memory objectIds,
         uint256[] memory amounts,
-        bytes memory
+        bytes memory payload
     ) public virtual override returns (bytes4) {
-        address ethItem = _getOrCreateERC1155Wrapper(msg.sender, objectIds[0]);
+        address ethItem = _getOrCreateERC1155Wrapper(msg.sender, objectIds[0], payload);
         IEthItemMainInterface(msg.sender).safeBatchTransferFrom(address(this), ethItem, objectIds, amounts, "");
         for(uint256 i = 0; i < objectIds.length; i++) {
             IERC20 item = IEthItemMainInterface(ethItem).asInteroperable(objectIds[i]);
@@ -194,22 +223,25 @@ contract EthItemOrchestrator is IEthItemOrchestrator, ERC165 {
         return this.onERC1155BatchReceived.selector;
     }
 
-    function _getOrCreateERC1155Wrapper(address source, uint256 objectId) private returns(address ethItem) {
+    function _getOrCreateERC1155Wrapper(address source, uint256 objectId, bytes memory payload) private returns(address ethItem) {
+        address model = payload.length == 0 ? address(0) : abi.decode(payload, (address));
+        uint256 version = model == address(0) ? 0 : IEthItemModelBase(model).modelVersion();
         IEthItemFactory currentFactory = IEthItemFactory(factory());
-        (,uint256 version) = currentFactory.erc1155WrapperModel();
-        ethItem = _checkEthItem(msg.sender, version);
+        if(model == address(0)) {
+            (,version) = currentFactory.erc721WrapperModel();
+        }
         if(ethItem == address(0)) {
             IKnowledgeBase currentKnowledgeBase = IKnowledgeBase(knowledgeBase());
-            currentKnowledgeBase.setEthItem(ethItem = _createERC1155Wrapper(currentFactory, source, objectId));
+            currentKnowledgeBase.setEthItem(ethItem = _createERC1155Wrapper(currentFactory, source, objectId, model));
             currentKnowledgeBase.setWrapped(source, ethItem);
         }
     }
 
-    function _createERC1155Wrapper(IEthItemFactory currentFactory, address source, uint256 objectId) private returns(address ethItem) {
+    function _createERC1155Wrapper(IEthItemFactory currentFactory, address source, uint256 objectId, address model) private returns(address ethItem) {
         (string memory name, string memory symbol) = _extractNameAndSymbol(source);
         (bool supportsSpecificName, bool supportsSpecificSymbol, bool supportsSpecificDecimals) = _extractSpecificData(source, objectId);
         bytes memory modelInitPayload = abi.encodeWithSignature("init(address,string,string,bool,bool,bool)", source, name, symbol, supportsSpecificName, supportsSpecificSymbol, supportsSpecificDecimals);
-        (ethItem,) = currentFactory.createWrappedERC1155(modelInitPayload);
+        (ethItem,) = currentFactory.createWrappedERC1155(model, modelInitPayload);
     }
 
     function _extractNameAndSymbol(address source) private view returns(string memory name, string memory symbol) {
@@ -252,17 +284,21 @@ contract EthItemOrchestrator is IEthItemOrchestrator, ERC165 {
         uint256 objectId,
         bytes memory payload
     ) public virtual override returns (bytes4) {
-        if(msg.sender == ENS_TOKEN_ADDRESS && keccak256(bytes("")) != keccak256(payload)) {
+        if(msg.sender == ENS_TOKEN_ADDRESS && keccak256(abi.encodePacked("transferENS")) == keccak256(payload)) {
             require(_isFromDFO(operator), "Unauthorized Action");
             IERC721(msg.sender).safeTransferFrom(address(this), _ensController, objectId, payload);
             return this.onERC721Received.selector;
         }
+        address model = payload.length == 0 ? address(0) : abi.decode(payload, (address));
+        uint256 version = model == address(0) ? 0 : IEthItemModelBase(model).modelVersion();
         IEthItemFactory currentFactory = IEthItemFactory(factory());
-        (,uint256 version) = currentFactory.erc721WrapperModel();
+        if(model == address(0)) {
+            (,version) = currentFactory.erc721WrapperModel();
+        }
         address ethItem = _checkEthItem(msg.sender, version);
         if(ethItem == address(0)) {
             IKnowledgeBase currentKnowledgeBase = IKnowledgeBase(knowledgeBase());
-            currentKnowledgeBase.setEthItem(ethItem = _createERC721Wrapper(currentFactory, msg.sender));
+            currentKnowledgeBase.setEthItem(ethItem = _createERC721Wrapper(currentFactory, msg.sender, model));
             currentKnowledgeBase.setWrapped(msg.sender, ethItem);
         }
         IERC721(msg.sender).safeTransferFrom(address(this), ethItem, objectId, "");
@@ -280,15 +316,24 @@ contract EthItemOrchestrator is IEthItemOrchestrator, ERC165 {
         }
     }
 
-    function _createERC721Wrapper(IEthItemFactory currentFactory, address source) private returns(address ethItem) {
+    function _createERC721Wrapper(IEthItemFactory currentFactory, address source, address modelAddress) private returns(address ethItem) {
         (string memory name, string memory symbol) = _extractNameAndSymbol(source);
         bytes memory modelInitPayload = abi.encodeWithSignature("init(address,string,string)", source, name, symbol);
-        (ethItem,) = currentFactory.createWrappedERC721(modelInitPayload);
+        (ethItem,) = currentFactory.createWrappedERC721(modelAddress, modelInitPayload);
+    }
+
+    function createNative(address modelAddress, bytes memory modelInitCallPayload, string memory ens) public override
+        returns (address newNativeAddress, bytes memory modelInitCallResponse) {
+        (newNativeAddress, modelInitCallResponse) = IEthItemFactory(factory()).createNative(modelAddress, modelInitCallPayload);
+        IKnowledgeBase(knowledgeBase()).setEthItem(newNativeAddress);
+        if(_ensController != address(0)) {
+            IENSController(_ensController).attachENS(newNativeAddress, ens);
+        }
     }
 
     function createNative(bytes memory modelInitCallPayload, string memory ens) public override
         returns (address newNativeAddress, bytes memory modelInitCallResponse) {
-        (newNativeAddress, modelInitCallResponse) = IEthItemFactory(factory()).createNative(modelInitCallPayload);
+        (newNativeAddress, modelInitCallResponse) = IEthItemFactory(factory()).createNative(address(0), modelInitCallPayload);
         IKnowledgeBase(knowledgeBase()).setEthItem(newNativeAddress);
         if(_ensController != address(0)) {
             IENSController(_ensController).attachENS(newNativeAddress, ens);
