@@ -67,7 +67,7 @@ module.exports = async function compile(file, contractName) {
     removeAtEnd && fs.writeFileSync(location = path.join(os.tmpdir(), `${contractName}_${new Date().getTime()}.sol`).split('\\').join('/'), file);
 
     return await new Promise(async function(ok, ko) {
-        exec(`${solidityManager.getBinary(solidityVersion)} ${await importedNodeModulesContracts} --optimize --abi --bin --allow-paths ${baseLocation} ${location}`, (error, stdout, stderr) => {
+        exec(`${solidityManager.getBinary(solidityVersion)} ${await importedNodeModulesContracts} --optimize --abi --bin --allow-paths ${path.resolve(__dirname, '..', 'contracts_old')},${baseLocation} ${location}`, (error, stdout, stderr) => {
             try {
                 removeAtEnd && fs.unlinkSync(location);
             } catch(e) {

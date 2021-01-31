@@ -6,13 +6,13 @@
   "scripts": {
     "postinstall": "cross-var solc-vm install $npm_package_config_solidityVersion",
     "build": "node util/build-contracts.js",
+    "abi": "node util/abi-extractor.js",
     "test": "mocha"
   },
   "config": {
     "solidityVersion": "0.6.12"
   },
   "mocha": {
-    "exit": true,
     "timeout": false
   },
   "author": "",
