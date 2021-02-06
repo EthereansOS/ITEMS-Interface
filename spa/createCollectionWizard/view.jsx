@@ -280,7 +280,7 @@ var CreateCollectionWizard = React.createClass({
         }
         var extension = state.extension;
         return (<section className="createCollection">
-            {extension === "contract" && <h2>Etension Contract</h2>}
+            {extension === "contract" && <h2>Extension Contract</h2>}
             {extension !== "contract" && <h2>Deploy</h2>}
             {extension === "contract" && <section className="FormCreate">
                 <section className="FormCreateThing FormCreateThingBig">

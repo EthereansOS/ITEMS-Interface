@@ -48,6 +48,7 @@ var IndexController = function (view) {
     };
 
     context.loadCollections = async function loadCollections(clear) {
+        window.context.excludingCollections = (window.context.excludingCollections || []).map(it => web3.utils.toChecksumAddress(it));
         clear && context.view.setState({ collections: null });
         (!context.view.state || !context.view.state.collections) && context.view.setState({ loadingCollections: true });
         var map = {};
@@ -74,6 +75,9 @@ var IndexController = function (view) {
             for (var log of logs) {
                 var modelAddress = window.web3.eth.abi.decodeParameter("address", log.topics[1]);
                 var collectionAddress = window.web3.utils.toChecksumAddress(window.web3.eth.abi.decodeParameter("address", log.topics[log.topics.length - 1]));
+                if(window.context.excludingCollections.indexOf(collectionAddress) !== -1) {
+                    continue;
+                }
                 var category = map[log.topics[0]];
                 subCollections.push(window.packCollection(collectionAddress, category, modelAddress));
             }
