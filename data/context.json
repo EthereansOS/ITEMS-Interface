@@ -21,6 +21,8 @@
     "openSeaItemLinkTemplate" : "https://opensea.io/assets/{0}/{1}",
     "openSeaCollectionLinkTemplate" : "https://opensea.io/assets/{0}",
     "excludingCollections" : ["0x93b45be03fdc98909589eaf4e1e5d5a282f96c75"],
+    "additionalFactories" : ["0x59d122eCC9aE61dD930F4706BcaAB239f671D611"],
+    "additionalFactoriesRopsten" : [],
     "trustwalletImgURLTemplate": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/{0}/logo.png",
     "defaultItemData" : {
         "Native" : {
