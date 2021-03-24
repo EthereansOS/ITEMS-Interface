@@ -180,7 +180,7 @@ var WrapController = function (view) {
             recipient = wrapped && wrapped !== window.voidEthereumAddress ? wrapped : recipient;
         } catch(e) {
         }
-        await window.blockchainCall(selectedToken.contract.methods.safeTransferFrom, window.walletAddress, window.ethItemOrchestrator.options.address, selectedToken.tokenId, value, "0x");
+        await window.blockchainCall(selectedToken.contract.methods.safeTransferFrom, window.walletAddress, recipient, selectedToken.tokenId, value, "0x");
         var version = (await window.blockchainCall(window.currentEthItemFactory.methods.erc1155WrapperModel))[1];
         selectedToken.wrappedAddress = await window.blockchainCall(window.currentEthItemKnowledgeBase.methods.wrapper, selectedToken.address, version);
     }

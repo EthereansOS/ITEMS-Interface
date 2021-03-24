@@ -228,8 +228,9 @@ contract EthItemOrchestrator is IEthItemOrchestrator, ERC165 {
         uint256 version = model == address(0) ? 0 : IEthItemModelBase(model).modelVersion();
         IEthItemFactory currentFactory = IEthItemFactory(factory());
         if(model == address(0)) {
-            (,version) = currentFactory.erc721WrapperModel();
+            (,version) = currentFactory.erc1155WrapperModel();
         }
+        address ethItem = _checkEthItem(msg.sender, version);
         if(ethItem == address(0)) {
             IKnowledgeBase currentKnowledgeBase = IKnowledgeBase(knowledgeBase());
             currentKnowledgeBase.setEthItem(ethItem = _createERC1155Wrapper(currentFactory, source, objectId, model));
