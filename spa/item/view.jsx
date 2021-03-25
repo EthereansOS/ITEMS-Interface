@@ -10,7 +10,8 @@ var Item = React.createClass({
     getDefaultSubscriptions() {
         return {
             "collections/refresh": () => window.loadItemData(undefined, undefined, this),
-            "ethereum/ping": () => window.updateItemDynamicData(undefined, this)
+            "ethereum/ping": () => window.updateItemDynamicData(undefined, this),
+            "wallet/update": () => this.forceUpdate()
         }
     },
     onClick(e) {
@@ -116,6 +117,9 @@ var Item = React.createClass({
     },
     render() {
         var item = (this.state && this.state.item) || this.props.item;
+        if(this.state && this.state.item && this.state.item.objectId !== this.props.item.objectId) {
+            item = this.props.item;
+        }
         var toggle = !this.state ? item.metadata ? 'metadata' : 'farm' : this.state.toggle;
         return (
             <section className="Pager">

@@ -2299,18 +2299,14 @@ window.loadItemData = async function loadItemData(item, collection, view) {
     } catch(e) {
         item.sourceSymbol = 'blank';
     }
-    var metadataPromise = window.tryRetrieveMetadata(item);
-    if (view) {
-        metadataPromise.then(() => view.setState({ item }));
-    } else {
-        await metadataPromise;
-    }
+    await (item.metadataPromise = item.metadataPromise || window.tryRetrieveMetadata(item));
     if (item.collection.category === 'W20' && !item.trustWalletURI) {
         item.trustWalletURI = window.context.trustwalletImgURLTemplate.format(item.sourceAddress);
         window.AJAXRequest(item.trustWalletURI = window.context.trustwalletImgURLTemplate.format(item.sourceAddress)).then(() => (item.image = item.trustWalletURI) && view && view.setState({ item }));
     }
     item.decimals = item.decimals || await window.blockchainCall(item.token.methods.decimals);
     item.collectionDecimals = item.collectionDecimals || await window.blockchainCall(item.collection.contract.methods.decimals, item.objectId);
+    item.dynamicData = item.dynamicData || {};
     return await window.updateItemDynamicData(item, view);
 };
 
@@ -2318,10 +2314,21 @@ window.updateItemDynamicData = async function updateItemDynamicData(item, view) 
     var item = item || (view.state && view.state.item) || view.props.item;
     item.dynamicData = item.dynamicData || {};
     item.dynamicData.totalSupply = await window.blockchainCall(item.token.methods.totalSupply);
-    item.dynamicData.tokenPriceInDollarsOnUniswap = await window.getTokenPriceInDollarsOnUniswap(item.address, item.decimals);
-    item.dynamicData.tokenPriceInDollarsOnOpenSea = await window.getTokenPriceInDollarsOnOpenSea(item.collection.address, item.objectId);
-    delete item.dynamicData.balanceOf;
-    delete item.dynamicData.balanceOfPlain;
+    try {
+        item.dynamicData.tokenPriceInDollarsOnUniswap = await window.getTokenPriceInDollarsOnUniswap(item.address, item.decimals);
+    } catch(e) {
+        item.dynamicData.tokenPriceInDollarsOnUniswap = item.dynamicData.tokenPriceInDollarsOnUniswap || "0";
+    }
+    try {
+        item.dynamicData.tokenPriceInDollarsOnOpenSea = await window.getTokenPriceInDollarsOnOpenSea(item.collection.address, item.objectId);
+    } catch(e) {
+        item.dynamicData.tokenPriceInDollarsOnOpenSea = item.dynamicData.tokenPriceInDollarsOnOpenSea || "0";
+    }
+    if(window.walletAddress !== item.dynamicData.walletAddress) {
+        delete item.dynamicData.balanceOf;
+        delete item.dynamicData.balanceOfPlain;
+        item.dynamicData.walletAddress = window.walletAddress;
+    }
     window.walletAddress && (item.dynamicData.balanceOf = await window.blockchainCall(item.token.methods.balanceOf, window.walletAddress));
     window.walletAddress && (item.dynamicData.balanceOfCollectionSide = await window.blockchainCall(item.collection.contract.methods.balanceOf, window.walletAddress, item.objectId));
     try {
@@ -2336,6 +2343,7 @@ window.updateItemDynamicData = async function updateItemDynamicData(item, view) 
     try {
         item.dynamicData.canMint = (item.dynamicData.isEditable = await window.blockchainCall(item.collection.contract.methods.isEditable, item.objectId)) && item.collection.isOwner;
     } catch (e) {}
+
     view && view.setState({ item }, () => item.dynamicData.balanceOf && item.dynamicData.balanceOf !== '0' && view.emit('wallet/update'));
     return item;
 };

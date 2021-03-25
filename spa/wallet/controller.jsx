@@ -41,10 +41,10 @@ var WalletController = function (view) {
                         continue;
                     }
                     idsOfCollection[log.address][objectId] = true;
-                    /*promises.push(window.loadItemData(collection.items[objectId] = collection.items[objectId] || {
+                    promises.push(window.loadItemData(collection.items[objectId] = collection.items[objectId] || {
                         objectId,
                         collection
-                    }, collection, context.view));*/
+                    }, collection, context.view));
                 }
             }
         }

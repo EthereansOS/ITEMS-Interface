@@ -9,6 +9,11 @@ var Collection = React.createClass({
             toggle: "items"
         }
     },
+    getDefaultSubscriptions() {
+        return {
+            "collections/refreshed": () => this.forceUpdate()
+        }
+    },
     toggle(e) {
         window.preventItem(e);
         var oldToggle = this.state && this.state.toggle;
