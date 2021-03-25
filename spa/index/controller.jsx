@@ -55,9 +55,7 @@ var IndexController = function (view) {
         Object.entries(window.context.ethItemFactoryEvents).forEach(it => map[window.web3.utils.sha3(it[0])] = it[1]);
         var topics = [Object.keys(map)];
         var address = await window.blockchainCall(window.ethItemOrchestrator.methods.factories);
-        console.log("Before: ", JSON.stringify(address));
         (window.getNetworkElement("additionalFactories") || []).map(it => window.web3.utils.toChecksumAddress(it)).filter(it => address.indexOf(it) === -1).forEach(it => address.push(it));
-        console.log("After: ", JSON.stringify(address));
         var collections = [];
         var blocks = await window.loadBlockSearchTranches();
         var updateSubCollectionsPromise = function updateSubCollectionsPromise(subCollections) {

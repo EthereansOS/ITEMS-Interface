@@ -2311,9 +2311,7 @@ window.loadItemData = async function loadItemData(item, collection, view) {
     }
     item.decimals = item.decimals || await window.blockchainCall(item.token.methods.decimals);
     item.collectionDecimals = item.collectionDecimals || await window.blockchainCall(item.collection.contract.methods.decimals, item.objectId);
-    view && view.setState({ item }/*, () => window.updateItemDynamicData(item, view)*/);
-    /*!view && */return await window.updateItemDynamicData(item, view);
-    //return item;
+    return await window.updateItemDynamicData(item, view);
 };
 
 window.updateItemDynamicData = async function updateItemDynamicData(item, view) {
