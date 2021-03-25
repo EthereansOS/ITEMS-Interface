@@ -7,7 +7,7 @@
     "etherscanURLRopsten": "https://ropsten.etherscan.io/",
     "coingeckoEthereumPriceURL": "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=ethereum",
     "coingeckoEthereumPriceRequestInterval": 600000,
-    "ethItemOrchestratorAddress" : "0x86Ab19d36c38aa81f092eAb4b1a8a4B553612465",
+    "ethItemOrchestratorAddress" : "0xf15aAAE073F578d3B7c086cA7Cb7901424120D51",
     "ethItemOrchestratorAddressRopsten" : "0x08136a13c040A8f07fb4e7a68f2cE272B7ADE501",
     "uniswapV2RouterAddress": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
     "ensDomainName" : "itempesta.eth",
@@ -21,7 +21,7 @@
     "openSeaItemLinkTemplate" : "https://opensea.io/assets/{0}/{1}",
     "openSeaCollectionLinkTemplate" : "https://opensea.io/assets/{0}",
     "excludingCollections" : ["0x93b45be03fdc98909589eaf4e1e5d5a282f96c75"],
-    "additionalFactories" : ["0x59d122eCC9aE61dD930F4706BcaAB239f671D611"],
+    "additionalFactories" : [],
     "additionalFactoriesRopsten" : [],
     "trustwalletImgURLTemplate": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/{0}/logo.png",
     "defaultItemData" : {

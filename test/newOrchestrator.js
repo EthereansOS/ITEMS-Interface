@@ -66,8 +66,6 @@ describe("New Orchestrator", () => {
         await wrap1155();
 
         var factories = await orchestrator.methods.factories().call();
-        factories = factories.map(it => it);
-        factories.splice(1, 0, "0x59d122eCC9aE61dD930F4706BcaAB239f671D611");
 
         var args = [
             dfo.doubleProxyAddress,
