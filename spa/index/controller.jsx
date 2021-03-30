@@ -48,13 +48,6 @@ var IndexController = function (view) {
     };
 
     context.loadCollections = async function loadCollections(clear) {
-        window.context.excludingCollections = (window.context.excludingCollections || []).map(it => web3.utils.toChecksumAddress(it));
-        try {
-            var communityDrivenExcludingCollectionsURL = await fetch(window.context.communityDrivenExcludingCollectionsURL);
-            communityDrivenExcludingCollectionsURL = communityDrivenExcludingCollectionsURL.json();
-            window.context.excludingCollections.push(... communityDrivenExcludingCollectionsURL.map(it => web3.utils.toChecksumAddress(it)));
-        } catch(e) {
-        }
         clear && context.view.setState({ collections: null });
         (!context.view.state || !context.view.state.collections) && context.view.setState({ loadingCollections: true });
         var map = {};

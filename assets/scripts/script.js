@@ -147,6 +147,7 @@ window.onEthereumUpdate = function onEthereumUpdate(millis) {
                 if (network === undefined || network === null) {
                     return alert('This network is actually not supported!');
                 }
+                await window.loadExcludingCollections();
                 update = true;
                 window.globalCollections = [];
             }
@@ -2241,6 +2242,16 @@ window.loadCollectionItems = async function loadCollectionItems(collectionAddres
     return Object.keys(collectionObjectIds);
 }
 
+window.loadExcludingCollections = async function loadExcludingCollections() {
+    window.context.excludingCollections = (window.context.excludingCollections || []).map(it => web3.utils.toChecksumAddress(it));
+    try {
+        var communityDrivenExcludingCollections = await fetch(window.context.communityDrivenExcludingCollectionsURL);
+        communityDrivenExcludingCollections = await communityDrivenExcludingCollections.json();
+        window.context.excludingCollections.push(... communityDrivenExcludingCollections.map(it => web3.utils.toChecksumAddress(it)));
+    } catch(e) {
+    }
+};
+
 window.loadItemData = async function loadItemData(item, collection, view) {
     collection = collection || (item && item.collection) || (view && view.props.collection);
     if (!item) {
@@ -2576,6 +2587,9 @@ window.onTextChange = function onTextChange(e) {
 
 window.loadSingleCollection = async function loadSingleCollection(collectionAddress, full) {
     collectionAddress = window.web3.utils.toChecksumAddress(collectionAddress);
+    if(window.context.excludingCollections.indexOf(collectionAddress) !== -1) {
+        return null;
+    }
     var map = {};
     Object.entries(window.context.ethItemFactoryEvents).forEach(it => map[window.web3.utils.sha3(it[0])] = it[1]);
     var topics = [
@@ -2630,6 +2644,9 @@ window.packCollection = function packCollection(address, category, modelAddress)
 };
 
 window.refreshSingleCollection = async function refreshSingleCollection(collection, view) {
+    if(window.context.excludingCollections.indexOf(collection.address) !== -1) {
+        return null;
+    }
     collection.name = collection.name || await window.blockchainCall(collection.contract.methods.name);
     collection.symbol = collection.symbol || await window.blockchainCall(collection.contract.methods.symbol);
     if (!collection.sourceAddress) {
