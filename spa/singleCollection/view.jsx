@@ -19,6 +19,9 @@ var SingleCollection = React.createClass({
         </p>);
     },
     render() {
+        if(window.context.excludingCollections.indexOf(this.props.collection.address) !== -1) {
+            return null;
+        }
         var children = [<Loader />];
         if (this.props.collection) {
             children = [

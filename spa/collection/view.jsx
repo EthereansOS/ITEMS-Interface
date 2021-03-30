@@ -35,6 +35,9 @@ var Collection = React.createClass({
         window.retrieveAndCheckModelCode(this.props.collection).then(() => _this.forceUpdate());
     },
     render() {
+        if(window.context.excludingCollections.indexOf(this.props.collection.address) !== -1) {
+            return null;
+        }
         return (<section className="Pager">
             <section className="collectionPage">
                 <SingleCollection collection={this.props.collection} className="collectionPageInfo" showLink showItemsCount onCollectionObjectIds={this.onCollectionObjectIds} />
