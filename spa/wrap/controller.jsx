@@ -225,7 +225,9 @@ var WrapController = function (view) {
     context.loadCollectionData = async function loadCollectionData() {
         var collectionObjectIds = await window.loadCollectionItems(context.view.state.selectedCollection.address);
         var promises = [];
-        for(var objectId of collectionObjectIds) {
+        for(var i in collectionObjectIds) {
+            var collecitonObject = collectionObjectIds[i];
+            var objectId = collecitonObject.objectId;
             var collection = context.view.state.selectedCollection;
             collection.items = collection.items || {};
             promises.push(window.loadItemData(collection.items[objectId] = collection.items[objectId] || {

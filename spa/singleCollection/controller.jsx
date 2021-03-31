@@ -8,7 +8,7 @@ var SingleCollectionController = function (view) {
 
     context.loadItemsCount = async function loadItemsCount(view) {
         var collectionObjectIds = await window.loadCollectionItems(view.props.collection.address);
-        view.setState({itemsCount : collectionObjectIds.length});
+        view.setState({itemsCount : collectionObjectIds.filter(it => window.context.pandorasBox.indexOf(it.address) === -1).length});
         view.props.onCollectionObjectIds && view.props.onCollectionObjectIds(collectionObjectIds);
     };
 };

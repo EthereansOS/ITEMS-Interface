@@ -2157,7 +2157,9 @@ window.tryRetrieveMetadata = async function tryRetrieveMetadata(item) {
     if (item.metadataLink) {
         return;
     }
-    if(window.context.pandorasBox.indexOf(window.web3.utils.toChecksumAddress(item.address)) !== -1 || (item.collection && window.context.pandorasBox.indexOf(window.web3.utils.toChecksumAddress(item.collection.address)) !== -1)) {
+    if(window.context.pandorasBox.indexOf(window.web3.utils.toChecksumAddress(item.address)) !== -1 || 
+    (item.collection && window.context.pandorasBox.indexOf(window.web3.utils.toChecksumAddress(item.collection.address)) !== -1) || 
+    (item.collection && item.collection.sourceAddress && item.collection.sourceAddress !== "blank" && window.context.pandorasBox.indexOf(window.web3.utils.toChecksumAddress(item.collection.sourceAddress)) !== -1)) {
         item.metadataLink = "blank";
         item.image = window.getElementImage(item);
         return;
@@ -2275,14 +2277,13 @@ window.loadCollectionItems = async function loadCollectionItems(collectionAddres
             objectId = web3.eth.abi.decodeParameters(["uint256", "address", "uint256"], log.data)[0];
             address = web3.eth.abi.decodeParameters(["uint256", "address", "uint256"], log.data)[1];
         }
-        collectionObjectIds[objectId] = window.context.pandorasBox.indexOf(window.web3.utils.toChecksumAddress(address)) === -1;
-        window.itemObjectIdLinker[objectId] = window.itemObjectIdLinker[objectId] || {
+        collectionObjectIds[objectId] = window.itemObjectIdLinker[objectId] = window.itemObjectIdLinker[objectId] || {
             objectId,
             address,
             collectionAddress : log.address
         }
     }
-    return Object.keys(collectionObjectIds);
+    return Object.values(collectionObjectIds);
 }
 
 window.loadExcludingCollections = async function loadExcludingCollections() {

@@ -39,6 +39,7 @@ var Explore = React.createClass({
             Object.values(subs).forEach(it => collections.unshift(it[0]));
         }
         allCollections.push(... collections);
+        allCollections = allCollections.filter(it => window.context.pandorasBox.indexOf(it.address) === -1 && (!it.sourceAddress || window.context.pandorasBox.indexOf(it.sourceAddress) === -1));
         return allCollections;
     },
     render() {

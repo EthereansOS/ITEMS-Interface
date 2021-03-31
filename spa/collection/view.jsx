@@ -52,7 +52,7 @@ var Collection = React.createClass({
                     {this.props.collection.isOwner && <a className="Enter" href="javascript:;" onClick={this.createMoreItems}>Add New</a>}
                     <section className="collectionPageItemsOrder">
                         {!this.state.collectionObjectIds && <Loader />}
-                        {this.state.collectionObjectIds && this.state.collectionObjectIds.map(it => <CollectionSingleItem key={it} objectId={it} collection={this.props.collection} miniature />)}
+                        {this.state.collectionObjectIds && this.state.collectionObjectIds.filter(it => window.context.pandorasBox.indexOf(it.address) === -1).map(it => <CollectionSingleItem key={it.objectId} objectId={it.objectId} collection={this.props.collection} miniature />)}
                     </section>
                 </section>}
                 {this.state && this.state.toggle === 'farm' && <section className="collectionPageItemsFarm">
