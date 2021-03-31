@@ -21,7 +21,7 @@
     "openSeaItemLinkTemplate" : "https://opensea.io/assets/{0}/{1}",
     "openSeaCollectionLinkTemplate" : "https://opensea.io/assets/{0}",
     "excludingCollections" : ["0x93b45be03fdc98909589eaf4e1e5d5a282f96c75"],
-    "communityDrivenExcludingCollectionsURL" : "https://raw.githubusercontent.com/b-u-i-d-l/ETHITEM/main/data/communityDrivenExcludingCollectionsURL.json",
+    "communityDrivenExcludingCollectionsURL" : "https://raw.githubusercontent.com/b-u-i-d-l/ETHITEM/main/data/communityDrivenExcludingCollections.json",
     "additionalFactories" : [],
     "additionalFactoriesRopsten" : [],
     "trustwalletImgURLTemplate": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/{0}/logo.png",
