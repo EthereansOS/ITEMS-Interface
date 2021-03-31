@@ -15,16 +15,30 @@ var Wallet = React.createClass({
         ]
     },
     getHostList() {
-        var state = window.getState(this);
-        var collections = state.collections;
+        var collections = this.getCollections();
         collections = collections.filter(it => it.hasBalance || it.isOwner);
         return collections.filter(it => it.isOwner);
     },
     getOwnedList() {
-        var state = window.getState(this);
-        var collections = state.collections;
+        var collections = this.getCollections();
         collections = collections.filter(it => it.hasBalance || it.isOwner);
         return collections.filter(it => it.hasBalance && !it.isOwner);
+    },
+    getCollections() {
+        var state = window.getState(this);
+        var allCollections = state.collections.filter(it => it.category === 'W20');
+        var collections = state.collections.filter(it => it.category !== 'W20');
+        if(window.context.W1155GroupMode === true) {
+            var sub = collections.filter(it => it.category === 'W1155');
+            sub.forEach(it => collections.splice(collections.indexOf(it), 1));
+            var subs = {};
+            for(var collection of sub) {
+                (subs[collection.sourceAddress] = (subs[collection.sourceAddress] || [])).push(collection);
+            }
+            Object.values(subs).forEach(it => collections.unshift(it[0]));
+        }
+        allCollections.push(... collections);
+        return allCollections;
     },
     toggle(e) {
         window.preventItem(e);

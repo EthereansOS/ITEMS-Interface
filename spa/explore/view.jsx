@@ -27,9 +27,19 @@ var Explore = React.createClass({
     },
     getCollections() {
         var state = window.getState(this);
-        var collections = state.collections.filter(it => it.category === 'W20');
-        collections.push(...state.collections.filter(it => it.category !== 'W20'));
-        return collections;
+        var allCollections = state.collections.filter(it => it.category === 'W20');
+        var collections = state.collections.filter(it => it.category !== 'W20');
+        if(window.context.W1155GroupMode === true) {
+            var sub = collections.filter(it => it.category === 'W1155');
+            sub.forEach(it => collections.splice(collections.indexOf(it), 1));
+            var subs = {};
+            for(var collection of sub) {
+                (subs[collection.sourceAddress] = (subs[collection.sourceAddress] || [])).push(collection);
+            }
+            Object.values(subs).forEach(it => collections.unshift(it[0]));
+        }
+        allCollections.push(... collections);
+        return allCollections;
     },
     render() {
         var _this = this;

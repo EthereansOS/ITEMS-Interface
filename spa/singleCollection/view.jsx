@@ -6,7 +6,8 @@ var SingleCollection = React.createClass({
     ],
     getDefaultSubscriptions() {
         return {
-            "collections/refresh": () => this.controller.loadData(this)
+            "collections/refresh": () => this.controller.loadData(this),
+            "collections/refreshed": () => this.controller.loadData(this)
         }
     },
     componentDidMount() {

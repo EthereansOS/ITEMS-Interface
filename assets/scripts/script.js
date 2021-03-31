@@ -148,7 +148,16 @@ window.onEthereumUpdate = function onEthereumUpdate(millis) {
                     return alert('This network is actually not supported!');
                 }
                 await window.loadExcludingCollections();
-                window.ethItemElementImages = await (await fetch(window.context.ethItemElementImagesURL)).json();
+                window.ethItemElementImages = [];
+                try {
+                    window.ethItemElementImages = await (await fetch(window.context.ethItemElementImagesURL)).json();
+                } catch(e) {
+                }
+                window.metadatas = [];
+                try {
+                    window.metadatas = await (await fetch(window.context.ethItemMetadatasURL)).json();
+                } catch(e) {
+                }
                 update = true;
                 window.globalCollections = [];
             }
@@ -2148,7 +2157,7 @@ window.tryRetrieveMetadata = async function tryRetrieveMetadata(item) {
     if (item.metadataLink) {
         return;
     }
-    if(window.pandorasBox.indexOf(window.web3.utils.toChecksumAddress(item.address)) !== -1) {
+    if(window.context.pandorasBox.indexOf(window.web3.utils.toChecksumAddress(item.address)) !== -1) {
         item.metadataLink = "blank";
         item.image = window.getElementImage(item);
         return;
@@ -2156,12 +2165,20 @@ window.tryRetrieveMetadata = async function tryRetrieveMetadata(item) {
     var clearMetadata = true;
     try {
         item.metadataLink = item.objectId ? await window.blockchainCall(item.contract.methods.uri, item.objectId) : await window.blockchainCall(item.contract.methods.uri);
+        item.objectId && (item.metadataLink = item.metadataLink.split('0x{id}').join(item.objectId));
+        item.metadataLink = window.metadatas[item.address] || item.metadataLink;
         if (item.metadataLink !== "") {
             item.image = window.formatLink(item.metadataLink);
             try {
                 item.metadata = await window.AJAXRequest(window.formatLink(item.metadataLink));
                 if (typeof item.metadata !== "string") {
-                    Object.entries(item.metadata).forEach(it => item[it[0]] = it[1]);
+                    Object.entries(item.metadata).forEach(it => {
+                        if(it[1] === undefined || it[1] === null) {
+                            delete item.metadata[it[0]];
+                            return;
+                        }
+                        item[it[0]] = it[1]
+                    });
                     item.name = item.item_name || item.name;
                     item.description = item.description && item.description.split('\n\n').join(' ');
                 }
@@ -2176,12 +2193,12 @@ window.tryRetrieveMetadata = async function tryRetrieveMetadata(item) {
     } catch (e) {}
     clearMetadata && delete item.metadata;
     clearMetadata && (item.metadataLink = clearMetadata ? "blank" : item.metadataLink);
-    /*if(!clearMetadata && window.ethItemElementImages[item.address] && !item.elementImageLoaded) {
+    if(!clearMetadata && window.ethItemElementImages[item.address] && !item.elementImageLoaded) {
         item.elementImageLoaded = window.ethItemElementImages[item.address];
         item.logoURI = item.elementImageLoaded;
         item.logoUri = item.elementImageLoaded;
         item.image = item.elementImageLoaded;
-    }*/
+    }
 };
 
 window.getTokenPriceInDollarsOnUniswap = async function getTokenPriceInDollarsOnUniswap(tokenAddress, decimals, amountPlain) {
@@ -2232,7 +2249,13 @@ window.getTokenPriceInDollarsOnOpenSea = async function getTokenPriceInDollarsOn
     return price;
 };
 
-window.loadCollectionItems = async function loadCollectionItems(collectionAddress) {
+window.loadCollectionItems = async function loadCollectionItems(collectionAddressToSearch) {
+    var collectionAddress = collectionAddressToSearch;
+    var collection = window.globalCollections.filter(it => it.address === collectionAddress)[0];
+    if(collection.category === 'W1155' && window.context.W1155GroupMode === true) {
+         collectionAddress = window.globalCollections.filter(it => it.category === 'W1155' && it.sourceAddress === collection.sourceAddress).map(it => it.address);
+    }
+    window.itemObjectIdLinker = window.itemObjectIdLinker || {};
     var logs = await window.getLogs({
         address: collectionAddress,
         topics: [window.web3.utils.sha3("NewItem(uint256,address)")]
@@ -2244,26 +2267,53 @@ window.loadCollectionItems = async function loadCollectionItems(collectionAddres
     var collectionObjectIds = {};
     for (var log of logs) {
         var objectId;
+        var address;
         try {
             objectId = web3.eth.abi.decodeParameter("uint256", log.topics[1]);
+            address = web3.eth.abi.decodeParameter("address", log.topics[2]);
         } catch (e) {
             objectId = web3.eth.abi.decodeParameters(["uint256", "address", "uint256"], log.data)[0];
+            address = web3.eth.abi.decodeParameters(["uint256", "address", "uint256"], log.data)[1];
         }
-        collectionObjectIds[objectId] = true;
+        collectionObjectIds[objectId] = window.context.pandorasBox.indexOf(window.web3.utils.toChecksumAddress(address)) === -1;
+        window.itemObjectIdLinker[objectId] = window.itemObjectIdLinker[objectId] || {
+            objectId,
+            address,
+            collectionAddress : log.address
+        }
     }
     return Object.keys(collectionObjectIds);
 }
 
 window.loadExcludingCollections = async function loadExcludingCollections() {
     window.context.excludingCollections = (window.context.excludingCollections || []).map(it => web3.utils.toChecksumAddress(it));
-    window.context.pandorasBox = [];
+    window.context.pandorasBox = (window.context.pandorasBox || []).map(it => web3.utils.toChecksumAddress(it));
     try {
         var pandorasBox = await fetch(window.context.pandorasBoxURL);
         pandorasBox = await pandorasBox.json();
-        window.context.pandorasBox.push(...pandorasBox);
+        window.context.pandorasBox.push(...pandorasBox.map(it => web3.utils.toChecksumAddress(it)).filter(it => window.context.pandorasBox.indexOf(it) === -1));
     } catch(e) {
     }
 };
+
+window.loadCorrectCollection = async function loadCorrectCollection(item, oldCollection) {
+    window.itemObjectIdLinker = window.itemObjectIdLinker || {};
+    if(oldCollection.category !== 'W1155' || window.context.W1155GroupMode !== true || item.correctCollectionLoaded || !window.itemObjectIdLinker[item.objectId]) {
+        return;
+    }
+    item.correctCollectionLoaded = true;
+    if(window.itemObjectIdLinker[item.objectId].collectionAddress === oldCollection.address) {
+        return item.collection = oldCollection;
+    }
+    var correctCollection = window.globalCollections.filter(it => it.address === window.itemObjectIdLinker[item.objectId].collectionAddress)[0];
+    if(!correctCollection) {
+        correctCollection = await window.loadSingleCollection(window.itemObjectIdLinker[item.objectId].collectionAddress);
+    }
+    correctCollection.items = correctCollection.items || {};
+    Object.entries(oldCollection.items).forEach(it => correctCollection.items[it[0]] = it[1]);
+    Object.entries(correctCollection.items).forEach(it => oldCollection.items[it[0]] = it[1]);
+    item.collection = correctCollection;
+}
 
 window.loadItemData = async function loadItemData(item, collection, view) {
     collection = collection || (item && item.collection) || (view && view.props.collection);
@@ -2280,9 +2330,10 @@ window.loadItemData = async function loadItemData(item, collection, view) {
     collection.items = collection.items || {};
     item.objectId = item.objectId || view.props.objectId;
     collection.items[item.objectId] = item;
-    item.collection = collection;
     item.key = item.objectId;
-    item.contract = collection.contract;
+    await window.loadCorrectCollection(item, collection);
+    item.collection = item.collection || collection;
+    item.contract = item.collection.contract;
     try {
         item.address = item.address || window.web3.utils.toChecksumAddress(await window.blockchainCall(item.contract.methods.asInteroperable, item.objectId));
     } catch (e) {

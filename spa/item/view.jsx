@@ -17,7 +17,7 @@ var Item = React.createClass({
     onClick(e) {
         window.preventItem(e);
         this.emit('section/change', 'spa/collection', {
-            collection: this.props.collection
+            collection: this.getItem().collection
         });
     },
     toggle(e) {
@@ -92,31 +92,37 @@ var Item = React.createClass({
     },
     max(e) {
         window.preventItem(e);
-        this.unwrapInput.value = this.props.item.dynamicData.balanceOfCollectionSidePlain.split(',').join();
+        this.unwrapInput.value = this.getItem().dynamicData.balanceOfCollectionSidePlain.split(',').join();
     },
     componentDidMount() {
-        window.setHomepageLink(`?interoperable=${this.props.item.address}`);
+        var item = this.getItem();
+        window.setHomepageLink(`?interoperable=${item.address}`);
         var _this = this;
-        window.retrieveWrappedCode(this.props.item).then(() => _this.forceUpdate());
+        window.retrieveWrappedCode(item).then(() => _this.forceUpdate());
     },
     wrap(e) {
         window.preventItem(e);
+        var item = this.getItem();
         this.emit('section/change', 'spa/wrap', {
-            selectedTokenType : this.props.item.collection.category.split('W').join('ERC'),
-            collectionAddress : this.props.item.collection.address,
-            sourceAddress : this.props.item.sourceAddress && this.props.item.sourceAddress !== 'blank' ? this.props.item.sourceAddress : this.props.collection.sourceAddress,
-            tokenId : this.props.item.objectId
+            selectedTokenType : item.collection.category.split('W').join('ERC'),
+            collectionAddress : item.collection.address,
+            sourceAddress : item.sourceAddress && item.sourceAddress !== 'blank' ? item.sourceAddress : item.collection.sourceAddress,
+            tokenId : item.objectId
         });
     },
     transfer(e) {
         window.preventItem(e);
+        var item = this.getItem();
         this.emit('section/change', 'spa/transfer', {
-            collectionAddress : this.props.item.collection.address,
-            objectId : this.props.item.objectId
+            collectionAddress : item.collection.address,
+            objectId : item.objectId
         });
     },
+    getItem() {
+        return (this.state && this.state.item) || this.props.item;
+    },
     render() {
-        var item = (this.state && this.state.item) || this.props.item;
+        var item = this.getItem();
         if(this.state && this.state.item && this.state.item.objectId !== this.props.item.objectId) {
             item = this.props.item;
         }
@@ -124,7 +130,7 @@ var Item = React.createClass({
         return (
             <section className="Pager">
                 <section className="returntocollection">
-                    <a href="javascript:;" onClick={this.onClick}><img src={window.getElementImage(this.props.collection)}></img> &#8592; From the <b>{this.props.collection.name} <span>({this.props.collection.symbol})</span></b> collection</a>
+                    <a href="javascript:;" onClick={this.onClick}><img src={window.getElementImage(item.collection)}></img> &#8592; From the <b>{item.collection.name} <span>({item.collection.symbol})</span></b> collection</a>
                 </section>
                 <section className="itemPage">
                     <section className="itemPageInfo">
@@ -135,14 +141,14 @@ var Item = React.createClass({
                             <section className="itemFundamentals">
                                 <h3 className="ItemTitle">{item.name} <span> ({item.symbol})</span></h3>
                                 <section className="itemFundamentalsThing">
-                                    <h5 className="itemaddress"><a target="_blank" href={window.context.openSeaItemLinkTemplate.format(this.props.collection.address, item.objectId)}>NFT Address</a></h5>
+                                    <h5 className="itemaddress"><a target="_blank" href={window.context.openSeaItemLinkTemplate.format(item.collection.address, item.objectId)}>NFT Address</a></h5>
                                     <h5 className="itemaddress"><a target="_blank" href={`${window.getNetworkElement("etherscanURL")}token/${item.address}`}>ERC20 Address</a></h5>
                                 </section>
                                 <section className="collectionInfoSide">
                                     <span className="ItemCollectionLink"><a target="_blank" onClick={window.copyHREF} href={window.getHomepageLink(`?wrappedItem=${this.props.item.address}`)} className="collectionLink collectionLinkS BrandizedS superlink">Copy Link</a></span>
                                 </section>
                                 <section className="collectionInfoSideLinks">
-                                    {this.props.collection.licence_url && <span className="ItemCollectionLink"><a target="_blank" href={window.formatLink(this.props.collection.licence_url)} className="collectionLink">Collection Licence</a></span>}
+                                    {item.collection.licence_url && <span className="ItemCollectionLink"><a target="_blank" href={window.formatLink(item.collection.licence_url)} className="collectionLink">Collection Licence</a></span>}
                                     {this.props.item.licence_url && <span className="ItemCollectionLink"><a target="_blank" href={window.formatLink(this.props.item.licence_url)} className="collectionLink">Item Licence</a></span>}
                                 </section>
                                 <section className="itemFundamentalsThing">
@@ -154,7 +160,7 @@ var Item = React.createClass({
                                         <br/>
                                         <a className="ItemPrice" target="_blank" href={window.context.uniswapSpawUrlTemplate.format(item.address)}>&#129412; $ {item.dynamicData.tokenPriceInDollarsOnUniswap ? window.formatMoney(item.dynamicData.tokenPriceInDollarsOnUniswap, 1) : "--"}</a>
                                         <a className="ItemPrice" target="_blank" href={window.context.uniswapInfoUrlTemplate.format(item.address)}>&#128039; Info</a>
-                                        <a className="ItemPrice" target="_blank" href={window.context.openSeaItemLinkTemplate.format(this.props.collection.address, item.objectId)}>&#9973; $ {item.dynamicData.tokenPriceInDollarsOnOpenSea ? window.formatMoney(item.dynamicData.tokenPriceInDollarsOnOpenSea, 1) : "--"}</a>
+                                        <a className="ItemPrice" target="_blank" href={window.context.openSeaItemLinkTemplate.format(item.collection.address, item.objectId)}>&#9973; $ {item.dynamicData.tokenPriceInDollarsOnOpenSea ? window.formatMoney(item.dynamicData.tokenPriceInDollarsOnOpenSea, 1) : "--"}</a>
                                         <section className="itemSidebySide">
                                             {this.props.item.dynamicData && this.props.item.dynamicData.canMint && <section className="SettingsForOwn">
                                                 <label>
@@ -199,15 +205,15 @@ var Item = React.createClass({
                         </section>}
                         {toggle === 'code' && <section className="collectionPageItemsCode">
                             {this.props.item.collection.extensionCode && <section className="CodePART">
-                                <h3>Extension <a target="_blank" href={window.getNetworkElement("etherscanURL") + "address/" + this.props.collection.address}> (Etherscan)</a></h3>
+                                <h3>Extension <a target="_blank" href={window.getNetworkElement("etherscanURL") + "address/" + item.collection.address}> (Etherscan)</a></h3>
                                 <Editor readonly firstCode={this.props.item.collection.extensionCode} />
                             </section>}
                             {this.props.item.collection.modelCode && <section className="CodePART">
-                                <h3>Main Interface <a target="_blank" href={window.getNetworkElement("etherscanURL") + "address/" + this.props.collection.address}> (Etherscan)</a></h3>
+                                <h3>Main Interface <a target="_blank" href={window.getNetworkElement("etherscanURL") + "address/" + item.collection.address}> (Etherscan)</a></h3>
                                 <Editor readonly firstCode={this.props.item.collection.modelCode} />
                             </section>}
                             {this.props.item.collection.wrappedCode && <section className="CodePART">
-                                <h3>Interoperable Interface <a target="_blank" href={window.getNetworkElement("etherscanURL") + "address/" + this.props.collection.address}> (Etherscan)</a></h3>
+                                <h3>Interoperable Interface <a target="_blank" href={window.getNetworkElement("etherscanURL") + "address/" + item.collection.address}> (Etherscan)</a></h3>
                                 <Editor readonly firstCode={this.props.item.collection.wrappedCode} />
                             </section>}
                         </section>}
