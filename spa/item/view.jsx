@@ -141,7 +141,7 @@ var Item = React.createClass({
                             <section className="itemFundamentals">
                                 <h3 className="ItemTitle">{item.name} <span> ({item.symbol})</span></h3>
                                 <section className="itemFundamentalsThing">
-                                    <h5 className="itemaddress"><a target="_blank" href={window.context.openSeaItemLinkTemplate.format(item.collection.address, item.objectId)}>NFT Address</a></h5>
+                                    <h5 className="itemaddress"><a target="_blank" href={`${window.getNetworkElement("etherscanURL")}address/${item.collection.address}/${item.objectId}`}>NFT Address</a></h5>
                                     <h5 className="itemaddress"><a target="_blank" href={`${window.getNetworkElement("etherscanURL")}token/${item.address}`}>ERC20 Address</a></h5>
                                 </section>
                                 <section className="collectionInfoSide">
