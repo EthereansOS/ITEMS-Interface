@@ -148,6 +148,7 @@ window.onEthereumUpdate = function onEthereumUpdate(millis) {
                     return alert('This network is actually not supported!');
                 }
                 await window.loadExcludingCollections();
+                window.ethItemElementImages = await (await fetch(window.context.ethItemElementImagesURL)).json();
                 update = true;
                 window.globalCollections = [];
             }
@@ -2147,6 +2148,11 @@ window.tryRetrieveMetadata = async function tryRetrieveMetadata(item) {
     if (item.metadataLink) {
         return;
     }
+    if(window.pandorasBox.indexOf(window.web3.utils.toChecksumAddress(item.address)) !== -1) {
+        item.metadataLink = "blank";
+        item.image = window.getElementImage(item);
+        return;
+    }
     var clearMetadata = true;
     try {
         item.metadataLink = item.objectId ? await window.blockchainCall(item.contract.methods.uri, item.objectId) : await window.blockchainCall(item.contract.methods.uri);
@@ -2170,6 +2176,12 @@ window.tryRetrieveMetadata = async function tryRetrieveMetadata(item) {
     } catch (e) {}
     clearMetadata && delete item.metadata;
     clearMetadata && (item.metadataLink = clearMetadata ? "blank" : item.metadataLink);
+    /*if(!clearMetadata && window.ethItemElementImages[item.address] && !item.elementImageLoaded) {
+        item.elementImageLoaded = window.ethItemElementImages[item.address];
+        item.logoURI = item.elementImageLoaded;
+        item.logoUri = item.elementImageLoaded;
+        item.image = item.elementImageLoaded;
+    }*/
 };
 
 window.getTokenPriceInDollarsOnUniswap = async function getTokenPriceInDollarsOnUniswap(tokenAddress, decimals, amountPlain) {
@@ -2244,10 +2256,11 @@ window.loadCollectionItems = async function loadCollectionItems(collectionAddres
 
 window.loadExcludingCollections = async function loadExcludingCollections() {
     window.context.excludingCollections = (window.context.excludingCollections || []).map(it => web3.utils.toChecksumAddress(it));
+    window.context.pandorasBox = [];
     try {
-        var communityDrivenExcludingCollections = await fetch(window.context.communityDrivenExcludingCollectionsURL);
-        communityDrivenExcludingCollections = await communityDrivenExcludingCollections.json();
-        window.context.excludingCollections.push(... communityDrivenExcludingCollections.map(it => web3.utils.toChecksumAddress(it)));
+        var pandorasBox = await fetch(window.context.pandorasBoxURL);
+        pandorasBox = await pandorasBox.json();
+        window.context.pandorasBox.push(...pandorasBox);
     } catch(e) {
     }
 };
