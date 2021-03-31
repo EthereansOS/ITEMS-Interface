@@ -2157,7 +2157,7 @@ window.tryRetrieveMetadata = async function tryRetrieveMetadata(item) {
     if (item.metadataLink) {
         return;
     }
-    if(window.context.pandorasBox.indexOf(window.web3.utils.toChecksumAddress(item.address)) !== -1) {
+    if(window.context.pandorasBox.indexOf(window.web3.utils.toChecksumAddress(item.address)) !== -1 || (item.collection && window.context.pandorasBox.indexOf(window.web3.utils.toChecksumAddress(item.collection.address)) !== -1)) {
         item.metadataLink = "blank";
         item.image = window.getElementImage(item);
         return;
