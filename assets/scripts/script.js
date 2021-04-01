@@ -2328,6 +2328,7 @@ window.loadItemData = async function loadItemData(item, collection, view) {
         item = window.deepCopy(item, propsItem);
         item = window.deepCopy(item, stateItem);
     }
+    item.dynamicData = item.dynamicData || {};
     collection.items = collection.items || {};
     item.objectId = item.objectId || view.props.objectId;
     collection.items[item.objectId] = item;

@@ -89,7 +89,7 @@ var IndexController = function (view) {
     };
 
     context.refreshCollectionData = async function refreshCollectionData(collections) {
-        collections = collections || context.view.state.collections;
+        collections = collections || (context.view && context.view.state && context.view.state.collections);
         if (!collections) {
             return;
         }
