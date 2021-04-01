@@ -46,8 +46,8 @@ var SingleCollection = React.createClass({
                     {this.props.showLink && <span className="ItemCollectionLink"><a target="_blank" onClick={window.copyHREF} href={window.getHomepageLink(`?collection=${this.props.collection.address}`)} className="collectionLink superlink">Copy Link</a></span>}
                     </section>
                     <section className="collectionInfoSideLinks">
-                        <span className="ItemCollectionLink"><a target="_blank" href={`${window.getNetworkElement("etherscanURL")}address/${this.props.collection.address}`} className="collectionLink">Contract</a></span>
-                        <span className="ItemCollectionLink"><a target="_blank" href={`${window.getNetworkElement("etherscanURL")}address/${this.props.collection.extensionAddress}`} className="collectionLink">Host</a></span>
+                        {this.props.showLink && <span className="ItemCollectionLink"><a target="_blank" href={`${window.getNetworkElement("etherscanURL")}address/${this.props.collection.address}`} className="collectionLink">Contract</a></span>}
+                        {this.props.showLink && this.props.collection.extensionAddress && <span className="ItemCollectionLink"><a target="_blank" href={`${window.getNetworkElement("etherscanURL")}address/${this.props.collection.extensionAddress}`} className="collectionLink">Host</a></span>}
                         {this.props.collection.externalDNS && this.props.showLink && <span className="ItemCollectionLink"><a target="_blank" href={window.formatLink(this.props.collection.externalDNS)} className="collectionLink">External DNS</a></span>}
                         {this.props.collection.externalENS && this.props.showLink && <span className="ItemCollectionLink"><a target="_blank" href={window.formatLink(this.props.collection.externalENS)} className="collectionLink">External ENS</a></span>}
                         {this.props.collection.repoUri && this.props.showLink && <span className="ItemCollectionLink"><a target="_blank" href={window.formatLink(this.props.collection.repoUri)} className="collectionLink">Repo</a></span>}
