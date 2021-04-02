@@ -2451,17 +2451,11 @@ window.loadCorrectCollection = async function loadCorrectCollection(item, oldCol
 
 window.loadItemData = async function loadItemData(item, collection, view) {
     collection = collection || (item && item.collection) || (view && view.props.collection);
-    if (!item) {
-        if (!view) {
-            return;
-        }
-        item = {};
-        item = (view && view.state && view.state.item) || (view && view.props.item) || (view && collection && view.props.objectId && collection.items && collection.items[view.props.objectId]);
-        var propsItem = (collection.items && collection.items[view.props.objectId]) || {};
-        var stateItem = (view.state && view.state.item) || {};
-        item = window.deepCopy(item, propsItem);
-        item = window.deepCopy(item, stateItem);
+    item = item || (view && view.props.collection && view.props.objectId && view.props.collection.items && view.props.collection.items[view.props.objectId]) || (view && view.state && view.state.item) || (view && view.props.item);
+    if(!item && (!view || !view.props.objectId)) {
+        return;
     }
+    item = item || {};
     item.dynamicData = item.dynamicData || {};
     collection.items = collection.items || {};
     item.objectId = item.objectId || view.props.objectId;
@@ -2518,7 +2512,10 @@ window.loadItemData = async function loadItemData(item, collection, view) {
 };
 
 window.updateItemDynamicData = async function updateItemDynamicData(item, view) {
-    item = item || (view && view.state && view.state.item) || (view && view.props.item) || (view && view.props.collection && view.props.objectId && view.props.collection.items && view.props.collection.items[view.props.objectId]);
+    item = item || (view && view.props.collection && view.props.objectId && view.props.collection.items && view.props.collection.items[view.props.objectId]) || (view && view.state && view.state.item) || (view && view.props.item);
+    if(!item) {
+        return;
+    }
     item.dynamicData = item.dynamicData || {};
     item.dynamicData.totalSupply = item.dynamicData.totalSupply || await window.blockchainCall(item.token.methods.totalSupply);
     try {

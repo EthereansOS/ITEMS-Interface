@@ -29,6 +29,14 @@ var CollectionSingleItem = React.createClass({
     componentDidMount() {
         window.loadItemData(undefined, undefined, this);
     },
+    componentDidUpdate() {
+        var item = (this.state && this.state.item) || this.props.item;
+        if(!item) {
+            return;
+        }
+        item.dynamicData = item.dynamicData || {};
+        !item.dynamicData.totalSupply && window.updateItemDynamicData(item, this);
+    },
     render() {
         var item = (this.state && this.state.item) || this.props.item || (this.props.collection && this.props.objectId && this.props.collection.items && this.props.collection.items[this.props.objectId]);
         item && (item.dynamicData = item.dynamicData || {});
