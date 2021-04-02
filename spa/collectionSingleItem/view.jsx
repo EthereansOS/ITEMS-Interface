@@ -30,8 +30,8 @@ var CollectionSingleItem = React.createClass({
         window.loadItemData(undefined, undefined, this);
     },
     render() {
-        var item = (this.state && this.state.item) || this.props.item;
-        var color = item && item.background_color;
+        var item = (this.state && this.state.item) || this.props.item || (this.props.collection && this.props.objectId && this.props.collection.items && this.props.collection.items[this.props.objectId]);
+        item && (item.dynamicData = item.dynamicData || {});
         return (<section ref={ref => ref && (ref.style.display = item && item.dynamicData && item.dynamicData.totalSupply && item.dynamicData.totalSupply !== '0' ? 'inline-block' : 'none')} className="collectionPageItem">
             <a href={this.props.readOnly ? undefined : "javascript:;"} onClick={this.props.readOnly ? undefined : this.onClick}>
                 <figure className="ItemIcon">

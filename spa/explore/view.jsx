@@ -40,6 +40,7 @@ var Explore = React.createClass({
         }
         allCollections.push(... collections);
         allCollections = allCollections.filter(it => window.context.pandorasBox.indexOf(it.address) === -1 && (!it.sourceAddress || window.context.pandorasBox.indexOf(it.sourceAddress) === -1));
+        console.log(allCollections.map(it => it.key));
         return allCollections;
     },
     render() {

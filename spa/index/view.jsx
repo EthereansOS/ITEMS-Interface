@@ -5,7 +5,8 @@ var Index = React.createClass({
     ],
     requiredScripts: [
         'spa/connect.jsx',
-        "spa/fullLoader.jsx"
+        "spa/fullLoader.jsx",
+        "spa/imported/ReactImporter.jsx"
     ],
     getDefaultSubscriptions() {
         return {

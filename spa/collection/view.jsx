@@ -4,6 +4,9 @@ var Collection = React.createClass({
         'spa/collectionSingleItem',
         'spa/editor'
     ],
+    requiredScripts: [
+        "spa/farmComponents/farmViewer.jsx"
+    ],
     getInitialState() {
         return {
             toggle: "items"
@@ -35,9 +38,19 @@ var Collection = React.createClass({
         window.retrieveAndCheckModelCode(this.props.collection).then(() => _this.forceUpdate());
     },
     render() {
-        if(window.context.excludingCollections.indexOf(this.props.collection.address) !== -1) {
+        if (window.context.excludingCollections.indexOf(this.props.collection.address) !== -1) {
             return null;
         }
+        var objectIds = [];
+        try {
+            objectIds = this.state.collectionObjectIds.filter(it => window.context.pandorasBox.indexOf(it.address) === -1);
+        } catch (e) {
+        }
+        try {
+            objectIds = objectIds.length !== 0 ? objectIds : Object.values(this.props.collection.items).filter(it => window.context.pandorasBox.indexOf(it.address) === -1);
+        } catch (e) {
+        }
+        objectIds = objectIds.map(it => it.objectId);
         return (<section className="Pager">
             <section className="collectionPage">
                 <SingleCollection collection={this.props.collection} className="collectionPageInfo" showLink showItemsCount onCollectionObjectIds={this.onCollectionObjectIds} />
@@ -52,19 +65,12 @@ var Collection = React.createClass({
                     {this.props.collection.isOwner && <a className="Enter" href="javascript:;" onClick={this.createMoreItems}>Add New</a>}
                     <section className="collectionPageItemsOrder">
                         {!this.state.collectionObjectIds && <Loader />}
-                        {this.state.collectionObjectIds && this.state.collectionObjectIds.filter(it => window.context.pandorasBox.indexOf(it.address) === -1).map(it => <CollectionSingleItem key={it.objectId} objectId={it.objectId} collection={this.props.collection} miniature />)}
+                        {objectIds.map(it => <CollectionSingleItem key={it} objectId={it} collection={this.props.collection} miniature />)}
                     </section>
                 </section>}
                 {this.state && this.state.toggle === 'farm' && <section className="collectionPageItemsFarm">
-                    <section>
-                        <section className="SoonFARM">
-                                <figure className="FarmImg">
-                                    <img src="assets/img/farmer.png"></img>
-                                </figure>
-                                <h3>Farm will available soon powered by <a target="_blank" href="https://github.com/b-u-i-d-l/unifi">UniFi V2</a> General Purposes Contracts</h3>
-                            </section>
-                        </section>
-                    </section>}
+                    <FarmViewer collectionAddress={this.props.collection.address}/>
+                </section>}
                 {this.state && this.state.toggle === 'code' && <section className="collectionPageItemsCode">
                     <section>
                         {this.props.collection.extensionCode && <section className="CodePART">

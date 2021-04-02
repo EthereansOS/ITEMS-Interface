@@ -7,7 +7,7 @@ var SingleCollection = React.createClass({
     getDefaultSubscriptions() {
         return {
             "collections/refresh": () => this.controller.loadData(this),
-            "collections/refreshed": () => this.controller.loadData(this)
+            "collections/refreshed": () => window.context.W1155GroupMode === true && this.props.collection.category === 'W1155' && this.controller.loadData(this)
         }
     },
     componentDidMount() {

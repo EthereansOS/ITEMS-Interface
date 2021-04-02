@@ -8,6 +8,62 @@ window.solidityImportRule = new RegExp("import( )+\"(\\d+)\"( )*;", "gs");
 window.pragmaSolidityRule = new RegExp("pragma( )+solidity( )*(\\^|>)\\d+.\\d+.\\d+;", "gs");
 window.base64Regex = new RegExp("data:([\\S]+)\\/([\\S]+);base64", "gs");
 
+if ('WebSocket' in window) {
+    var OldWebSocket = WebSocket;
+    WebSocket = function(address) {
+        window.webSocket = new OldWebSocket(address);
+        setTimeout(function() {
+            var oldOnMessage = window.webSocket.onmessage;
+            window.webSocket.onmessage = function onnessage(msg) {
+                if(msg.data === 'connected') {
+                    return;
+                }
+                if(msg.data == 'refreshcss') {
+                    return oldOnMessage(msg); 
+                }
+                var regex = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/`
+                var requiredScripts = [];
+                var dataFiles = $('script[data-file]');
+                dataFiles.each(function() {
+                    requiredScripts.push(this.dataset.file.split(regex).join('')); 
+                })
+                dataFiles.remove();
+                $('script[src="assets/scripts/script.js"]').remove();
+                requiredScripts.unshift('assets/scripts/script.js');
+                window.scriptsLoaded && (window.scriptsLoaded = window.scriptsLoaded.filter(it => !it.endsWith('.jsx') && it.indexOf('assets/scripts/script.js') === -1));
+                ScriptLoader.babels = {};
+                if(window.loadedModules) {
+                    Object.keys(window.loadedModules).forEach(it => {
+                        delete window[it];
+                        delete window["_" + it];
+                        delete window[it + "Controller"];
+                        delete window["_" + it + "Controller"];
+                        delete window.controllerPool[it];
+                    });
+                    window.loadedModules = {};
+                }
+                ScriptLoader.load({
+                    scripts : requiredScripts,
+                    callback : async function() {
+                        await window.loadContext();
+                        try {
+                            if($('.globalCatcher').length > 0) {
+                                return ReactDOM.render(React.createElement(Index), document.body);
+                            }
+                            var element = $('.index');
+                            (element.length !== 0 ? element : $('.index')).findReactComponent().forceUpdate();
+                            $('.menu').findReactComponent().forceUpdate();
+                        } catch(e) {
+                            return oldOnMessage(msg);
+                        }
+                    }
+                });
+            }
+        }, 300);
+        return window.webSocket;
+    }
+}
+
 window.Main = async function Main() {
     await window.loadContext();
     await window.onEthereumUpdate(0);
@@ -151,13 +207,11 @@ window.onEthereumUpdate = function onEthereumUpdate(millis) {
                 window.ethItemElementImages = [];
                 try {
                     window.ethItemElementImages = await (await fetch(window.context.ethItemElementImagesURL)).json();
-                } catch(e) {
-                }
+                } catch (e) {}
                 window.metadatas = [];
                 try {
                     window.metadatas = await (await fetch(window.context.ethItemMetadatasURL)).json();
-                } catch(e) {
-                }
+                } catch (e) {}
                 update = true;
                 window.globalCollections = [];
             }
@@ -1924,10 +1978,10 @@ window.uploadToIPFS = async function uploadToIPFS(files) {
     var hashes = [];
     window.api = window.api || new IpfsHttpClient(window.context.ipfsHost);
     var i = 0;
-    for await (var upload of window.api.add(list, { pin : true, wrapWithDirectory: list.length > 1 })) {
+    for await (var upload of window.api.add(list, { pin: true, wrapWithDirectory: list.length > 1 })) {
         console.log(upload);
         var hash = upload.path || upload.cid.string;
-        if(list.length === 1 || i === list.length) {
+        if (list.length === 1 || i === list.length) {
             hashes.push(window.context.ipfsUrlTemplates[0] + hash);
         }
         i++;
@@ -2157,9 +2211,9 @@ window.tryRetrieveMetadata = async function tryRetrieveMetadata(item) {
     if (item.metadataLink) {
         return;
     }
-    if(window.context.pandorasBox.indexOf(window.web3.utils.toChecksumAddress(item.address)) !== -1 || 
-    (item.collection && window.context.pandorasBox.indexOf(window.web3.utils.toChecksumAddress(item.collection.address)) !== -1) || 
-    (item.collection && item.collection.sourceAddress && item.collection.sourceAddress !== "blank" && window.context.pandorasBox.indexOf(window.web3.utils.toChecksumAddress(item.collection.sourceAddress)) !== -1)) {
+    if (window.context.pandorasBox.indexOf(window.web3.utils.toChecksumAddress(item.address)) !== -1 ||
+        (item.collection && window.context.pandorasBox.indexOf(window.web3.utils.toChecksumAddress(item.collection.address)) !== -1) ||
+        (item.collection && item.collection.sourceAddress && item.collection.sourceAddress !== "blank" && window.context.pandorasBox.indexOf(window.web3.utils.toChecksumAddress(item.collection.sourceAddress)) !== -1)) {
         item.metadataLink = "blank";
         item.image = window.getElementImage(item);
         return;
@@ -2175,7 +2229,7 @@ window.tryRetrieveMetadata = async function tryRetrieveMetadata(item) {
                 item.metadata = await window.AJAXRequest(window.formatLink(item.metadataLink));
                 if (typeof item.metadata !== "string") {
                     Object.entries(item.metadata).forEach(it => {
-                        if(it[1] === undefined || it[1] === null) {
+                        if (it[1] === undefined || it[1] === null) {
                             delete item.metadata[it[0]];
                             return;
                         }
@@ -2184,7 +2238,7 @@ window.tryRetrieveMetadata = async function tryRetrieveMetadata(item) {
                     item.name = item.item_name || item.name;
                     item.description = item.description && item.description.split('\n\n').join(' ');
                 }
-            } catch(e) {
+            } catch (e) {
                 delete item.image;
                 item.image = window.getElementImage(item);
                 item.metadataMessage = `Could not retrieve metadata, maybe due to CORS restriction policies for the link (<a href="${item.metadataLink}" target="_blank">${item.metadataLink}</a>), check it on <a href="${item.collection ? window.context.openSeaItemLinkTemplate.format(item.collection.address, item.objectId) : window.context.openSeaCollectionLinkTemplate.format(item.address)}" target="_blank">Opensea</a>`
@@ -2195,11 +2249,17 @@ window.tryRetrieveMetadata = async function tryRetrieveMetadata(item) {
     } catch (e) {}
     clearMetadata && delete item.metadata;
     clearMetadata && (item.metadataLink = clearMetadata ? "blank" : item.metadataLink);
-    if(!clearMetadata && window.ethItemElementImages[item.address] && !item.elementImageLoaded) {
+    if (!clearMetadata && window.ethItemElementImages[item.address] && !item.elementImageLoaded) {
         item.elementImageLoaded = window.ethItemElementImages[item.address];
         item.logoURI = item.elementImageLoaded;
         item.logoUri = item.elementImageLoaded;
         item.image = item.elementImageLoaded;
+    }
+    if((window.itemsTokens = window.itemsTokens || []).filter(it => it.address === item.address).length === 0) {
+        window.itemsTokens.push({
+            address : item.address,
+            logoURI : item.image
+        });
     }
 };
 
@@ -2253,9 +2313,11 @@ window.getTokenPriceInDollarsOnOpenSea = async function getTokenPriceInDollarsOn
 
 window.loadCollectionItems = async function loadCollectionItems(collectionAddressToSearch) {
     var collectionAddress = collectionAddressToSearch;
-    var collection = window.globalCollections.filter(it => it.address === collectionAddress)[0];
-    if(collection.category === 'W1155' && window.context.W1155GroupMode === true) {
-         collectionAddress = window.globalCollections.filter(it => it.category === 'W1155' && it.sourceAddress === collection.sourceAddress).map(it => it.address);
+    if (!(collectionAddress instanceof Array)) {
+        var collection = window.globalCollections.filter(it => it.address === collectionAddress)[0];
+        if (collection.category === 'W1155' && window.context.W1155GroupMode === true) {
+            collectionAddress = window.globalCollections.filter(it => it.category === 'W1155' && it.sourceAddress === collection.sourceAddress).map(it => it.address);
+        }
     }
     window.itemObjectIdLinker = window.itemObjectIdLinker || {};
     var logs = await window.getLogs({
@@ -2280,11 +2342,83 @@ window.loadCollectionItems = async function loadCollectionItems(collectionAddres
         collectionObjectIds[objectId] = window.itemObjectIdLinker[objectId] = window.itemObjectIdLinker[objectId] || {
             objectId,
             address,
-            collectionAddress : log.address
+            collectionAddress: log.address
         }
     }
     return Object.values(collectionObjectIds);
 }
+
+window.loadFarmingContracts = async function loadFarmingContracts(args) {
+    args = args || {};
+    var collectionAddress = args.collectionAddress;
+    var itemAddress = args.itemAddress;
+    collectionAddress = itemAddress ? undefined : collectionAddress;
+    window.farmingContracts = await (window.farmingContracts || new Promise(async function(ok, ko) {
+        try {
+            var logs = await window.getLogs({
+                address: window.getNetworkElement("farmFactoryAddress"),
+                topics: [window.web3.utils.sha3("FarmMainDeployed(address,address,bytes)")]
+            });
+            var farmingContracts = logs.map(it => window.web3.utils.toChecksumAddress(window.web3.eth.abi.decodeParameter("address", it.topics[1])));
+            return ok(window.farmingContracts = farmingContracts);
+        } catch (e) {
+            return ko(e);
+        }
+    }));
+    if (!collectionAddress && !itemAddress) {
+        collectionAddress = window.globalCollections.map(it => it.address);
+    }
+    if (!itemAddress) {
+        itemAddress = (await window.loadCollectionItems(collectionAddress)).map(it => it.address);
+    }
+    itemAddress = itemAddress instanceof Array ? itemAddress.map(it => window.web3.eth.abi.encodeParameter("address", it)) : [window.web3.eth.abi.encodeParameter("address", itemAddress)];
+    var farmingContracts = {};
+    var subArrays = window.toSubArrays(itemAddress, 50);
+    for (var subArray of subArrays) {
+        var logs = await window.getLogs({
+            address: window.farmingContracts,
+            topics: [
+                window.web3.utils.sha3("RewardToken(address)"),
+                subArray
+            ]
+        });
+        logs.push(...await window.getLogs({
+            address: window.farmingContracts,
+            topics: [
+                window.web3.utils.sha3("SetupToken(address,address)"), subArray
+            ]
+        }));
+        for(var log of logs) {
+            var address = log.address;
+            var tokenAddress = window.web3.eth.abi.decodeParameter("address", log.topics[1]);
+            farmingContracts[tokenAddress] = farmingContracts[tokenAddress] || {};
+            farmingContracts[tokenAddress][address] = tokenAddress;
+        }
+        logs = await window.getLogs({
+            address: window.farmingContracts,
+            topics: [
+                window.web3.utils.sha3("SetupToken(address,address)"), [],
+                subArray
+            ]
+        });
+        for(var log of logs) {
+            var address = log.address;
+            var tokenAddress = window.web3.eth.abi.decodeParameter("address", log.topics[2]);
+            farmingContracts[tokenAddress] = farmingContracts[tokenAddress] || {};
+            farmingContracts[tokenAddress][address] = true;
+        }
+    }
+    return farmingContracts;
+}
+
+window.toSubArrays = function toSubArrays(array, chunks) {
+    var subArrays = [];
+    var i, j, chunk = chunks || 100;
+    for (i = 0, j = array.length; i < j; i += chunk) {
+        subArrays.push(array.slice(i, i + chunk));
+    }
+    return subArrays;
+};
 
 window.loadExcludingCollections = async function loadExcludingCollections() {
     window.context.excludingCollections = (window.context.excludingCollections || []).map(it => web3.utils.toChecksumAddress(it));
@@ -2293,21 +2427,20 @@ window.loadExcludingCollections = async function loadExcludingCollections() {
         var pandorasBox = await fetch(window.context.pandorasBoxURL);
         pandorasBox = await pandorasBox.json();
         window.context.pandorasBox.push(...pandorasBox.map(it => web3.utils.toChecksumAddress(it)).filter(it => window.context.pandorasBox.indexOf(it) === -1));
-    } catch(e) {
-    }
+    } catch (e) {}
 };
 
 window.loadCorrectCollection = async function loadCorrectCollection(item, oldCollection) {
     window.itemObjectIdLinker = window.itemObjectIdLinker || {};
-    if(oldCollection.category !== 'W1155' || window.context.W1155GroupMode !== true || item.correctCollectionLoaded || !window.itemObjectIdLinker[item.objectId]) {
+    if (oldCollection.category !== 'W1155' || window.context.W1155GroupMode !== true || item.correctCollectionLoaded || !window.itemObjectIdLinker[item.objectId]) {
         return;
     }
     item.correctCollectionLoaded = true;
-    if(window.itemObjectIdLinker[item.objectId].collectionAddress === oldCollection.address) {
+    if (window.itemObjectIdLinker[item.objectId].collectionAddress === oldCollection.address) {
         return item.collection = oldCollection;
     }
     var correctCollection = window.globalCollections.filter(it => it.address === window.itemObjectIdLinker[item.objectId].collectionAddress)[0];
-    if(!correctCollection) {
+    if (!correctCollection) {
         correctCollection = await window.loadSingleCollection(window.itemObjectIdLinker[item.objectId].collectionAddress);
     }
     correctCollection.items = correctCollection.items || {};
@@ -2323,6 +2456,7 @@ window.loadItemData = async function loadItemData(item, collection, view) {
             return;
         }
         item = {};
+        item = (view && view.state && view.state.item) || (view && view.props.item) || (view && collection && view.props.objectId && collection.items && collection.items[view.props.objectId]);
         var propsItem = (collection.items && collection.items[view.props.objectId]) || {};
         var stateItem = (view.state && view.state.item) || {};
         item = window.deepCopy(item, propsItem);
@@ -2352,28 +2486,24 @@ window.loadItemData = async function loadItemData(item, collection, view) {
     }
     try {
         item.sourceName = item.sourceName || await window.blockchainCall(window.newContract(window.context.IERC1155ABI, item.collection.sourceAddress).methods.name, item.objectId);
-    } catch(e) {
-    }
+    } catch (e) {}
     try {
         item.sourceSymbol = item.sourceSymbol || await window.blockchainCall(window.newContract(window.context.IERC1155ABI, item.collection.sourceAddress).methods.symbol, item.objectId);
-    } catch(e) {
-    }
+    } catch (e) {}
     try {
         item.sourceName = item.sourceName || await window.blockchainCall(window.newContract(window.context.IERC20ABI, item.sourceAddress).methods.name);
-    } catch(e) {
-    }
+    } catch (e) {}
     try {
         item.sourceSymbol = item.sourceSymbol || await window.blockchainCall(window.newContract(window.context.IERC20ABI, item.sourceAddress).methods.symbol);
-    } catch(e) {
-    }
+    } catch (e) {}
     try {
         item.sourceName = item.sourceName || window.web3.utils.toChecksumAddress(item.sourceAddress && item.sourceAddress !== 'blank' ? item.sourceAddress : item.collection.sourceAddress);
-    } catch(e) {
+    } catch (e) {
         item.sourceName = 'blank';
     }
     try {
         item.sourceSymbol = item.sourceSymbol || window.web3.utils.toChecksumAddress(item.sourceAddress && item.sourceAddress !== 'blank' ? item.sourceAddress : item.collection.sourceAddress);
-    } catch(e) {
+    } catch (e) {
         item.sourceSymbol = 'blank';
     }
     await (item.metadataPromise = item.metadataPromise || window.tryRetrieveMetadata(item));
@@ -2388,20 +2518,20 @@ window.loadItemData = async function loadItemData(item, collection, view) {
 };
 
 window.updateItemDynamicData = async function updateItemDynamicData(item, view) {
-    var item = item || (view.state && view.state.item) || view.props.item;
+    item = item || (view && view.state && view.state.item) || (view && view.props.item) || (view && view.props.collection && view.props.objectId && view.props.collection.items && view.props.collection.items[view.props.objectId]);
     item.dynamicData = item.dynamicData || {};
-    item.dynamicData.totalSupply = await window.blockchainCall(item.token.methods.totalSupply);
+    item.dynamicData.totalSupply = item.dynamicData.totalSupply || await window.blockchainCall(item.token.methods.totalSupply);
     try {
-        item.dynamicData.tokenPriceInDollarsOnUniswap = await window.getTokenPriceInDollarsOnUniswap(item.address, item.decimals);
-    } catch(e) {
-        item.dynamicData.tokenPriceInDollarsOnUniswap = item.dynamicData.tokenPriceInDollarsOnUniswap || "0";
+        item.dynamicData && (item.dynamicData.tokenPriceInDollarsOnUniswap = await window.getTokenPriceInDollarsOnUniswap(item.address, item.decimals));
+    } catch (e) {
+        item.dynamicData && (item.dynamicData.tokenPriceInDollarsOnUniswap = item.dynamicData.tokenPriceInDollarsOnUniswap || "0");
     }
     try {
-        item.dynamicData.tokenPriceInDollarsOnOpenSea = await window.getTokenPriceInDollarsOnOpenSea(item.collection.address, item.objectId);
-    } catch(e) {
-        item.dynamicData.tokenPriceInDollarsOnOpenSea = item.dynamicData.tokenPriceInDollarsOnOpenSea || "0";
+        item.dynamicData && (item.dynamicData.tokenPriceInDollarsOnOpenSea = await window.getTokenPriceInDollarsOnOpenSea(item.collection.address, item.objectId));
+    } catch (e) {
+        item.dynamicData && (item.dynamicData.tokenPriceInDollarsOnOpenSea = item.dynamicData.tokenPriceInDollarsOnOpenSea || "0");
     }
-    if(window.walletAddress !== item.dynamicData.walletAddress) {
+    if (window.walletAddress !== item.dynamicData.walletAddress) {
         delete item.dynamicData.balanceOf;
         delete item.dynamicData.balanceOfPlain;
         item.dynamicData.walletAddress = window.walletAddress;
@@ -2421,7 +2551,7 @@ window.updateItemDynamicData = async function updateItemDynamicData(item, view) 
         item.dynamicData.canMint = (item.dynamicData.isEditable = await window.blockchainCall(item.collection.contract.methods.isEditable, item.objectId)) && item.collection.isOwner;
     } catch (e) {}
 
-    view && view.setState({ item }, () => item.dynamicData.balanceOf && item.dynamicData.balanceOf !== '0' && view.emit('wallet/update'));
+    view && view.setState({ item }, () => item.dynamicData && item.dynamicData.balanceOf && item.dynamicData.balanceOf !== '0' && view.emit('wallet/update'));
     return item;
 };
 
@@ -2489,7 +2619,7 @@ window.checkMetadataLink = async function checkMetadataLink(metadataLink, item) 
     } catch (e) {
         throw "Error loading metadata";
     }
-    return true;//await window[`checkMetadataValuesFor${item ? "Item" : "Collection"}`](metadata);
+    return true; //await window[`checkMetadataValuesFor${item ? "Item" : "Collection"}`](metadata);
 };
 
 window.checkMetadataValuesForCollection = async function checkMetadataValuesForCollection(metadata) {
@@ -2653,7 +2783,7 @@ window.onTextChange = function onTextChange(e) {
 
 window.loadSingleCollection = async function loadSingleCollection(collectionAddress, full) {
     collectionAddress = window.web3.utils.toChecksumAddress(collectionAddress);
-    if(window.context.excludingCollections.indexOf(collectionAddress) !== -1) {
+    if (window.context.excludingCollections.indexOf(collectionAddress) !== -1) {
         return null;
     }
     var map = {};
@@ -2671,7 +2801,7 @@ window.loadSingleCollection = async function loadSingleCollection(collectionAddr
     try {
         var modelAddress = window.web3.eth.abi.decodeParameter("address", logs[0].topics[1]);
         var collection = await window.refreshSingleCollection(window.packCollection(collectionAddress, map[logs[0].topics[0]], modelAddress));
-        if(full) {
+        if (full) {
             try {
                 var promises = [];
                 collection.items = collection.items || {};
@@ -2683,11 +2813,10 @@ window.loadSingleCollection = async function loadSingleCollection(collectionAddr
                     }, collection));
                 }
                 await Promise.all(promises);
-            } catch (e) {
-            }
+            } catch (e) {}
         }
         return collection;
-    } catch(e) {
+    } catch (e) {
         return null;
     }
 };
@@ -2710,7 +2839,7 @@ window.packCollection = function packCollection(address, category, modelAddress)
 };
 
 window.refreshSingleCollection = async function refreshSingleCollection(collection, view) {
-    if(window.context.excludingCollections.indexOf(collection.address) !== -1) {
+    if (window.context.excludingCollections.indexOf(collection.address) !== -1) {
         return null;
     }
     collection.name = collection.name || await window.blockchainCall(collection.contract.methods.name);
@@ -2748,7 +2877,7 @@ window.refreshSingleCollection = async function refreshSingleCollection(collecti
             collection.interoperableInterfaceModel = (await window.blockchainCall((window.newContract(window.context.OldNativeABI, collection.address)).methods.erc20NFTWrapperModel));
             collection.interoperableInterfaceModelAddress = collection.interoperableInterfaceModelAddress || collection.interoperableInterfaceModel[0];
             collection.interoperableInterfaceModelVersion = collection.interoperableInterfaceModelVersion || collection.interoperableInterfaceModel[1];
-        } catch(e) {
+        } catch (e) {
             collection.interoperableInterfaceModelAddress = collection.interoperableInterfaceModelAddress || collection.address;
             collection.interoperableInterfaceModelVersion = collection.interoperableInterfaceModelVersion || 1;
         }

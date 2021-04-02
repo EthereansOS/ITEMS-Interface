@@ -2,7 +2,8 @@ var Item = React.createClass({
     requiredScripts: [
         "spa/lazyImageLoader.jsx",
         "spa/innerLoader.jsx",
-        "spa/loader.jsx"
+        "spa/loader.jsx",
+        "spa/farmComponents/farmViewer.jsx"
     ],
     requiredModules: [
         'spa/editor'
@@ -104,18 +105,18 @@ var Item = React.createClass({
         window.preventItem(e);
         var item = this.getItem();
         this.emit('section/change', 'spa/wrap', {
-            selectedTokenType : item.collection.category.split('W').join('ERC'),
-            collectionAddress : item.collection.address,
-            sourceAddress : item.sourceAddress && item.sourceAddress !== 'blank' ? item.sourceAddress : item.collection.sourceAddress,
-            tokenId : item.objectId
+            selectedTokenType: item.collection.category.split('W').join('ERC'),
+            collectionAddress: item.collection.address,
+            sourceAddress: item.sourceAddress && item.sourceAddress !== 'blank' ? item.sourceAddress : item.collection.sourceAddress,
+            tokenId: item.objectId
         });
     },
     transfer(e) {
         window.preventItem(e);
         var item = this.getItem();
         this.emit('section/change', 'spa/transfer', {
-            collectionAddress : item.collection.address,
-            objectId : item.objectId
+            collectionAddress: item.collection.address,
+            objectId: item.objectId
         });
     },
     getItem() {
@@ -123,7 +124,7 @@ var Item = React.createClass({
     },
     render() {
         var item = this.getItem();
-        if(this.state && this.state.item && this.state.item.objectId !== this.props.item.objectId) {
+        if (this.state && this.state.item && this.state.item.objectId !== this.props.item.objectId) {
             item = this.props.item;
         }
         var toggle = !this.state ? item.metadata ? 'metadata' : 'farm' : this.state.toggle;
@@ -157,7 +158,7 @@ var Item = React.createClass({
                                     {item.dynamicData && <section className="itemSide">
                                         <span className="ItemSupply">Supply: {window.fromDecimals(item.dynamicData.totalSupply, item.decimals)}</span>
                                         {window.walletAddress && item.dynamicData && item.dynamicData.balanceOf && item.dynamicData.balanceOf !== '0' && <span className="ItemBalance">| You own: {window.formatMoney(window.fromDecimals(item.dynamicData.balanceOf, item.decimals, true), 2)}</span>}
-                                        <br/>
+                                        <br />
                                         <a className="ItemPrice" target="_blank" href={window.context.uniswapSpawUrlTemplate.format(item.address)}>&#129412; $ {item.dynamicData.tokenPriceInDollarsOnUniswap ? window.formatMoney(item.dynamicData.tokenPriceInDollarsOnUniswap, 1) : "--"}</a>
                                         <a className="ItemPrice" target="_blank" href={window.context.uniswapInfoUrlTemplate.format(item.address)}>&#128039; Info</a>
                                         <a className="ItemPrice" target="_blank" href={window.context.openSeaItemLinkTemplate.format(item.collection.address, item.objectId)}>&#9973; $ {item.dynamicData.tokenPriceInDollarsOnOpenSea ? window.formatMoney(item.dynamicData.tokenPriceInDollarsOnOpenSea, 1) : "--"}</a>
@@ -219,13 +220,9 @@ var Item = React.createClass({
                         </section>}
                         {toggle === 'farm' && <section className="ItemFarm">
                             <section>
-                                <section className="SoonFARM">
-                                    <figure className="FarmImg">
-                                        <img src="assets/img/farmer.png"></img>
-                                    </figure>
-                                    <h3>Farm will available soon powered by <a target="_blank" href="https://github.com/b-u-i-d-l/unifi">UniFi V2</a> General Purposes Contracts</h3>
-                                </section>
+                                <a href={window.context.createFarmingContractURLTemplate.format(item.address)} target="_blank">New Farming Contract</a>
                             </section>
+                            <FarmViewer itemAddress={item.address} />
                         </section>}
                     </section>
                 </section>
