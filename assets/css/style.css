@@ -503,8 +503,541 @@ pre.prettyprint {
 
 
 
+.ApplicationAll {width: 990px; display: block; text-align: center; margin: 80px auto 80px auto;}
+.ApplicationBox {width: 750px; display: inline-block; margin-left: 20px; vertical-align: top;}
+.ApplicationMenu {width: 150px; display: inline-block;}
+a {cursor: pointer !important;}
+a:disabled {cursor:wait !important;}
+.MobileMenu {display: none;}
+.spinner-border, .spinner-border-sm, .text-secondary  {color: #7474f7 !important;}
+.fantasyMenu {font-size: 13px;z-index: 5; position: relative;}
+.fantasyMenuLi {position: relative; cursor: pointer;}
+.mr-2, .mx-2 {margin-right: 1rem;}
+.menuIconMap {vertical-align: middle; display: inline-block; width: 40px; height: 30px;}
+.menuIconEth {vertical-align: middle; display: inline-block; width: 30px; height: 30px;}
+.ChangeMod {display: inline-block; vertical-align: middle; font-size: 20px; cursor: pointer; text-decoration: none;}
+.ChangeMod:hover {text-decoration: none;}
+.BtnConnect, .BtnConnectAfter {font-size: 15px; padding: 4px 13px; display: inline-block; vertical-align: middle; margin: auto 5px auto 20px; background-color: transparent; border-radius: 8px; box-shadow: none; text-shadow: none; text-decoration: none; cursor: pointer;}
+.BtnConnect:hover, .BtnConnectAfter:hover {text-decoration: none;}
+.LogoM {background-image: url(./assets/images/covlogo.png); display: inline-block; height: 42px;width: 30px; vertical-align: middle; background-repeat: no-repeat;}
+.Ditone {width: 20px; height: 20px; display: none; position: absolute; left: -10px;top: 18px; background-image: url(./assets/images/indicator.png); background-repeat: no-repeat;}
+.fantasyMenuLi:hover .Ditone {display: block !important; z-index: 10;left: -15px;}
+.sidebar-menu-link-selected .Ditone {display: block !important; z-index: 10;}
+.infoList {font-size: 13px; margin-bottom: 5px;margin-block-start: 0em;margin-block-end: 0em;}
+.infoList p {margin: 0px;margin-block-start: 0em;margin-block-end: 0em; display: inline-block; width: 100%;padding: 4px 0;}
+.row {margin-left: 0; margin-right: 0;}
+.IndexRegular {display: inline-block; text-align: center;}
+.IndexRegular .IndexRegularContents {width: 95%; display: inline-block;}
+.IndexRegular .IndexRegularBTN {width: 95%; display: inline-block; margin-bottom: 0px;}
+.IndexRegular .IndexRegularText {width: 50%; display: inline-block; text-align: left;vertical-align: middle;}
+.IndexRegular .IndexRegularText p {width: 95%; font-size: 13px;}
+.IndexRegular .IndexRegularText h3 {width: 95%; font-size: 20px;}
+.IndexRegular .IndexRegularImg {width: 50%; display: inline-block; text-align: center;vertical-align: middle;}
+.IndexRegular .IndexRegularImg img {width: 90%; height: auto; display: inline-block;}
+.btn-Fantasy {border: 2px solid #4d4c4a; color: #ffffff;background-color: #4d4c4a;}
+.btn-Fantasy:hover {color: #ffffff; border-color: #4d4c4a;}
+.Footer {width: 100%; min-width: 100%; display: inline-block; text-align: center; position: fixed; bottom: 0; left: 0;}
+.Footer img {display: none;}
+.FooterP { width: 80%; margin: 20px auto 0px auto; display: inline-block; text-align: center;}
+.FooterP p {padding: 5px 5px 5px 5px; display: inline-block; width: 100%; font-size: 10px;}
+.FooterP p a {text-decoration: underline;}
+.page-container, .dapp-container, .DappBox {z-index: 5; position: relative;margin-bottom: 100px;}
+.card {background-color: transparent;}
+.navbar {z-index: 5;}
+.CoveExpl {width: 99%; margin: 30px auto; display: inline-block;}
+.CovDesc {width: 50%; text-align: left;display: inline-block;vertical-align: middle;}
+.CovDesc h3 {font-size: 24px; margin-bottom: 20px; display: inline-block; font-weight: bold; width: 100%;}
+.CovDesc p {font-size: 13px; margin-bottom: 10px; display: inline-block;}
+.CovLinks {margin-top: 10px; display: inline-block;}
+.CovLinks h5 {font-size: 15px; display: inline-block; font-weight: bold; width: 100%; margin-top: 20px;}
+.CovLinks a {font-size: 13px; display: inline-block; margin: 5px 5px; text-decoration: underline !important; cursor: pointer; color: #000000;}
+.ConnectBTN {display: inline-block;margin: 30px auto;text-align: center;cursor: pointer; background-image: linear-gradient(90deg, #00C0FF 0%, #FFCF00 49%, #FC4F4F 80%, #00C0FF 100%);color: #ffffff !important;text-shadow: #c0c0c0 1px 1px;text-decoration: none;cursor: auto;box-shadow: none;border: 1px solid transparent;outline: none;opacity: 1;padding: 10px 30px;border-radius: 12px;font-weight: 500;text-decoration: none;display: inline-block;animation: slidebg 10s linear infinite;}
+.Web3 {width: 100%; font-size: 20px; text-align: center; font-weight: bold;}
+.Web3 a {text-decoration: underline !important; color: #7474f7; font-weight: bold;}
+.CovSide {width: 30%; display: inline-block; vertical-align: middle;margin-right: 8%;}
+.CovDiversity {width: 90%; display: block; margin-bottom: 20px;}
+.CovDiversity img {width: 100%; height: auto;} 
+.CovAMMs {width: 100%; display: inline-block; vertical-align: middle; background-color: #5f5b53; border-radius: 8px; padding: 20px 2%;font-weight: bold !important;box-shadow: rgb(0 0 0 / 1%) 0px 0px 1px, rgb(0 0 0 / 4%) 0px 4px 8px, rgb(0 0 0 / 4%) 0px 16px 24px, rgb(0 0 0 / 1%) 0px 24px;}
+.CovAMMs h5 {font-size: 15px; display: inline-block; font-weight: bold; width: 100%; margin-bottom: 20px; color: #ffffff;}
+.CovAMMs a {font-size: 13px; display: inline-block; text-decoration: none !important; font-weight: bold !important; cursor: pointer; width: 100%; text-align: left;color: #ffffff !important;}
+.disclamer {font-size: 9px; color: #636363; width: 60%; text-align: center;}
+.disclamer a {text-decoration: underline !important;}
+.IndexRegularText iframe {border: 2px solid #9e6915; border-radius: 8px;}
+@keyframes slidebg {to {background-position:20vw;}}
+.DescCov {text-align: center; width: 80%; display: inline-block; margin:0 auto 30px auto;}
+.DescCov p {font-size: 14px;}
+.DescCov h2 {text-align: center; font-size: 30px; font-weight: bold !important;}
+.DescCov h5 {text-align: center; font-size: 20px;font-weight: bold !important; margin: 10px auto;}
+.CovTITLE {margin: 2px auto; display: inline-block; width: 90%; text-align: center;}
+.CovTITLE figure {width: 47%; display: inline-block; height: auto; margin: 0 0 0rem;}
+.CovTITLE figure img {width: 100%; display: inline-block; height: auto;}
+.LogoWUSD {width: 80%; margin: 10px auto;display: inline-block;}
+.LogoWUSD img {width: 100%; display: inline-block; height: auto;}
+.xTitle {width: 100%; display: inline-block; text-align: left; font-weight: bold; margin: 0px auto 10px auto; font-size: 17px;}
+.xTitle img {margin-right: 10px; width: 35px; height: 35px;}
+.HealthContainer {width:80%; display: inline-block; margin: 10px auto 40px auto;}
+.StatsIndicator {width: 45%; padding: 4px 0% 4px 5%; height: auto; display: inline-block;}
+.StatsBro {display: inline-block; text-align: left; width: 22%; padding-left: 3%; margin-right: 10% !important;vertical-align: top !important;}
+.StatsBroO {margin-bottom: 20px;}
+.StatsSis {width: 65%;text-align: left; display: inline-block; vertical-align: middle !important;}
+.StatsIndicator p, .StatsIndicator a {font-size: 13px;}
+.StatsIndicator h6 {font-size: 14px;}
+.StatsLink {display: inline-block; width: 90%; margin: 5px auto; text-align: center;}
+.StatsLink a {font-size: 11px; margin: 5px 5px; display: inline-block; padding: 2px 5px; border-radius: 5px; cursor: pointer;}
+.health-bar {border-radius: 8px; width: 100%;text-align: left;font-weight: bold;padding: 4px 0;font-size: 14px;}
+.health-bar aside {border-radius: 8px; text-align: center; padding: 5px 0;}
+.health-bar aside span {background-color: transparent; color: #ffffff;}
+.DappBoxI {padding: 70px 50px}
+.Web3Disclamer {display: inline-block; text-align: center; margin: 20px auto;}
+.DappMenu {width: 100%;display: inline-block;text-align: center;margin-block-start: 0em;margin-block-end: 0em;margin-inline-start: 0px;margin-inline-end: 0px;padding-inline-start: 0px;margin: 0px auto 40px auto;}
+.DappMenu li {display: inline-block;cursor: pointer;font-weight: bold;}
+.DappMenu li span {font-size: 15px; font-weight: bold;display: block;padding: 0.5rem 1rem;}
+.DappMenu .nav-selected {border-bottom: 8px #7474f7 solid;}
+.DappMenu .nav-selected span {font-weight: bold;}
 
+.SelectRegular {width: 100%; display: inline-block; font-size: 13px; font-weight: bold; padding: 7px 2%;border: 1px solid; border-radius: 8px; background-color: transparent;max-width: 370px;}
+.TextRegular {width: 100%; display: inline-block; font-size: 13px; font-weight: bold; padding: 7px 2%;border: 1px solid; border-radius: 8px; background-color: transparent;max-width: 370px;}
+.TextAreaRegular {width: 100%; display: inline-block; height: 100px; font-size: 13px; font-weight: bold; padding: 7px 2%;border: 1px solid; border-radius: 8px; background-color: transparent;max-width: 370px;}
+.QuestionRegular {width: 100%; display: inline-block; font-size: 14px; margin: 15px auto 0px auto;}
+.QuestionRegular input {display: inline-block; vertical-align: middle;}
+.QuestionRegular label {display: inline-block; margin: 0 0 0 10px; vertical-align: middle;}
+.Resultsregular {display: inline-block; margin: 10px auto; width: 100%;}
+.Resultsregular p {font-size: 16px;}
+.Resultsregular img {display: inline-block; margin: auto 5px; width: 25px; height: 25px;}
+.DisclamerRegular {width: 100%; display: inline-block; margin: 50px auto;}
+.DisclamerRegular p {display: inline-block; width: 80%; font-size: 15px;}
+.InputTokensRegular {display: inline-block; width: 80%; margin: 15px auto; max-width: 370px;}
+.InputTokensRegular p {display: inline-block; width: 80%; font-size: 15px; margin: 10px auto;}
+.InputTokenRegular {width: 100%;max-width: 370px;}
+.InputTokenRegular section {width: 100%; display: inline-block;}
+.InputTokenRegular aside {width: 100%; display: inline-block; margin-top: 3px; text-align: left;}
+.InputTokenRegular aside a {display: inline-block; padding: 2px 4px; background-color: #9e6915; color: #ffffff !important; border-radius: 8px; font-size: 10px; font-weight: bold;vertical-align: middle;}
+.InputTokenRegular aside p {display: inline-block; font-size: 12px; margin-left: 10px; vertical-align: middle; color: #5f5b53;}
+.InputTokenRegular img {width: 22px;height: 22px;margin-right: 5px;}
+.ApproveBTN {display: inline-block; padding: 8px 17px; background-color: #bd84fb; color: #ffffff; border-radius: 20px; font-size: 16px; font-weight: bold; cursor: pointer;}
+.ApproveBTN:hover {color: #ffffff; text-decoration: none;}
+.ApproveBTN:disabled {font-weight: normal;}
+.Web3ActionBTN {display: inline-block; padding: 8px 17px; background-color: #7474f7; color: #ffffff; border-radius: 20px; font-size: 16px; font-weight: bold; cursor: pointer;}
+.Web3ActionBTN:hover {color: #ffffff; text-decoration: none;}
+.Web3ActionBTN:disabled {font-weight: normal !important;}
+.Rebalance {width: 100%; display: inline-block; text-align: center;}
+.Rebalance aside {width: 45%; padding-right: 5%; display: inline-block; text-align: left;}
+.Rebalance aside h6 {font-size: 18px; margin: 10px auto; display: inline-block; width: 100%;}
+.Rebalance aside p {font-size: 11.5px; margin: 2px auto; display: inline-block; width: 100%;}
+.CreditAction {width: 45%; display: inline-block; text-align: center;}
+.grimoireBox {z-index: 20; position: relative; display: inline-block; width: 85%; margin: 5px auto; border-radius: 12px;}
+.grimoireAll {width: 100%; display: inline-block; padding: 20px 2%; text-align: center;}
+.MintBurn {width: 100%; display: inline-block;}
+.PairSelector {width: 80%; margin: 10px auto; display: inline-block; vertical-align: middle;}
+.Web3BTNs {display: inline-block; width: 80%; margin: 15px auto; max-width: 370px; text-align: center;}
+.Web3BTNs a {margin: 5px 20px;}
+.GrimoureContent {width: 92%; margin: 5px auto; display: inline-block;text-align: left;}
+.GrimoureContent h1 {font-size: 35px; margin: 20px auto; display: inline-block; width: 100%; text-align: center; font-weight: bold !important;}
+.GrimoureContent article {width: 100%; display: inline-block; margin: 20px auto;}
+.GrimoureContent header {width: 80%; display: inline-block; margin: 10px auto;}
+.GrimoureContent span {width: 20%; display: inline-block; margin: 10px auto;vertical-align: top;}
+.GrimoureContent span img {display: inline-block; width: 90px; height: 90px;}
+.GrimoureContent h2 {font-size: 18px; font-weight: bold !important;}
+.GrimoureContent p {font-size: 13px; font-weight: normal !important;}
+.GrimoureContent figure {width: 100%; display: inline-block; margin: 10px auto;}
+.GrimoureContent figure img {display: inline-block; width: 100%; height: auto;}
+.GrimoureContent header h2 {font-size: 27px; font-weight: bold !important;}
+.GrimoureContent header p {font-size: 13px; font-weight: normal !important;}
+.ListOfThings {width: 100%; text-align: center; display: inline-block; margin: 20px auto;max-width: 600px;}
+.web2ActionBTN {display: inline-block; padding: 4px 13px; background-color: #9e6915; color: #ffffff; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; text-decoration: none !important;}
+.web2ActionBTN:hover {color: #ffffff; text-decoration: none;}
+.web2ActionBTN:disabled {font-weight: normal !important;}
+.backActionBTN {display: inline-block; padding: 4px 13px; border:1px solid #9e6915; color: #9e6915; border-radius: 20px; font-size: 14px; font-weight: normal; cursor: pointer;}
+.backActionBTN:hover {color: #9e6915; text-decoration: none;}
+.backActionBTN:disabled {font-weight: normal !important;}
+.InputForm {width: 100%; display: inline-block; margin: 10px auto; text-align: center;}
+.CreateList {width: 95%; width: 600px; display: inline-block; text-align: center; margin: 10px auto;}
+.CreateList h6 {font-size: 20px; display: inline-block; width: 100%; text-align: center; margin: 15px auto;}
+.InputForm input, .InputForm textarea {margin: 10px auto 0px auto;}
+.InputForm p {font-size: 12px; display: block; margin: 5px auto; text-align: left; width: 300px;}
+.InputForm input[type="file"] {width: auto; text-align: center; margin: 10px auto;}
+.Web2ActionsBTNs {width: 300px; text-align: center; display: inline-block; margin: 20px auto;}
+.Web2ActionsBTNs a {margin: auto 10px;}
+.LoadInput input {margin-right:5px;}
+.TokenLoaded {margin: 20px auto; display: inline-block; text-align: center; width: 100%;}
+.TokenLoaded > div {width: 300px; text-align: center; display: inline-block; position: relative;}
+.TokenLoaded > div .backActionBTN {display: inline-block; position: absolute; z-index: 10; top: 4px; left: -50px;}
+.TokenLoaded img {width: 23px; height: 23px; margin: auto 5px; display: inline-block;}
+.TokenLoaded p {font-size: 12px; display: block; margin: 5px auto; text-align: center; width: 300px;}
+.CreateList p {font-size: 12px; display: block; margin: 5px auto; text-align: center; width: 300px;}
+.TextRegularS {width: 90%; display: inline-block; font-size: 13px; font-weight: bold; padding: 7px 2%;border: 1px solid; border-radius: 8px; background-color: transparent;max-width: 330px;}
+.CheckboxQuestions aside {width: 10%; display: inline-block; margin-left: 3px; font-size: 18px; }
+.CreateListS .TextRegular {width: 300px;}
+.InputForm .SpecialInputPerch input {margin: 0;}
+.InputForm .SpecialInputPerch {margin-top: 10px;}
+.PathSelected {width: 300px; text-align: center; margin: 5px auto; display: block;}
+.PathSelected p {width: auto; display: inline;}
 
+.MainExploration {width: 95%; display: inline-block; margin: 10px auto; width: 600px;}
+.SortSection {width: 100%; text-align: center; display: inline-block; margin: 10px auto; min-width: 600px;} 
+.SortSection .SelectRegular {width: 45%; margin: 0 2.5%;}
+.SortSection .TextRegular {width: 45%; margin: 0 2.5%;}
+.ImgStand {width: 30px; height: 30px; display: inline-block;}
+.FarmContract, .FarmSetup, .IndexContract {width: 100%; display: inline-block; margin: 10px auto; min-width: 600px; border: 1px solid; border-radius: 12px; padding: 3%; text-align: left;}
+.InflationContract {width: 100%; display: inline-block; margin: 10px auto; min-width: 600px; border: 1px solid; border-radius: 12px; padding: 3%; text-align: left;}
+.FarmContractOpen {width: 100%; display: inline-block; margin: 10px auto; min-width: 600px; border-bottom: 1px solid; border-radius: 0px; padding: 3%; text-align: left;}
+.InflationContractOpen {width: 100%; display: inline-block; margin: 10px auto; min-width: 600px; border-radius: 0px; padding: 3%; text-align: left;}
+.FarmTitle {width: 40%; display: inline-block; margin-right: 1%; text-align: left;}
+.FarmTitle figure {display: inline-block; width: 40%; text-align: center;margin-block-start: 0em;margin-block-end: 0em;margin-inline-start: 0px;margin-inline-end: 0px; margin-bottom: 5px; vertical-align: middle;}
+.FarmTitle figure img {display: inline-block; width: 45px; max-height: 90px; vertical-align: middle;}
+.FarmTitle aside h6 {font-size: 16px; text-align: center; display: inline-block; width: 95%;}
+.FarmTitle aside {width: 60%;display: inline-block;text-align: center;margin-block-start: 0em;margin-block-end: 0em;margin-inline-start: 0px;margin-inline-end: 0px; margin-bottom: 5px; vertical-align: middle;}
+.FarmThings {width: 55%; margin-left: 4%; display: inline-block; vertical-align: middle;}
+.FarmThings p {display: inline-block; width: 95%; font-size: 14px; margin-bottom: 5px;}
+.FarmThings p a {text-decoration: underline !important;}
+.FarmContractOpen .FarmThings p {font-size: 12px;margin-block-start: 0em;margin-block-end: 0em;}
+.FarmSetupMain {width: 100%; display: inline-block;}
+.FarmSetupMain h5 {width: 60%; display: inline-block; font-size: 16px; vertical-align: top;}
+.FarmSetupMain h5 a {font-size: 11px; margin: 5px 5px; display: inline-block; padding: 2px 5px; border-radius: 5px; cursor: pointer;}
+.FarmSetupMain aside {width: 37%; display: inline-block;vertical-align: top; margin-left: 2%;}
+.FarmSetupMain aside p {font-size: 12px; width: 100%; text-align: right; margin-bottom: 5px;}
+.SetupFarmingInstructions {width: 100%; display: inline-block; margin-top: 10px; text-align: left;}
+.SetupFarmingInstructions p {display: inline-block; font-size: 16px; margin-bottom: 2px; width: 66%; margin-left: 2%;}
+.SetupFarmingInstructions p span {font-size: 12px;}
+.SetupFarmingInstructions figure {display: inline-block; margin-right: 5px;}
+.SetupFarmingInstructions img {width: 40px; height: auto;}
+.SetupFarmingOthers {display: inline-block; width: 100%; margin: 10px 0%;vertical-align: middle;}
+.SetupFarmingOthers p {font-size: 13px; margin: 5px; display: inline-block;}
+.SetupFarmingOthers p span {font-size: 11px;}
+.YourFarmingPositions {width: 100%; border-top: 1px solid; padding-top: 10px; text-align: center;}
+.YourFarmingPositions p {font-size: 13px; margin: 5px; display: inline-block; width: 100%;}
+.YourFarmingPositions .web2ActionBTN, .YourFarmingPositions .backActionBTN {margin: 5px;}
+.FarmYou {width: 48%; display: inline-block; margin-right: 2%; vertical-align: top; text-align: center;}
+.Farmed {width: 48%; display: inline-block;vertical-align: top; text-align: right;}
+.SetupFarmingBotton {display: inline-block; width: 15%; vertical-align: middle; text-align: left;}
+.InflationContract h4 {font-size: 20px; display: inline-block; width: 70%; font-weight: bold; vertical-align: middle; margin-bottom: 20px;}
+.InflationContractLinks {display: inline-block; width: 28%; text-align: right;vertical-align: middle;}
+.InflationContractLinks a {font-size: 11px; margin: 5px 5px; display: inline-block; padding: 2px 5px; border-radius: 5px; cursor: pointer;}
+.InflationContract p {font-size: 13px; display: inline-block; vertical-align: middle; width: 60%;}
+.InflationContract .InflationContractButton {width: 30%; margin-left: 9%; display: inline-block; vertical-align: middle; text-align: right;}
+.InflationContractAll {width: 100%; display: inline-block;}
+.InflationContractOpen h3 {font-size: 30px; width: 70%; text-align: left; display: inline-block; font-weight: bold; vertical-align: middle;}
+.InflationContractOpenBack {width: 29%; text-align: right; display: inline-block; vertical-align: middle;} 
+.TokenOperation {width: 95%; text-align: left; display: inline-block; margin: 10px auto; border: 1px solid; padding: 2%; border-radius: 12px;}
+.TokenOperation h6 {font-size: 20px; font-weight: bold; display: inline-block; width: 28%; vertical-align: middle; margin-block-start: 0em;margin-block-end: 0em;margin-inline-start: 0px;margin-inline-end: 0px; margin-bottom: 0;}
+.TokenOperation p {font-size: 16px; width: 100%; display: inline-block; margin-top: 20px;}
+.TokenOperation p img {width: 25px; margin: auto 5px; display: inline-block;}
+.TokenOperationLinks {display: inline-block; width: 71%; vertical-align: middle; text-align: left;}
+.TokenOperationLinks a {font-size: 11px; margin: 5px 5px; display: inline-block; padding: 2px 5px; border-radius: 5px; cursor: pointer;}
+.TokenOperationExecute {width: 100%; text-align: center; display: inline-block; margin: 30px auto;}
+.TokenOperationExecute h5 {font-size: 18px; font-weight: normal; vertical-align: middle; display: inline-block; margin: auto 5px;}
+.TokenOperationExecute .SelectRegular {width: 20%;margin: auto 5px; display: inline-block; vertical-align: middle;}
+.ExploreCreate {text-align: right;}
+.InputForm h5 {font-size: 16px; margin: 30px auto 5px auto;}
+.InputForm .imputCool {width: 300px; border: 1px solid #9e6915;}
+.CovCODEEDITOR {width: 600px; height: 400px;; display: block; margin: 20px auto;}
+.CovCODEEDITOR section {width: 600px !important; height: 400px !important;display: block !important;}
+.monaco-editor {height: 400px !important;}
+.CheckboxQuestions {width: 100%; display: inline-block; margin: 10px auto;}
+.CheckboxQuestions label {width: 100%; display: inline-block; margin: 10px auto; text-align: center;}
+.CheckboxQuestions label h5 {display: inline-block;font-size: 16px; margin: auto 10px; vertical-align: middle;}
+.CheckboxQuestions label input[type="checkbox"] {display: inline-block;vertical-align: middle;}
+.SpecialInputPerch {width: 100%; display: inline-block;max-width: 370px; position: relative;}
+.SpecialInputPerch aside {position: absolute; right: 0; width: 40px; font-size: 18px; color: #9e6915; border-left: 1px solid #9e6915; top: 4px;}
+.TokenInflLoaded {width: 100%; display: inline-block; text-align: center; margin: 20px auto;}
+.TokenInflLoaded h5 {font-size: 18px; display: inline-block; margin: auto 10px auto auto; vertical-align: middle; font-weight: bold;}
+.TokenInflLoaded img {width: 40px; display: inline-block; height: auto; vertical-align: middle;}
+.IndexLogo {width: 100px; height: 100px; display: inline-block; vertical-align: middle;}
+.IndexLogo img {width: 100px; height: 100px;}
+.IndexLogoL {width: 150px; height: 150px; display: inline-block; vertical-align: middle;}
+.IndexLogoL img {width: 150px; height: 150px;}
+.IndexInfo {width: 400px; display: inline-block; margin-left: 50px; vertical-align: middle;}
+.IndexInfo h6 {font-size: 18px; width: 100%; display: inline-block;}
+.IndexTokens {display: inline-block; width: 100%; margin-top: 10px;}
+.IndexTokens p {display: inline-block; margin: 5px; font-size: 12px;}
+.IndexTokens img {width: 23px;}
+.IndexContractBTN {width: 100%; display: inline-block; text-align: right;}
+.IndexContractOpenInfo {width: 95%; display: inline-block; margin: 10px auto 0 auto; padding-bottom: 10px; position: relative;}
+.IndexContractOpenInfo .web2ActionBTN {position: absolute; top: -10px; right: 0;}
+.IndexThings {width: 450px; display: inline-block; margin-left: 40px; vertical-align: middle; text-align: left;}
+.IndexThings p {font-size: 12px; display: inline-block; width: 100%;}
+.IndexThings h3 {font-size: 20px;display: inline-block; width: 100%;}
+.IndexThings .StatsLink {width: 100%; margin: 5px 0; text-align: left;}
+.IndexContractOpenCollateral {width: 95%; display: inline-block; margin: 15px auto;}
+.IndexContractOpenCollateral h6 {width: 100%; display: inline-block; text-align: left;}
+.IndexContractOpenCollateralALL {width: 100%;display: inline-block; text-align: left;margin: 10px auto;}
+.IndexContractOpenCollateralSingle {width: 30%; display: inline-block; vertical-align: middle; margin: 10px; border: 1px solid;border-radius: 12px;}
+.IndexContractOpenCollateralSingleTITLE {width: 100%; display: inline-block; margin: 20px 0 5px 0; text-align: center;}
+.IndexContractOpenCollateralSingleTITLE img {display: inline-block; margin: auto 5px; vertical-align: middle; width: 30px;}
+.IndexContractOpenCollateralSingleTITLE p {display: inline-block;vertical-align: middle; font-size: 16px; margin-block-start: 0em;margin-block-end: 0em;margin-inline-start: 0px;margin-inline-end: 0px;}
+.IndexSinglePerchBar {display: inline-block; width: 80%; border: 1px solid #7474f7; height: 33px; margin-top: 17px; border-radius: 12px; text-align: left;}
+.IndexSinglePerchBar span {font-size: 11px; font-weight: bold; margin-left: 5px; display: inline-block; vertical-align: middle;}
+.IndexSinglePerchBar aside {display: inline-block; height: 28px; vertical-align: middle; margin: 1px 1px; background-color: #7474f7; border-radius: 12px; min-width: 17%; max-width: 99%;}
+.IndexContractOpenCollateralSingle .StatsLink {width: 100%; text-align: center;}
+.FarmThings .StatsLink {width: 100%; text-align: left;}
+.IndexManageMB {width: 600px; margin: 20px auto; display: inline-block; text-align: center;}
+.ShowCollateralNeededBal {width: 100%; display: inline-block; margin: 10px auto; border: 1px solid; border-radius: 12px; padding: 5px;}
+.ShowCollateralNeededBal p {display: inline-block; width: auto; font-size: 13px;margin-block-start: 0em;margin-block-end: 0em;margin-inline-start: 0px;margin-inline-end: 0px; margin: 2px 5px;}
+.ShowCollateralNeededBal h6 {display: inline-block; margin-top: 5px; width: 100%; font-size: 13px;}
+.COMINGSOONCOSIGIUDILI {width: 100%; display: inline-block; margin: 30px auto; text-align: center; font-size: 20px;}
+.IndexContractOpenStatistic {width: 95%; display: inline-block; margin: 30px auto; border: 1px solid; border-radius: 12px;}
+.IndexContractOpenStatistic p {font-size: 14px; display: inline-block; margin: 10px 10px; vertical-align: middle;}
+.IndexManageMB .Web3BTNs {width: 100%;}
+.success {position: fixed; top: 0; left: 0; z-index: 99999999999; background-color: #7474f7; padding: 25px 0; text-align: center; border-radius: 12px; width: 100%;}
+.success p {font-size: 18px; display: inline-block; color: #ffffff; font-weight: normal;}
+.success p a {font-size: 18px; display: inline-block; color: #ffffff; font-weight: bold; text-decoration: underline !important;}
+.success > a {font-size: 14px; position: absolute; bottom: 5px; left: 5px;z-index: 999999999999; color: #ffffff;}
+.ResultsregularS {font-size: 12px;}
+.InputForm .InputTokenRegular .input-group-append {margin-top: 10px;}
+.InputForm .InputTokensRegular {width: 100%;}
+.ReceiversList {width: 370px; display: inline-block; margin: 10px auto;}
+.ReceiverSingle {width: 100%; display: inline-block; margin: 5px auto;}
+.ReceiverSingle p {width: 80%; display: inline-block;}
+.ReceiverSingle .DeleteAddress {width: 15%; margin-left: 4%; display: inline-block; text-align: center;}
+.ReceiverSingle .TextRegular {width: 100%; display: inline-block;}
+.InputForm .Web2ActionsBTNs {width: 100%;}
+.CreateListOp {width: 100%; padding: 10px 10px; border: 1px solid #9e6915; border-radius: 12px;}
+.CreateListOp p {font-size: 15px;}
+.SortBox {width: 99%; display: block; margin: 5px auto; text-align: center;}
+.SortBox .TextRegular {width: 40%; display: inline-block; margin: auto 5px auto auto;}
+.SortOptions {width: 55%;display: inline-block; margin: auto auto auto 10px;}
+.SortOptions label {display: inline-block; text-align: right; width: 40%;}
+.SortOptions label input {display: inline-block; width: auto; vertical-align: middle;}
+.SortOptions label p {display: inline-block;vertical-align: middle; margin-block-start: 0em; margin-block-end: 0em; margin-bottom: 0; margin-left: 10px; font-size: 13px;}
+.SortOptions .SelectRegular {width: 50%;}
+.FarmActions .QuestionRegular {text-align: center !important;}
+.FarmActions .InputTokenRegular {display: block;margin: 30px auto 0px auto;}
+.OptionalThingsFarmers {width: 95%; margin: 20px auto; display: block; text-align: center;}
+.OptionalThingsFarmers input {display: inline-block; font-size: 14px; vertical-align: middle;}
+.OptionalThingsFarmers p {display: inline-block; font-size: 14px; vertical-align: middle;}
+.FarmActions .Web3BTNs {display: block;margin: 20px auto 0px auto;}
+.LockedFarmPositions {display: block; margin: 30px auto; width: 100%;}
+.ListOfThings h3 {font-size: 20px;}
+.FarmActions .Web2ActionsBTNs {width: 100%;}
+input[type=range] {height: 31px;-webkit-appearance: none;margin: 10px 0;width: 100%;background-color: transparent;}
+ input[type=range]:focus {outline: none;}
+ input[type=range]::-webkit-slider-runnable-track {width: 100%;height: 15px;cursor: pointer;animate: 0.2s;box-shadow: 0px 0px 0px #50555C;background: #849BBD;border-radius: 10px;border: 0px solid #000000;}
+ input[type=range]::-webkit-slider-thumb {box-shadow: 0px 0px 0px #000000;border: 0px solid #000000;height: 25px;width: 40px;border-radius: 12px;background: #7474F7;cursor: pointer;-webkit-appearance: none;margin-top: -5px;}
+ input[type=range]:focus::-webkit-slider-runnable-track {background: #849BBD;}
+ input[type=range]::-moz-range-track {width: 100%;height: 15px;cursor: pointer;animate: 0.2s;box-shadow: 0px 0px 0px #50555C;background: #849BBD;border-radius: 10px;border: 0px solid #000000;}
+ input[type=range]::-moz-range-thumb {box-shadow: 0px 0px 0px #000000;border: 0px solid #000000;height: 25px;width: 40px;border-radius: 12px;background: #7474F7;cursor: pointer;}
+ input[type=range]::-ms-track {width: 100%;height: 15px;cursor: pointer;animate: 0.2s;background: transparent;border-color: transparent;color: transparent;}
+ input[type=range]::-ms-fill-lower {background: #849BBD;border: 0px solid #000000;border-radius: 20px;box-shadow: 0px 0px 0px #50555C;}
+ input[type=range]::-ms-fill-upper {background: #849BBD;border: 0px solid #000000;border-radius: 20px;box-shadow: 0px 0px 0px #50555C;}
+ input[type=range]::-ms-thumb {margin-top: 1px;box-shadow: 0px 0px 0px #000000;border: 0px solid #000000;height: 25px;width: 40px;border-radius: 12px;background: #7474F7;cursor: pointer;}
+ input[type=range]:focus::-ms-fill-lower {background: #849BBD;}
+ input[type=range]:focus::-ms-fill-upper {background: #849BBD;}
+ .FarmSetup .Web3ActionBTN, .FarmSetup .ApproveBTN {padding: 4px 14px;}
+ .BreefExpl {font-size: 11px;margin-top: 4px;margin-bottom: 5px;}
+ .BreefRecap {font-size: 12px;margin-top: 4px;margin-bottom: 5px;}
+ .BreefRecapB {font-size: 13px !important;margin: 15px auto; max-width: 500px; display: block;}
+ .Web3ActionBTN .spinner-border,  .Web3ActionBTN .spinner-border-sm, .ApproveBTN .spinner-border, .ApproveBTN .spinner-border-sm {color: #ffffff !important;}
+ .Tranferpos {display: inline-block; width: 80%; margin: 5px auto; text-align: center;}
+ .Tranferpos input {margin: 5px auto;}
+ .DiffWallet {width: 390px; display: block; margin: 10px auto; text-align: center;}
+ .BetaAllert {width: 100%;display: block;margin: 20px auto;text-align: center;padding: 10px;color: #ffffff;background-color: #7474f7;border-radius: 12px;}
+ .MetamaskAddButton {color: #7474f7; border-radius: 8px; border: 1px solid #7474f7;padding: 2px 8px;font-size: 12px; margin-left: 5px; text-decoration: none !important;}
+ .MetamaskAddButton:hover {color: #7474f7; border-radius: 8px; border: 1px solid #7474f7;padding: 2px 8px;font-size: 12px; margin-left: 5px; text-decoration: none !important;}
+ .UnlockInfo {font-size: 14px !important;width: 90% !important;display: block !important;}
+ .UnlockInfoBal {font-size: 12px !important;width: 90% !important;}
+.UnlockDiv, .Tranferpos {padding: 10px 8px; border: 1px solid #9e6915; border-radius: 12px;}
+.Web3ActionBTNV {display: inline-block; margin: 10px auto;}
+.BalanceImputPRCD {font-size: 13px; margin-left: 5px;}
+.BLKEMD {text-decoration: underline !important;}
+.hiddenLink {text-decoration: underline; font-size: 12px; color: #50555C; display: block; margin: 5px auto;}
+.hiddenLink:hover {color: #50555C;}
+.TokenSelectedB {padding: 10px; border: 1px solid #7474f7; display: inline-block;width: auto;border-radius: 12px;}
+.NewFarm a {display: inline-block; padding: 4px 13px; background-color: #9e6915; color: #ffffff; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; text-decoration: none; margin: 30px auto;}
+.StatsLink a {text-decoration: none;}
 
+.custom-control-label::before, .custom-file-label, .custom-select, .custom-select:focus {transition: none; background: url("./assets/images/arrowdownblack.png") right 0.75rem center/15px 10px no-repeat;}
+.wusd-pair-select, .token-filter-input {background-color: #ffffff !important; color: #000000;}
+.LogoM {background-position: 0 -50px;}
+.BtnConnect {border: 1px solid #7474f7; color: #7474f7;}
+.BtnConnectAfter {border: 1px solid #9e6915; color: #9e6915;}
+.TitleCov, .StatsIndicator a {color: #000000;}
+.fantasyMenu:hover, .fantasyMenu {color: #000000;}
+.form-check-label {color: #000000;}
+.IndexRegular {color: #000000;}
+.FooterP p {color: #636363;}
+.FooterP p a, .disclamer a, .FarmThings p a {font-weight: bold; color: #636363 !important;}
+.card {border: 1px solid #aaaaaa; color: #000000;}
+.StatsLink a, .FarmSetupMain h5 a, .InflationContractLinks a, .TokenOperationLinks a {border: 1px solid #9e6915; color: #9e6915;}
+.StatsLink a:hover, .FarmSetupMain h5 a:hover, .InflationContractLinks a:hover, .TokenOperationLinks a:hover {color: #9e6915;text-decoration: none !important;}
+.nav-item-selected {border-bottom: 8px solid #7474f7;}
+.health-bar {background-color: #ebebeb;}
+.SelectRegular {border-color: #9e6915; color: #9e6915;}
+.TextRegular, .TextAreaRegular {border-color: #9e6915; color: #9e6915;}
+.input-group-text {background-color: transparent;border-top: 1px solid #9e6915; border-right: 1px solid #9e6915; border-bottom: 1px solid #9e6915; border-left: 0px solid #9e6915; color: #000000;}
+.form-control, .form-control:focus {background-color: transparent;border-top: 1px solid #9e6915; border-left: 1px solid #9e6915; border-bottom: 1px solid #9e6915; border-right: 0px solid #9e6915; color: #000000;}
+.FarmContract,.IndexContract, .FarmContractOpen, .FarmSetup, .InflationContract, .TokenOperation, .IndexContractOpenInfo, .IndexContractOpenCollateralSingle, .IndexContractOpenStatistic, .ShowCollateralNeededBal {border-color: #ebebeb;}
+.IndexSinglePerchBar span {color: #ffffff;}
+.YourFarmingPositions {border-color: #bdbdbd;}
+.BLKEMD {color: #000000 !important;}
+.InputRegularB .form-control, .InputRegularB .form-control:focus {border-right: 1px solid #9e6915;}
 
+.PrestoSelector {padding: 5px; margin: 2px 3px; border-radius: 8px; border: 1px solid #9e6915;}
+.PrestoSelector span {font-size: 14px; margin: auto 5px auto auto; display: inline-block; vertical-align: middle;}
+.FromETHPrestoDesc {width: 100%;}
+.FromETHPrestoDesc p {width: 100%;font-size: 12px;}
+.FromETHPrestoDesc img {width: 15px; height: 15px;}
+.InputTokenRegularS {position: relative;}
+.InputTokenRegularS .PrestoSelector {padding: 2px 5px; position: absolute; left: -80px; top: 2px;}
+.OnlyMobileVersion {display: none !important;}
+.HIDEO {display: none !important;}
+.SetupListITEM {padding: 20px; display: block; margin: 10px auto; border: 1px solid #7474F7; border-radius: 12px;}
+.SetupListITEM p {font-size: 14px;vertical-align: middle;margin-block-start: 0em;margin-block-end: 0em;margin-inline-start: 0px; margin-inline-end: 0px;margin-bottom: 0rem; text-align: left;}
+.SetupListITEMINFO {width: 62%; display: inline-block; margin-right: 8%; vertical-align: middle;}
+.SetupListITEMACTIONS {width: 30%;display: inline-block;vertical-align: middle;}
+.SetupListITEMACTIONS .web2ActionBTN {display: block; width: 100%; text-align: center; font-size: 12px; padding: 4px 6px; margin: 5px auto;}
+.youDIDit {width: 80%; display: block; margin: 5px auto;}
+.youDIDit p {font-size: 13px; text-align: left;}
+.youDIDit .SuccessText {font-size: 20px; text-align: center; margin: 10px auto;}
+.youDIDit .SuccessTextNow {font-size: 25px; text-align: center; margin: 10px auto; color: #7474F7; font-weight: bold;}
+.youDIDit .SuccessTextLink {font-size: 11px; padding: 5px 8px; border: 1px solid #9e6915; color: #ffffff !important; display: inline-block; background-color: #9e6915; border-radius: 6px;}
+.youDIDit .SuccessTextLink a {color: #ffffff !important; text-decoration: none !important; font-weight: bold;font-size: 11px;}
+.Disclamerfinish {font-size: 10px !important; text-align: left; margin: 10px auto; background-color: #7474F7; font-weight: bold; padding: 12px 20px; border-radius: 12px; color: #ffffff !important;}
 
+@media only screen and (max-device-width: 750px) {
+   .IndexRegularText iframe {display: none;}
+   .page-container, .dapp-container, .DappBox {width: 270px !important; display: inline-block; margin: 0px auto;}
+   .TitleCov {display: none;}
+   .CovTITLE figure {width: 90%;}
+   .DescCov p {font-size: 11px; font-weight: 600; text-align: left; margin-bottom: 5px;}
+   .page-container .FooterP {display: none;}
+   .TextRegular {width: 100%;}
+   .IndexRegular .IndexRegularImg {width: 90%;}
+   .dapp-container, .page-container, .DappBox {padding: 2px !important;}
+   .StatsBro {display: none;}
+   .StatsSis {width: 95%;}
+   .TextAreaRegular {max-width: 100%;}
+   .nav-link {font-size: 10px;}
+   .HealthContainer {width: 100%;display: inline-block;margin: 10px auto 40px auto;}
+   .StatsIndicator {width: 50%;}
+   .StatsLink {text-align: left;}
+   .ApproveBTN {display: inline-block; margin: 10px auto; font-size: 13px;}
+   .InputTokenRegular aside p {width: 75%; margin-left: 5%;}
+   .StatsIndicator h6 {font-size: 14px;}
+   .StatsIndicator p, .StatsIndicator a {font-size: 12px;}
+   .Rebalance aside {width: 100%; padding-right: 0; text-align: center; margin-bottom: 15px;}
+   .xTitle {font-size: 18px;}
+   .xTitle img {width: 27px;height: 27px;}
+   .CovDesc {width: 90%;}
+   .CovSide {width: 90%; margin-top: 10px; margin-left: 0;}
+   .CovAMMs {width: 90%; margin-left: 0;}
+   .Menuone li:hover .Ditone {display: none !important;}
+   .Ditone {display: none !important;}
+   .sidebar-menu-link-selected .Ditone {display: none !important;}
+   .Menuone {display: none;}
+   .sidemenu-active {display: inline-block; position: fixed; z-index: 30; right: 10px; top: 10px; background-color: #2d2e40; border-radius: 8px;top: 55px; border: 1px solid #9e6915;}
+   .sidemenu-active {background-color: #ffffff; color: #000000;}
+   .sidebar-menu-link {color: #000000 !important;}
+   .MobileMenu {display: inline-block; font-size: 13px; background-color: #7474f7; padding: 3px 5px; border-radius: 5px; color: #ffffff;text-decoration: none;}
+   .MobileMenu:hover, .MobileMenu:after {color: #ffffff; text-decoration: none;}
+   .ChangeMod {position: fixed;top: 5px;left: 5px;z-index: 99999999999999999999999119;background-color: #7474f7;padding: 4px 4px;font-size: 10px;border-radius: 50%;}
+   .ChangeMod {background-color: #ffffff;}
+   .app-container {z-index: 0;}
+   .app-container .row {z-index: 0;}
+   .BtnConnect, .BtnConnectAfter {font-size: 10px;}
+   .fantasyMenu {color: #ffffff;}
+   .grimoireBox {max-width: 270px;width: 270px;}
+   .GrimoureContent header {width: 100%; display: inline-block; margin: 10px auto;}
+   .GrimoureContent span {width: 100%; display: inline-block; margin: 10px auto;vertical-align: top; text-align: center;}
+   .GrimoureContent span img {text-align: center;}
+   .IndexRegular {position: relative;}
+   .IndexRegular .IndexRegularText {width: 80%; margin-top: 20px;}
+   .IndexRegular .IndexRegularText h3 {width: 95%;font-size: 18px; margin-top: 20px; display: inline-block;}
+   .IndexRegularImg {width: 65% !important;}
+   .IndexRegular .IndexRegularText p {font-size: 10px;font-weight: bold;}
+   .IndexRegular {display: inline-block !important; min-height: 300px !important; padding: 20px 20px 20px 20px !important;}
+   .IndexThings, .IndexManageMB, .IndexContractOpenCollateralSingle {width: 90%;}
+   .IndexThings {margin-left: auto; margin: 10px auto;}
+   .ListOfThings, .IndexContract, .InflationContract, .InflationContractOpen {max-width: 95%;min-width: 95%;}
+   .IndexInfo, .MainExploration {width: 90%;}
+   .IndexLogo {margin: 10px auto; display: block;}
+   .IndexInfo {width: 95%; display: block; margin: 5px auto;}
+   .IndexInfo h6 {font-size: 12px;}
+   .IndexContractBTN {text-align: center;}
+   .InflationContract h4 {width: 100%; font-size: 15px; margin-bottom: 8px;}
+   .InflationContractLinks {width: 100%; text-align: center;}
+   .InflationContract p {display: none;}
+   .InflationContract .InflationContractButton {width: 100%; text-align: center; margin-left: auto; margin: 10px auto;}
+   .InflationContractOpen h3 {font-size: 15px;}
+   .dapp-container, .DappBox {min-height: 300px;}
+   .TokenOperation h6 {width: 100%; font-size: 15px; text-align: center; margin: 8px auto; margin-bottom: 8px;}
+   .TokenOperationLinks, .CreateList {width: 100%;}
+   .TokenOperation p {font-size: 13px;}
+   .TokenOperation p img {width: 20px;}
+   .CreateList p {width: 100%;}
+   .InputForm input[type="file"] {width: 90%;}
+   .Web2ActionsBTNs {width: 100%;}
+   .TokenLoaded > div {width: 100%;}
+   .CreateList .TokenLoaded > div .backActionBTN {left: -35px;}
+   .CreateList .TokenLoaded {width: 90%;margin-left: 25px;}
+   .ApplicationBox {width: 100%;margin-left: 0; margin: 0 auto; display: block;border-radius: 0 !important;}
+   .ApplicationAll {width: 100%;margin: 0px auto 0px auto;border-radius: 0 !important;}
+   .dapp-container, .DappBox {width: 100% !important;border-radius: 0 !important;}
+   .app-container {width: 100% !important;border-radius: 0 !important;}
+   .page-container-wrapper, .page-container {width: 100% !important;border-radius: 0 !important;}
+   .Footer {display: none;}
+   #root {padding-bottom: 0 !important;}
+   .ApplicationMenu {position: absolute;}
+   .FooterP {width: 100%;}
+   .DappMenu li span {font-size: 11px;font-weight: bold;display: block;padding: 0.2rem .5rem;}
+   .NUUUMobileVersion {display: none !important;}
+   .OnlyMobileVersion {display: inline-block !important; margin: 25px auto;}
+   .CovSide {margin-bottom: 20px;}
+   .CovLinks h5 {margin-top: 0px;}
+   .CovDesc h3 {font-size: 20px;margin-bottom: 5px;}
+   .CovDiversity {width: 60%;display: inline-block;}
+   .CovAMMs {padding: 5px 2%;}
+   .CovAMMs h5 {margin-bottom: 10px;}
+   .CoveExpl {margin: 30px auto 5px auto;}
+   .MenuMobileIndex .Menuone {display: block; padding: 5px 5%; background-color: #5f5b53;width: 200px;border-radius: 12px;box-shadow: rgb(0 0 0 / 1%) 0px 0px 1px, rgb(0 0 0 / 4%) 0px 4px 8px, rgb(0 0 0 / 4%) 0px 16px 24px, rgb(0 0 0 / 1%) 0px 24px;} 
+   .MenuMobileIndex .nav-link {display: block;padding: 0.2rem 0em;text-align: left;}
+   .MenuMobileIndex .sidemenu-active {position: static; border: none;}
+   .MenuMobileIndex .Menuone h5 {color: #ffffff;}
+   .Menuone .NoALL {display: none !important;}
+   .MenuMobileIndex .NoALL {display: inline-block !important;}
+   .PrestoSelector {margin: 0 0px 3px 3px !important;padding: 0px 4px !important;}
+   .InputTokenRegularS .PrestoSelector {left: auto;right: 0px;top: -28px;}
+   .PrestoSelector span {font-size: 12px;margin: auto 4px auto auto;}
+   .QuestionRegular {font-size: 12px;margin: 10px auto 0px auto;}
+   .FarmContract, .FarmContractOpen, .FarmSetup {width: 100%;min-width: 100%;}
+   .FarmThings {text-align: center; width: 100%; margin-left: 0;}
+   .FarmTitle {width: 100%;margin-bottom: 10px;}
+   .SortBox .TextRegular {width: 100%;display: block;}
+   .SortOptions {width: 100%;margin-top: 10px;display: block;}
+   .FarmContractOpen > .FarmThings {display: none;}
+   .SetupFarmingInstructions p {width: 100%;margin-left: 0;text-align: center;}
+   .DiffWallet {width: 100%;}
+   .SetupFarmingOthers p {width: 100%; text-align: center;}
+   .MetamaskAddButton {display: block;}
+   .FarmYou {width: 100%; margin-left: 0;}
+   .Farmed {width: 100%; text-align: center;}
+   .LockedFarmPositions {display: block; margin: 10px auto; padding: 10px 0; width: 100%; border-top: 1px solid;}
+   .LockedFarmPositions {border-color: #bdbdbd;}
+   .YourFarmingPositions .web2ActionBTN, .YourFarmingPositions .backActionBTN, .FarmSetup .Web3ActionBTN, .FarmSetup .ApproveBTN {margin: 5px;padding: 5px 8px;font-size: 12px;}
+   .UnlockInfo {font-size: 12px !important;}
+   .UnlockInfoBal {font-size: 10px !important;}
+   .FarmYou a {width: 100%; display: block; margin: 5px auto;}
+   .Web2ActionsBTNs a {margin: 4px 4px;font-size: 12px; padding: 4px 8px;}
+   .FarmContractOpen {padding: 0 3%;}
+   .FarmContract .StatsLink {display: none;}
+}
+
+@media only screen and (min-device-width: 751px) and (max-device-width: 1024px) {
+   .Menuone {display: none;}
+   .sidemenu-active {display: inline-block;}
+   .Menuone li:hover .Ditone {display: none !important;}
+   .Ditone {display: none !important;}
+   .sidebar-menu-link-selected .Ditone {display: none !important;}
+   .MobileMenu {display: inline-block;}
+   .MobileMenu {display: inline-block; font-size: 15px; background-color: #7474f7; padding: 3px 5px; border-radius: 5px; color: #ffffff;text-decoration: none;}
+   .MobileMenu:hover, .MobileMenu:after {color: #ffffff; text-decoration: none;}
+   .sidemenu-active {display: inline-block; position: fixed; z-index: 30; right: 10px; top: 10px; background-color: #2d2e40; border-radius: 8px;top: 55px; border: 1px solid #9e6915;}
+   .sidemenu-active {background-color: #ffffff; color: #000000;}
+   .sidebar-menu-link {color: #000000 !important;}
+   .grimoireBox {max-width: 650px;width: 650px;}
+   .ApplicationBox {width: 99%;margin-left: 0; margin: 0 auto; display: block;}
+   .ApplicationAll {width: 100%;margin: 40px auto 20px auto;}
+   .dapp-container, .DappBox {width: 100% !important; display: inline-block !important;;}
+   .app-container {width: 100% !important; display: inline-block !important;;}
+   .page-container-wrapper, .page-container {width: 100% !important;display: inline-block !important;}
+   .ApplicationMenu {position: absolute;}
+}

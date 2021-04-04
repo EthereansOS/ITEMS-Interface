@@ -219,10 +219,10 @@ var Item = React.createClass({
                             </section>}
                         </section>}
                         {toggle === 'farm' && <section className="ItemFarm">
-                            <section>
+                            <FarmViewer itemAddress={item.address} />
+                            <section className="NewFarm">
                                 <a href={window.context.createFarmingContractURLTemplate.format(item.address)} target="_blank">New Farming Contract</a>
                             </section>
-                            <FarmViewer itemAddress={item.address} />
                         </section>}
                     </section>
                 </section>
