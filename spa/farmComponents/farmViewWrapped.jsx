@@ -13,6 +13,5 @@ ImportReact({
         'spa/imported/farm/CreateOrEditFarmingSetup.jsx',
         'spa/imported/farm/CreateOrEditFarmingSetups.jsx'
     ],
-    className : 'DappBox',
     render : 'ExploreFarmingContract'
 });
