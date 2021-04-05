@@ -12,9 +12,6 @@ var Farm = React.createClass({
                 <br/>
                 <br/>
             </section>
-            <section>
-                <a href={window.context.createFarmingContractURLTemplate.format("")} target="_blank">New Farming Contract</a>
-            </section>
             <FarmViewer/>
         </section>);
     }
