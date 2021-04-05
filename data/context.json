@@ -30,6 +30,7 @@
     "pandorasBoxURL" : "https://raw.githubusercontent.com/b-u-i-d-l/ETHITEM/main/data/pandorasBox.json",
     "additionalFactories" : [],
     "additionalFactoriesRopsten" : [],
+    "farmingContractsToHide" : ["0xb19dA910aca635E3DCFc9F170002a7FBff65F0F1"],
     "trustwalletImgURLTemplate": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/{0}/logo.png",
     "farmFactoryAddress" : "0x6BC8530fecc0001b9FC0bf5DAA17873e847616ed",
     "farmFactoryAddressRopsten": "0x75687cb2A21F7c596DC973193f26D01c597F2e75",

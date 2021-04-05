@@ -17,7 +17,7 @@ var FarmViewer = React.createClass({
         }).then(fc => {
             var farmingContracts = [];
             Object.values(fc).forEach(it => Object.keys(it).forEach(key => farmingContracts.push(key)));
-            _this.setState({farmingContracts});
+            _this.setState({farmingContracts : farmingContracts.filter(it => window.context.farmingContractsToHide.indexOf(it) === -1)});
         });
     },
     render() {
