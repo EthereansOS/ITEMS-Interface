@@ -541,7 +541,7 @@ a:disabled {cursor:wait !important;}
 .FooterP { width: 80%; margin: 20px auto 0px auto; display: inline-block; text-align: center;}
 .FooterP p {padding: 5px 5px 5px 5px; display: inline-block; width: 100%; font-size: 10px;}
 .FooterP p a {text-decoration: underline;}
-.page-container, .dapp-container, .DappBox {z-index: 5; position: relative;margin-bottom: 100px;}
+.page-container, .dapp-container, .DappBox {z-index: 5; position: relative;display: block;margin: 30px auto;text-align: center;}
 .card {background-color: transparent;}
 .navbar {z-index: 5;}
 .CoveExpl {width: 99%; margin: 30px auto; display: inline-block;}
@@ -643,7 +643,7 @@ a:disabled {cursor:wait !important;}
 .GrimoureContent figure img {display: inline-block; width: 100%; height: auto;}
 .GrimoureContent header h2 {font-size: 27px; font-weight: bold !important;}
 .GrimoureContent header p {font-size: 13px; font-weight: normal !important;}
-.ListOfThings {width: 100%; text-align: center; display: inline-block; margin: 20px auto;max-width: 600px;}
+.ListOfThings {width: 100%; text-align: center; display: inline-block; margin: 5px auto;max-width: 600px;}
 .web2ActionBTN {display: inline-block; padding: 4px 13px; background-color: #9e6915; color: #ffffff; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; text-decoration: none !important;}
 .web2ActionBTN:hover {color: #ffffff; text-decoration: none;}
 .web2ActionBTN:disabled {font-weight: normal !important;}
@@ -680,7 +680,7 @@ a:disabled {cursor:wait !important;}
 .ImgStand {width: 30px; height: 30px; display: inline-block;}
 .FarmContract, .FarmSetup, .IndexContract {width: 100%; display: inline-block; margin: 10px auto; min-width: 600px; border: 1px solid; border-radius: 12px; padding: 3%; text-align: left;}
 .InflationContract {width: 100%; display: inline-block; margin: 10px auto; min-width: 600px; border: 1px solid; border-radius: 12px; padding: 3%; text-align: left;}
-.FarmContractOpen {width: 100%; display: inline-block; margin: 10px auto; min-width: 600px; border-bottom: 1px solid; border-radius: 0px; padding: 3%; text-align: left;}
+.FarmContractOpen {width: 100%; display: inline-block; margin: 10px auto; min-width: 600px; padding: 3%; text-align: left;}
 .InflationContractOpen {width: 100%; display: inline-block; margin: 10px auto; min-width: 600px; border-radius: 0px; padding: 3%; text-align: left;}
 .FarmTitle {width: 40%; display: inline-block; margin-right: 1%; text-align: left;}
 .FarmTitle figure {display: inline-block; width: 40%; text-align: center;margin-block-start: 0em;margin-block-end: 0em;margin-inline-start: 0px;margin-inline-end: 0px; margin-bottom: 5px; vertical-align: middle;}
