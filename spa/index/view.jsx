@@ -57,7 +57,7 @@ var Index = React.createClass({
             {React.createElement(Wallet, props)}
             <footer>
             <section>
-                <a target="_blank" href="https://github.com/b-u-i-d-l/ethItem">Github</a>
+                <a target="_blank" href="https://github.com/EthereansOS/ITEMS-Interface">Github</a>
                 <a target="_blank" href="/doc.html">Documentation</a>
                 <a target="_blank" href="https://dapp.dfohub.com/?addr=0x7cB2Aa86fC0F3dA708783168BFd25B80F045d183">ETHITEM Governance</a>
                 <a target="_blank" href="https://covenants.eth.link/#/farm/dapp/0x0074f1D1D1F0086F46EA102380635fCC460c212b">Farm ARTE</a>
