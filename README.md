@@ -1,6 +1,6 @@
 # ETHITEM
 
-WEBSITE: https://www.ethitem.com
+WEBSITE: https://item.eth.link
 
 <img scr="https://raw.githubusercontent.com/EthereansOS/ITEMS-Interface/master/assets/img/awesome.gif">
 
