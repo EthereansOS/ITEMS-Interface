@@ -57,19 +57,19 @@ var Index = React.createClass({
             {React.createElement(Wallet, props)}
             <footer>
             <section>
-                <a target="_blank" href="https://github.com/EthereansOS/ITEMS-Interface">Github</a>
-                <a target="_blank" href="/doc.html">Documentation</a>
+                <a target="_blank" href="https://github.com/EthereansOS/">Github</a>
+                <a target="_blank" href="https://docs.ethos.wiki/items/">Documentation</a>
                 <a target="_blank" href="https://dapp.dfohub.com/?addr=0x7cB2Aa86fC0F3dA708783168BFd25B80F045d183">ETHITEM Governance</a>
                 <a target="_blank" href="https://covenants.eth.link/#/farm/dapp/0x0074f1D1D1F0086F46EA102380635fCC460c212b">Farm ARTE</a>
-                <a href="https://ethos.eth.link/" target="_blank">EthOS</a>
-                <a href="javascript:;" data-section="explore" onclick="window.connectFromHomepage(this)" target="_blank">Explore Items</a>
-                <a href="javascript:;" data-section="wrap" onclick="window.connectFromHomepage(this)" target="_blank">Wrap to Items</a>
-                <a href="javascript:;" data-section="create" onclick="window.connectFromHomepage(this)" target="_blank">Create Items</a>
-                <a href="javascript:;" data-section="farm" onclick="window.connectFromHomepage(this)" target="_blank">Farm Items</a>
+                <a target="_blank" href="https://ethos.eth.link/" target="_blank">EthOS</a>
+                <a href="javascript:;" data-section="explore" onclick="window.connectFromHomepage(this)">Explore Items</a>
+                <a href="javascript:;" data-section="wrap" onclick="window.connectFromHomepage(this)">Wrap to Items</a>
+                <a href="javascript:;" data-section="create" onclick="window.connectFromHomepage(this)">Create Items</a>
+                <a href="javascript:;" data-section="farm" onclick="window.connectFromHomepage(this)">Farm Items</a>
                 <a target="_blank" href="https://whereismydragon.eth.link" class="Brandized">Where is my dragon?</a>
             </section>
             <section>
-                <p>ETHITEM is a new protocol on top of Ethereum, it's an R&D project made by the EthOS team. Use it at your own risk!</p>
+                <p>ITEMS is a permissionless R&D protocol on top of Ethereum by the EthOS team. Use it at your own risk!</p>
             </section>
             <img className="FooterImg" src="assets/img/footer.png"></img>
         </footer>
