@@ -144,14 +144,12 @@ var Item = React.createClass({
                                 <section className="itemFundamentalsThing">
                                 {item.dynamicData && <h5 className="ItemSupply">Supply: {window.fromDecimals(item.dynamicData.totalSupply, item.decimals)}</h5>}<br></br>
                                     <h5 className="itemaddress"><a target="_blank" href={`${window.getNetworkElement("etherscanURL")}address/${item.collection.address}/${item.objectId}`}>NFT Address</a></h5>
-                                    <h5 className="itemaddress"><a target="_blank" href={`${window.getNetworkElement("etherscanURL")}token/${item.address}`}>ERC20 Address</a></h5>
+                                    <h5 className="itemaddress"><a target="_blank" href={`${window.getNetworkElement("etherscanURL")}token/${item.address}`}>ERC20 Address</a></h5><br></br>
+                                    {item.collection.licence_url && <h5 className="itemaddress"><a target="_blank" href={window.formatLink(item.collection.licence_url)}>Collection Licence</a></h5>}
+                                    {this.props.item.licence_url && <h5 className="itemaddress"><a target="_blank" href={window.formatLink(this.props.item.licence_url)}>Item Licence</a></h5>}
                                 </section>
                                 <section className="collectionInfoSide">
                                     <span className="ItemCollectionLink"><a target="_blank" onClick={window.copyHREF} href={window.getHomepageLink(`?wrappedItem=${this.props.item.address}`)} className="collectionLink collectionLinkS BrandizedS superlink">Copy Link</a></span>
-                                </section>
-                                <section className="collectionInfoSideLinks">
-                                    {item.collection.licence_url && <span className="ItemCollectionLink"><a target="_blank" href={window.formatLink(item.collection.licence_url)} className="collectionLink">Collection Licence</a></span>}
-                                    {this.props.item.licence_url && <span className="ItemCollectionLink"><a target="_blank" href={window.formatLink(this.props.item.licence_url)} className="collectionLink">Item Licence</a></span>}
                                 </section>
                                 <section className="itemFundamentalsThing">
                                     {item.dynamicData && item.dynamicData.isEditable && item.collection.extensionAddress && item.collection.extensionAddress !== window.voidEthereumAddress && <span className="HostInfo">Host {item.collection.extensionIsContract ? "Contract" : "Wallet"}: <a target="_blank" href={`${window.getNetworkElement('etherscanURL')}address/${item.collection.extensionAddress}`}>{window.shortenWord(item.collection.extensionAddress, 6)}</a></span>}
