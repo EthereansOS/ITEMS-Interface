@@ -644,7 +644,7 @@ a:disabled {cursor:wait !important;}
 .GrimoureContent header h2 {font-size: 27px; font-weight: bold !important;}
 .GrimoureContent header p {font-size: 13px; font-weight: normal !important;}
 .ListOfThings {width: 100%; text-align: center; display: inline-block; margin: 5px auto;max-width: 600px;}
-.web2ActionBTN {display: inline-block; padding: 4px 13px; background-color: #9e6915; color: #ffffff; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; text-decoration: none !important;}
+.web2ActionBTN {display: inline-block; padding: 4px 13px; background-color: #6e88e3; color: #ffffff; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; text-decoration: none !important;}
 .web2ActionBTN:hover {color: #ffffff; text-decoration: none;}
 .web2ActionBTN:disabled {font-weight: normal !important;}
 .backActionBTN {display: inline-block; padding: 4px 13px; border:1px solid #9e6915; color: #9e6915; border-radius: 20px; font-size: 14px; font-weight: normal; cursor: pointer;}
@@ -680,7 +680,7 @@ a:disabled {cursor:wait !important;}
 .ImgStand {width: 30px; height: 30px; display: inline-block;}
 .FarmContract, .FarmSetup, .IndexContract {width: 100%; display: inline-block; margin: 10px auto; min-width: 600px; border: 1px solid; border-radius: 12px; padding: 3%; text-align: left;}
 .InflationContract {width: 100%; display: inline-block; margin: 10px auto; min-width: 600px; border: 1px solid; border-radius: 12px; padding: 3%; text-align: left;}
-.FarmContractOpen {width: 100%; display: inline-block; margin: 10px auto; min-width: 600px; padding: 3%; text-align: left;}
+.FarmContractOpen {width: 100%; display: inline-block; margin: 10px auto; min-width: 600px; padding: 1.5%;text-align: left;border: 3px solid #6e88e3 !important; border-radius: 12px;}
 .InflationContractOpen {width: 100%; display: inline-block; margin: 10px auto; min-width: 600px; border-radius: 0px; padding: 3%; text-align: left;}
 .FarmTitle {width: 40%; display: inline-block; margin-right: 1%; text-align: left;}
 .FarmTitle figure {display: inline-block; width: 40%; text-align: center;margin-block-start: 0em;margin-block-end: 0em;margin-inline-start: 0px;margin-inline-end: 0px; margin-bottom: 5px; vertical-align: middle;}
@@ -842,7 +842,7 @@ input[type=range] {height: 31px;-webkit-appearance: none;margin: 10px 0;width: 1
 .hiddenLink {text-decoration: underline; font-size: 12px; color: #50555C; display: block; margin: 5px auto;}
 .hiddenLink:hover {color: #50555C;}
 .TokenSelectedB {padding: 10px; border: 1px solid #7474f7; display: inline-block;width: auto;border-radius: 12px;}
-.NewFarm a {display: inline-block; padding: 4px 13px; background-color: #9e6915; color: #ffffff; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; text-decoration: none; margin: 30px auto;}
+.NewFarm a {display: inline-block;  color: #6e88e3; font-size: 11px; font-weight: bold; cursor: pointer; text-decoration: underline; margin: 10px auto;}
 .StatsLink a {text-decoration: none;}
 
 .custom-control-label::before, .custom-file-label, .custom-select, .custom-select:focus {transition: none; background: url("./assets/images/arrowdownblack.png") right 0.75rem center/15px 10px no-repeat;}
@@ -857,7 +857,7 @@ input[type=range] {height: 31px;-webkit-appearance: none;margin: 10px 0;width: 1
 .FooterP p {color: #636363;}
 .FooterP p a, .disclamer a, .FarmThings p a {font-weight: bold; color: #636363 !important;}
 .card {border: 1px solid #aaaaaa; color: #000000;}
-.StatsLink a, .FarmSetupMain h5 a, .InflationContractLinks a, .TokenOperationLinks a {border: 1px solid #9e6915; color: #9e6915;}
+.StatsLink a, .FarmSetupMain h5 a, .InflationContractLinks a, .TokenOperationLinks a {border: 1px solid #6e88e3; color: #6e88e3;}
 .StatsLink a:hover, .FarmSetupMain h5 a:hover, .InflationContractLinks a:hover, .TokenOperationLinks a:hover {color: #9e6915;text-decoration: none !important;}
 .nav-item-selected {border-bottom: 8px solid #7474f7;}
 .health-bar {background-color: #ebebeb;}

@@ -47,11 +47,12 @@ var SingleCollection = React.createClass({
                     </section>
                     <section className="collectionInfoSideLinks">
                         {this.props.showLink && <span className="ItemCollectionLink"><a target="_blank" href={`${window.getNetworkElement("etherscanURL")}address/${this.props.collection.address}`} className="collectionLink">Contract</a></span>}
-                        {this.props.showLink && this.props.collection.extensionAddress && <span className="ItemCollectionLink"><a target="_blank" href={`${window.getNetworkElement("etherscanURL")}address/${this.props.collection.extensionAddress}`} className="collectionLink">Host</a></span>}
+                        {this.props.showLink && this.props.collection.extensionAddress && this.props.collection.extensionAddress !== window.voidEthereumAddress && <span className="ItemCollectionLink"><a target="_blank" href={`${window.getNetworkElement("etherscanURL")}address/${this.props.collection.extensionAddress}`} className="collectionLink">Host</a></span>}
                         {this.props.collection.externalDNS && this.props.showLink && <span className="ItemCollectionLink"><a target="_blank" href={window.formatLink(this.props.collection.externalDNS)} className="collectionLink">External DNS</a></span>}
                         {this.props.collection.externalENS && this.props.showLink && <span className="ItemCollectionLink"><a target="_blank" href={window.formatLink(this.props.collection.externalENS)} className="collectionLink">External ENS</a></span>}
                         {this.props.collection.repoUri && this.props.showLink && <span className="ItemCollectionLink"><a target="_blank" href={window.formatLink(this.props.collection.repoUri)} className="collectionLink">Repo</a></span>}
                         {this.props.collection.licence_url && this.props.showLink && <span className="ItemCollectionLink"><a target="_blank" href={window.formatLink(this.props.collection.licence_url)} className="collectionLink">Licence</a></span>}
+                        {this.props.showLink && <span className="ItemCollectionLink"><a className="collectionLink" href={window.context.openSeaItemLinkTemplate.format(this.props.collection.address)} target="_blank" >Opensea</a></span>}
                     </section>
                 </article>
             ];
