@@ -84,7 +84,7 @@ var CreateItemWizard = React.createClass({
         metadata.symbol = this.state.itemSymbol;
         return metadata;
     },
-    renderMetadata() {
+    renderMetadataBasic() {
         var state = this.getState();
         return (<section className="MetaDataThings" ref={ref => window.setData(this.metadataPage = ref, state.metadata)}>
             <section className="MetaImputThings">
@@ -97,17 +97,24 @@ var CreateItemWizard = React.createClass({
             <section className="spacialImputs">
                 <section className="MetaImputThings">
                     <label className="createWhat">
-                        <p>ITEM Img Regular<b>*</b></p>
+                        <p>Cover<b>*</b></p>
                         <input id="image" data-mandatory="true" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
                     </label>
-                    <span className="ExplBoom">The cover img must be .png or .gif and at least 5mb lenght with a max with of 350px, due to users experience in IPFS download speed limitations</span>
+                    <span className="ExplBoom">The cover img must be .png or .gif and at max 5mb lenght, due to users experience in IPFS download speed limitations (recommended size 350 x 200, 350 x 350 or 350 x 500)</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
-                        <p>ITEM Img HD</p>
+                        <p>ITEM Img content HD</p>
                         <input id="image_data" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
                     </label>
                     <span className="ExplBoom">No limitations for the HQ version of the image</span>
+                </section>
+                <section className="MetaImputThings">
+                    <label className="createWhat">
+                        <p>Animation:</p>
+                        <input id="animation_url" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
+                    </label>
+                    <span className="ExplBoom">an mp4, mp3 or gif </span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
@@ -194,9 +201,11 @@ var CreateItemWizard = React.createClass({
                 <select className="" onChange={this.onMetadataType}>
                     <option value="">Select</option>
                     <option value="basic" selected={metadataType === "basic"}>Basic</option>
+                    <option value="art" selected={metadataType === "art"}>Art</option>
                     <option value="custom" selected={metadataType === "custom"}>Custom</option>
                 </select>
-                {metadataType === 'basic' && this.renderMetadata()}
+                {metadataType === 'basic' && this.renderMetadataBasic()}
+                {metadataType === 'art' && this.renderMetadataArt()}
                 {metadataType === 'custom' && <section className="FormCreateThing">
                     <p>Metadata Link</p>
                     <input type="text" ref={ref => (this.metadataLinkInput = ref) && (this.state && this.state.metadataLink && (ref.value = (this.state && this.state.metadataLink)))} />

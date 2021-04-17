@@ -109,6 +109,7 @@
         "png" : "image/png",
         "gif" : "image/gif"
     },
+    
     "specialMessages" : {
         "wrap" : {
             "ERC20" : [
