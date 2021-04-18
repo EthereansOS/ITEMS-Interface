@@ -92,7 +92,7 @@ var CreateItemWizard = React.createClass({
                     <p>Description<b>*</b></p>
                     <textarea id="description" data-mandatory="true" />
                 </label>
-                <span className="ExplBoom">The description of this new awesome collection</span>
+                <span className="ExplBoom">The description of this new awesome Item</span>
             </section>
             <section className="spacialImputs">
                 <section className="MetaImputThings">
@@ -105,16 +105,16 @@ var CreateItemWizard = React.createClass({
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>ITEM Img content HD</p>
-                        <input id="image_data" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
+                        <input id="image_data" type="file" accept=".png, .jpeg, .gif" />
                     </label>
                     <span className="ExplBoom">No limitations for the HQ version of the image</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Animation:</p>
-                        <input id="animation_url" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
+                        <input id="animation_url" type="file" accept={'.' + Object.keys(window.context.supportedAnimationFileExtensions).join(', .')} />
                     </label>
-                    <span className="ExplBoom">an mp4, mp3 or gif </span>
+                    <span className="ExplBoom">an mp4, mp3 or gif file as a fancy animated version of your ITEM</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
@@ -139,7 +139,127 @@ var CreateItemWizard = React.createClass({
                         <p>Licence File</p>
                         <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt"/>
                     </label>
-                    <span className="ExplBoom">A file that represent the legal licence of the file (if Any). Accepted file: .pdf, .html, .md, .txt</span>
+                    <span className="ExplBoom">A file that represent the legal licence of the ITEM (if Any). Accepted file: .pdf, .html, .md, .txt</span>
+                </section>
+            </section>
+        </section>);
+    },
+    renderMetadataArt() {
+        var state = this.getState();
+        return (<section className="MetaDataThings" ref={ref => window.setData(this.metadataPage = ref, state.metadata)}>
+            <section className="MetaImputThings">
+                <label className="createWhat">
+                    <p>Artwork Description<b>*</b></p>
+                    <textarea id="description" data-mandatory="true" />
+                </label>
+                <span className="ExplBoom">The description of this new awesome Artwork</span>
+            </section>
+            <section className="spacialImputs">
+                <section className="MetaImputThings">
+                    <label className="createWhat">
+                        <p>Artwork Cover<b>*</b></p>
+                        <input id="image" data-mandatory="true" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
+                    </label>
+                    <span className="ExplBoom">The cover img must be .png or .gif and at max 5mb lenght, due to users experience in IPFS download speed limitations (recommended size 350 x 200, 350 x 350 or 350 x 500)</span>
+                </section>
+                <section className="MetaImputThings">
+                    <label className="createWhat">
+                        <p>Artwork Cover HD</p>
+                        <input id="image_data" type="file" accept=".png, .jpeg, .gif" />
+                    </label>
+                    <span className="ExplBoom">No limitations for the HQ version of the Artwork</span>
+                </section>
+                <section className="MetaImputThings">
+                    <label className="createWhat">
+                        <p>Animation:</p>
+                        <input id="animation_url" type="file" accept={'.' + Object.keys(window.context.supportedAnimationFileExtensions).join(', .')} />
+                    </label>
+                    <span className="ExplBoom">an mp4, mp3 or gif file as a fancy animated version of your Artwork</span>
+                </section>
+                <section className="MetaImputThings">
+                    <section className="createWhat">
+                        <p>Artwork Extra File or Folder</p>
+                        <select className="FF" id="fileType" onChange={this.onFileOrFolder}>
+                            <option value="file">File</option>
+                            <option value="folder">Folder</option>
+                        </select>
+                        <input id={this.state && this.state.fileOrFolder === 'folder' ? 'folder' : 'file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'}/>
+                    </section>
+                    <span className="ExplBoom">The file or folder of the ITEM (if Any).</span>
+                </section>
+                <section className="MetaImputThings">
+                    <label className="createWhat">
+                        <p>Background Color<b>*</b></p>
+                        <input id="background_color" data-mandatory="true" type="color" />
+                    </label>
+                    <span className="ExplBoom">The background color used in most of the dapps behind your cover if not fixed with their standard image sizes</span>
+                </section>
+                <section className="MetaImputThings">
+                    <label className="createWhat">
+                        <p>Licence</p>
+                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt"/>
+                    </label>
+                    <span className="ExplBoom">A file that represent the legal licence of the Artwork (if Any). Accepted file: .pdf, .html, .md, .txt</span>
+                </section>
+            </section>
+        </section>);
+    },
+    renderMetadataVoxel() {
+        var state = this.getState();
+        return (<section className="MetaDataThings" ref={ref => window.setData(this.metadataPage = ref, state.metadata)}>
+            <section className="MetaImputThings">
+                <label className="createWhat">
+                    <p>Artwork Description<b>*</b></p>
+                    <textarea id="description" data-mandatory="true" />
+                </label>
+                <span className="ExplBoom">The description of this new awesome Artwork</span>
+            </section>
+            <section className="spacialImputs">
+                <section className="MetaImputThings">
+                    <label className="createWhat">
+                        <p>Artwork Cover<b>*</b></p>
+                        <input id="image" data-mandatory="true" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
+                    </label>
+                    <span className="ExplBoom">The cover img must be .png or .gif and at max 5mb lenght, due to users experience in IPFS download speed limitations (recommended size 350 x 200, 350 x 350 or 350 x 500)</span>
+                </section>
+                <section className="MetaImputThings">
+                    <label className="createWhat">
+                        <p>Artwork Cover HD</p>
+                        <input id="image_data" type="file" accept=".png, .jpeg, .gif" />
+                    </label>
+                    <span className="ExplBoom">No limitations for the HQ version of the Artwork</span>
+                </section>
+                <section className="MetaImputThings">
+                    <label className="createWhat">
+                        <p>Animation:</p>
+                        <input id="animation_url" type="file" accept={'.' + Object.keys(window.context.supportedAnimationFileExtensions).join(', .')} />
+                    </label>
+                    <span className="ExplBoom">an mp4, mp3 or gif file as a fancy animated version of your Artwork</span>
+                </section>
+                <section className="MetaImputThings">
+                    <section className="createWhat">
+                        <p>Artwork Extra File or Folder</p>
+                        <select className="FF" id="fileType" onChange={this.onFileOrFolder}>
+                            <option value="file">File</option>
+                            <option value="folder">Folder</option>
+                        </select>
+                        <input id={this.state && this.state.fileOrFolder === 'folder' ? 'folder' : 'file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'}/>
+                    </section>
+                    <span className="ExplBoom">The file or folder of the ITEM (if Any).</span>
+                </section>
+                <section className="MetaImputThings">
+                    <label className="createWhat">
+                        <p>Background Color<b>*</b></p>
+                        <input id="background_color" data-mandatory="true" type="color" />
+                    </label>
+                    <span className="ExplBoom">The background color used in most of the dapps behind your cover if not fixed with their standard image sizes</span>
+                </section>
+                <section className="MetaImputThings">
+                    <label className="createWhat">
+                        <p>Licence</p>
+                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt"/>
+                    </label>
+                    <span className="ExplBoom">A file that represent the legal licence of the Artwork (if Any). Accepted file: .pdf, .html, .md, .txt</span>
                 </section>
             </section>
         </section>);
@@ -201,7 +321,7 @@ var CreateItemWizard = React.createClass({
                 <select className="" onChange={this.onMetadataType}>
                     <option value="">Select</option>
                     <option value="basic" selected={metadataType === "basic"}>Basic</option>
-                    <option value="art" selected={metadataType === "art"}>Art</option>
+                    <option value="art" selected={metadataType === "art"}>Crypto Art</option>
                     <option value="custom" selected={metadataType === "custom"}>Custom</option>
                 </select>
                 {metadataType === 'basic' && this.renderMetadataBasic()}

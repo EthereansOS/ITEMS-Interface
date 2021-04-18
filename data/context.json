@@ -109,6 +109,11 @@
         "png" : "image/png",
         "gif" : "image/gif"
     },
+    "supportedAnimationFileExtensions" : {
+        "mp4" : "video/mp4",
+        "mp3" : "audio/mp3",
+        "gif" : "image/gif"
+    },
     
     "specialMessages" : {
         "wrap" : {
