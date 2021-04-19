@@ -609,7 +609,7 @@ var CreateItemWizard = React.createClass({
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Virtual Land File:<b>*</b></p>
-                        <input data-mandatory="true" id="land_url" type="file" accept=".vox" />
+                        <input data-mandatory="true" id="voxel_url" type="file" accept=".vox" />
                     </label>
                     <span className="ExplBoom">The original .vox file</span>
                 </section>
@@ -690,9 +690,9 @@ var CreateItemWizard = React.createClass({
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>3D Printable File:<b>*</b></p>
-                        <input data-mandatory="true" id="3d_url" type="file" accept=".WRL, .AMF, .STL, .OBJ, .FBX, .3DS, .IGES, .STEP" />
+                        <input data-mandatory="true" id="voxel_url" type="file" accept=".WRL, .AMF, .STL, .OBJ, .FBX, .3DS, .IGES, .STEP, .vox" />
                     </label>
-                    <span className="ExplBoom">The original .WRL, .AMF, .STL, .OBJ, .FBX, .3DS, .IGES or .STEP 3D Printable File</span>
+                    <span className="ExplBoom">The original .WRL, .AMF, .STL, .OBJ, .FBX, .3DS, .IGES, .vox or .STEP 3D Printable File</span>
                 </section>
                 <section className="MetaImputThings">
                     <section className="createWhat">

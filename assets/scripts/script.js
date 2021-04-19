@@ -2710,10 +2710,46 @@ window.normalizeMetadata = async function normalizeMetadata(metadata) {
             metadata.file = "https://ipfs.io/ipfs/" + metadata.file.split("ipfs://ipfs/")[1];
         }
     }
+    if (metadata.animation_url && metadata.animation_url instanceof Array) {
+        metadata.animation_url = metadata.animation_url[0];
+        if (metadata.animation_url && metadata.animation_url.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
+            metadata.animation_url = "https://ipfs.io/ipfs/" + metadata.animation_url.split("ipfs://ipfs/")[1];
+        }
+    }
+    if (metadata.pro_url && metadata.pro_url instanceof Array) {
+        metadata.pro_url = metadata.pro_url[0];
+        if (metadata.pro_url && metadata.pro_url.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
+            metadata.pro_url = "https://ipfs.io/ipfs/" + metadata.pro_url.split("ipfs://ipfs/")[1];
+        }
+    }
+    if (metadata.specials_url && metadata.specials_url instanceof Array) {
+        metadata.specials_url = metadata.specials_url[0];
+        if (metadata.specials_url && metadata.specials_url.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
+            metadata.specials_url = "https://ipfs.io/ipfs/" + metadata.specials_url.split("ipfs://ipfs/")[1];
+        }
+    }
+    if (metadata.soundtrack_file && metadata.soundtrack_file instanceof Array) {
+        metadata.soundtrack_file = metadata.soundtrack_file[0];
+        if (metadata.soundtrack_file && metadata.soundtrack_file.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
+            metadata.soundtrack_file = "https://ipfs.io/ipfs/" + metadata.soundtrack_file.split("ipfs://ipfs/")[1];
+        }
+    }
+    if (metadata.voxel_url && metadata.voxel_url instanceof Array) {
+        metadata.voxel_url = metadata.voxel_url[0];
+        if (metadata.voxel_url && metadata.voxel_url.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
+            metadata.voxel_url = "https://ipfs.io/ipfs/" + metadata.voxel_url.split("ipfs://ipfs/")[1];
+        }
+    }
     if (metadata.folder && metadata.folder instanceof Array) {
         metadata.folder = metadata.folder[metadata.folder.length - 1];
         if (metadata.folder && metadata.folder.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
             metadata.folder = "https://ipfs.io/ipfs/" + metadata.folder.split("ipfs://ipfs/")[1];
+        }
+    }
+    if (metadata.soundtrack_folder && metadata.soundtrack_folder instanceof Array) {
+        metadata.soundtrack_folder = metadata.soundtrack_folder[metadata.soundtrack_folder.length - 1];
+        if (metadata.soundtrack_folder && metadata.soundtrack_folder.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
+            metadata.soundtrack_folder = "https://ipfs.io/ipfs/" + metadata.soundtrack_folder.split("ipfs://ipfs/")[1];
         }
     }
     if (metadata.licence_url && metadata.licence_url instanceof Array) {
