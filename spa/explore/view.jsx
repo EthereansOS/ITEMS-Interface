@@ -25,7 +25,7 @@ var Explore = React.createClass({
     componentDidMount() {
         window.setHomepageLink(`?section=explore`);
     },
-    getCollections() {
+    getCollections(category) {
         var state = window.getState(this);
         var allCollections = state.collections.filter(it => it.category === 'W20');
         var collections = state.collections.filter(it => it.category !== 'W20');
@@ -40,7 +40,8 @@ var Explore = React.createClass({
         }
         allCollections.push(... collections);
         allCollections = allCollections.filter(it => window.context.pandorasBox.indexOf(it.address) === -1 && (!it.sourceAddress || window.context.pandorasBox.indexOf(it.sourceAddress) === -1));
-        return allCollections;
+        return !category ? allCollections : allCollections.filter(it => it.category === category);
+
     },
     render() {
         var _this = this;
@@ -52,7 +53,11 @@ var Explore = React.createClass({
             <section className="collections">
                 <section className="collectionsList">
                     {state.searchedCollection && <SingleCollection collection={state.searchedCollection} collectionKey={state.searchedCollection.key} onClick={_this.onClick} miniature/>}
-                    {!state.searchedCollection && state.collections && this.getCollections().map(it => <SingleCollection collection={it} collectionKey={it.key} key={it.key} onClick={_this.onClick} miniature/>)}
+                    {!state.searchedCollection && state.collections && this.getCollections("W1155").map(it => <SingleCollection collection={it} collectionKey={it.key} key={it.key} onClick={_this.onClick} miniature/>)}
+                    {!state.searchedCollection && state.collections && this.getCollections("Native").map(it => <SingleCollection collection={it} collectionKey={it.key} key={it.key} onClick={_this.onClick} miniature/>)}
+                    {!state.searchedCollection && state.collections && this.getCollections("W20").map(it => <SingleCollection collection={it} collectionKey={it.key} key={it.key} onClick={_this.onClick} miniature/>)}
+                    {!state.searchedCollection && state.collections && this.getCollections("W721").map(it => <SingleCollection collection={it} collectionKey={it.key} key={it.key} onClick={_this.onClick} miniature/>)}
+
                 </section>
             </section>
         </section>);

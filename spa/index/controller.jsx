@@ -94,7 +94,7 @@ var IndexController = function (view) {
             return;
         }
         for (var collection of collections) {
-            collection.items && Object.values(collection.items).forEach(it => delete it.dynamicData);
+          //  collection.items && Object.values(collection.items).forEach(it => delete it.dynamicData);
         }
         context.view.setState({ collections: context.view.state.collections });
         var promises = [];
