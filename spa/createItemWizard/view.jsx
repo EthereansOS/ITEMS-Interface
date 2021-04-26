@@ -1,7 +1,8 @@
 var CreateItemWizard = React.createClass({
     requiredScripts: [
         'spa/innerLoader.jsx',
-        'spa/fullLoader.jsx'
+        'spa/fullLoader.jsx',
+        'spa/createItemWizard/createOrEditTraitTypes.jsx'
     ],
     getState() {
         var state = {};
@@ -1011,6 +1012,25 @@ var CreateItemWizard = React.createClass({
                     <input type="text" ref={ref => (this.metadataLinkInput = ref) && (this.state && this.state.metadataLink && (ref.value = (this.state && this.state.metadataLink)))} />
                     <span className="ExplBoom">The metadata file is a Json standard file containing all of the info and links to the file of the ITEM. <a href="/doc.html#6" target="_blank">here</a> You can find a step by step guide to build your json file correctly. | Link must be expressed in ipfs://ipfs/0000000000..</span>
                 </section>}
+                <section className="FormCreateThing">
+                    <a className={"SuperActionBTN SuperActionBTNB" + (this.state && this.state.performing ? " disabled" : "")} href="javascript:;" onClick={this.back}>BACK</a>
+                    {metadataType === 'custom' && (!this.state || this.state.performing !== 'deploy') && <a href="javascript:;" data-action="deploy" className="SuperActionBTN" onClick={window.perform}>DEPLOY</a>}
+                    {metadataType !== 'custom' && <a className="SuperActionBTN" href="javascript:;" onClick={this.next}>NEXT</a>}
+                    {this.state && this.state.performing === 'deploy' && <InnerLoader />}
+                    {this.state && this.state.loadingMessage && <span>{this.state.loadingMessage}</span>}
+                </section>
+            </section>
+        </section>);
+    },
+    renderStep3() {
+        var state = this.getState();
+        if(state.loadingMessage === this.controller.deployingItemMessage) {
+            return (<FullLoader/>);
+        }
+        var metadataType = state.metadataType;
+        return (<section className="createITEM">
+            <section className="FormCreate">
+                <CreateOrEditTraitTypes state={state} metadataType={metadataType}/>
                 <section className="FormCreateThing">
                     <a className={"SuperActionBTN SuperActionBTNB" + (this.state && this.state.performing ? " disabled" : "")} href="javascript:;" onClick={this.back}>BACK</a>
                     {(!this.state || this.state.performing !== 'deploy') && <a href="javascript:;" data-action="deploy" className="SuperActionBTN" onClick={window.perform}>DEPLOY</a>}

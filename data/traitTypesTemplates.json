@@ -1,0 +1,21 @@
+{
+    "global" : [
+        "Saga",
+        "Story N.",
+        "Format",
+        "Created"
+    ],
+    "basic" : [],
+    "art" : [],
+    "movie" : [],
+    "song" : [],
+    "Voxel" : [],
+    "land" : [],
+    "3d" : [],
+    "gameitem" : [
+        "Creator"
+    ],
+    "gamecard" : [],
+    "document" : [],
+    "token" : []
+}
