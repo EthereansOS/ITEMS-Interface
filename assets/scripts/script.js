@@ -2207,6 +2207,15 @@ window.sleep = function sleep(millis) {
     });
 };
 
+window.tryRetrieveItemImage = async function tryRetrieveItemImage(itemAddress) {
+    var collectionAddress = window.globalCollections.map(it => it.address);
+    var item = (await window.loadCollectionItems(collectionAddress)).filter(it => it.address === itemAddress)[0];
+    var collection = window.globalCollections.filter(it => it.address === item.collectionAddress)[0];
+    item = await window.loadItemData({objectId : item.objectId}, collection);
+    console.log(window.formatLink(item.image));
+    return item.image;
+};
+
 window.tryRetrieveMetadata = async function tryRetrieveMetadata(item) {
     if (item.metadataLink) {
         return;
@@ -2320,14 +2329,17 @@ window.loadCollectionItems = async function loadCollectionItems(collectionAddres
         }
     }
     window.itemObjectIdLinker = window.itemObjectIdLinker || {};
-    var logs = await window.getLogs({
+    if(!collectionAddress || collectionAddress.length === 0) {
+        return [];
+    }
+    var logs = (await window.getLogs({
         address: collectionAddress,
         topics: [window.web3.utils.sha3("NewItem(uint256,address)")]
-    });
-    logs = logs && logs.length > 0 ? logs : await window.getLogs({
+    })) || [];
+    (logs.length === 0 || collectionAddress instanceof Array) && logs.push(...(await window.getLogs({
         address: collectionAddress,
         topics: [window.web3.utils.sha3("Mint(uint256,address,uint256)")]
-    });
+    })));
     var collectionObjectIds = {};
     for (var log of logs) {
         var objectId;
@@ -2382,19 +2394,19 @@ window.loadFarmingContracts = async function loadFarmingContracts(args) {
                 subArray
             ]
         });
-        logs.push(...await window.getLogs({
+        /*logs.push(...await window.getLogs({
             address: window.farmingContracts,
             topics: [
                 window.web3.utils.sha3("SetupToken(address,address)"), subArray
             ]
-        }));
+        }));*/
         for(var log of logs) {
             var address = log.address;
             var tokenAddress = window.web3.eth.abi.decodeParameter("address", log.topics[1]);
             farmingContracts[tokenAddress] = farmingContracts[tokenAddress] || {};
             farmingContracts[tokenAddress][address] = tokenAddress;
         }
-        logs = await window.getLogs({
+        /*logs = await window.getLogs({
             address: window.farmingContracts,
             topics: [
                 window.web3.utils.sha3("SetupToken(address,address)"), [],
@@ -2406,7 +2418,7 @@ window.loadFarmingContracts = async function loadFarmingContracts(args) {
             var tokenAddress = window.web3.eth.abi.decodeParameter("address", log.topics[2]);
             farmingContracts[tokenAddress] = farmingContracts[tokenAddress] || {};
             farmingContracts[tokenAddress][address] = true;
-        }
+        }*/
     }
     return farmingContracts;
 }

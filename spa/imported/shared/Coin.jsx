@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 const Coin = (props) => {
     const { forcedImage, height } = props;
     const [image, setImage] = useState(props.dfoCore.getContextElement('trustwalletImgURLTemplate').split('{0}').join(window.web3.utils.toChecksumAddress(props.address)));
-    const { icons } = require('../../../data/context.json').default;
 
     var imageLink = props.address === window.voidEthereumAddress ? ethereumLogoImage : image;
 
@@ -18,14 +17,11 @@ const Coin = (props) => {
     }
 
     const onImageError = () => {
-        if (icons[props.address.toLowerCase()]) {
-            setImage(icons[props.address.toLowerCase()]);
-        } else {
-            setImage(defaultLogoImage);
-        }
+        setImage("assets/img/loadMonolith.png");
+        window.tryRetrieveItemImage(addr).then(setImage);
     }
 
-    return <img className={props.className} height={height || 24} src={forcedImage || imageLink} onError={(e) => onImageError()} />
+    return <img className={props.className} height={height || 24} src={window.formatLink(forcedImage || imageLink)} onError={onImageError} />
 }
 
 Coin.propTypes = {
