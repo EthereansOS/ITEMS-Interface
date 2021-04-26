@@ -344,7 +344,7 @@ var CreateItemWizard = React.createClass({
             <section className="spacialImputs">
                 <section className="MetaImputThings">
                     <label className="createWhat">
-                        <p>Song Cover<b>*</b></p>
+                        <p>Song Cover<b>*</b>:</p>
                         <input id="image" data-mandatory="true" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
                     </label>
                     <span className="ExplBoom">The cover img must be .png or .gif and at max 5mb lenght, due to users experience in IPFS download speed limitations (recommended size 350 x 200, 350 x 350 or 350 x 500)</span>
@@ -358,8 +358,8 @@ var CreateItemWizard = React.createClass({
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
-                        <p>Song:</p>
-                        <input id="animation_url" type="file" accept=".mp4, mp3" />
+                        <p>Song<b>*</b>:</p>
+                        <input id="animation_url" type="file" accept=".mp4, .mp3" />
                     </label>
                     <span className="ExplBoom">The mp3 file of the Song or the mp4 file of the music video</span>
                 </section>

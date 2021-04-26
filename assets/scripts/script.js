@@ -2710,12 +2710,7 @@ window.normalizeMetadata = async function normalizeMetadata(metadata) {
             metadata.file = "https://ipfs.io/ipfs/" + metadata.file.split("ipfs://ipfs/")[1];
         }
     }
-    if (metadata.animation_url && metadata.animation_url instanceof Array) {
-        metadata.animation_url = metadata.animation_url[0];
-        if (metadata.animation_url && metadata.animation_url.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
-            metadata.animation_url = "https://ipfs.io/ipfs/" + metadata.animation_url.split("ipfs://ipfs/")[1];
-        }
-    }
+    
     if (metadata.pro_url && metadata.pro_url instanceof Array) {
         metadata.pro_url = metadata.pro_url[0];
         if (metadata.pro_url && metadata.pro_url.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
@@ -2732,6 +2727,12 @@ window.normalizeMetadata = async function normalizeMetadata(metadata) {
         metadata.soundtrack_file = metadata.soundtrack_file[0];
         if (metadata.soundtrack_file && metadata.soundtrack_file.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
             metadata.soundtrack_file = "https://ipfs.io/ipfs/" + metadata.soundtrack_file.split("ipfs://ipfs/")[1];
+        }
+    }
+    if (metadata.gameitem_url && metadata.gameitem_url instanceof Array) {
+        metadata.gameitem_url = metadata.gameitem_url[0];
+        if (metadata.gameitem_url && metadata.gameitem_url.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
+            metadata.gameitem_url = "https://ipfs.io/ipfs/" + metadata.gameitem_url.split("ipfs://ipfs/")[1];
         }
     }
     if (metadata.voxel_url && metadata.voxel_url instanceof Array) {
@@ -2752,6 +2753,7 @@ window.normalizeMetadata = async function normalizeMetadata(metadata) {
             metadata.soundtrack_folder = "https://ipfs.io/ipfs/" + metadata.soundtrack_folder.split("ipfs://ipfs/")[1];
         }
     }
+    
     if (metadata.licence_url && metadata.licence_url instanceof Array) {
         metadata.licence_url = metadata.licence_url[0];
         if (metadata.licence_url && metadata.licence_url.toLowerCase().indexOf("ipfs://ipfs/") !== -1) {
