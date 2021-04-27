@@ -1,21 +1,71 @@
 {
     "global" : [
-        "Saga",
-        "Story N.",
         "Format",
+        "Project",
         "Created"
     ],
     "basic" : [],
-    "art" : [],
-    "movie" : [],
-    "song" : [],
-    "Voxel" : [],
-    "land" : [],
-    "3d" : [],
-    "gameitem" : [
-        "Creator"
+    "art" : [
+        "Artist",
+        "Edition",
+        "Rarity",
+        "Movement"
     ],
-    "gamecard" : [],
-    "document" : [],
-    "token" : []
+    "movie" : [
+        "Artist",
+        "Duration",
+        "Genre",
+        "language",
+        "Subtitles"
+    ],
+    "song" : [
+        "Artist",
+        "Duration",
+        "Genre",
+        "language"
+    ],
+    "Voxel" : [
+        "Artist",
+        "Game",
+        "Rarity",
+        "Size_X",
+        "Size_Y",
+        "Size_Z"
+    ],
+    "land" : [
+        "Artist",
+        "Game",
+        "Rarity",
+        "Size_X",
+        "Size_Y",
+        "Size_Z"
+    ],
+    "3d" : [
+        "Artist",
+        "Usage",
+        "Size_X",
+        "Size_Y",
+        "Size_Z"
+    ],
+    "gameitem" : [
+        "Artist",
+        "Game",
+        "Rarity",
+        "Type",
+        "Season"
+
+    ],
+    "gamecard" : [
+        "Artist",
+        "Game",
+        "Rarity",
+        "Type",
+        "Season"
+    ],
+    "document" : [
+        "Type"
+    ],
+    "token" : [
+        
+    ]
 }

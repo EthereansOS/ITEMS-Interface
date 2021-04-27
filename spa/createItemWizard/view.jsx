@@ -961,7 +961,7 @@ var CreateItemWizard = React.createClass({
                 </section>
                 <section className="FormCreateThing">
                     <label>
-                        <p>You'll maintain the right to mint new?</p>
+                        <p>You'll maintain the Host rights? (Mint and Metadata Edit)</p>
                         <input type="checkbox" ref={ref => (this.itemMintable = ref) && (ref.checked = this.state.itemMintable)} />
                     </label>
                 </section>
