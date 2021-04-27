@@ -51,6 +51,10 @@ var CreateItemWizardController = function (view) {
         });
     };
 
+    context.checkStep2 = async function checkStep2() {
+        return await context.checkMetadata();
+    }
+
     context.toDecimals = function toDecimals(selectedToken, value) {
         if(!selectedToken || !value) {
             return;
