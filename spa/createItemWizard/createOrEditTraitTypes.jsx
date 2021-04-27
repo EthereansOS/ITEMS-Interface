@@ -53,13 +53,13 @@ function CreateOrEditTraitTypes({ metadataType, state }) {
     }
 
     function renderTraitTypeElement(it, isCustom) {
-        return <section key={it}>
-            {isCustom && <a href="javascript:;" data-key={it} onClick={deleteCustomTraitType}>X</a>}
-            <label>
-                <span>{it}</span>
-                <input id={it.split(' ').join('')} data-key={it} type="text" value={renterTraitTypeValue(it)} onChange={onTraitTypeValueChange} />
-            </label>
-        </section>
+        return <section className="MetaImputThings" key={it}>
+                    {isCustom && <a className="RemoveAthing" href="javascript:;" data-key={it} onClick={deleteCustomTraitType}>X</a>}
+                    <label className="createWhat">
+                        <p>{it}</p>
+                        <input className="ITEMURLINPUT" id={it.split(' ').join('')} data-key={it} type="text" value={renterTraitTypeValue(it)} onChange={onTraitTypeValueChange} />
+                    </label>
+                </section>
     }
 
     function addTraitType(e) {
@@ -79,18 +79,19 @@ function CreateOrEditTraitTypes({ metadataType, state }) {
     }
 
     function renderNewTraitType() {
-        return <section>
-            <label>
-                <span>New Trait Type</span>
-                <input type="text" value={newTraitType} onChange={e => setNewTraitType(window.preventItem(e).currentTarget.value)}/>
-            </label>
-            <a href="javascript:;" onClick={addTraitType}>Add</a>
+        return <section className="NewTrait">
+            <h6>Add Custom Trait</h6>
+            <input className="ITEMURLINPUT" type="text" value={newTraitType} onChange={e => setNewTraitType(window.preventItem(e).currentTarget.value)}/>
+            <a className="AddAthing" href="javascript:;" onClick={addTraitType}>Add</a>
         </section>
     }
 
-    return !traitTypesTemplates ? <InnerLoader /> : <section>
-        {standardTraitTypes.map(it => renderTraitTypeElement(it))}
-        {customTraitTypes.map(it => renderTraitTypeElement(it, true))}
-        {renderNewTraitType()}
+    return !traitTypesTemplates ? <InnerLoader /> : <section className="MetaDataThings">
+        <section className="spacialImputs">
+            <h3>Traits</h3>
+            {standardTraitTypes.map(it => renderTraitTypeElement(it))}
+            {customTraitTypes.map(it => renderTraitTypeElement(it, true))}
+            {renderNewTraitType()}
+        </section>
     </section>
 }
