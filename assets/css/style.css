@@ -111,6 +111,8 @@ footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; d
 .collectionPageItems .ItemInfo .ItemPrice {text-decoration: none; margin: 2px 1% 0px 1%; display: inline-block; color: #ffffff; font-size: 11px; font-weight: bold; background: linear-gradient(to right, #9048fd 20%,  #4bcbc9 100%); text-align: center; padding: 3px 7px; border-radius: 8px;}
 .collectionPageItems .ItemInfo .ItemSupply {width: 100%; margin: 2px 0.2%; display: inline-block; color: #6e6e6e; font-size: 13px;}
 .collectionPageItems .ItemInfo .ItemCollectionLink {width: 100%; margin: 2px 0.2%; display: inline-block; color: #6e6e6e; font-size: 13px;}
+.OLDVER {width: 100%; display: block; margin: 20px 0;text-align: center; }
+.OLDVER h4 {font-size: 22px; color: #ffffff; padding: 20px; background-color: #9048fd;}
 
 .returntocollection {width: 100%; padding: 20px 0; background-color: ffffff; text-align: center;}
 .returntocollection a {font-size: 16px; color: #6e6e6e; text-decoration: none;}

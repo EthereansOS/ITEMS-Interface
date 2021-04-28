@@ -83,7 +83,9 @@ var Explore = React.createClass({
             </section>
             {state.showW20 && <>
                 <Collection collection={this.props.collections.filter(it => it.category === 'W20').reverse()[0]}/>
-                <h2>Old Versions:</h2>
+                <div className="OLDVER">
+                    <h4>Old Versions:</h4>
+                </div>
                 {this.props.collections.filter(it => it.category === 'W20').reverse().map((it, i) => i !== 0 && <Collection key={it.address} collection={it}/>)}
             </>}
         </section>);
