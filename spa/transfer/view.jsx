@@ -87,8 +87,6 @@ var Transfer = React.createClass({
             <section className="wrapPage">
                 <section className="wrapBox">
                     <section className="WrapWhat">
-                        <p>Transfer Items</p>
-                        <input type="text" className="SendtoWho" placeholder="Receiver address" ref={ref => this.receiverInput = ref} />
                         <p>Choose from Collections list:</p>
                         {(!list || (list.length === 0 && !walletLoaded)) && <Loader/>}
                         {list && list.length === 0 && walletLoaded && <h4>You don't own any ITEM</h4>}
@@ -128,6 +126,10 @@ var Transfer = React.createClass({
                         {state.performing !== 'transfer' && <a className={"WrapToITEM" + (!state.selectedCollection ? " disabled" : "")} data-action="transfer" onClick={window.perform} href="javascript:;">TRANSFER</a>}
                         {state.performing === 'transfer' && <InnerLoader />}
                     </section>}
+                    <section className="WrapWhat">
+                        <p>Receiver</p>
+                        <input type="text" className="SendtoWho" placeholder="Receiver address" ref={ref => this.receiverInput = ref} />
+                    </section>
                 </section>
             </section>
         </section>);
