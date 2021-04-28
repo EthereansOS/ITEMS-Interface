@@ -41,13 +41,13 @@ var Explore = React.createClass({
         allCollections.push(... collections);
         allCollections.push(... state.collections.filter(it => it.category === 'W20'));
         allCollections = allCollections.filter(it => window.context.pandorasBox.indexOf(it.address) === -1 && (!it.sourceAddress || window.context.pandorasBox.indexOf(it.sourceAddress) === -1));
-        categories = !categories ? categories : (categories instanceof Array ? categories : [categories]).map(it => it.split('Wrapped ERC').join('W'));
-        return !categories ? allCollections : allCollections.filter(it => it.symbol === 'cFARM' ? categories.indexOf("Covenants Farming Contracts") !== -1 : categories.indexOf(it.category) !== -1);
+        categories = !categories ? categories : (categories instanceof Array ? categories : [categories]).map(it => it.split('Wrapped ').join('W'));
+        return !categories ? allCollections : allCollections.filter(it => it.symbol === 'cFARM' ? categories.indexOf("fLPs") !== -1 : categories.indexOf(it.category) !== -1);
     },
     getCategories() {
         var categories = Object.values(window.context.ethItemFactoryEvents);
-        categories = categories.filter((item, pos) => categories.indexOf(item) === pos).map(it => it.split('ABI').join('').split('W').join('Wrapped ERC'));
-        categories.push("Covenants Farming Contracts");
+        categories = categories.filter((item, pos) => categories.indexOf(item) === pos).map(it => it.split('ABI').join('').split('W').join('Wrapped '));
+        categories.push("fLPs");
         return categories;
     },
     onCategoryChange(e) {
@@ -63,8 +63,17 @@ var Explore = React.createClass({
         }
         return (<section className="Pager">
             <section className="collections">
-                <section className="Categories">
+                <section className="CategoriesList">
                     {this.getCategories().map(it => <a key={it} href="javascript:;" className={"Category" + (categories.indexOf(it) !== -1 ? " Selected" : "")} data-key={it} onClick={this.onCategoryChange}>{it}</a>)}
+                </section>
+                <section className="ExploreSelectionDescription">
+                    <p>
+                    {categories[0] === 'Native' &&  "Native ITEMs are Ethereum Objects that are created as ITEMs nativelly. "}
+                    {categories[0] === 'W20' &&  "Testo W20"}
+                    {categories[0] === 'W1155' &&  "Testo W1155"}
+                    {categories[0] === 'W721' &&  "Testo W721"}
+                    {categories[0] === 'Covenants' &&  "Testo Covenats"}
+                    </p>
                 </section>
                 <section className="collectionsList">
                     {state.searchedCollection && <SingleCollection collection={state.searchedCollection} collectionKey={state.searchedCollection.key} onClick={_this.onClick} miniature/>}
