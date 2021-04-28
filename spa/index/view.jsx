@@ -51,7 +51,7 @@ var Index = React.createClass({
             <section>
                 <Menu onSelection={this.sectionChange} />
             </section>
-            {props.section && <section>
+            {props.section && <section className="loadedSection">
                 {React.createElement(window[props.section], props)}
             </section>}
             {React.createElement(Wallet, props)}
