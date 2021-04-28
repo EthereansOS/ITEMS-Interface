@@ -109,6 +109,9 @@ var Transfer = React.createClass({
                         <input ref={ref => this.collectionAddressInput = ref} className="addressWrapSelector" type="text" placeholder="Collection address" data-action="onCollectionAddressChange" onKeyUp={window.onTextChange} onChange={window.onTextChange} />
                         <a className="LoadToITEM" href="javascript:;" onClick={this.reloadCollection}>Load</a>
                     </section>
+                </section>
+                <section className="wrapBox">
+                    
                     {state.selectedCollection && <section className="WrapWhatLoaded">
                         {(state.selectedCollection.name || state.selectedCollection.symbol) && <h6 className="tokenSelectedToWrap">{window.shortenWord(state.selectedCollection.name, 18)} {state.selectedCollection.symbol && state.selectedCollection.name ? ` (${window.shortenWord(state.selectedCollection.symbol, 10)})` : window.shortenWord(state.selectedCollection.symbol, 10)}</h6>}
                         <section className="tokenSelectedToWrapDecide">
