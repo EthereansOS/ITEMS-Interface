@@ -11,7 +11,8 @@ var Explore = React.createClass({
         'spa/fullLoader.jsx'
     ],
     requiredModules: [
-        'spa/singleCollection'
+        'spa/singleCollection',
+        'spa/collection'
     ],
     onClick(e) {
         window.preventItem(e);
@@ -52,7 +53,7 @@ var Explore = React.createClass({
     },
     onCategoryChange(e) {
         window.preventItem(e);
-        this.setState({categories : [e.currentTarget.dataset.key]});
+        this.setState({categories : [e.currentTarget.dataset.key], showW20 : e.currentTarget.dataset.key === 'Wrapped 20'});
     },
     render() {
         var _this = this;
@@ -75,11 +76,16 @@ var Explore = React.createClass({
                     {categories[0] === 'fLPs' &&  "Covenants Farming LP Tokens Collection are Native ITEMs minted for Locked Setups. The Liquidity Pool stored in Locked Setups remains liquid to the owner via the fLP token. These tokens correspond 1:1 with the quantity of LP tokens locked and can be redeemed anytime after the end block of a Locked Farming Setup."}
                     </p>
                 </section>
-                <section className="collectionsList">
+                {!state.showW20 && <section className="collectionsList">
                     {state.searchedCollection && <SingleCollection collection={state.searchedCollection} collectionKey={state.searchedCollection.key} onClick={_this.onClick} miniature/>}
                     {!state.searchedCollection && state.collections && this.getCollections(categories).map(it => <SingleCollection collection={it} collectionKey={it.key} key={it.key} onClick={_this.onClick} miniature/>)}
-                </section>
+                </section>}
             </section>
+            {state.showW20 && <>
+                <Collection collection={this.props.collections.filter(it => it.category === 'W20').reverse()[0]}/>
+                <h2>Deprecated Collections:</h2>
+                {this.props.collections.filter(it => it.category === 'W20').reverse().map((it, i) => i !== 0 && <Collection key={it.address} collection={it}/>)}
+            </>}
         </section>);
     }
 });
