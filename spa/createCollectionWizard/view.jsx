@@ -156,7 +156,7 @@ var CreateCollectionWizard = React.createClass({
                         <p>Cover (Regular)<b>*</b></p>
                         <input id="image" data-mandatory="true" type="file" accept={'.' + Object.keys(window.context.supportedImageFileExtensions).join(', .')} />
                     </label>
-                    <span className="ExplBoom">The cover image must be .png or .gif, with a size limit of 5 MB and max. width of 350px, due to users experience in IPFS download speed limitations</span>
+                    <span className="ExplBoom">The cover img must be .png or .gif and at max 5mb lenght, due to users experience in IPFS download speed limitations (recommended size 350 x 350)</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">

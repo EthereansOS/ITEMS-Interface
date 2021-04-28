@@ -193,7 +193,7 @@ var CreateItemWizard = React.createClass({
                         <p>Animation:</p>
                         <input id="animation_url" type="file" accept={'.' + Object.keys(window.context.supportedAnimationFileExtensions).join(', .')} />
                     </label>
-                    <span className="ExplBoom">An mp4, mp3 or gif file as a fancy animated version of your Artwork</span>
+                    <span className="ExplBoom">An mp4 file as a fancy animated version of your Artwork</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">

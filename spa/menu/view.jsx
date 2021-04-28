@@ -31,7 +31,7 @@ var Menu = React.createClass({
                         <a href="javascript:;" data-index={i} className={"menuSelection BrandizedSSx" + ((i + "") === (this.state.selected + "") ? " Selected" : "")} onClick={_this.onSelection}>{it.name}</a>
                     </section>)}
                     <section className="menuSelection NoMobileForNow">
-                        <a target="_blank" href="https://docs.ethos.wiki/items/" className="menuSelection BrandizedSSx">Doc</a>
+                        <a target="_blank" href="https://docs.ethos.wiki/items/" className="menuSelection BrandizedSSx">DOC</a>
                     </section>
                 </section>
                 <section className="search NoMobileForNow">

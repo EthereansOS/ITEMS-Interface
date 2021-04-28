@@ -119,6 +119,7 @@ var Item = React.createClass({
             objectId: item.objectId
         });
     },
+
     getItem() {
         return (this.state && this.state.item) || this.props.item;
     },
@@ -138,6 +139,7 @@ var Item = React.createClass({
                         <figure className="itemIcon">
                             <LazyImageLoader src={window.getElementImage(item)} />
                         </figure>
+                        
                         <article className="itemInfo">
                             <section className="itemFundamentals">
                                 <h3 className="ItemTitle">{item.name} <span> ({item.symbol})</span></h3>

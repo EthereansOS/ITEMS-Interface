@@ -119,6 +119,7 @@ footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; d
 .itemPage .itemPageInfo {width: 100%; display: inline-block; padding: 30px 0; text-align: center;background-color: ffffff;}
 .itemPage .itemIcon {width: 220px; display: inline-block;}
 .itemPage .itemIcon img {width: 95%;}
+.itemPage .AnimationFiga {width: 95%; background-color: #ffffff;}
 .itemPage .itemInfo {width: 700px; display: block; margin: 25px auto; text-align: left;}
 .itemFundamentals {width: 260px; display: inline-block; vertical-align: middle;}
 .itemInfo .itemDesc {width: 400px;text-align: left; margin-left: 30px; color: #6e6e6e; font-size: 14px; vertical-align: middle; line-height: 1.3;-ms-word-break: break-all;word-break: break-all;word-break: break-word;-webkit-hyphens: auto;-moz-hyphens: auto;hyphens: auto;}
@@ -312,6 +313,9 @@ footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; d
 .CategoriesList a:hover {font-family:ITEMGig;font-weight: bolder;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 60%, #9048fd 80%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;animation: shine 3s linear infinite;}
 .ExploreSelectionDescription {width: 100%; display: inline-block; text-align: center; overflow: hidden;}
 .ExploreSelectionDescription p {font-size: 14px; width: 70%;padding: 23px;display: inline-block; margin: 15px auto;background-color: #6fbefd; color: #ffffff; border-radius: 12px; text-align: left; line-height: 1.5;}
+
+
+
 
 .SoonFARM {width: 100%; padding: 80px 0; text-align: center;}
 .SoonFARM h3 {width: 450px; font-weight: normal; display: inline-block; color: #6e6e6e;}
