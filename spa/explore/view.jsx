@@ -68,11 +68,11 @@ var Explore = React.createClass({
                 </section>
                 <section className="ExploreSelectionDescription">
                     <p>
-                    {categories[0] === 'Native' &&  "Native ITEMs are Ethereum Objects that are created as ITEMs nativelly. "}
-                    {categories[0] === 'W20' &&  "Testo W20"}
-                    {categories[0] === 'W1155' &&  "Testo W1155"}
-                    {categories[0] === 'W721' &&  "Testo W721"}
-                    {categories[0] === 'Covenants' &&  "Testo Covenats"}
+                    {categories[0] === 'Native' &&  "Native ITEMs are a Collection’s objects that, via their Extensions, can perform complex behaviors specified optionally in the Extension logic. These extra capabilities are up to the developers writing the Extension logic. "}
+                    {categories[0] === 'Wrapped 20' &&  "Testo W20"}
+                    {categories[0] === 'Wrapped 1155' &&  "Testo W1155"}
+                    {categories[0] === 'Wrapped 721' &&  "Testo W721"}
+                    {categories[0] === 'fLPs' &&  "Testo Covenats"}
                     </p>
                 </section>
                 <section className="collectionsList">
