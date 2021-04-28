@@ -108,9 +108,9 @@ var Transfer = React.createClass({
                         <a className="LoadToITEM" href="javascript:;" onClick={this.reloadCollection}>Load</a>
                     </section>
                 </section>
-                <section className="wrapBox">
                     
-                    {state.selectedCollection && <section className="WrapWhatLoaded">
+                    {state.selectedCollection && <section className="wrapBoxSide">
+                        <section className="WrapWhatLoaded">
                         {(state.selectedCollection.name || state.selectedCollection.symbol) && <h6 className="tokenSelectedToWrap">{window.shortenWord(state.selectedCollection.name, 18)} {state.selectedCollection.symbol && state.selectedCollection.name ? ` (${window.shortenWord(state.selectedCollection.symbol, 10)})` : window.shortenWord(state.selectedCollection.symbol, 10)}</h6>}
                         <section className="tokenSelectedToWrapDecide">
                             {state.objectIds && state.objectIds.length > 0 && state.objectIds}
@@ -123,14 +123,15 @@ var Transfer = React.createClass({
                         <section className="WrapWhatLoaded">
                             <input type="text" className="SendtoWho" placeholder="Payload" ref={ref => this.payloadInput = ref} />
                         </section>
-                        {state.performing !== 'transfer' && <a className={"WrapToITEM" + (!state.selectedCollection ? " disabled" : "")} data-action="transfer" onClick={window.perform} href="javascript:;">TRANSFER</a>}
-                        {state.performing === 'transfer' && <InnerLoader />}
-                    </section>}
-                    <section className="WrapWhat">
+                        <section className="WrapWhat">
                         <p>Receiver</p>
                         <input type="text" className="SendtoWho" placeholder="Receiver address" ref={ref => this.receiverInput = ref} />
+                        </section>
+                        {state.performing !== 'transfer' && <a className={"WrapToITEM" + (!state.selectedCollection ? " disabled" : "")} data-action="transfer" onClick={window.perform} href="javascript:;">TRANSFER</a>}
+                        {state.performing === 'transfer' && <InnerLoader />}
+                    
                     </section>
-                </section>
+                    </section>}
             </section>
         </section>);
     }
