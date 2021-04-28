@@ -51,32 +51,20 @@ var Explore = React.createClass({
         return categories;
     },
     onCategoryChange(e) {
-        var categories = [];
-        $(this.categories).children().find('input[type="checkbox"]:checked').each((_, element) => categories.push(element.dataset.key));
-        if(categories.length === 0) {
-            return window.preventItem(e);
-        }
-        window.localStorage.setItem('explore/categories', JSON.stringify(categories));
-        this.forceUpdate();
+        window.preventItem(e);
+        this.setState({categories : [e.currentTarget.dataset.key]});
     },
     render() {
         var _this = this;
         var state = window.getState(this);
-        var categories = this.getCategories();
-        try {
-            categories = JSON.parse(window.localStorage.getItem('explore/categories')) || categories;
-        } catch(e) {
-        }
+        var categories = state.categories || [this.getCategories()[0]];
         if(state.loadingCollections) {
             return (<FullLoader/>);
         }
         return (<section className="Pager">
             <section className="collections">
-                <section ref={ref => this.categories = ref}>
-                    {this.getCategories().map(it => <label key={it}>
-                        <p>{it}</p>
-                        <input type="checkbox" checked={categories.indexOf(it) !== -1} data-key={it} onChange={this.onCategoryChange}/>
-                    </label>)}
+                <section className="Categories">
+                    {this.getCategories().map(it => <a key={it} href="javascript:;" className={"Category" + (categories.indexOf(it) !== -1 ? " Selected" : "")} data-key={it} onClick={this.onCategoryChange}>{it}</a>)}
                 </section>
                 <section className="collectionsList">
                     {state.searchedCollection && <SingleCollection collection={state.searchedCollection} collectionKey={state.searchedCollection.key} onClick={_this.onClick} miniature/>}
