@@ -68,11 +68,11 @@ var Explore = React.createClass({
                 </section>
                 <section className="ExploreSelectionDescription">
                     <p>
-                    {categories[0] === 'Native' &&  "Native ITEMs are a Collection’s objects that, via their Extensions, can perform complex behaviors specified optionally in the Extension logic. These extra capabilities are up to the developers writing the Extension logic. "}
-                    {categories[0] === 'Wrapped 20' &&  "Testo W20"}
-                    {categories[0] === 'Wrapped 1155' &&  "Testo W1155"}
-                    {categories[0] === 'Wrapped 721' &&  "Testo W721"}
-                    {categories[0] === 'fLPs' &&  "Testo Covenats"}
+                    {categories[0] === 'Native' &&  "Native ITEMs are collections of objects on top of Ethereum built as ITEMs natively. The ITEM Standard makes these objects interoperable across all of the Ethereum Network using both the ERC20 Interface and the ERC1155 Interface. Native ITEMs can also perform complex behaviors specified optionally via their Extension. These extra capabilities are up to the developers writing the Extension logic. For more Info, read the ITEM Documentation."}
+                    {categories[0] === 'Wrapped 20' &&  "Wrapped ERC20 ITEMs are ERC20 Tokens Wrapped into the ITEM Standard. Wrapped ERC20, retain all the capabilities of the default ITEM standard, but lose any extra ones while wrapped. For example, once wrapped, A DAO or DFO governance token cannot interact with the DAO or DFO (until unwrapped, if not explicitly programmed) but can still be used like any ITEM using a gas-efficient method like BatchTransfer."}
+                    {categories[0] === 'Wrapped 1155' &&  "Wrapped ERC1155 ITEMs are ERC1155 NFTs Wrapped into the ITEM Standard. Wrapped ERC1155, retain all the capabilities of the default ITEM standard, but lose any extra ones while wrapped. For example, once wrapped, The NFT can't be used in a specific Game, if any until unwrapped (if not explicitly programmed in the application), but can still be used like any ITEM as an interoperable Object in every DeFi application via its Interoperable Interface (ERC20)."}
+                    {categories[0] === 'Wrapped 721' &&  "Wrapped ERC721 ITEMs are ERC721 NFTs Wrapped into the ITEM Standard. Wrapped ERC721, retain all the capabilities of the default ITEM standard, but lose any extra ones while wrapped. For example, once wrapped, The NFT can't be used in a specific Game, if any until unwrapped (if not explicitly programmed in the application), but can still be used like any ITEM as an interoperable Object in every DeFi application via its Interoperable Interface (ERC20)."}
+                    {categories[0] === 'fLPs' &&  "Covenants Farming LP Tokens Collection are Native ITEMs minted for Locked Setups. The Liquidity Pool stored in Locked Setups remains liquid to the owner via the fLP token. These tokens correspond 1:1 with the quantity of LP tokens locked and can be redeemed anytime after the end block of a Locked Farming Setup."}
                     </p>
                 </section>
                 <section className="collectionsList">

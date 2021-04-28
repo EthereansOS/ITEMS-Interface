@@ -52,7 +52,7 @@ footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; d
 .BrandizedSSx:hover, .logo:hover .BrandizedSSx, .BrandizedSS:hover, .logo:hover .BrandizedSS {font-family:ITEMGig;font-weight: bolder;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 60%, #9048fd 80%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;animation: shine 3s linear infinite;}
 .BrandizedSSS:hover {font-family:ITEMGig;font-weight: bolder;text-align: center;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 60%, #9048fd 80%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;animation: shine 3s linear infinite;}
 .Intro .Explainer a {border-radius:8px;font-size: 12px; font-weight: bold; display: inline-block; padding: 10px 20px; background: linear-gradient(to right, #9048fd 30%, #4bcbc9 90%); color: #f2eafc; margin: 10px 30px;text-decoration: none; width: 160px;}
-.Pager {width: 100% !important; margin: 60px 0 0 0 !important;}
+.Pager {width: 100% !important; margin: 60px 0 0 0 !important;    overflow: hidden;}
 .collections {width: 100%; display: inline-block;}
 .Giffona {width: 200px; display: inline-block; height: 200px;}
 .collectionsList {padding: 20px 2% 20px 2%;display: inline-block; text-align: center;}
@@ -306,10 +306,12 @@ footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; d
 .DocSectionSingleContent img {padding: 5%;max-width: 90%;display: block; margin: 10px 0;}
 .ITEMURLINPUT {background-color: #fafdff !important;border: 2px solid #131D39 !important;border-radius: 6px !important;color: #131D39 !important;}
 
-.CategoriesList {width: 100%; margin: 0 auto; display: inline-block; text-align: center; background-color: #F6FBFF;}
+.CategoriesList {width: 100%; margin: 0 auto; display: inline-block; text-align: center; background-color: #F6FBFF;overflow: hidden;}
 .CategoriesList a {font-family:ITEMGig; padding: 15px 15px; font-size: 11.5px; color: #636363; display: inline-block; font-weight: bold; text-decoration: none;}
 .CategoriesList .Selected {font-family:ITEMGig;font-weight: bolder;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 70%, #9048fd 90%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;}
 .CategoriesList a:hover {font-family:ITEMGig;font-weight: bolder;background: linear-gradient(to right, #9048fd 20%, #4bcbc9 40%, #4bcbc9 60%, #9048fd 80%);background-size: 200% auto;color: #6e6e6e;background-clip: text;text-fill-color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;animation: shine 3s linear infinite;}
+.ExploreSelectionDescription {width: 100%; display: inline-block; text-align: center; overflow: hidden;}
+.ExploreSelectionDescription p {font-size: 14px; width: 70%;padding: 23px;display: inline-block; margin: 15px auto;background-color: #6fbefd; color: #ffffff; border-radius: 12px; text-align: left; line-height: 1.5;}
 
 .SoonFARM {width: 100%; padding: 80px 0; text-align: center;}
 .SoonFARM h3 {width: 450px; font-weight: normal; display: inline-block; color: #6e6e6e;}
