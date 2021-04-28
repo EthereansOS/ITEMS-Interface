@@ -80,10 +80,14 @@ var CreateItemWizard = React.createClass({
         this.setState({ step: currentStep });
     },
     getMetadataValues() {
-        var metadata = window.getData(this.metadataPage);
+        var metadata = this.metadataPage ? window.getData(this.metadataPage) : this.state.metadata;
         metadata.name = this.state.itemName;
         metadata.symbol = this.state.itemSymbol;
+        metadata.attributes = this.state.attributes || [];
         return metadata;
+    },
+    onAttributes(attributes) {
+        this.setState({attributes});
     },
     renderMetadataBasic() {
         var state = this.getState();
@@ -1030,7 +1034,7 @@ var CreateItemWizard = React.createClass({
         var metadataType = state.metadataType;
         return (<section className="createITEM">
             <section className="FormCreate">
-                <CreateOrEditTraitTypes state={state} metadataType={metadataType}/>
+                <CreateOrEditTraitTypes state={state} metadataType={metadataType} onAttributes={this.onAttributes}/>
                 <section className="FormCreateThing">
                     <a className={"SuperActionBTN SuperActionBTNB" + (this.state && this.state.performing ? " disabled" : "")} href="javascript:;" onClick={this.back}>BACK</a>
                     {(!this.state || this.state.performing !== 'deploy') && <a href="javascript:;" data-action="deploy" className="SuperActionBTN" onClick={window.perform}>DEPLOY</a>}
