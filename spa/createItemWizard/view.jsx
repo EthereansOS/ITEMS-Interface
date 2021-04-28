@@ -15,7 +15,7 @@ var CreateItemWizard = React.createClass({
     onFileOrFolder(e) {
         window.preventItem(e);
         var _this = this;
-        this.setState({fileOrFolder : e.currentTarget.value}, function() {
+        this.setState({ fileOrFolder: e.currentTarget.value }, function () {
             _this.fileOrFolder.directory = _this.state.fileOrFolder === 'folder';
             _this.fileOrFolder.webkitdirectory = _this.state.fileOrFolder === 'folder';
         });
@@ -35,7 +35,7 @@ var CreateItemWizard = React.createClass({
         this.controller.onTokenAddressChange(value)
     },
     onMetadataType(e) {
-        this.setState({ metadataType: e.currentTarget.value, metadataLink : null, metadata : null });
+        this.setState({ metadataType: e.currentTarget.value, metadataLink: null, metadata: null });
     },
     catch(e) {
         if (!e) {
@@ -87,7 +87,18 @@ var CreateItemWizard = React.createClass({
         return metadata;
     },
     onAttributes(attributes) {
-        this.setState({attributes});
+        this.setState({ attributes });
+    },
+    getOwnedList() {
+        var state = window.getState(this);
+        return (state && state.collections && state.collections.filter(it => it.isOwner)) || undefined;
+    },
+    selectCollection(e) {
+        window.preventItem(e);
+        var address = e.currentTarget.dataset.address;
+        this.tokenAddressInput.value = address;
+        var _this = this;
+        this.controller.onTokenAddressChange(this.tokenAddressInput.value = address).then(() => _this.setState({step : 1}));
     },
     renderMetadataBasic() {
         var state = this.getState();
@@ -135,28 +146,28 @@ var CreateItemWizard = React.createClass({
                             <option value="file">File</option>
                             <option value="folder">Folder</option>
                         </select>
-                        <input id={this.state && this.state.fileOrFolder === 'folder' ? 'folder' : 'file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'}/>
+                        <input id={this.state && this.state.fileOrFolder === 'folder' ? 'folder' : 'file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'} />
                     </section>
                 </section>
                 <span className="ExplBoom">The file or folder of the ITEM (if Any).</span>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Licence File</p>
-                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt"/>
+                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt" />
                     </label>
                     <span className="ExplBoom">A file that represent the legal licence of the ITEM (if Any). Accepted file: .pdf, .html, .md, .txt</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Discussion Link</p>
-                        <input className="ITEMURLINPUT" id="discussion" type="url"/>
+                        <input className="ITEMURLINPUT" id="discussion" type="url" />
                     </label>
                     <span className="ExplBoom">The link to the official social media discussion of the ITEM</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Website Link</p>
-                        <input className="ITEMURLINPUT" id="website" type="url"/>
+                        <input className="ITEMURLINPUT" id="website" type="url" />
                     </label>
                     <span className="ExplBoom">The link to the official website of the ITEM</span>
                 </section>
@@ -198,7 +209,7 @@ var CreateItemWizard = React.createClass({
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Professional File:</p>
-                        <input id="pro_url" type="file"/>
+                        <input id="pro_url" type="file" />
                     </label>
                     <span className="ExplBoom">Enter the professional/Raw file version of the Artwork (.psd, .ai...)</span>
                 </section>
@@ -209,7 +220,7 @@ var CreateItemWizard = React.createClass({
                             <option value="file">File</option>
                             <option value="folder">Folder</option>
                         </select>
-                        <input id={this.state && this.state.fileOrFolder === 'folder' ? 'folder' : 'file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'}/>
+                        <input id={this.state && this.state.fileOrFolder === 'folder' ? 'folder' : 'file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'} />
                     </section>
                     <span className="ExplBoom">The file or folder of the ITEM (if Any).</span>
                 </section>
@@ -223,21 +234,21 @@ var CreateItemWizard = React.createClass({
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Licence</p>
-                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt"/>
+                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt" />
                     </label>
                     <span className="ExplBoom">A file that represent the legal licence of the Artwork (if Any). Accepted file: .pdf, .html, .md, .txt</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Discussion Link</p>
-                        <input className="ITEMURLINPUT" id="discussion" type="url"/>
+                        <input className="ITEMURLINPUT" id="discussion" type="url" />
                     </label>
                     <span className="ExplBoom">The link to the official social media discussion of the ITEM</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Website Link</p>
-                        <input className="ITEMURLINPUT" id="website" type="url"/>
+                        <input className="ITEMURLINPUT" id="website" type="url" />
                     </label>
                     <span className="ExplBoom">The link to the official website of the ITEM</span>
                 </section>
@@ -290,7 +301,7 @@ var CreateItemWizard = React.createClass({
                             <option value="file">File</option>
                             <option value="folder">Folder</option>
                         </select>
-                        <input id={this.state && this.state.fileOrFolder === 'soundtrack_folder' ? 'soundtrack_folder' : 'soundtrack_file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'}/>
+                        <input id={this.state && this.state.fileOrFolder === 'soundtrack_folder' ? 'soundtrack_folder' : 'soundtrack_file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'} />
                     </section>
                     <span className="ExplBoom">The official soundtrack of this Movie / Video via an mp3 file or a folder (if Any).</span>
                 </section>
@@ -301,7 +312,7 @@ var CreateItemWizard = React.createClass({
                             <option value="file">File</option>
                             <option value="folder">Folder</option>
                         </select>
-                        <input id={this.state && this.state.fileOrFolder === 'folder' ? 'folder' : 'file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'}/>
+                        <input id={this.state && this.state.fileOrFolder === 'folder' ? 'folder' : 'file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'} />
                     </section>
                     <span className="ExplBoom">The file or folder of the ITEM (if Any).</span>
                 </section>
@@ -315,21 +326,21 @@ var CreateItemWizard = React.createClass({
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Licence</p>
-                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt"/>
+                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt" />
                     </label>
                     <span className="ExplBoom">A file that represent the legal licence of the Artwork (if Any). Accepted file: .pdf, .html, .md, .txt</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Discussion Link</p>
-                        <input className="ITEMURLINPUT" id="discussion" type="url"/>
+                        <input className="ITEMURLINPUT" id="discussion" type="url" />
                     </label>
                     <span className="ExplBoom">The link to the official social media discussion of the ITEM</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Website Link</p>
-                        <input className="ITEMURLINPUT" id="website" type="url"/>
+                        <input className="ITEMURLINPUT" id="website" type="url" />
                     </label>
                     <span className="ExplBoom">The link to the official website of the ITEM</span>
                 </section>
@@ -382,7 +393,7 @@ var CreateItemWizard = React.createClass({
                             <option value="file">File</option>
                             <option value="folder">Folder</option>
                         </select>
-                        <input id={this.state && this.state.fileOrFolder === 'folder' ? 'folder' : 'file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'}/>
+                        <input id={this.state && this.state.fileOrFolder === 'folder' ? 'folder' : 'file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'} />
                     </section>
                     <span className="ExplBoom">The file or folder of the ITEM (if Any).</span>
                 </section>
@@ -396,21 +407,21 @@ var CreateItemWizard = React.createClass({
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Licence</p>
-                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt"/>
+                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt" />
                     </label>
                     <span className="ExplBoom">A file that represent the legal licence of the Song (if Any). Accepted file: .pdf, .html, .md, .txt</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Discussion Link</p>
-                        <input className="ITEMURLINPUT" id="discussion" type="url"/>
+                        <input className="ITEMURLINPUT" id="discussion" type="url" />
                     </label>
                     <span className="ExplBoom">The link to the official social media discussion of the ITEM</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Website Link</p>
-                        <input className="ITEMURLINPUT" id="website" type="url"/>
+                        <input className="ITEMURLINPUT" id="website" type="url" />
                     </label>
                     <span className="ExplBoom">The link to the official website of the ITEM</span>
                 </section>
@@ -463,7 +474,7 @@ var CreateItemWizard = React.createClass({
                             <option value="file">File</option>
                             <option value="folder">Folder</option>
                         </select>
-                        <input id={this.state && this.state.fileOrFolder === 'folder' ? 'folder' : 'file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'}/>
+                        <input id={this.state && this.state.fileOrFolder === 'folder' ? 'folder' : 'file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'} />
                     </section>
                     <span className="ExplBoom">The file or folder of the ITEM (if Any).</span>
                 </section>
@@ -477,21 +488,21 @@ var CreateItemWizard = React.createClass({
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Licence</p>
-                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt"/>
+                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt" />
                     </label>
                     <span className="ExplBoom">A file that represent the legal licence of the Artwork (if Any). Accepted file: .pdf, .html, .md, .txt</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Discussion Link</p>
-                        <input className="ITEMURLINPUT" id="discussion" type="url"/>
+                        <input className="ITEMURLINPUT" id="discussion" type="url" />
                     </label>
                     <span className="ExplBoom">The link to the official social media discussion of the ITEM</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Website Link</p>
-                        <input className="ITEMURLINPUT" id="website" type="url"/>
+                        <input className="ITEMURLINPUT" id="website" type="url" />
                     </label>
                     <span className="ExplBoom">The link to the official website of the ITEM</span>
                 </section>
@@ -544,7 +555,7 @@ var CreateItemWizard = React.createClass({
                             <option value="file">File</option>
                             <option value="folder">Folder</option>
                         </select>
-                        <input id={this.state && this.state.fileOrFolder === 'folder' ? 'folder' : 'file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'}/>
+                        <input id={this.state && this.state.fileOrFolder === 'folder' ? 'folder' : 'file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'} />
                     </section>
                     <span className="ExplBoom">The file or folder of the ITEM (if Any).</span>
                 </section>
@@ -558,21 +569,21 @@ var CreateItemWizard = React.createClass({
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Licence</p>
-                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt"/>
+                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt" />
                     </label>
                     <span className="ExplBoom">A file that represent the legal licence of the Artwork (if Any). Accepted file: .pdf, .html, .md, .txt</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Discussion Link</p>
-                        <input className="ITEMURLINPUT" id="discussion" type="url"/>
+                        <input className="ITEMURLINPUT" id="discussion" type="url" />
                     </label>
                     <span className="ExplBoom">The link to the official social media discussion of the ITEM</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Website Link</p>
-                        <input className="ITEMURLINPUT" id="website" type="url"/>
+                        <input className="ITEMURLINPUT" id="website" type="url" />
                     </label>
                     <span className="ExplBoom">The link to the official website of the ITEM</span>
                 </section>
@@ -625,7 +636,7 @@ var CreateItemWizard = React.createClass({
                             <option value="file">File</option>
                             <option value="folder">Folder</option>
                         </select>
-                        <input id={this.state && this.state.fileOrFolder === 'folder' ? 'folder' : 'file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'}/>
+                        <input id={this.state && this.state.fileOrFolder === 'folder' ? 'folder' : 'file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'} />
                     </section>
                     <span className="ExplBoom">The file or folder of the ITEM (if Any).</span>
                 </section>
@@ -639,21 +650,21 @@ var CreateItemWizard = React.createClass({
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Licence</p>
-                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt"/>
+                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt" />
                     </label>
                     <span className="ExplBoom">A file that represent the legal licence of the Artwork (if Any). Accepted file: .pdf, .html, .md, .txt</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Discussion Link</p>
-                        <input className="ITEMURLINPUT" id="discussion" type="url"/>
+                        <input className="ITEMURLINPUT" id="discussion" type="url" />
                     </label>
                     <span className="ExplBoom">The link to the official social media discussion of the ITEM</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Website Link</p>
-                        <input className="ITEMURLINPUT" id="website" type="url"/>
+                        <input className="ITEMURLINPUT" id="website" type="url" />
                     </label>
                     <span className="ExplBoom">The link to the official website of the ITEM</span>
                 </section>
@@ -706,7 +717,7 @@ var CreateItemWizard = React.createClass({
                             <option value="file">File</option>
                             <option value="folder">Folder</option>
                         </select>
-                        <input id={this.state && this.state.fileOrFolder === 'folder' ? 'folder' : 'file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'}/>
+                        <input id={this.state && this.state.fileOrFolder === 'folder' ? 'folder' : 'file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'} />
                     </section>
                     <span className="ExplBoom">The file or folder of the ITEM (if Any).</span>
                 </section>
@@ -720,21 +731,21 @@ var CreateItemWizard = React.createClass({
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Licence</p>
-                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt"/>
+                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt" />
                     </label>
                     <span className="ExplBoom">A file that represent the legal licence of the Artwork (if Any). Accepted file: .pdf, .html, .md, .txt</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Discussion Link</p>
-                        <input className="ITEMURLINPUT" id="discussion" type="url"/>
+                        <input className="ITEMURLINPUT" id="discussion" type="url" />
                     </label>
                     <span className="ExplBoom">The link to the official social media discussion of the ITEM</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Website Link</p>
-                        <input className="ITEMURLINPUT" id="website" type="url"/>
+                        <input className="ITEMURLINPUT" id="website" type="url" />
                     </label>
                     <span className="ExplBoom">The link to the official website of the ITEM</span>
                 </section>
@@ -776,7 +787,7 @@ var CreateItemWizard = React.createClass({
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Game Item File:<b>*</b></p>
-                        <input data-mandatory="true" id="gameitem_url" type="file"/>
+                        <input data-mandatory="true" id="gameitem_url" type="file" />
                     </label>
                     <span className="ExplBoom">The original Game Item File</span>
                 </section>
@@ -787,7 +798,7 @@ var CreateItemWizard = React.createClass({
                             <option value="file">File</option>
                             <option value="folder">Folder</option>
                         </select>
-                        <input id={this.state && this.state.fileOrFolder === 'folder' ? 'folder' : 'file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'}/>
+                        <input id={this.state && this.state.fileOrFolder === 'folder' ? 'folder' : 'file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'} />
                     </section>
                     <span className="ExplBoom">The file or folder of the ITEM (if Any).</span>
                 </section>
@@ -801,21 +812,21 @@ var CreateItemWizard = React.createClass({
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Licence</p>
-                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt"/>
+                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt" />
                     </label>
                     <span className="ExplBoom">A file that represent the legal licence of the Artwork (if Any). Accepted file: .pdf, .html, .md, .txt</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Discussion Link</p>
-                        <input className="ITEMURLINPUT" id="discussion" type="url"/>
+                        <input className="ITEMURLINPUT" id="discussion" type="url" />
                     </label>
                     <span className="ExplBoom">The link to the official social media discussion of the ITEM</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Website Link</p>
-                        <input className="ITEMURLINPUT" id="website" type="url"/>
+                        <input className="ITEMURLINPUT" id="website" type="url" />
                     </label>
                     <span className="ExplBoom">The link to the official website of the ITEM</span>
                 </section>
@@ -847,7 +858,7 @@ var CreateItemWizard = React.createClass({
                             <option value="file">File</option>
                             <option value="folder">Folder</option>
                         </select>
-                        <input data-mandatory="true" id={this.state && this.state.fileOrFolder === 'folder' ? 'folder' : 'file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'}/>
+                        <input data-mandatory="true" id={this.state && this.state.fileOrFolder === 'folder' ? 'folder' : 'file'} ref={ref => this.fileOrFolder = ref} type="file" webkitdirectory={this.state && this.state.fileOrFolder === 'folder'} directory={this.state && this.state.fileOrFolder === 'folder'} />
                     </section>
                     <span className="ExplBoom">The file or folder of the Document.</span>
                 </section>
@@ -861,21 +872,21 @@ var CreateItemWizard = React.createClass({
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Licence</p>
-                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt"/>
+                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt" />
                     </label>
                     <span className="ExplBoom">A file that represent the legal licence of the Artwork (if Any). Accepted file: .pdf, .html, .md, .txt</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Discussion Link</p>
-                        <input className="ITEMURLINPUT" id="discussion" type="url"/>
+                        <input className="ITEMURLINPUT" id="discussion" type="url" />
                     </label>
                     <span className="ExplBoom">The link to the official social media discussion of the ITEM</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Website Link</p>
-                        <input className="ITEMURLINPUT" id="website" type="url"/>
+                        <input className="ITEMURLINPUT" id="website" type="url" />
                     </label>
                     <span className="ExplBoom">The link to the official website of the ITEM</span>
                 </section>
@@ -910,21 +921,21 @@ var CreateItemWizard = React.createClass({
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Licence</p>
-                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt"/>
+                        <input id="licence_url" type="file" accept=".pdf, .html, .md, .txt" />
                     </label>
                     <span className="ExplBoom">A file that represent the legal licence of the Artwork (if Any). Accepted file: .pdf, .html, .md, .txt</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Discussion Link</p>
-                        <input className="ITEMURLINPUT" id="discussion" type="url"/>
+                        <input className="ITEMURLINPUT" id="discussion" type="url" />
                     </label>
                     <span className="ExplBoom">The link to the official social media discussion of the ITEM</span>
                 </section>
                 <section className="MetaImputThings">
                     <label className="createWhat">
                         <p>Website Link</p>
-                        <input className="ITEMURLINPUT" id="website" type="url"/>
+                        <input className="ITEMURLINPUT" id="website" type="url" />
                     </label>
                     <span className="ExplBoom">The link to the official website of the ITEM</span>
                 </section>
@@ -933,9 +944,15 @@ var CreateItemWizard = React.createClass({
     },
     renderStep0() {
         var state = this.getState();
+        var list = this.getOwnedList();
         return (<section className="createITEM">
             <section className="FormCreateThing">
                 <h2>Collection:</h2>
+                {list && list.length > 0 && <ul className="SelectorToGo">
+                    {list.map(it => <li key={it.address}>
+                        <a href="javascript:;" data-address={it.address} onClick={this.selectCollection}>{window.shortenWord(it.name, 25)} {it.symbol && it.name ? ` (${window.shortenWord(it.symbol, 10)})` : window.shortenWord(it.symbol, 10)}</a>
+                    </li>)}
+                </ul>}
                 <input ref={ref => (this.tokenAddressInput = ref) && (ref.value = (state.selectedToken && state.selectedToken.address) || "")} className="addressWrapSelector" type="text" placeholder="Token address" data-action="onTokenAddressChange" onKeyUp={this.onChange} onChange={this.onChange} />
             </section>
             {state.selectedToken && <section className="CollectionLoaded">
@@ -978,8 +995,8 @@ var CreateItemWizard = React.createClass({
     },
     renderStep2() {
         var state = this.getState();
-        if(state.loadingMessage === this.controller.deployingItemMessage) {
-            return (<FullLoader/>);
+        if (state.loadingMessage === this.controller.deployingItemMessage) {
+            return (<FullLoader />);
         }
         var metadataType = state.metadataType;
         return (<section className="createITEM">
@@ -1028,13 +1045,13 @@ var CreateItemWizard = React.createClass({
     },
     renderStep3() {
         var state = this.getState();
-        if(state.loadingMessage === this.controller.deployingItemMessage) {
-            return (<FullLoader/>);
+        if (state.loadingMessage === this.controller.deployingItemMessage) {
+            return (<FullLoader />);
         }
         var metadataType = state.metadataType;
         return (<section className="createITEM">
             <section className="FormCreate">
-                <CreateOrEditTraitTypes state={state} metadataType={metadataType} onAttributes={this.onAttributes}/>
+                <CreateOrEditTraitTypes state={state} metadataType={metadataType} onAttributes={this.onAttributes} />
                 <section className="FormCreateThing">
                     <a className={"SuperActionBTN SuperActionBTNB" + (this.state && this.state.performing ? " disabled" : "")} href="javascript:;" onClick={this.back}>BACK</a>
                     {(!this.state || this.state.performing !== 'deploy') && <a href="javascript:;" data-action="deploy" className="SuperActionBTN" onClick={window.perform}>DEPLOY</a>}
