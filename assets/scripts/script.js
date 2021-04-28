@@ -50,8 +50,8 @@ if ('WebSocket' in window) {
                             if($('.globalCatcher').length > 0) {
                                 return ReactDOM.render(React.createElement(Index), document.body);
                             }
-                            var element = $('.index');
-                            (element.length !== 0 ? element : $('.index')).findReactComponent().forceUpdate();
+                            var element = $('.loadedSection');
+                            (element.length !== 0 ? element : $('.loadedSection')).findReactComponent().forceUpdate();
                             $('.menu').findReactComponent().forceUpdate();
                         } catch(e) {
                             return oldOnMessage(msg);
