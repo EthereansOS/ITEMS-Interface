@@ -87,6 +87,8 @@ var Transfer = React.createClass({
             <section className="wrapPage">
                 <section className="wrapBox">
                     <section className="WrapWhat">
+                        <p>Transfer Items</p>
+                        <input type="text" className="SendtoWho" placeholder="Receiver address" ref={ref => this.receiverInput = ref} />
                         <p>Choose from Collections list:</p>
                         {(!list || (list.length === 0 && !walletLoaded)) && <Loader/>}
                         {list && list.length === 0 && walletLoaded && <h4>You don't own any ITEM</h4>}
@@ -107,10 +109,7 @@ var Transfer = React.createClass({
                         <input ref={ref => this.collectionAddressInput = ref} className="addressWrapSelector" type="text" placeholder="Collection address" data-action="onCollectionAddressChange" onKeyUp={window.onTextChange} onChange={window.onTextChange} />
                         <a className="LoadToITEM" href="javascript:;" onClick={this.reloadCollection}>Load</a>
                     </section>
-                </section>
-                    
-                    {state.selectedCollection && <section className="wrapBoxSide">
-                        <section className="WrapWhatLoaded">
+                    {state.selectedCollection && <section className="WrapWhatLoaded">
                         {(state.selectedCollection.name || state.selectedCollection.symbol) && <h6 className="tokenSelectedToWrap">{window.shortenWord(state.selectedCollection.name, 18)} {state.selectedCollection.symbol && state.selectedCollection.name ? ` (${window.shortenWord(state.selectedCollection.symbol, 10)})` : window.shortenWord(state.selectedCollection.symbol, 10)}</h6>}
                         <section className="tokenSelectedToWrapDecide">
                             {state.objectIds && state.objectIds.length > 0 && state.objectIds}
@@ -123,15 +122,10 @@ var Transfer = React.createClass({
                         <section className="WrapWhatLoaded">
                             <input type="text" className="SendtoWho" placeholder="Payload" ref={ref => this.payloadInput = ref} />
                         </section>
-                        <section className="WrapWhat">
-                        <p>Receiver</p>
-                        <input type="text" className="SendtoWho" placeholder="Receiver address" ref={ref => this.receiverInput = ref} />
-                        </section>
                         {state.performing !== 'transfer' && <a className={"WrapToITEM" + (!state.selectedCollection ? " disabled" : "")} data-action="transfer" onClick={window.perform} href="javascript:;">TRANSFER</a>}
                         {state.performing === 'transfer' && <InnerLoader />}
-                    
-                    </section>
                     </section>}
+                </section>
             </section>
         </section>);
     }
