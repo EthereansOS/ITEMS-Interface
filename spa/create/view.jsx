@@ -17,6 +17,8 @@ var Create = React.createClass({
     },
     componentDidMount() {
         window.setHomepageLink(`?section=create`);
+        var collectionAddress = window.consumeAddressBarParam("collectionAddress");
+        collectionAddress && this.setState({create : 'CreateItemWizard', collectionAddress});
     },
     render() {
         var state = this.getState();

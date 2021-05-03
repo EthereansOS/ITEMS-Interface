@@ -943,6 +943,9 @@ var CreateItemWizard = React.createClass({
         </section>);
     },
     renderStep0() {
+        if(!this.state && this.props.collectionAddress) {
+            return (<FullLoader/>);
+        }
         var state = this.getState();
         var list = this.getOwnedList();
         return (<section className="createITEM">
@@ -1062,7 +1065,8 @@ var CreateItemWizard = React.createClass({
         </section>);
     },
     componentDidMount() {
-        this.props.collectionAddress && this.controller.onTokenAddressChange(this.props.collectionAddress);
+        var _this = this;
+        this.props.collectionAddress && this.controller.onTokenAddressChange(this.props.collectionAddress).then(() => _this.setState({step : 1}));
     },
     render() {
         return (this[`renderStep${this.getState().step || 0}`]());
