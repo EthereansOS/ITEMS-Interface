@@ -28,6 +28,12 @@ var ReactModuleManager = function() {
                 }
                 reactClass.prototype.oldRender = reactClass.prototype.render
                 reactClass.prototype.render = function render() {
+
+                    if(this.getInitialState) {
+                        var _this = this;
+                        Object.entries(this.getInitialState()).forEach(it => _this[it[0]] === undefined && (_this[it[0]] = it[1]));
+                    }
+
                     var viewName = this.constructor.displayName
                     if (this.props.newController === true) {
                         delete window.controllerPool[elementName]
@@ -120,6 +126,28 @@ var ReactModuleManager = function() {
                     return rendered
                 }
             }
+
+            if(reactClass.prototype.getInitialState && !reactClass.prototype.setVar) {
+                var initialState = reactClass.prototype.getInitialState();
+                reactClass.prototype.setVar = function setVar(varName, varValue) {
+                    var _this = this;
+                    _this.setVarsTimeout && clearTimeout(_this.setVarsTimeout);
+                    _this.varState = _this.varState || {};
+                    _this.varState[varName] = varValue;
+                    _this.setVarsTimeout = setTimeout(function() {
+                        var newState = _this.varState;
+                        delete _this.varState;
+                        Object.entries(newState).forEach(it => _this[it[0]] = it[1]);
+                        _this.forceUpdate();
+                    });
+                }
+                Object.entries(initialState).forEach(it => {
+                    reactClass.prototype["set" + it[0][0].toUpperCase() + it[0].substring(1)] = function(newValue) {
+                        this.setVar(it[0], newValue);
+                    }
+                });
+            }
+
             if (reactClass.prototype._internalDomRefresh === undefined) {
                 reactClass.prototype._internalDomRefresh = function _internalDomRefresh() {
                     if (this.domRoot !== undefined && this.domRoot !== null && this.domRoot.length > 0) {
