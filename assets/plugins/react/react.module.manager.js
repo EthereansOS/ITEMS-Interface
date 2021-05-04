@@ -138,14 +138,34 @@ var ReactModuleManager = function() {
                         var newState = _this.varState;
                         delete _this.varState;
                         Object.entries(newState).forEach(it => _this[it[0]] = it[1]);
-                        _this.forceUpdate();
-                    });
+                        _this.forceUpdate(function() {
+                            if(!_this.useEffectCallbacks) {
+                                return;
+                            }
+                            var callbacks = [];
+                            Object.keys(newState).forEach(it => callbacks.push(_this.useEffectCallbacks[it]));
+                            callbacks.filter((it, i) => it && callbacks.indexOf(it) === i).forEach(it => setTimeout(it));
+                        });
+                    }, 10);
                 }
                 Object.entries(initialState).forEach(it => {
                     reactClass.prototype["set" + it[0][0].toUpperCase() + it[0].substring(1)] = function(newValue) {
                         this.setVar(it[0], newValue);
-                    }
+                    };
                 });
+                reactClass.prototype.useEffect = function useEffect() {
+                    var _this = this;
+                    if(_this.useEffectCallbacks) {
+                        return;
+                    }
+                    var callback = arguments[0].bind(this);
+                    var vars = [];
+                    for(var i = 1; i < arguments.length; i++) {
+                        vars.push(arguments[i]);
+                    }
+                    _this.useEffectCallbacks = {};
+                    vars.forEach(it => _this.useEffectCallbacks[it] = callback);
+                }
             }
 
             if (reactClass.prototype._internalDomRefresh === undefined) {
