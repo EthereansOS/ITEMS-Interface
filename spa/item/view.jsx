@@ -28,6 +28,30 @@ var Item = React.createClass({
         toggle = oldToggle === toggle ? null : toggle;
         this.setState({ toggle });
     },
+    renderTradeAMM() {
+        <section className="SwapBoxAMM">
+            <section className="SwapBoxcont">
+                <section className="inputAMM">
+                    <imput></imput>
+                    <a></a>
+                </section>
+                <section className="switcherAMM">
+
+                </section>
+                <section className="inputAMM">
+                    <imput></imput>
+                    <a></a>
+                </section>
+            </section>
+        </section>
+    },
+    renderTradeOrders() {
+        <section className="TradeBoxOS">
+            <section className="TradeBoxcont">
+                
+            </section>
+        </section>
+    },
     renderMetadata(renderShowButton) {
         var item = (this.state && this.state.item) || this.props.item;
         var keys = Object.keys(item.metadata);
@@ -195,12 +219,17 @@ var Item = React.createClass({
                     </section>
                     <section className="collectionNav">
                         <ul>
+                            <li className={toggle === 'market' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>MARKET</a></li>
                             {item.metadata && <li className={toggle === 'metadata' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>METADATA</a></li>}
                             <li className={toggle === 'farm' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>FARM</a></li>
                             {(this.props.item.collection.extensionCode || this.props.item.collection.modelCode || this.props.item.collection.wrappedCode) && <li className={toggle === 'code' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle} data-toggle="code">CODE</a></li>}
                         </ul>
                     </section>
                     <section className="ItemStuff">
+                        {toggle === 'market' && <section className="ItemTrade">
+                            
+                            </section>
+                        }
                         {toggle === 'metadata' && <section className="ItemData">
                             <section className="ItemStuffOpen">
                             </section>
