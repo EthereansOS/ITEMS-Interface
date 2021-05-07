@@ -2235,7 +2235,7 @@ window.tryRetrieveMetadata = async function tryRetrieveMetadata(item) {
         if (item.metadataLink !== "") {
             item.image = window.formatLink(item.metadataLink);
             try {
-                item.metadata = await window.AJAXRequest(window.formatLink(item.metadataLink));
+                item.metadata = item.metadataLink.startsWith("data:application/json;base64,") ? JSON.parse(Base64.decode(item.metadataLink.substring("data:application/json;base64,".length))) : await window.AJAXRequest(window.formatLink(item.metadataLink));
                 if (typeof item.metadata !== "string") {
                     Object.entries(item.metadata).forEach(it => {
                         if (it[1] === undefined || it[1] === null) {

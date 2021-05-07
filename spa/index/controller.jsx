@@ -53,7 +53,7 @@ var IndexController = function (view) {
         var map = {};
         Object.entries(window.context.ethItemFactoryEvents).forEach(it => map[window.web3.utils.sha3(it[0])] = it[1]);
         var topics = [[Object.keys(map).filter(key => window.networkId !== 1 ? true : map[key].indexOf("721") === -1)]];
-        window.networkId === 1 && topics.push([Object.keys(map).filter(key => map[key].indexOf("721") !== -1), [], window.web3.eth.abi.encodeParameter("uint256", "2")])
+        window.networkId === 1 && topics.push([Object.keys(map).filter(key => map[key].indexOf("721") !== -1), [], [window.web3.eth.abi.encodeParameter("uint256", "2"), window.web3.eth.abi.encodeParameter("uint256", "3")]])
         var address = await window.blockchainCall(window.ethItemOrchestrator.methods.factories);
         (window.getNetworkElement("additionalFactories") || []).map(it => window.web3.utils.toChecksumAddress(it)).filter(it => address.indexOf(it) === -1).forEach(it => address.push(it));
         var collections = [];

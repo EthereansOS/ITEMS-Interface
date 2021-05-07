@@ -9,9 +9,13 @@ var LazyImageLoader = React.createClass({
     },
     render() {
         var src = this.props.src;
+        src = window.formatLink(src);
+        if(src.startsWith("//data")) {
+            src = src.substring(2);
+        }
         return (<section>
             <section className="LoadImg" ref={ref => this.loader = ref}><img src="assets/img/loadMonolith.png"></img></section>
-            <img src={window.formatLink(src)} ref={ref => this.image = ref} style={{display : "none"}} onLoad={this.onLoad} onError={this.onError}/>
+            <img src={src} ref={ref => this.image = ref} style={{display : "none"}} onLoad={this.onLoad} onError={this.onError}/>
             <p ref={ref => this.errorMessage = ref} style={{display : "none"}}>An error occurred while trying to load <a href={window.formatLink(src)} target="_blank">this image</a></p>
         </section>);
     }
