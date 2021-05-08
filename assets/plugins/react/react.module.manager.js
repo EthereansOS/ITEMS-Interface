@@ -28,6 +28,9 @@ var ReactModuleManager = function() {
                 }
                 reactClass.prototype.oldRender = reactClass.prototype.render
                 reactClass.prototype.render = function render() {
+
+                    this.oldRender.instance = this;
+
                     var viewName = this.constructor.displayName
                     if (this.props.newController === true) {
                         delete window.controllerPool[elementName]
@@ -42,10 +45,15 @@ var ReactModuleManager = function() {
                     var rendered = null;
                     var loader = true;
                     if(requireCalled !== false) {
+                        this.useStateCounter = 0;
+                        this.rendering = true;
                         loader = false;
                         try {
                             rendered = this.oldRender.apply(this);
+                            !this.useEffectEnd && this.useEffectCallbacks && this.useEffectCallbacks.all && this.useEffectCallbacks.all.forEach(it => setTimeout(it));
+                            this.useEffectEnd = true;
                         } catch(e) {
+                            delete this.useEffectCallbacks;
                             if(requireCalled === "true") {
                                 console.error(e);
                                 rendered = this.componentDidCatch.apply(this, [e]) || React.createElement('span', {});
@@ -54,6 +62,7 @@ var ReactModuleManager = function() {
                                 requireCalled = false;
                             }
                         }
+                        delete this.rendering;
                     }
                     if(requireCalled === false) {
                         if(this.getCustomLoader) {
@@ -120,6 +129,63 @@ var ReactModuleManager = function() {
                     return rendered
                 }
             }
+
+            reactClass.prototype.useState = reactClass.prototype.useState || function useState(initialValue) {
+                if(!this.rendering) {
+                    throw "Cannot call useState while not rendering";
+                }
+                this.useStateVars = this.useStateVars || [];
+                if(this.useStateVars.length <= this.useStateCounter) {
+                    var index = this.useStateCounter;
+                    var _this = this;
+                    this.useStateVars.push([initialValue, function setUseStateVarValue(newValue) {
+                        _this.setUseStateVarValue(index, newValue);
+                    }]);
+                }
+                return this.useStateVars[this.useStateCounter++];
+            };
+
+            reactClass.prototype.setUseStateVarValue = reactClass.prototype.setUseStateVarValue || function setUseStateVarValue(varIndex, varValue) {
+                var _this = this;
+                _this.setUseStateVarValuesTimeout && clearTimeout(_this.setUseStateVarValuesTimeout);
+                _this.useStateVarNewValues = _this.useStateVarNewValues || {};
+                _this.useStateVarNewValues[varIndex] = varValue;
+                _this.setUseStateVarValuesTimeout = setTimeout(function() {
+                    var newState = _this.useStateVarNewValues;
+                    delete _this.useStateVarNewValues;
+                    var callbacks = [];
+                    _this.useEffectCallbacks && Object.keys(newState).forEach(it => !(newState[it] == _this.useStateVars[it][0]) && callbacks.push(..._this.useEffectCallbacks[it]));
+                    _this.useEffectCallbacks && callbacks.push(...(_this.useEffectCallbacks["update"] || []));
+                    callbacks = callbacks.sort(function(a, b) {
+                        var first = _this.useEffectCallbacks.all.indexOf(a);
+                        var second = _this.useEffectCallbacks.all.indexOf(b);
+                        return first < second ? -1 : first > second ? 1 : 0;
+                    });
+                    Object.entries(newState).forEach(it => _this.useStateVars[it[0]][0] = it[1]);
+                    _this.forceUpdate(function() {
+                        callbacks.filter((it, i) => it && callbacks.indexOf(it) === i).forEach(it => setTimeout(it));
+                    });
+                }, 10);
+            };
+
+            reactClass.prototype.useEffect = reactClass.prototype.useEffect || function useEffect(callback, vars) {
+                if(!this.useEffect) {
+                    throw "Cannot call useEffect while not rendering";
+                }
+                var _this = this;
+                if(_this.useEffectEnd) {
+                    return;
+                }
+                (_this.useEffectCallbacks = _this.useEffectCallbacks || {all : []}).all.push(callback = callback.bind(this));
+                if(!vars) {
+                    return (_this.useEffectCallbacks["update"] = _this.useEffectCallbacks["update"] || []).push(callback);
+                }
+                for(var value of vars) {
+                    var index = _this.useStateVars.indexOf(_this.useStateVars.filter(it => it[0] == value)[0]);
+                    (_this.useEffectCallbacks[index] = _this.useEffectCallbacks[index] || []).push(callback);
+                }
+            };
+
             if (reactClass.prototype._internalDomRefresh === undefined) {
                 reactClass.prototype._internalDomRefresh = function _internalDomRefresh() {
                     if (this.domRoot !== undefined && this.domRoot !== null && this.domRoot.length > 0) {
@@ -289,8 +355,14 @@ React.defaultLoader = function() {
 React.defaultCatcher = function(e) {
     return React.createElement('h1', {}, 'An error occurred during rendering: "' + (e.message || e) + '".\nPlease try refresh the page.');
 };
-window.useState = React.useState;
-window.useEffect = React.useEffect;
+window.useState = function useState() {
+    var context = window.useState.caller.instance || React;
+    return context.useState.apply(context, arguments);
+}
+window.useEffect = function useEffect() {
+    var context = window.useEffect.caller.instance || React;
+    return context.useEffect.apply(context, arguments);
+}
 window.Fragment = React.Fragment;
 React.createElement2 = React.createElement;
 React.createElement = ReactModuleManager.createElement

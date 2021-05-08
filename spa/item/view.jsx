@@ -227,7 +227,8 @@ var Item = React.createClass({
                     </section>
                     <section className="ItemStuff">
                         {toggle === 'market' && <section className="ItemTrade">
-                            
+                            {this.renderTradeAMM()}
+                            {this.renderTradeOrders()}
                             </section>
                         }
                         {toggle === 'metadata' && <section className="ItemData">
