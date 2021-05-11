@@ -29,28 +29,60 @@ var Item = React.createClass({
         this.setState({ toggle });
     },
     renderTradeAMM() {
+        return (
         <section className="SwapBoxAMM">
+            <h3>Swap</h3>
             <section className="SwapBoxcont">
                 <section className="inputAMM">
-                    <imput></imput>
+                    <input></input>
                     <a></a>
                 </section>
                 <section className="switcherAMM">
 
                 </section>
                 <section className="inputAMM">
-                    <imput></imput>
+                    <input></input>
                     <a></a>
                 </section>
             </section>
         </section>
+        )
     },
     renderTradeOrders() {
+        return (
         <section className="TradeBoxOS">
+            <h3>Orders</h3>
             <section className="TradeBoxcont">
-                
+                <section className="TradeOrders">
+                    <section className="TradeOrder">
+                        <section className="TradeOrderData">
+                            <b>5,000</b>
+                            <p>0.00003 ETH</p>
+                        </section>
+                        <a className="OrderButton">Buy</a>
+                    </section>
+                    <section className="TradeOrder">
+                        <p>0.005 ETH</p>
+                        <a className="OrderButton">Buy</a>
+                    </section>
+                    <section className="TradeOrder">
+                        <p>0.01 ETH</p>
+                        <a className="OrderButton">Buy</a>
+                    </section>
+                    <section className="TradeOrder">
+                        <p>0.2 ETH</p>
+                        <a className="OrderButton">Buy</a>
+                    </section>
+                </section>
+            </section>
+            <section className="TradeBoxcont">
+                <section className="TradeOrder">
+                <p></p>
+                <a className="OrderButton"></a>
+                </section>
             </section>
         </section>
+        )
     },
     renderMetadata(renderShowButton) {
         var item = (this.state && this.state.item) || this.props.item;
@@ -219,7 +251,7 @@ var Item = React.createClass({
                     </section>
                     <section className="collectionNav">
                         <ul>
-                            <li className={toggle === 'market' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>MARKET</a></li>
+                            <li className={toggle === 'market' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle} data-toggle="market">MARKET</a></li>
                             {item.metadata && <li className={toggle === 'metadata' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>METADATA</a></li>}
                             <li className={toggle === 'farm' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle}>FARM</a></li>
                             {(this.props.item.collection.extensionCode || this.props.item.collection.modelCode || this.props.item.collection.wrappedCode) && <li className={toggle === 'code' ? 'selected' : undefined}><a href="javascript:;" onClick={this.toggle} data-toggle="code">CODE</a></li>}

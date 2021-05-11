@@ -210,6 +210,7 @@ footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; d
 .MetaImputThings {margin: 20px auto;}
 
 .ItemData {max-width: 1200px; display: block; margin: 30px auto 100px auto; text-align:center; -moz-column-gap: 10px;-moz-column-width: 300px;;column-gap: 10px;column-width: 300px;-webkit-column-gap: 10px;-webkit-column-width: 300px; max-width: 1200px;}
+.ItemTrade {max-width: 1200px; display: block; margin: 30px auto 100px auto; text-align:center;max-width: 1200px;}
 .swowThis {padding: 3px 9px; font-size: 11px; font-weight: bold; color: #ffffff; text-decoration: none; background-color: #8447F1;  border-radius: 5px; display: inline-block; margin: 10px auto;}
 .subMetaValueList {display: inline-block; text-align: center;width: 280px; background-color: #F6FBFF; padding: 20px 10px; margin: 10px; border-radius: 10px;}
 .subMetaValueList .subMetaValueList {width: 80%; background-color: transparent; border-top: 1px solid #9c9c9c; border-radius: 0%;}
@@ -224,6 +225,21 @@ footer section a {font-size: 15px; color: #6e6e6e; text-decoration: underline; d
 .CodePART {width: 850px; display: block; padding: 10px 20px; margin: 5px auto;}
 .CodePART h3 {display: block; margin: 0 auto; font-size: 20px; color: #59b0fb; margin: 20px auto;}
 .CodePART h3 a {font-size: 15px; cursor: pointer;}
+.SwapBoxAMM {width: 300px;border-radius: 30px;display: inline-block;padding: 20px 30px; background-color: #F6FBFF;box-shadow: rgba(0, 0, 0, 0.01) 0px 0px 1px, rgba(0, 0, 0, 0.04) 0px 4px 8px, rgba(0, 0, 0, 0.04) 0px 16px 24px, rgba(0, 0, 0, 0.01) 0px 24px 32px;}
+.SwapBoxAMM h3, .TradeBoxOS h3 {font-size: 16px; color: #6fbefd;}
+.SwapBoxAMM h6, .TradeBoxOS h6 {font-size: 13px; color: #6fbefd; margin: 10px auto;}
+.SwapBoxcont {width: 100%; margin: 20px auto;}
+.inputAMM {display: block; margin: 10px 2.5%; width: 95%; text-align: left;}
+.inputAMM input {width: 60%; height: 40px; background-color: #d4ecff; border-radius: 12px; border: 1px solid #6fbefd; margin-top: 15px; color: #849BBD; font-size: 15px;}
+.inputAMM a {background-color: #0180EC;}
+.TradeBoxOS {width: 600px;border-radius: 30px;display: inline-block;padding: 20px 30px; background-color: #F6FBFF;box-shadow: rgba(0, 0, 0, 0.01) 0px 0px 1px, rgba(0, 0, 0, 0.04) 0px 4px 8px, rgba(0, 0, 0, 0.04) 0px 16px 24px, rgba(0, 0, 0, 0.01) 0px 24px 32px; margin-left: 20px;}
+.TradeBoxcont {width: 45%; display: inline-block; margin: 10px 2%;vertical-align: top;}
+.TradeOrders {width: 100%; text-align: center;}
+.TradeOrder {background-color: #d4ecff;  border-radius: 8px; padding: 10px 1%; width: 98%;text-align: center; margin: 10px auto;}
+.TradeOrderData {width: 70%; display: inline-block; vertical-align: middle;}
+.TradeOrderData p {width: 60%; font-size: 13px; text-align: left; color: #849BBD; font-weight: normal;display: inline-block;}
+.TradeOrderData b {font-size: 12.5px;width: 35%; display: inline-block; text-align: left; color: #849BBD; margin-left: 5%;}
+.TradeOrder .OrderButton {width: 20%; font-size: 12px; text-align: left; color: #ffffff; font-weight: bold; margin-left: 9%; padding: 3px 8px; background-color: #0180EC;border-radius: 8px; vertical-align: middle;}
 
 .sideThing {width: 66%;background-color: #ffffff;height: 100%;display: inline-block;z-index: 1000000;position: absolute;top: 0;right: 0;overflow: scroll;}
 .sideALLThing {width: 100%; height: 100%; overflow: hidden; position: fixed; left: 0; right: 0; top: 0;}
