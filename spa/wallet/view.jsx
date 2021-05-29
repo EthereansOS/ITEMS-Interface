@@ -59,6 +59,7 @@ var Wallet = React.createClass({
         var state = window.getState(this);
         var collection = state.collections.filter(it => it.key === e.currentTarget.dataset.key)[0];
         this.emit('wallet/toggle', false);
+        this.emit('section/change', 'spa/explore');
         this.emit('section/change', 'spa/collection', {
             collection,
             collectionAddress : collection.address,
@@ -71,6 +72,7 @@ var Wallet = React.createClass({
         var collection = state.collections.filter(it => it.key === e.currentTarget.dataset.collection)[0];
         var item = collection.items[e.currentTarget.dataset.item];
         this.emit('wallet/toggle', false);
+        this.emit('section/change', 'spa/explore');
         this.emit('section/change', 'spa/item', {
             collection,
             item,
