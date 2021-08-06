@@ -399,7 +399,6 @@ window.getSendingOptions = function getSendingOptions(transaction, value) {
             }) : transaction.estimateGas({
                     nonce,
                     from,
-                    gasPrice: window.web3.utils.toWei("13", "gwei"),
                     value,
                     gas: '7900000',
                     gasLimit: '7900000'
